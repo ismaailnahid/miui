@@ -1332,7 +1332,7 @@
       formatterXml += '</MIUI_Theme_Values>';
 
       let blob = new Blob([formatterXml], { type: 'text/xml' });
-      saveAs(blob, `theme_fallback_bg_btn.xml`);
+      saveAs(blob, `theme_fallback.xml`);
 
       hideLoading();
       showToast(`✅ ${bgButtonFiles.length} টি BG/বাটন ড্রয়েবল ফরম্যাট করা হয়েছে!`);
@@ -1400,7 +1400,7 @@
       }
 
       let finalZipBlob = await mainZip.generateAsync({ type: 'blob' });
-      saveAs(finalZipBlob, `theme_with_images.zip`);
+      saveAs(finalZipBlob, `theme.zip`);
 
       hideLoading();
       showToast(`✅ ${convertedCount} টি ইমেজ + theme_fallback.xml জিপ করা হয়েছে! (${failedCount} ব্যর্থ)`);
@@ -1807,7 +1807,7 @@
         xml += `    <color name="${name}">${val}</color>\n`;
       }
       xml += '</resources>';
-      saveAs(new Blob([xml], { type: 'text/xml' }), standaloneState.fileName || 'colors_resolved.xml');
+      saveAs(new Blob([xml], { type: 'text/xml' }), standaloneState.fileName || 'theme_values.xml');
       showToast('✅ Download complete');
     };
     document.getElementById('standaloneDownloadNonSystemBtn').onclick = () => {
@@ -1818,7 +1818,7 @@
         xml += `    <color name="${name}">${val}</color>\n`;
       }
       xml += '</resources>';
-      saveAs(new Blob([xml], { type: 'text/xml' }), standaloneState.fileName || 'nonsystem_colors.xml');
+      saveAs(new Blob([xml], { type: 'text/xml' }), standaloneState.fileName || 'theme_values.xml');
       showToast('✅ Non-system colors downloaded');
     };
     document.getElementById('standaloneClearBtn').onclick = () => {
