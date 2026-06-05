@@ -1,1402 +1,1236 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Material Dark XML Merger | MIUI Theme Studio | Color Resolver</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Dell Latitude E5450 | XML Color Replacer - Final</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --md-surface-1: #0f1117;
+      --md-surface-2: #161a24;
+      --md-surface-3: #1e2432;
+      --md-primary: #1686D0;
+      --md-primary-light: #3a9be0;
+      --md-primary-dark: #0e6ba8;
+      --md-secondary: #00FF62;
+      --md-tertiary: #FFC300;
+      --md-error: #FF5CA1;
+      --md-warning: #FF7E29;
+      --md-on-surface: #f1f5f9;
+      --md-on-surface-variant: #94a3b8;
+      --md-outline: #334155;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
-      color: #e2e8f0;
+      font-family: 'Inter', sans-serif;
+      background: var(--md-surface-1);
+      color: var(--md-on-surface);
       min-height: 100vh;
-      padding: 20px;
     }
 
+    /* Custom Scrollbar */
     ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
     }
 
     ::-webkit-scrollbar-track {
-      background: #1e1e2e;
+      background: var(--md-surface-2);
       border-radius: 10px;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--md-primary);
       border-radius: 10px;
     }
 
-    .app-container {
-      max-width: 1600px;
-      margin: 0 auto;
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--md-primary-light);
     }
 
+    /* Header */
     .header {
-      text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-      border-radius: 30px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(102, 126, 234, 0.2);
+      background: linear-gradient(135deg, var(--md-surface-2), var(--md-surface-1));
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--md-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
-    .header h1 {
-      font-size: 2rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
-    }
-
-    .header p {
-      color: #94a3b8;
-      font-size: 0.9rem;
-    }
-
-    .badge-container {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      background: rgba(102, 126, 234, 0.2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      border: 1px solid rgba(102, 126, 234, 0.3);
-    }
-
-    .dual-pane {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    @media (min-width: 1024px) {
-      .dual-pane {
-        flex-direction: row;
-        gap: 20px;
-      }
-    }
-
-    .card {
-      background: rgba(18, 18, 28, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      border: 1px solid rgba(102, 126, 234, 0.2);
-      overflow: hidden;
-      transition: transform 0.2s, box-shadow 0.2s;
-      flex: 1;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      border-color: rgba(102, 126, 234, 0.4);
-    }
-
-    .card-header {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(102, 126, 234, 0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .card-title {
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--md-primary);
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .logo i {
+      font-size: 20px;
+    }
+
+    .badge {
+      background: var(--md-primary-dark);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 9px;
       font-weight: 600;
-      font-size: 1rem;
     }
 
-    .card-title-icon {
-      font-size: 1.3rem;
+    /* Container - Single Column */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px;
     }
 
-    .btn {
-      padding: 8px 16px;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      cursor: pointer;
+    /* Cards */
+    .card {
+      background: var(--md-surface-2);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid var(--md-outline);
       transition: all 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--md-primary);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--md-primary);
+    }
+
+    .card-title i {
+      font-size: 15px;
+    }
+
+    /* Buttons */
+    .btn {
       border: none;
-      font-family: 'Inter', sans-serif;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--md-surface-3);
+      color: var(--md-on-surface);
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--md-primary), var(--md-primary-dark));
+      color: white;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--md-secondary), #00cc4e);
+      color: #0f1117;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--md-error), #cc4a81);
+      color: white;
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, var(--md-warning), #cc6521);
+      color: white;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+      justify-content: center;
+    }
+
+    /* Textarea */
+    .md-textarea {
+      width: 100%;
+      min-height: 200px;
+      font-family: 'Courier New', monospace;
+      background: var(--md-surface-1);
+      color: var(--md-on-surface);
+      border: 1.5px solid var(--md-outline);
+      border-radius: 16px;
+      padding: 12px;
+      font-size: 11px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .md-textarea:focus {
+      outline: none;
+      border-color: var(--md-primary);
+    }
+
+    /* Color Inputs */
+    .color-inputs {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      margin: 12px 0;
+    }
+
+    .color-preview {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      border: 2px solid var(--md-primary);
+      cursor: pointer;
+      background: #1686D0;
+    }
+
+    .hex-input {
+      padding: 10px 14px;
+      border-radius: 30px;
+      background: var(--md-surface-1);
+      color: white;
+      border: 1.5px solid var(--md-outline);
+      font-family: monospace;
+      font-size: 14px;
+      width: 130px;
+      text-align: center;
+    }
+
+    .hex-input:focus {
+      outline: none;
+      border-color: var(--md-primary);
+    }
+
+    /* Preset Colors */
+    .preset-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+
+    .preset-swatch {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 2px solid var(--md-outline);
+      transition: all 0.2s;
+    }
+
+    .preset-swatch:hover {
+      transform: scale(1.05);
+      border-color: var(--md-primary);
+    }
+
+    /* File Upload */
+    .file-zone {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .file-btn {
+      background: linear-gradient(135deg, var(--md-primary), var(--md-primary-dark));
+      padding: 8px 16px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
 
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 0.7rem;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    .btn-secondary {
-      background: rgba(51, 51, 68, 0.8);
-      color: #e2e8f0;
-      border: 1px solid rgba(102, 126, 234, 0.3);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(102, 126, 234, 0.3);
-    }
-
-    .btn-success {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: white;
-    }
-
-    .btn-warning {
-      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-      color: white;
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-      color: white;
-    }
-
-    .btn-purple {
-      background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-      color: white;
-    }
-
-    .btn-cyan {
-      background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
-      color: white;
-    }
-
-    .btn-pink {
-      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-      color: white;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 280px;
-      background: #0a0a10;
-      border: 1px solid #2a2a3c;
-      color: #e2e8f0;
-      font-family: 'Fira Code', 'Courier New', monospace;
+    .file-name {
+      color: var(--md-on-surface-variant);
       font-size: 11px;
-      padding: 16px;
-      border-radius: 16px;
-      resize: vertical;
-      outline: none;
-      line-height: 1.5;
-    }
-
-    textarea:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .status-bar {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 10px 16px;
-      font-size: 0.7rem;
-      border-top: 1px solid rgba(102, 126, 234, 0.2);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .action-bar {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-    }
-
-    .action-bar .btn {
-      padding: 12px 24px;
-      font-size: 0.85rem;
-    }
-
-    .resolver-panel {
-      background: rgba(18, 18, 28, 0.95);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      border: 1px solid rgba(102, 126, 234, 0.2);
-      margin-top: 20px;
+      flex: 1;
       overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
     }
 
-    .resolver-header {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-      padding: 16px 20px;
+    /* Color List */
+    .color-list-container {
+      max-height: 450px;
+      overflow-y: auto;
+      margin-top: 8px;
+    }
+
+    /* Color Item - Single Line */
+    .color-grid-item {
+      background: var(--md-surface-1);
+      border: 1px solid var(--md-outline);
+      border-radius: 14px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      cursor: pointer;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.2s;
     }
 
-    .resolver-title {
+    .color-grid-item:hover {
+      border-color: var(--md-primary);
+    }
+
+    .color-grid-item.selected {
+      border-color: var(--md-primary);
+      background: rgba(22, 134, 208, 0.1);
+    }
+
+    .color-info-block {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .serial-number {
+      color: var(--md-primary);
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 12px;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .color-palette-preview {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+    }
+
+    .color-text-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .color-name-text {
       font-weight: 600;
+      font-size: 11px;
+      word-break: break-word;
+      line-height: 1.3;
     }
 
-    .resolver-content {
-      max-height: 500px;
-      overflow-y: auto;
-      transition: max-height 0.3s ease;
+    .color-hex-value {
+      font-family: monospace;
+      font-size: 9px;
+      color: var(--md-on-surface-variant);
+      margin-top: 2px;
     }
 
-    .resolver-content.collapsed {
-      max-height: 0;
-      overflow: hidden;
+    .color-actions-block {
+      flex-shrink: 0;
     }
 
-    .color-grid {
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 12px;
+    .md-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--md-primary);
     }
 
-    .color-item {
-      background: rgba(26, 26, 36, 0.8);
-      border-radius: 16px;
-      padding: 12px;
+    /* Selection Controls */
+    .selection-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin: 12px 0;
+    }
+
+    /* Search Box */
+    .search-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 30px;
+      background: var(--md-surface-1);
+      border: 1.5px solid var(--md-outline);
+      color: white;
+      font-size: 12px;
+      margin-bottom: 12px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--md-primary);
+    }
+
+    /* FAB Buttons */
+    .fab-group {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 99;
+    }
+
+    .fab {
+      width: 44px;
+      height: 44px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--md-primary), var(--md-primary-dark));
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s;
       display: flex;
       align-items: center;
-      gap: 12px;
-      transition: all 0.2s;
-      border: 1px solid rgba(102, 126, 234, 0.1);
-    }
-
-    .color-item:hover {
-      border-color: rgba(102, 126, 234, 0.4);
-      transform: translateX(4px);
-    }
-
-    .color-preview {
-      width: 55px;
-      height: 55px;
-      border-radius: 12px;
-      border: 2px solid rgba(102, 126, 234, 0.3);
-      flex-shrink: 0;
-      transition: all 0.2s;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .color-preview:hover {
-      transform: scale(1.05);
-      border-color: #667eea;
-    }
-
-    .color-info {
-      flex: 1;
-    }
-
-    .color-name {
-      font-weight: 600;
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-      word-break: break-word;
-    }
-
-    .color-value {
-      font-size: 0.65rem;
-      color: #94a3b8;
-      font-family: monospace;
-      margin: 2px 0;
-    }
-
-    .color-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.6rem;
-      margin-left: 8px;
-    }
-
-    .system-badge {
-      background: #ef4444;
-      color: white;
-    }
-
-    .non-system-badge {
-      background: #10b981;
-      color: white;
-    }
-
-    .relative-badge {
-      background: #f59e0b;
-      color: white;
-    }
-
-    .category-grid {
-      display: flex;
-      flex-direction: row;
       justify-content: center;
-      gap: 12px;
-      margin-top: 20px;
-      flex-wrap: wrap;
     }
 
-    .category-btn {
-      flex: 0 0 auto;
-      width: fit-content;
-      min-width: fit-content;
-      white-space: nowrap;
+    .fab:hover {
+      transform: scale(1.05);
     }
 
-    .toast {
+    /* Modal */
+    .md-modal {
+      display: none;
       position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      color: #e2e8f0;
-      padding: 12px 24px;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      border: 1px solid #667eea;
-      z-index: 10000;
-      animation: slideUp 0.3s ease;
-      white-space: nowrap;
+      bottom: 180px;
+      right: 16px;
+      background: var(--md-surface-2);
+      border: 1px solid var(--md-primary);
+      border-radius: 20px;
+      padding: 16px;
+      z-index: 1000;
+      min-width: 230px;
     }
 
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
+    .md-modal input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 30px;
+      background: var(--md-surface-1);
+      border: 1.5px solid var(--md-outline);
+      color: white;
+      font-size: 14px;
+      text-align: center;
+      margin: 10px 0;
     }
 
-    .stats {
+    .modal-btns {
       display: flex;
-      gap: 8px;
-      font-size: 0.7rem;
+      gap: 10px;
+      justify-content: center;
     }
 
-    .stat-badge {
-      background: rgba(102, 126, 234, 0.2);
-      padding: 2px 8px;
-      border-radius: 12px;
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--md-on-surface-variant);
     }
 
-    .btn[data-shortcut] {
-      position: relative;
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
     }
 
-    .btn[data-shortcut]:after {
-      content: attr(data-shortcut);
-      position: absolute;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #1e293b;
-      color: #94a3b8;
-      font-size: 0.6rem;
-      padding: 2px 6px;
-      border-radius: 8px;
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: none;
+    /* Target for scroll */
+    #colorListCard {
+      scroll-margin-top: 70px;
     }
 
-    .btn[data-shortcut]:hover:after {
-      opacity: 1;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 12px;
+    /* Dell Latitude E5450 - 1366x768 Optimized */
+    @media (min-width: 1024px) and (max-width: 1366px) {
+      .container {
+        max-width: 900px;
+        padding: 16px;
       }
 
-      .btn[data-shortcut]:after {
-        display: none;
+      .md-textarea {
+        min-height: 180px;
+      }
+
+      .color-list-container {
+        max-height: 380px;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 10px;
+      }
+
+      .card {
+        padding: 14px;
+      }
+
+      .btn {
+        padding: 6px 12px;
+        font-size: 11px;
+      }
+
+      .preset-swatch {
+        width: 36px;
+        height: 36px;
       }
 
       .color-preview {
-        width: 45px;
-        height: 45px;
+        width: 42px;
+        height: 42px;
       }
 
-      .color-grid {
-        grid-template-columns: 1fr;
+      .hex-input {
+        width: 110px;
+        font-size: 13px;
+      }
+
+      .color-grid-item {
+        padding: 6px 10px;
+      }
+
+      .color-palette-preview {
+        width: 30px;
+        height: 30px;
+      }
+
+      .color-name-text {
+        font-size: 10px;
+      }
+
+      .fab {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="app-container">
-    <div class="header">
-      <h1>🎨 MIUI Theme Studio</h1>
-      <p>Professional XML Merger & Color Resolver | Material Design Dark Theme</p>
-      <div class="badge-container">
-        <span class="badge">🔧 MIUI_Theme_Values Format</span>
-        <span class="badge">🎨 Material 3 Colors</span>
-        <span class="badge">📱 MIUI Theme Support</span>
-        <span class="badge">✨ Auto Format Convert</span>
-        <span class="badge">🚫 Non-System Color Extractor</span>
+
+  <div class="header">
+    <div class="logo">
+      <i class="fas fa-laptop-code"></i>
+      🎨 Color HEX Replacer <!-- <span class="badge">XML Color Replacer</span> -->
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Main Card -->
+    <div class="card">
+      <div class="card-title">
+        <i class="fas fa-cloud-upload-alt"></i>
+        Import XML File
+      </div>
+      <div class="file-zone">
+        <label class="file-btn" for="xmlFileInput">
+          <i class="fas fa-folder-open"></i> Browse
+        </label>
+        <input type="file" id="xmlFileInput" accept=".xml" style="display: none;">
+        <button class="btn btn-warning" onclick="resetPage()">
+          <i class="fas fa-sync-alt"></i> Reset
+        </button>
+        <span class="file-name" id="fileNameDisplay">No file selected</span>
+      </div>
+
+      <textarea id="xmlEditor" class="md-textarea"
+        placeholder="Paste your XML code here or upload a file..."></textarea>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="formatAndResolve()">
+          <i class="fas fa-magic"></i> Format
+        </button>
+        <button class="btn btn-secondary" onclick="extractColorList()">
+          <i class="fas fa-eye"></i> Show Colors
+        </button>
+        <button class="btn btn-primary" onclick="downloadResolvedXML()">
+          <i class="fas fa-download"></i> Download
+        </button>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn" onclick="undoAction()">
+          <i class="fas fa-undo-alt"></i> Undo
+        </button>
+        <button class="btn" onclick="redoAction()">
+          <i class="fas fa-redo-alt"></i> Redo
+        </button>
+        <button class="btn" onclick="sortColorsByName()">
+          <i class="fas fa-sort-alpha-down"></i> Sort
+        </button>
+        <button class="btn btn-warning" onclick="restoreOriginalXML()">
+          <i class="fas fa-history"></i> Restore
+        </button>
+      </div>
+
+      <div class="card-title">
+        <i class="fas fa-fill-drip"></i>
+        Replace Colors
+      </div>
+      <div class="color-inputs">
+        <div class="color-preview" id="colorPreviewBox" style="background: #1686D0;"></div>
+        <input type="color" id="newColorPicker" value="#1686D0" style="display: none;">
+        <input type="text" id="newColorHex" class="hex-input" value="#1686D0" maxlength="7">
+      </div>
+
+      <div class="preset-grid" id="presetColorsGrid"></div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="replaceSelectedColors()">
+          <i class="fas fa-paint-brush"></i> Replace Selected
+        </button>
+        <button class="btn btn-primary" onclick="replaceAllColors()">
+          <i class="fas fa-fill-drip"></i> Replace All
+        </button>
+        <button class="btn btn-danger" onclick="deleteSelectedColors()">
+          <i class="fas fa-trash-alt"></i> Delete Selected
+        </button>
+        <button class="btn btn-danger" onclick="deleteAllColors()">
+          <i class="fas fa-trash"></i> Delete All
+        </button>
       </div>
     </div>
 
-    <div class="dual-pane">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <span class="card-title-icon">🎨</span>
-            <span>MASTER SOURCE</span>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <label class="btn btn-sm btn-secondary">
-              📂 LOAD
-              <input type="file" id="leftFileInput" accept=".xml,text/xml" style="display:none;">
-            </label>
-            <button class="btn btn-sm btn-secondary" id="clearLeftBtn">🗑️ CLEAR</button>
-          </div>
-        </div>
-        <div class="editor-area" style="padding: 16px;">
-          <textarea id="leftEditor" spellcheck="false"></textarea>
-        </div>
-        <div class="status-bar">
-          <span id="leftStats">📄 Ready</span>
-          <div class="stats">
-            <span class="stat-badge">🎨 Colors: 0</span>
-            <span class="stat-badge">📏 Dimen: 0</span>
-            <span class="stat-badge">📦 Total: 0</span>
-          </div>
-        </div>
+    <!-- Color List Card -->
+    <div class="card" id="colorListCard">
+      <div class="card-title">
+        <i class="fas fa-palette"></i>
+        Color Palette Preview
       </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <span class="card-title-icon">📁</span>
-            <span>TARGET SOURCE</span>
-          </div>
-          <div style="display: flex; gap: 8px;">
-            <label class="btn btn-sm btn-secondary">
-              📂 LOAD
-              <input type="file" id="rightFileInput" accept=".xml,text/xml" style="display:none;">
-            </label>
-            <button class="btn btn-sm btn-secondary" id="clearRightBtn">🗑️ CLEAR</button>
-          </div>
-        </div>
-        <div class="editor-area" style="padding: 16px;">
-          <textarea id="rightEditor" spellcheck="false"></textarea>
-        </div>
-        <div class="status-bar">
-          <span id="rightStats">📄 Ready</span>
-          <div class="stats">
-            <span class="stat-badge">🎨 Colors: 0</span>
-            <span class="stat-badge">📏 Dimen: 0</span>
-            <span class="stat-badge">📦 Total: 0</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="action-bar">
-      <button class="btn btn-primary" id="mergeActionBtn" data-shortcut="Ctrl+M">🔄 MERGE</button>
-      <button class="btn btn-success" id="downloadBtn" data-shortcut="Ctrl+S">⬇️ DOWNLOAD</button>
-      <button class="btn btn-purple" id="resetExampleBtn" data-shortcut="Ctrl+R">✨ RESET</button>
-    </div>
-
-    <div class="category-grid">
-      <button class="btn btn-warning category-btn" id="exportBgBtn">🎨 BUTTON-BG</button>
-      <button class="btn btn-cyan category-btn" id="exportTextBtn">✍️ TEXT</button>
-      <button class="btn btn-pink category-btn" id="extractNonSystemBtn">🚫 EXTRACT NON-SYSTEM</button>
-    </div>
-
-    <div class="category-grid">
-      <button class="btn btn-danger category-btn" id="replaceBgWithColorBtn">🎨 BG-BTN #061D2E</button>
-      <button class="btn btn-primary category-btn" id="replaceTextWithColorBtn">✍️ TEXT #1686D0</button>
-    </div>
-
-    <div class="resolver-panel">
-      <div class="resolver-header" id="toggleResolverHeader">
-        <div class="resolver-title">
-          <span>🎨 RESOLVED COLORS</span>
-          <span class="badge">MIUI_Theme_Values Format</span>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button class="btn btn-sm btn-purple" id="resolveColorsBtn">🔍 FORCE RESOLVE</button>
-          <button class="btn btn-sm btn-success" id="cleanDownloadBtn">⬇️ CLEAN DOWNLOAD</button>
-          <span id="toggleIcon" style="cursor: pointer;">▼</span>
-        </div>
-      </div>
-      <div id="resolverContent" class="resolver-content">
-        <div id="colorListContainer" class="color-grid">
-          <div style="text-align: center; padding: 40px; color: #94a3b8;">
-            ✨ Click "FORCE RESOLVE" to convert all dynamic colors to HEX<br>
-            Supports Android Dynamic + Material 3 + MIUI colors
-          </div>
+      <div id="colorListArea">
+        <div class="empty-state">
+          <i class="fas fa-palette"></i>
+          <p>Click "Show Colors" to view all colors</p>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- FAB Buttons -->
+  <div class="fab-group">
+    <button class="fab" id="scrollToBottomFab" title="Go to Bottom of Color List">
+      <i class="fas fa-arrow-down"></i>
+    </button>
+    <button class="fab" id="scrollToTopFab" title="Go to Top">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <button class="fab" id="goToSerialFab" title="Go to Serial">
+      <i class="fas fa-hashtag"></i>
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="md-modal" id="serialModal">
+    <div style="text-align: center; font-weight: 600; font-size: 14px; margin-bottom: 8px;">
+      <i class="fas fa-hashtag"></i> Go to Serial
+    </div>
+    <input type="number" id="serialNumberInput" min="1" placeholder="Enter number">
+    <div class="modal-btns">
+      <button class="btn btn-primary" onclick="gotoSerialNumber()">Go</button>
+      <button class="btn btn-danger" onclick="closeSerialModal()">Close</button>
+    </div>
+  </div>
+
   <script>
-    // ===============================================================================
-    // NON-SYSTEM COLOR EXTRACTOR - COMPLETE JAVASCRIPT CODE
-    // ===============================================================================
+    // ======================== GLOBALS ========================
+    let historyStack = [];
+    let redoHistory = [];
+    let originalXmlContent = "";
+    let allColorsArray = [];
 
-    // ===============================================================================
-    // ANDROID SYSTEM COLORS DATABASE
-    // ===============================================================================
+    // Custom Preset Colors
+    const customPresetColors = ["#1686D0", "#006378", "#00FF62", "#061D2E", "#0A2E39", "#041C30", "#FFC300", "#FF7E29", "#FF5CA1", "#E68585", "#7646FF", "#000000"];
 
-    const ANDROID_SYSTEM_COLORS = {
-      'system_accent1_dark': '#1976D2',
-      'system_accent1_light': '#2196F3',
-      'system_accent2_dark': '#F57C00',
-      'system_accent2_light': '#FF9800',
-      'system_error_dark': '#D32F2F',
-      'system_error_light': '#F44336',
-      'system_neutral1_500': '#757575',
-      'android:color/system_accent1_dark': '#1976D2',
-      'android:color/system_accent1_light': '#2196F3',
-      'android:color/system_accent2_dark': '#F57C00',
-      'android:color/system_accent2_light': '#FF9800',
-      'android:color/system_error_dark': '#D32F2F',
-      'android:color/system_error_light': '#F44336',
-      'android:color/system_neutral1_500': '#757575'
-    };
-
-    function getAndroidSystemColorValue(colorName) {
-      const cleanName = colorName.replace('@android:color/', '');
-      return ANDROID_SYSTEM_COLORS[cleanName] || ANDROID_SYSTEM_COLORS[colorName] || null;
+    // ======================== UTILITIES ========================
+    function saveToHistory() {
+      const current = document.getElementById('xmlEditor').value;
+      historyStack.push(current);
+      if (historyStack.length > 30) historyStack.shift();
+      redoHistory = [];
     }
 
-    // ===============================================================================
-    // CORE STATE MANAGEMENT FOR NON-SYSTEM EXTRACTOR
-    // ===============================================================================
-
-    let nonSystemColorMap = new Map();
-    let nonSystemResolvedMap = new Map();
-
-    // ===============================================================================
-    // RESOLVE RELATIVE COLORS (RECURSIVE FUNCTION)
-    // ===============================================================================
-
-    function resolveRelativeColorsNonSystem() {
-      const resolved = new Map();
-      const visited = new Set();
-
-      function resolveValue(name) {
-        if (visited.has(name)) return null;
-        visited.add(name);
-
-        const data = nonSystemColorMap.get(name);
-        if (!data) return null;
-
-        if (!data.isRelative) {
-          visited.delete(name);
-          return data.value;
-        }
-
-        if (data.isAndroidRelative) {
-          const resolvedVal = getAndroidSystemColorValue(data.parent);
-          visited.delete(name);
-          return resolvedVal || '#A855F7';
-        }
-
-        if (data.parent) {
-          const parentVal = resolveValue(data.parent);
-          visited.delete(name);
-          return parentVal || '#A855F7';
-        }
-
-        visited.delete(name);
-        return null;
+    function undoAction() {
+      if (historyStack.length > 1) {
+        redoHistory.push(historyStack.pop());
+        document.getElementById('xmlEditor').value = historyStack[historyStack.length - 1];
+        extractColorList();
       }
-
-      for (let [name, data] of nonSystemColorMap) {
-        if (!data.isRelative) {
-          resolved.set(name, data.value);
-        } else {
-          const val = resolveValue(name);
-          resolved.set(name, val || '#A855F7');
-          data.value = val || '#A855F7';
-        }
-      }
-
-      nonSystemResolvedMap = resolved;
-      return resolved;
     }
 
-    // ===============================================================================
-    // PARSE COLORS.XML FILE FOR NON-SYSTEM EXTRACTOR
-    // ===============================================================================
-
-    async function parseColorsXmlForNonSystem(content) {
-      nonSystemColorMap.clear();
-      nonSystemResolvedMap.clear();
-
-      const regex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
-      let match;
-
-      while ((match = regex.exec(content)) !== null) {
-        const name = match[1];
-        const rawValue = match[2].trim();
-
-        if (rawValue.startsWith('@android:color/')) {
-          const parent = rawValue.replace('@android:color/', '');
-          nonSystemColorMap.set(name, {
-            value: null,
-            isRelative: true,
-            isAndroidRelative: true,
-            parent: parent,
-            originalRaw: rawValue
-          });
-        }
-        else if (rawValue.startsWith('@color/')) {
-          const parent = rawValue.replace('@color/', '');
-          nonSystemColorMap.set(name, {
-            value: null,
-            isRelative: true,
-            isAndroidRelative: false,
-            parent: parent,
-            originalRaw: rawValue
-          });
-        }
-        else {
-          nonSystemColorMap.set(name, {
-            value: rawValue,
-            isRelative: false,
-            isAndroidRelative: false,
-            parent: null,
-            originalRaw: rawValue
-          });
-        }
+    function redoAction() {
+      if (redoHistory.length > 0) {
+        const state = redoHistory.pop();
+        historyStack.push(state);
+        document.getElementById('xmlEditor').value = state;
+        extractColorList();
       }
-
-      resolveRelativeColorsNonSystem();
-      return nonSystemColorMap.size;
     }
 
-    // ===============================================================================
-    // GET NON-SYSTEM COLORS ONLY
-    // ===============================================================================
+    function restoreOriginalXML() {
+      if (confirm('Restore to original XML? All changes will be lost!')) {
+        document.getElementById('xmlEditor').value = originalXmlContent;
+        saveToHistory();
+        extractColorList();
+      }
+    }
 
-    function getNonSystemColorsOnly() {
-      const nonSystemColors = [];
+    function resetPage() {
+      location.reload();
+    }
 
-      for (let [name, data] of nonSystemColorMap) {
-        if (data.isAndroidRelative) {
-          continue;
-        }
-
-        let finalValue = nonSystemResolvedMap.get(name) || data.value;
-
-        if (data.isRelative && !finalValue) {
-          finalValue = '#A855F7';
-        }
-
-        nonSystemColors.push({
-          name: name,
-          value: finalValue,
-          originalRaw: data.originalRaw,
-          isRelative: data.isRelative,
-          parent: data.parent
+    function scrollToBottomOfColorList() {
+      const colorListContainer = document.querySelector('.color-list-container');
+      if (colorListContainer) {
+        colorListContainer.scrollTo({
+          top: colorListContainer.scrollHeight,
+          behavior: 'smooth'
         });
-      }
-
-      return nonSystemColors;
-    }
-
-    // ===============================================================================
-    // GENERATE NON-SYSTEM COLORS XML
-    // ===============================================================================
-
-    function generateNonSystemXml() {
-      const nonSystemColors = getNonSystemColorsOnly();
-
-      if (nonSystemColors.length === 0) {
-        return null;
-      }
-
-      let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
-      xml += '<!-- Generated by Non-System Color Extractor -->\n';
-      xml += '<!-- Only Non-Android colors are included -->\n';
-      xml += '<resources>\n\n';
-
-      for (let color of nonSystemColors) {
-        const finalValue = color.value || color.originalRaw;
-        xml += `    <color name="${color.name}">${finalValue}</color>\n`;
-      }
-
-      xml += '\n</resources>';
-      return xml;
-    }
-
-    // ===============================================================================
-    // DOWNLOAD NON-SYSTEM COLORS AS XML FILE
-    // ===============================================================================
-
-    function downloadNonSystemColors(originalFileName) {
-      const nonSystemColors = getNonSystemColorsOnly();
-
-      if (nonSystemColors.length === 0) {
-        showToast('⚠️ কোনো Non-System কালার পাওয়া যায়নি!');
-        return;
-      }
-
-      const xmlContent = generateNonSystemXml();
-      if (!xmlContent) {
-        showToast('❌ XML জেনারেট করতে ব্যর্থ!');
-        return;
-      }
-
-      const blob = new Blob([xmlContent], { type: 'text/xml' });
-      const downloadName = originalFileName ?
-        originalFileName.replace('.xml', '_non_system.xml') :
-        'non_system_colors.xml';
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = downloadName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      showToast(`✅ ${nonSystemColors.length} টি Non-System কালার ডাউনলোড হয়েছে!`);
-    }
-
-    // ===============================================================================
-    // MAIN FUNCTION - EXTRACT NON-SYSTEM COLORS FROM CURRENT XML
-    // ===============================================================================
-
-    async function extractNonSystemFromCurrentXml() {
-      if (!leftRawXml || leftRawXml.trim() === '') {
-        showToast('⚠️ আগে একটি XML ফাইল লোড করুন বা এডিটরে কিছু লিখুন!');
-        return;
-      }
-
-      await parseColorsXmlForNonSystem(leftRawXml);
-      downloadNonSystemColors('theme_values');
-    }
-
-    // ===============================================================================
-    // NON-SYSTEM COLOR VISUALIZATION IN RESOLVER
-    // ===============================================================================
-
-    function renderNonSystemColorsInResolver() {
-      const nonSystemColors = getNonSystemColorsOnly();
-      const container = document.getElementById('colorListContainer');
-
-      if (nonSystemColors.length === 0) {
-        if (colorMap.size === 0) {
-          container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No colors found in XML</div>';
+        // Highlight effect on last item
+        const lastItem = colorListContainer.querySelector('.color-grid-item:last-child');
+        if (lastItem) {
+          lastItem.style.boxShadow = '0 0 0 2px var(--md-primary)';
+          setTimeout(() => lastItem.style.boxShadow = '', 1500);
         }
-        return;
-      }
-
-      let html = '';
-
-      for (let color of nonSystemColors) {
-        const resolvedColor = color.value || '#A855F7';
-
-        let badges = '<span class="color-badge non-system-badge">🚫 Non-System</span>';
-
-        if (color.isRelative) {
-          badges += '<span class="color-badge relative-badge">🔗 Relative</span>';
+      } else {
+        // If no color list container, scroll to the color list card
+        const target = document.getElementById('colorListCard');
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
-
-        if (isBgButtonColor(color.name)) {
-          badges += '<span class="color-badge" style="background:#10b981;">🎨 BG/BTN</span>';
-        }
-        if (isTextColor(color.name)) {
-          const type = getTextReplaceColor(color.name) === '#00FF62' ? 'Secondary' : 'Primary';
-          badges += `<span class="color-badge" style="background:#f59e0b;">✍️ ${type}</span>`;
-        }
-
-        html += `
-          <div class="color-item">
-            <div class="color-preview" style="background: ${resolvedColor};"></div>
-            <div class="color-info">
-              <div class="color-name">
-                ${escapeHtml(color.name)} 
-                ${badges}
-              </div>
-              <div class="color-value">📄 Original: ${escapeHtml(color.originalRaw)}</div>
-              <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
-              ${color.isRelative ? `<div class="color-value" style="color: #f59e0b;">🔗 Parent: ${escapeHtml(color.parent)}</div>` : ''}
-            </div>
-          </div>
-        `;
       }
-
-      container.innerHTML = html;
-      showToast(`🎨 Non-System কালার দেখানো হচ্ছে: ${nonSystemColors.length} টি`);
     }
 
-    // Color Database
-    const androidDynamicColors = {
-      'm3_ref_palette_dynamic_primary40': '#6750A4',
-      'm3_ref_palette_dynamic_secondary40': '#625B71',
-      'm3_ref_palette_dynamic_tertiary40': '#7D5260',
-      'm3_ref_palette_dynamic_neutral60': '#949397',
-      'system_surface': '#FFFBFE',
-      'system_surface_container_high': '#E6E1E5',
-      'white': '#FFFFFF',
-      'black': '#000000',
-      'transparent': '#00000000'
-    };
-
-    const miuiColors = {
-      'miuix_color_primary': '#FF6200EE',
-      'miuix_color_accent': '#FF03DAC5',
-      'miuix_color_background': '#FFFFFFFF',
-      'miuix_color_dark_background': '#121212'
-    };
-
-    const universalColorDB = new Map();
-    Object.entries(androidDynamicColors).forEach(([k, v]) => universalColorDB.set(k, v));
-    Object.entries(miuiColors).forEach(([k, v]) => universalColorDB.set(k, v));
-
-    // Keywords
-    const bgButtonKeywords = ['background', 'bg', 'surface', 'container', 'card', 'dialog', 'panel', 'button', 'btn', 'primary', 'accent', 'error', 'warning', 'success', 'info', 'fab', 'toolbar', 'navbar', 'statusbar'];
-    const primaryTextKeywords = ['text', 'label', 'title', 'body', 'headline', 'content', 'message'];
-    const secondaryTextKeywords = ['secondary', 'subtitle', 'caption', 'hint', 'placeholder', 'helper'];
-
-    function isBgButtonColor(name) {
-      const lower = name.toLowerCase();
-      return bgButtonKeywords.some(kw => lower.includes(kw));
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function isTextColor(name) {
-      const lower = name.toLowerCase();
-      return primaryTextKeywords.some(kw => lower.includes(kw)) || secondaryTextKeywords.some(kw => lower.includes(kw));
-    }
-
-    function getTextReplaceColor(name) {
-      const lower = name.toLowerCase();
-      if (secondaryTextKeywords.some(kw => lower.includes(kw))) return '#00FF62';
-      return '#1686D0';
-    }
-
-    function isValidHexColor(color) {
-      if (!color || typeof color !== 'string') return false;
-      return /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/i.test(color);
-    }
-
-    function forceResolveColor(rawValue, colorMap, visited = new Set()) {
-      if (!rawValue || typeof rawValue !== 'string') return rawValue || '#888888';
-      let trimmed = String(rawValue).trim();
-
-      if (isValidHexColor(trimmed)) {
-        return trimmed.toUpperCase();
-      }
-
-      let refMatch = trimmed.match(/^@(?:color|android:color)\/([a-zA-Z0-9_\.]+)$/);
-      if (!refMatch) refMatch = trimmed.match(/^@([a-zA-Z0-9_\.]+)$/);
-
-      if (refMatch && refMatch[1]) {
-        const refName = refMatch[1];
-        if (visited.has(refName)) return '#FFA500';
-        visited.add(refName);
-
-        if (colorMap && colorMap.has(refName)) {
-          return forceResolveColor(colorMap.get(refName), colorMap, visited);
-        }
-        if (universalColorDB.has(refName)) {
-          return universalColorDB.get(refName);
-        }
-
-        const lowerRef = refName.toLowerCase();
-        if (lowerRef.includes('primary')) return '#6750A4';
-        if (lowerRef.includes('secondary')) return '#625B71';
-        if (lowerRef.includes('surface')) return '#E6E1E5';
-        if (lowerRef.includes('background')) return '#0A0C15';
-        return '#9CA3AF';
-      }
-
-      if (trimmed.includes('?attr')) {
-        if (trimmed.toLowerCase().includes('primary')) return '#6750A4';
-        if (trimmed.toLowerCase().includes('secondary')) return '#625B71';
-        return '#9CA3AF';
-      }
-
-      return trimmed;
-    }
-
-    function extractColorMap(xmlString) {
-      const map = new Map();
-      const colorMatches = xmlString.matchAll(/<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g);
-      for (const match of colorMatches) {
-        map.set(match[1], match[2].trim());
+    // ======================== COLOR RESOLVER ========================
+    function buildColorMapFromXML(xmlText) {
+      const map = {};
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      let match;
+      while ((match = regex.exec(xmlText)) !== null) {
+        map[match[1]] = match[2].trim();
       }
       return map;
     }
 
-    function convertToMIUIFormat(xmlString) {
-      const colorMatches = [];
-      const dimenMatches = [];
+    function resolveSingleColor(value, colorMap, visited = new Set(), depth = 0) {
+      if (depth > 30) return value;
+      if (typeof value !== 'string') return value;
 
-      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
+      if (value.startsWith('@color/')) {
+        const refName = value.replace('@color/', '');
+        if (visited.has(refName)) return value;
+        if (colorMap[refName]) {
+          visited.add(refName);
+          return resolveSingleColor(colorMap[refName], colorMap, visited, depth + 1);
+        }
+        return value;
+      }
+
+      if (value.startsWith('@android:color/')) {
+        const androidName = value.replace('@android:color/', '');
+        const mapping = {
+          'system_accent1_800': '#FF1686D0',
+          'primary': '#FF1686D0',
+          'secondary': '#FF00FF62',
+          'background': '#FF0F1117',
+          'surface': '#FF161A24',
+          'error': '#FFFF5CA1',
+          'white': '#FFFFFFFF',
+          'black': '#FF000000'
+        };
+        return mapping[androidName] || '#FF6B7280';
+      }
+
+      if (/^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/i.test(value)) {
+        return value;
+      }
+      return value;
+    }
+
+    function resolveAllColorReferences(xmlText) {
+      let colorMap = buildColorMapFromXML(xmlText);
+      let changed = true;
+      let passes = 0;
+      const maxPasses = 15;
+
+      while (changed && passes < maxPasses) {
+        changed = false;
+        const newMap = {};
+        for (const [name, val] of Object.entries(colorMap)) {
+          const resolved = resolveSingleColor(val, colorMap);
+          if (resolved !== val) changed = true;
+          newMap[name] = resolved;
+        }
+        colorMap = newMap;
+        passes++;
+      }
+
+      let result = xmlText;
+      for (const [name, resolvedVal] of Object.entries(colorMap)) {
+        const regex = new RegExp(`(<color\\s+name="${name}">)[^<]*(<\\/color>)`, 'g');
+        result = result.replace(regex, `$1${resolvedVal}$2`);
+      }
+      return result;
+    }
+
+    function formatAndResolve() {
+      let text = document.getElementById('xmlEditor').value;
+      text = resolveAllColorReferences(text);
+
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      const colors = [];
       let match;
-      while ((match = colorRegex.exec(xmlString)) !== null) {
-        colorMatches.push({ name: match[1], value: match[2].trim() });
+      while ((match = regex.exec(text)) !== null) {
+        colors.push(`    <color name="${match[1]}">${match[2].trim()}</color>`);
       }
 
-      const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]+)<\/dimen>/g;
-      while ((match = dimenRegex.exec(xmlString)) !== null) {
-        dimenMatches.push({ name: match[1], value: match[2].trim() });
+      let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      if (colors.length > 0) {
+        formatted += colors.join('\n') + '\n';
       }
+      formatted += `</MIUI_Theme_Values>`;
 
-      let miuiXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      miuiXml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      document.getElementById('xmlEditor').value = formatted;
+      saveToHistory();
+      extractColorList();
+    }
 
-      if (colorMatches.length > 0) {
-        colorMatches.forEach(c => {
-          miuiXml += `    <color name="${escapeXml(c.name)}">${escapeXml(c.value)}</color>\n`;
+    // ======================== EXTRACT & DISPLAY ========================
+    function extractColorList() {
+      const text = document.getElementById('xmlEditor').value;
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      const colors = [];
+      let match;
+
+      while ((match = regex.exec(text)) !== null) {
+        colors.push({
+          name: match[1],
+          value: match[2].trim()
         });
       }
 
-      if (dimenMatches.length > 0) {
-        if (colorMatches.length > 0) miuiXml += `\n`;
-        dimenMatches.forEach(d => {
-          miuiXml += `    <dimen name="${escapeXml(d.name)}">${escapeXml(d.value)}</dimen>\n`;
-        });
+      allColorsArray = colors;
+
+      if (colors.length === 0) {
+        document.getElementById('colorListArea').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-palette"></i>
+                        <p>No colors found in XML</p>
+                    </div>
+                `;
+        return;
       }
 
-      miuiXml += `</MIUI_Theme_Values>`;
-      return miuiXml;
+      renderColorPalette(colors);
     }
 
-    function buildXml(rootTag, itemMap) {
-      const items = Array.from(itemMap.values());
-      const colors = items.filter(i => i.tagName === 'color').sort((a, b) => a.name.localeCompare(b.name));
-      const dimens = items.filter(i => i.tagName === 'dimen').sort((a, b) => a.name.localeCompare(b.name));
+    function renderColorPalette(colors) {
+      const container = document.getElementById('colorListArea');
+      container.innerHTML = `
+                <input type="text" id="searchColorInput" class="search-input" placeholder="🔍 Search by color name or hex value...">
+                <div class="selection-bar">
+                    <button class="btn" onclick="selectAllColors()"><i class="fas fa-check-double"></i> Select All</button>
+                    <button class="btn" onclick="deselectAllColors()"><i class="fas fa-times-circle"></i> Deselect All</button>
+                    <button class="btn btn-secondary" onclick="invertColorSelection()"><i class="fas fa-exchange-alt"></i> Invert</button>
+                </div>
+                <div class="color-list-container" id="colorListContainer"></div>
+            `;
 
-      let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      const searchInput = document.getElementById('searchColorInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => filterColorList(e.target.value));
+      }
 
-      colors.forEach(item => {
-        xml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
+      displayColorItems(colors);
+    }
+
+    function filterColorList(searchTerm) {
+      if (!searchTerm) {
+        displayColorItems(allColorsArray);
+        return;
+      }
+      const term = searchTerm.toLowerCase();
+      const filtered = allColorsArray.filter(c =>
+        c.name.toLowerCase().includes(term) ||
+        c.value.toLowerCase().includes(term)
+      );
+      displayColorItems(filtered);
+    }
+
+    function displayColorItems(colors) {
+      const listContainer = document.getElementById('colorListContainer');
+      if (!listContainer) return;
+      listContainer.innerHTML = '';
+
+      colors.forEach((color, idx) => {
+        const isHex = /^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/i.test(color.value);
+        const paletteColor = isHex ? color.value : '#6b7280';
+
+        const item = document.createElement('div');
+        item.className = 'color-grid-item';
+        item.setAttribute('data-serial-idx', idx + 1);
+        item.innerHTML = `
+                    <div class="color-info-block">
+                        <span class="serial-number" onclick="goToSerial(${idx + 1})">${idx + 1}</span>
+                        <div class="color-palette-preview" style="background: ${paletteColor};"></div>
+                        <div class="color-text-details">
+                            <div class="color-name-text">${escapeHtml(color.name)}</div>
+                            <div class="color-hex-value">${escapeHtml(color.value)}</div>
+                        </div>
+                    </div>
+                    <div class="color-actions-block">
+                        <input type="checkbox" class="md-checkbox" data-color-name="${escapeHtml(color.name)}" data-color-value="${escapeHtml(color.value)}">
+                    </div>
+                `;
+        listContainer.appendChild(item);
       });
 
-      if (colors.length > 0 && dimens.length > 0) xml += `\n`;
-
-      dimens.forEach(item => {
-        xml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
+      document.querySelectorAll('.color-grid-item .md-checkbox').forEach(cb => {
+        cb.addEventListener('change', () => updateSelectionHighlight());
       });
-
-      xml += `</MIUI_Theme_Values>`;
-      return xml;
     }
 
-    function normalizeXml(xmlString) {
-      let content = xmlString.trim();
-
-      if (content.includes('<MIUI_Theme_Values')) {
-        return content;
-      }
-
-      return convertToMIUIFormat(content);
-    }
-
-    function parseXml(xmlString) {
-      const normalized = normalizeXml(xmlString);
-      const items = [];
-
-      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
-      let match;
-      while ((match = colorRegex.exec(normalized)) !== null) {
-        items.push({ tagName: 'color', name: match[1], value: match[2].trim() });
-      }
-
-      const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]+)<\/dimen>/g;
-      while ((match = dimenRegex.exec(normalized)) !== null) {
-        items.push({ tagName: 'dimen', name: match[1], value: match[2].trim() });
-      }
-
-      const itemMap = new Map();
-      items.forEach(item => itemMap.set(`${item.tagName}::${item.name}`, item));
-      return { rootTag: 'MIUI_Theme_Values', itemMap };
-    }
-
-    function escapeXml(str) {
-      return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    function updateSelectionHighlight() {
+      const items = document.querySelectorAll('.color-grid-item');
+      items.forEach(item => {
+        const cb = item.querySelector('.md-checkbox');
+        if (cb && cb.checked) {
+          item.classList.add('selected');
+        } else {
+          item.classList.remove('selected');
+        }
+      });
     }
 
     function escapeHtml(str) {
-      return str ? str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])) : '';
-    }
-
-    function showToast(msg) {
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    function updateStats() {
-      try {
-        const leftParsed = parseXml(leftRawXml);
-        let colors = 0, dimens = 0;
-        leftParsed.itemMap.forEach((v, k) => {
-          if (k.startsWith('color::')) colors++;
-          else if (k.startsWith('dimen::')) dimens++;
-        });
-        document.getElementById('leftStats').innerHTML = `📄 Ready`;
-        const leftStatsDiv = document.querySelector('#leftStats + .stats');
-        if (leftStatsDiv) {
-          leftStatsDiv.children[0].innerHTML = `🎨 Colors: ${colors}`;
-          leftStatsDiv.children[1].innerHTML = `📏 Dimen: ${dimens}`;
-          leftStatsDiv.children[2].innerHTML = `📦 Total: ${leftParsed.itemMap.size}`;
-        }
-      } catch (e) { }
-
-      try {
-        const rightParsed = parseXml(rightRawXml);
-        let colors = 0, dimens = 0;
-        rightParsed.itemMap.forEach((v, k) => {
-          if (k.startsWith('color::')) colors++;
-          else if (k.startsWith('dimen::')) dimens++;
-        });
-        document.getElementById('rightStats').innerHTML = `📄 Ready`;
-        const rightStatsDiv = document.querySelector('#rightStats + .stats');
-        if (rightStatsDiv) {
-          rightStatsDiv.children[0].innerHTML = `🎨 Colors: ${colors}`;
-          rightStatsDiv.children[1].innerHTML = `📏 Dimen: ${dimens}`;
-          rightStatsDiv.children[2].innerHTML = `📦 Total: ${rightParsed.itemMap.size}`;
-        }
-      } catch (e) { }
-    }
-
-    let leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-<MIUI_Theme_Values template="DarkTemplate">
-    <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
-    <color name="button_bg">@color/primary</color>
-    <color name="text_title">#E2E2F0</color>
-    <color name="text_subtitle">#A9B1D6</color>
-    <color name="text_hint">#6C6C8A</color>
-    <color name="background_main">#0A0C15</color>
-    <color name="error_red">#FF4444</color>
-    <color name="success_green">#00C851</color>
-    <color name="system_accent">@android:color/system_accent1_dark</color>
-    <dimen name="spacing_large">24dp</dimen>
-</MIUI_Theme_Values>`;
-
-    let rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-<MIUI_Theme_Values template="DarkTemplate">
-    <color name="accent">#FF03DAC5</color>
-    <dimen name="spacing_medium">16dp</dimen>
-</MIUI_Theme_Values>`;
-
-    function updateEditors() {
-      document.getElementById('leftEditor').value = leftRawXml;
-      document.getElementById('rightEditor').value = rightRawXml;
-      updateStats();
-    }
-
-    function mergeFiles() {
-      try {
-        const leftParsed = parseXml(leftRawXml);
-        const rightParsed = parseXml(rightRawXml);
-        const mergedMap = new Map(leftParsed.itemMap);
-        let added = 0;
-        rightParsed.itemMap.forEach((item, key) => {
-          if (!mergedMap.has(key)) {
-            mergedMap.set(key, item);
-            added++;
-          }
-        });
-        leftRawXml = buildXml(leftParsed.rootTag, mergedMap);
-        updateEditors();
-        showToast(`✓ Merged: +${added} new items added in MIUI_Theme_Values format`);
-      } catch (e) {
-        showToast(`Error: ${e.message}`);
-      }
-    }
-
-    function downloadRaw() {
-      const blob = new Blob([leftRawXml], { type: 'application/xml' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'theme_values.xml';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast('✓ Downloaded in MIUI_Theme_Values format');
-    }
-
-    function downloadCleanResolved() {
-      let resolvedXml = leftRawXml;
-      const colorMap = extractColorMap(leftRawXml);
-      colorMap.forEach((value, name) => {
-        const resolved = forceResolveColor(value, colorMap);
-        resolvedXml = resolvedXml.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'), `$1${resolved}$2`);
+      return str.replace(/[&<>]/g, function (m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
       });
-
-      if (!resolvedXml.includes('<MIUI_Theme_Values')) {
-        resolvedXml = convertToMIUIFormat(resolvedXml);
-      }
-
-      const blob = new Blob([resolvedXml], { type: 'application/xml' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'theme_values_resolved.xml';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast('✓ Clean resolved XML downloaded in MIUI_Theme_Values format');
     }
 
-    function escapeRegex(str) {
-      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // ======================== SELECTION ========================
+    function selectAllColors() {
+      document.querySelectorAll('.color-grid-item .md-checkbox').forEach(cb => cb.checked = true);
+      updateSelectionHighlight();
     }
 
-    function exportColorsByCategory(filter, categoryName) {
-      const colorMap = extractColorMap(leftRawXml);
-      const filtered = [];
-      colorMap.forEach((value, name) => {
-        if (filter(name)) {
-          const resolved = forceResolveColor(value, colorMap);
-          filtered.push({ name, value: resolved });
-        }
-      });
-      if (filtered.length === 0) {
-        showToast(`No ${categoryName} colors found`);
+    function deselectAllColors() {
+      document.querySelectorAll('.color-grid-item .md-checkbox').forEach(cb => cb.checked = false);
+      updateSelectionHighlight();
+    }
+
+    function invertColorSelection() {
+      document.querySelectorAll('.color-grid-item .md-checkbox').forEach(cb => cb.checked = !cb.checked);
+      updateSelectionHighlight();
+    }
+
+    // ======================== DELETE ========================
+    function deleteSelectedColors() {
+      const selected = document.querySelectorAll('.color-grid-item .md-checkbox:checked');
+      if (selected.length === 0) {
+        alert('Please select colors to delete');
         return;
       }
-
-      let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-      filtered.forEach(c => xml += `    <color name="${c.name}">${c.value}</color>\n`);
-      xml += `</MIUI_Theme_Values>`;
-
-      const blob = new Blob([xml], { type: 'application/xml' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `${categoryName}.xml`;
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast(`✓ Exported ${filtered.length} ${categoryName} colors in MIUI_Theme_Values format`);
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+      selected.forEach(cb => {
+        const colorName = cb.getAttribute('data-color-name');
+        const regex = new RegExp(`<color\\s+name="${colorName}">[^<]*<\\/color>`, 'g');
+        text = text.replace(regex, '');
+      });
+      text = text.replace(/\n\s*\n/g, '\n');
+      document.getElementById('xmlEditor').value = text;
+      extractColorList();
     }
 
-    function replaceBgColors() {
-      let modified = leftRawXml;
-      const colorMap = extractColorMap(leftRawXml);
-      let count = 0;
-      colorMap.forEach((value, name) => {
-        if (isBgButtonColor(name)) {
-          modified = modified.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'), `$1#061D2E$2`);
-          count++;
-        }
-      });
-      if (count > 0) {
-        leftRawXml = modified;
-        updateEditors();
-        showToast(`✓ Replaced ${count} button/bg colors with #061D2E`);
-      } else {
-        showToast('No button/background colors found');
+    function deleteAllColors() {
+      if (confirm('⚠️ Delete ALL colors? This action cannot be undone!')) {
+        saveToHistory();
+        let text = document.getElementById('xmlEditor').value;
+        text = text.replace(/<color\s+name="[^"]+">[^<]*<\/color>/g, '');
+        text = text.replace(/\n\s*\n/g, '\n');
+        document.getElementById('xmlEditor').value = text;
+        extractColorList();
       }
     }
 
-    function replaceTextColorsSmart() {
-      let modified = leftRawXml;
-      const colorMap = extractColorMap(leftRawXml);
-      let primary = 0, secondary = 0;
-      colorMap.forEach((value, name) => {
-        if (isTextColor(name)) {
-          const newColor = getTextReplaceColor(name);
-          modified = modified.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'), `$1${newColor}$2`);
-          if (newColor === '#00FF62') secondary++;
-          else primary++;
-        }
-      });
-      if (primary + secondary > 0) {
-        leftRawXml = modified;
-        updateEditors();
-        showToast(`✓ Replaced: ${primary} Primary (#1686D0) + ${secondary} Secondary (#00FF62) text colors`);
-      } else {
-        showToast('No text colors found');
-      }
+    // ======================== REPLACE (NO CONFIRMATION) ========================
+    function getNewColorValue() {
+      return document.getElementById('newColorHex').value.trim();
     }
 
-    function renderColorResolver() {
-      const colorMap = extractColorMap(leftRawXml);
-      const container = document.getElementById('colorListContainer');
-
-      if (colorMap.size === 0) {
-        container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No colors found in XML</div>';
+    function replaceSelectedColors() {
+      const selected = document.querySelectorAll('.color-grid-item .md-checkbox:checked');
+      if (selected.length === 0) {
+        alert('Please select colors to replace');
         return;
       }
-
-      let html = '';
-
-      for (let [name, originalValue] of colorMap) {
-        const resolvedColor = forceResolveColor(originalValue, colorMap);
-        const isSystemColor = originalValue.includes('@android:color/');
-
-        let badges = '';
-
-        if (isSystemColor) {
-          badges += '<span class="color-badge system-badge">📱 System</span>';
-        } else {
-          badges += '<span class="color-badge non-system-badge">🚫 Non-System</span>';
-        }
-
-        if (isBgButtonColor(name)) {
-          badges += '<span class="color-badge" style="background:#10b981;">🎨 BG/BTN</span>';
-        }
-        if (isTextColor(name)) {
-          const type = getTextReplaceColor(name) === '#00FF62' ? 'Secondary' : 'Primary';
-          badges += `<span class="color-badge" style="background:#f59e0b;">✍️ ${type}</span>`;
-        }
-
-        const isOriginalHex = isValidHexColor(originalValue);
-        const isSame = isOriginalHex && originalValue.toUpperCase() === resolvedColor.toUpperCase();
-
-        html += `
-          <div class="color-item">
-            <div class="color-preview" style="background: ${resolvedColor};"></div>
-            <div class="color-info">
-              <div class="color-name">
-                ${escapeHtml(name)} 
-                ${badges}
-              </div>
-              <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
-              ${!isSame ? `<div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>` : ''}
-            </div>
-          </div>
-        `;
+      const newColor = getNewColorValue();
+      if (!/^#([0-9A-Fa-f]{6})$/i.test(newColor)) {
+        alert('Please enter a valid 6-digit hex color (e.g., #FF0000)');
+        return;
       }
-
-      container.innerHTML = html;
-      showToast(`✓ Resolved ${colorMap.size} colors successfully!`);
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+      selected.forEach(cb => {
+        const colorName = cb.getAttribute('data-color-name');
+        const regex = new RegExp(`(<color\\s+name="${colorName}">)[^<]*(<\\/color>)`, 'g');
+        text = text.replace(regex, `$1${newColor}$2`);
+      });
+      document.getElementById('xmlEditor').value = text;
+      extractColorList();
     }
 
-    // Event Listeners
-    document.getElementById('mergeActionBtn').addEventListener('click', mergeFiles);
-    document.getElementById('downloadBtn').addEventListener('click', downloadRaw);
-    document.getElementById('resetExampleBtn').addEventListener('click', () => {
-      leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
+    function replaceAllColors() {
+      const newColor = getNewColorValue();
+      if (!/^#([0-9A-Fa-f]{6})$/i.test(newColor)) {
+        alert('Please enter a valid 6-digit hex color');
+        return;
+      }
+      // No confirmation - direct replace
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+      text = text.replace(/(<color\s+name="[^"]+">)[^<]*(<\/color>)/g, `$1${newColor}$2`);
+      document.getElementById('xmlEditor').value = text;
+      extractColorList();
+    }
+
+    // ======================== SORT ========================
+    function sortColorsByName() {
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      const colors = [];
+      let match;
+      while ((match = regex.exec(text)) !== null) {
+        colors.push(`<color name="${match[1]}">${match[2]}</color>`);
+      }
+      colors.sort((a, b) => {
+        const nameA = a.match(/name="([^"]+)"/)[1];
+        const nameB = b.match(/name="([^"]+)"/)[1];
+        return nameA.localeCompare(nameB);
+      });
+
+      let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      formatted += colors.map(c => `    ${c}`).join('\n') + '\n';
+      formatted += `</MIUI_Theme_Values>`;
+
+      document.getElementById('xmlEditor').value = formatted;
+      extractColorList();
+    }
+
+    // ======================== DOWNLOAD ========================
+    function downloadResolvedXML() {
+      let text = document.getElementById('xmlEditor').value;
+      text = resolveAllColorReferences(text);
+
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      const colors = [];
+      let match;
+      while ((match = regex.exec(text)) !== null) {
+        colors.push(`    <color name="${match[1]}">${match[2].trim()}</color>`);
+      }
+
+      let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      if (colors.length > 0) {
+        formatted += colors.join('\n') + '\n';
+      }
+      formatted += `</MIUI_Theme_Values>`;
+
+      const blob = new Blob([formatted], { type: 'text/xml' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'theme_values_resolved.xml';
+      link.click();
+    }
+
+    // ======================== SERIAL ========================
+    function goToSerial(serialNum) {
+      const target = document.querySelector(`.color-grid-item[data-serial-idx="${serialNum}"]`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.style.boxShadow = '0 0 0 2px var(--md-primary)';
+        setTimeout(() => target.style.boxShadow = '', 1500);
+      } else {
+        alert(`Color #${serialNum} not found`);
+      }
+    }
+
+    function gotoSerialNumber() {
+      const num = parseInt(document.getElementById('serialNumberInput').value);
+      if (num && num > 0) {
+        goToSerial(num);
+        closeSerialModal();
+      } else {
+        alert('Please enter a valid serial number');
+      }
+    }
+
+    function closeSerialModal() {
+      document.getElementById('serialModal').style.display = 'none';
+    }
+
+    // ======================== PRESET COLORS ========================
+    function loadPresetColorsUI() {
+      const container = document.getElementById('presetColorsGrid');
+      container.innerHTML = '';
+      customPresetColors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'preset-swatch';
+        swatch.style.backgroundColor = color;
+        swatch.onclick = () => {
+          document.getElementById('newColorPicker').value = color;
+          document.getElementById('newColorHex').value = color;
+          document.getElementById('colorPreviewBox').style.backgroundColor = color;
+        };
+        container.appendChild(swatch);
+      });
+    }
+
+    // ======================== FILE UPLOAD ========================
+    document.getElementById('xmlFileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('fileNameDisplay').innerHTML = file.name;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        let content = ev.target.result;
+        content = resolveAllColorReferences(content);
+
+        const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+        const colors = [];
+        let match;
+        while ((match = regex.exec(content)) !== null) {
+          colors.push(`    <color name="${match[1]}">${match[2].trim()}</color>`);
+        }
+
+        let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+        formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+        if (colors.length > 0) formatted += colors.join('\n') + '\n';
+        formatted += `</MIUI_Theme_Values>`;
+
+        document.getElementById('xmlEditor').value = formatted;
+        originalXmlContent = formatted;
+        saveToHistory();
+        extractColorList();
+      };
+      reader.readAsText(file);
+    });
+
+    // ======================== EVENT LISTENERS ========================
+    document.getElementById('newColorHex').addEventListener('input', (e) => {
+      const val = e.target.value;
+      if (/^#([0-9A-Fa-f]{6})$/i.test(val)) {
+        document.getElementById('newColorPicker').value = val;
+        document.getElementById('colorPreviewBox').style.backgroundColor = val;
+      }
+    });
+
+    document.getElementById('colorPreviewBox').addEventListener('click', () => {
+      document.getElementById('newColorPicker').click();
+    });
+
+    document.getElementById('newColorPicker').addEventListener('input', (e) => {
+      const val = e.target.value;
+      document.getElementById('newColorHex').value = val;
+      document.getElementById('colorPreviewBox').style.backgroundColor = val;
+    });
+
+    // FAB Events
+    document.getElementById('goToSerialFab').onclick = () => {
+      document.getElementById('serialModal').style.display = 'block';
+      document.getElementById('serialNumberInput').focus();
+    };
+    document.getElementById('scrollToTopFab').onclick = scrollToTop;
+    document.getElementById('scrollToBottomFab').onclick = scrollToBottomOfColorList;
+
+    // Close modal on outside click
+    document.addEventListener('click', (e) => {
+      const modal = document.getElementById('serialModal');
+      const btn = document.getElementById('goToSerialFab');
+      if (modal.style.display === 'block' && !modal.contains(e.target) && e.target !== btn) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoAction(); }
+      if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redoAction(); }
+      if (e.key === 'Escape') { closeSerialModal(); }
+    });
+
+    // ======================== INITIALIZE ========================
+    const defaultXmlData = `<?xml version='1.0' encoding='UTF-8'?>
 <MIUI_Theme_Values template="DarkTemplate">
-    <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
-    <color name="button_bg">@color/primary</color>
-    <color name="text_title">#E2E2F0</color>
-    <color name="text_subtitle">#A9B1D6</color>
-    <color name="text_hint">#6C6C8A</color>
-    <color name="background_main">#0A0C15</color>
-    <color name="error_red">#FF4444</color>
-    <color name="success_green">#00C851</color>
-    <color name="system_accent">@android:color/system_accent1_dark</color>
-    <dimen name="spacing_large">24dp</dimen>
+    <color name="primary_color">#1686D0</color>
+    <color name="secondary_color">#006378</color>
+    <color name="success_color">#00FF62</color>
+    <color name="dark_bg">#061D2E</color>
+    <color name="surface_color">#0A2E39</color>
+    <color name="warning_color">#FFC300</color>
+    <color name="accent_color">#FF7E29</color>
+    <color name="error_color">#FF5CA1</color>
+    <color name="custom_color">#E68585</color>
+    <color name="extra_color">#7646FF</color>
+    <color name="black_color">#000000</color>
+    <color name="dark_extra">#041C30</color>
 </MIUI_Theme_Values>`;
-      updateEditors();
-      showToast('Reset to default MIUI_Theme_Values format');
-    });
-    document.getElementById('exportBgBtn').addEventListener('click', () => exportColorsByCategory(isBgButtonColor, 'button_background_colors'));
-    document.getElementById('exportTextBtn').addEventListener('click', () => exportColorsByCategory(isTextColor, 'text_colors'));
-    document.getElementById('extractNonSystemBtn').addEventListener('click', extractNonSystemFromCurrentXml);
-    document.getElementById('replaceBgWithColorBtn').addEventListener('click', replaceBgColors);
-    document.getElementById('replaceTextWithColorBtn').addEventListener('click', replaceTextColorsSmart);
-    document.getElementById('resolveColorsBtn').addEventListener('click', renderColorResolver);
-    document.getElementById('cleanDownloadBtn').addEventListener('click', downloadCleanResolved);
 
-    document.getElementById('leftFileInput').addEventListener('change', (e) => {
-      const f = e.target.files[0];
-      if (f) {
-        const r = new FileReader();
-        r.onload = (ev) => {
-          let content = ev.target.result;
-          leftRawXml = convertToMIUIFormat(content);
-          updateEditors();
-          showToast('✓ File loaded and converted to MIUI_Theme_Values format');
-        };
-        r.readAsText(f);
-      }
-    });
-    document.getElementById('rightFileInput').addEventListener('change', (e) => {
-      const f = e.target.files[0];
-      if (f) {
-        const r = new FileReader();
-        r.onload = (ev) => {
-          let content = ev.target.result;
-          rightRawXml = convertToMIUIFormat(content);
-          updateEditors();
-          showToast('✓ File loaded and converted to MIUI_Theme_Values format');
-        };
-        r.readAsText(f);
-      }
-    });
-    document.getElementById('clearLeftBtn').addEventListener('click', () => {
-      leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n\n</MIUI_Theme_Values>`;
-      updateEditors();
-    });
-    document.getElementById('clearRightBtn').addEventListener('click', () => {
-      rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n\n</MIUI_Theme_Values>`;
-      updateEditors();
-    });
-
-    const leftEditor = document.getElementById('leftEditor');
-    const rightEditor = document.getElementById('rightEditor');
-    leftEditor.addEventListener('input', () => {
-      leftRawXml = leftEditor.value;
-      updateStats();
-    });
-    rightEditor.addEventListener('input', () => {
-      rightRawXml = rightEditor.value;
-      updateStats();
-    });
-
-    let isPanelOpen = true;
-    document.getElementById('toggleResolverHeader').addEventListener('click', (e) => {
-      if (e.target.id !== 'resolveColorsBtn' && e.target.id !== 'cleanDownloadBtn') {
-        isPanelOpen = !isPanelOpen;
-        document.getElementById('resolverContent').classList.toggle('collapsed', !isPanelOpen);
-        document.getElementById('toggleIcon').textContent = isPanelOpen ? '▼' : '▲';
-      }
-    });
-
-    updateEditors();
+    const resolvedDefault = resolveAllColorReferences(defaultXmlData);
+    document.getElementById('xmlEditor').value = resolvedDefault;
+    originalXmlContent = resolvedDefault;
+    saveToHistory();
+    extractColorList();
+    loadPresetColorsUI();
   </script>
 </body>
 
