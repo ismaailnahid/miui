@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover, shrink-to-fit=no">
+    <title>Name Merger</title>
+    <!-- JSZip + FileSaver -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a141c 0%, #02080e 100%);
+            font-family: -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 12px;
+            min-height: 100vh;
+        }
+
+        .master-container {
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(15, 25, 30, 0.8);
+            backdrop-filter: blur(3px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+            }
+            .master-container {
+                padding: 0.7rem;
+                border-radius: 20px;
+            }
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: clamp(1.2rem, 5vw, 1.6rem);
+            font-weight: 600;
+            background: linear-gradient(135deg, #f0f9ff, #8cd4e8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggles-container {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            background: #0a151cb3;
+            padding: 6px 16px;
+            border-radius: 60px;
+        }
+
+        .toggle-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-label {
+            color: #cce7f0;
+            font-size: clamp(0.65rem, 2.8vw, 0.75rem);
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #2c4a47;
+            transition: 0.25s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.25s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #4bcbad;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .toggle-status {
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+            background: #1a2f2a;
+            color: #ffd966;
+        }
+
+        .toggle-status.active {
+            background: #2e7d64;
+            color: white;
+        }
+
+        .direction-badge {
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .sub {
+            color: #8bb3c2;
+            border-left: 3px solid #3bc0a0;
+            padding-left: 12px;
+            margin: 6px 0 16px 0;
+            font-size: clamp(0.7rem, 3vw, 0.78rem);
+        }
+
+        .dual-pane {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.8rem, 2vw, 1.5rem);
+        }
+
+        .pane {
+            flex: 1;
+            min-width: 280px;
+            background: #0e1921dd;
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            border: 1px solid #2b8872;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+        }
+
+        .pane-left.direction-source {
+            border: 2px solid #4bcbad;
+            box-shadow: 0 0 0 1px #4bcbad55;
+        }
+
+        .pane-right.direction-target {
+            border: 2px solid #ffaa44;
+            box-shadow: 0 0 0 1px #ffaa4455;
+        }
+
+        @media (min-width: 1024px) {
+            .pane {
+                min-width: 400px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pane {
+                min-width: 100%;
+                margin-bottom: 4px;
+            }
+            .dual-pane {
+                gap: 1rem;
+            }
+        }
+
+        .pane-header {
+            background: #061018ee;
+            padding: clamp(10px, 3vw, 14px) clamp(10px, 3vw, 14px);
+            border-bottom: 1px solid #277a66;
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .pane-title {
+            font-weight: bold;
+            background: #00000066;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+            color: #d2effa;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .icon-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: #1d423b;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 40px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:active {
+            transform: scale(0.94);
+            background: #3a7b67;
+        }
+
+        @media (hover: hover) {
+            .icon-btn:hover {
+                background: #317a65;
+                transform: scale(0.96);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .icon-btn {
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+            .action-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+
+        .controls-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-top: 6px;
+        }
+
+        .search-input {
+            flex: 2;
+            background: #0d181f;
+            border: 1px solid #319d81;
+            border-radius: 2rem;
+            padding: 10px 14px;
+            color: white;
+            font-size: clamp(0.75rem, 3vw, 0.8rem);
+            outline: none;
+        }
+
+        .sort-select {
+            background: #1d3f38;
+            border: none;
+            padding: 9px 14px;
+            border-radius: 2rem;
+            color: #eafaff;
+            font-size: clamp(0.7rem, 2.8vw, 0.75rem);
+            cursor: pointer;
+        }
+
+        .file-scroll-area {
+            display: flex;
+            flex: 1;
+            min-height: 350px;
+            position: relative;
+        }
+
+        @media (max-width: 640px) {
+            .file-scroll-area {
+                min-height: 380px;
+            }
+        }
+
+        .file-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 6px;
+            max-height: 460px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .alphabet-bar {
+            width: clamp(38px, 8vw, 48px);
+            background: #0a161ec9;
+            border-left: 1px solid #35987e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            text-align: center;
+            padding: 8px 2px;
+            gap: 4px;
+            user-select: none;
+            font-family: monospace;
+        }
+
+        .alphabet-bar span {
+            padding: 8px 0;
+            width: 100%;
+            text-align: center;
+            color: #c8ecf5;
+            border-radius: 20px;
+            transition: 0.05s linear;
+            font-weight: 600;
+            font-size: clamp(0.7rem, 3vw, 0.8rem);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 32px;
+        }
+
+        .alphabet-bar span:active {
+            background: #46bfa0;
+            color: #0f1a1a;
+            transform: scale(0.95);
+        }
+
+        @media (hover: hover) {
+            .alphabet-bar span:hover {
+                background: #46bfa0;
+                color: #0f1a1a;
+                transform: scale(1.03);
+            }
+        }
+
+        .file-item {
+            background: #0c1920c2;
+            margin: 8px 6px;
+            border-radius: 18px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-left: 3px solid #4bcbad;
+            transition: 0.05s;
+        }
+
+        .tap-copy-active .file-name {
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .tap-copy-active .file-name:active {
+            background: #4bcbad;
+            color: #07131c;
+            transform: scale(0.98);
+        }
+
+        .tap-paste-active .file-name {
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .tap-paste-active .file-name:active {
+            background: #ffaa44;
+            color: #07131c;
+            transform: scale(0.98);
+        }
+
+        .preview-img {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #1e2a2f;
+            border: 1px solid #73dbbc;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .preview-img {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+        .file-name {
+            font-size: clamp(0.7rem, 3.2vw, 0.8rem);
+            font-weight: 500;
+            color: #e2f0f5;
+            word-break: break-word;
+            background: #00000044;
+            padding: 6px 12px;
+            border-radius: 20px;
+            flex: 2;
+            min-width: 100px;
+            transition: 0.1s;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .action-icon {
+            background: #2a525b;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-icon:active {
+            transform: scale(0.92);
+            opacity: 0.8;
+        }
+
+        .action-icon.copy-icon {
+            background: #2c6c77;
+        }
+
+        .action-icon.paste-icon {
+            background: #6d6a2e;
+        }
+
+        .action-icon.disabled-copy,
+        .action-icon.disabled-paste {
+            opacity: 0.35;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        @media (max-width: 550px) {
+            .item-actions {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-end;
+                margin-top: 6px;
+            }
+            .file-item {
+                gap: 10px;
+            }
+            .action-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 1rem;
+            }
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #9cbacb;
+            padding: 50px 16px;
+            font-size: clamp(0.75rem, 3vw, 0.85rem);
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f222a;
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #389f83;
+            border-radius: 8px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: clamp(0.6rem, 2.5vw, 0.7rem);
+            color: #628f99;
+            padding: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1c2f2aeb;
+            backdrop-filter: blur(12px);
+            padding: 10px 24px;
+            border-radius: 60px;
+            color: white;
+            font-size: clamp(0.75rem, 3vw, 0.85rem);
+            z-index: 9999;
+            border: 1px solid #5dd6b5;
+            max-width: 90vw;
+            text-align: center;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 500px) {
+            .toast {
+                white-space: normal;
+                min-width: 200px;
+            }
+        }
+
+        .highlight-jump {
+            transition: 0.2s;
+            background-color: #2a8b75 !important;
+            box-shadow: 0 0 0 2px #5dd6b5;
+        }
+
+        .paste-flash {
+            transition: 0.15s;
+            background-color: #ffaa4455 !important;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            backdrop-filter: blur(8px);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #4bcbad;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="master-container">
+        <div class="header-row">
+            <h1><i class="fas fa-layer-group"></i> Name Merger Tool </h1>
+            <div class="toggles-container">
+                <div class="toggle-item">
+                    <span class="toggle-label"><i class="fas fa-arrow-right"></i> Left→Right Mode</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="directionalToggle">
+                        <span class="slider"></span>
+                    </label>
+                    <span id="dirStatus" class="toggle-status">OFF</span>
+                </div>
+            </div>
+        </div>
+        <div class="sub"><i class="fas fa-code-branch"></i> <strong>Name Merger + Archive Upload:</strong> Toggle ON → Tap LEFT filename = copy name | Tap RIGHT filename = replace name. <strong>📦 এখন একই আপলোড বাটনে ইমেজ ও ZIP/RAR আর্কাইভ দুটোই আপলোড করা যাবে - আর্কাইভ থেকে সব ইমেজ অটো এক্সট্র্যাক্ট হবে!</strong></div>
+
+        <div class="dual-pane">
+            <!-- LEFT PANE -->
+            <div class="pane pane-left" id="paneLeft">
+                <div class="pane-header">
+                    <div class="title-bar">
+                        <span class="pane-title"><i class="fas fa-folder-open"></i> LEFT PANEL <span id="leftBadge" class="direction-badge"></span></span>
+                        <div class="icon-buttons">
+                            <button class="icon-btn" id="uploadLeftBtn" title="Upload Images or ZIP/RAR"><i class="fas fa-upload"></i></button>
+                            <button class="icon-btn" id="zipLeftBtn" title="Download ZIP"><i class="fas fa-file-archive"></i></button>
+                        </div>
+                    </div>
+                    <div class="controls-row">
+                        <input type="text" class="search-input" id="searchLeft" placeholder="🔍 Search...">
+                        <select class="sort-select" id="sortLeft">
+                            <option value="name_asc">Name A→Z</option>
+                            <option value="name_desc">Name Z→A</option>
+                            <option value="date_asc">Oldest first</option>
+                            <option value="date_desc">Newest first</option>
+                        </select>
+                    </div>
+                    <input type="file" id="leftFileInput" accept="image/png, image/jpeg, image/jpg, .png, .jpg, .jpeg, .9.png, .zip, .rar, .cbz" multiple style="display:none">
+                </div>
+                <div class="file-scroll-area">
+                    <div class="file-list" id="leftFileList"></div>
+                    <div class="alphabet-bar" id="alphabetLeft"></div>
+                </div>
+            </div>
+
+            <!-- RIGHT PANE -->
+            <div class="pane pane-right" id="paneRight">
+                <div class="pane-header">
+                    <div class="title-bar">
+                        <span class="pane-title"><i class="fas fa-folder-open"></i> RIGHT PANEL <span id="rightBadge" class="direction-badge"></span></span>
+                        <div class="icon-buttons">
+                            <button class="icon-btn" id="uploadRightBtn" title="Upload Images or ZIP/RAR"><i class="fas fa-upload"></i></button>
+                            <button class="icon-btn" id="zipRightBtn" title="Download ZIP"><i class="fas fa-file-archive"></i></button>
+                        </div>
+                    </div>
+                    <div class="controls-row">
+                        <input type="text" class="search-input" id="searchRight" placeholder="🔍 Search...">
+                        <select class="sort-select" id="sortRight">
+                            <option value="name_asc">Name A→Z</option>
+                            <option value="name_desc">Name Z→A</option>
+                            <option value="date_asc">Oldest first</option>
+                            <option value="date_desc">Newest first</option>
+                        </select>
+                    </div>
+                    <input type="file" id="rightFileInput" accept="image/png, image/jpeg, image/jpg, .png, .jpg, .jpeg, .9.png, .zip, .rar, .cbz" multiple style="display:none">
+                </div>
+                <div class="file-scroll-area">
+                    <div class="file-list" id="rightFileList"></div>
+                    <div class="alphabet-bar" id="alphabetRight"></div>
+                </div>
+            </div>
+        </div>
+        <footer><i class="fas fa-info-circle"></i> <strong>কীভাবে কাজ করে:</strong> Toggle ON → LEFT প্যানেলের যেকোনো ফাইলের নাম ট্যাপ করুন (নাম কপি হবে) → RIGHT প্যানেলের যেকোনো ফাইলের নাম ট্যাপ করুন (শুধু নাম রিপ্লেস হবে, ছবি একই থাকবে)। <strong>✨ নতুন সুবিধা: একই আপলোড বাটনে ইমেজ ও ZIP/RAR আপলোড করুন - আর্কাইভ থেকে সব ইমেজ অটো এক্সট্র্যাক্ট হবে!</strong></footer>
+    </div>
+
+    <script>
+        // ---------- DATA ----------
+        let leftItems = [];     // { id, file, name, previewUrl, lastModified }
+        let rightItems = [];
+        let globalCopiedName = null;
+        let directionalModeEnabled = false;
+
+        function generateId() { return Date.now() + '-' + Math.random().toString(36).substr(2, 8); }
+        
+        function isImageFile(file) {
+            let name = file.name.toLowerCase();
+            if (name.endsWith('.9.png')) return true;
+            return name.endsWith('.png') || name.endsWith('.jpg') || name.endsWith('.jpeg');
+        }
+        
+        function isArchiveFile(file) {
+            let name = file.name.toLowerCase();
+            return name.endsWith('.zip') || name.endsWith('.rar') || name.endsWith('.cbz');
+        }
+        
+        function createPreviewUrl(file) { return URL.createObjectURL(file); }
+        
+        function getStartingLetter(filename) {
+            if (!filename || filename.length === 0) return '#';
+            let firstChar = filename.charAt(0).toUpperCase();
+            if (/[A-Z]/.test(firstChar)) return firstChar;
+            if (/[0-9]/.test(firstChar)) return '0-9';
+            return '#';
+        }
+
+        function showLoading(message = "প্রসেসিং হচ্ছে...") {
+            let existing = document.querySelector('.loading-overlay');
+            if (existing) existing.remove();
+            let overlay = document.createElement('div');
+            overlay.className = 'loading-overlay';
+            overlay.innerHTML = `<div class="loading-spinner"></div><div class="loading-text">${message}</div>`;
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoading() {
+            let overlay = document.querySelector('.loading-overlay');
+            if (overlay) overlay.remove();
+        }
+
+        // Extract images from ZIP archive
+        async function extractImagesFromZip(zipFile) {
+            try {
+                const zip = await JSZip.loadAsync(zipFile);
+                const imageFiles = [];
+                const promises = [];
+
+                for (const [filename, zipEntry] of Object.entries(zip.files)) {
+                    if (zipEntry.dir) continue;
+                    
+                    const fileNameLower = filename.toLowerCase();
+                    const isImage = fileNameLower.endsWith('.png') || 
+                                   fileNameLower.endsWith('.jpg') || 
+                                   fileNameLower.endsWith('.jpeg') ||
+                                   fileNameLower.endsWith('.9.png');
+                    
+                    if (isImage) {
+                        promises.push(async () => {
+                            try {
+                                const blob = await zipEntry.async('blob');
+                                const originalName = filename.split('/').pop();
+                                const extractedFile = new File([blob], originalName, { type: blob.type || 'image/png' });
+                                imageFiles.push(extractedFile);
+                            } catch(e) {
+                                console.warn(`Failed to extract ${filename}:`, e);
+                            }
+                        });
+                    }
+                }
+
+                // Execute extraction in parallel with limit
+                const batchSize = 20;
+                for (let i = 0; i < promises.length; i += batchSize) {
+                    const batch = promises.slice(i, i + batchSize);
+                    await Promise.all(batch.map(fn => fn()));
+                }
+
+                return imageFiles;
+            } catch (error) {
+                console.error("Error extracting ZIP:", error);
+                throw new Error("Failed to extract ZIP archive");
+            }
+        }
+
+        // Handle RAR files (show message since full RAR support needs external lib)
+        async function extractImagesFromRar(rarFile) {
+            showToast("ℹ️ RAR ফাইল থেকে এক্সট্র্যাক্ট করার জন্য বিশেষ লাইব্রেরি প্রয়োজন। দয়া করে ZIP ফরম্যাট ব্যবহার করুন বা আলাদাভাবে ইমেজ আপলোড করুন।", 4000);
+            
+            // Try as ZIP anyway (some CBZ/RAR might work if renamed)
+            try {
+                return await extractImagesFromZip(rarFile);
+            } catch(e) {
+                return [];
+            }
+        }
+
+        async function addFilesToPane(paneId, fileList) {
+            let files = Array.from(fileList);
+            let imageFiles = [];
+            let archiveFiles = files.filter(f => isArchiveFile(f));
+            let regularImages = files.filter(f => !isArchiveFile(f) && isImageFile(f));
+            
+            imageFiles.push(...regularImages);
+            
+            if (archiveFiles.length > 0) {
+                showLoading(`${archiveFiles.length}টি আর্কাইভ প্রসেস করা হচ্ছে...`);
+                
+                for (let archive of archiveFiles) {
+                    try {
+                        let extracted = [];
+                        const ext = archive.name.toLowerCase();
+                        if (ext.endsWith('.zip') || ext.endsWith('.cbz')) {
+                            extracted = await extractImagesFromZip(archive);
+                            if (extracted.length > 0) {
+                                showToast(`📦 ${archive.name}: ${extracted.length}টি ইমেজ এক্সট্র্যাক্ট করা হয়েছে`, 2000);
+                            }
+                        } else if (ext.endsWith('.rar')) {
+                            extracted = await extractImagesFromRar(archive);
+                            if (extracted.length > 0) {
+                                showToast(`📦 ${archive.name}: ${extracted.length}টি ইমেজ এক্সট্র্যাক্ট করা হয়েছে`, 2000);
+                            }
+                        }
+                        imageFiles.push(...extracted);
+                    } catch (error) {
+                        console.error(error);
+                        showToast(`❌ ${archive.name} প্রসেস করতে ব্যর্থ হয়েছে`, 2000);
+                    }
+                }
+                
+                hideLoading();
+            }
+            
+            if (!imageFiles.length) {
+                showToast("❌ কোনো বৈধ ইমেজ বা আর্কাইভ পাওয়া যায়নি", 1300);
+                return;
+            }
+            
+            let newEntries = [];
+            for (let file of imageFiles) {
+                newEntries.push({
+                    id: generateId(),
+                    file: file,
+                    name: file.name,
+                    previewUrl: createPreviewUrl(file),
+                    lastModified: file.lastModified || Date.now()
+                });
+            }
+            
+            if (paneId === 'left') leftItems.push(...newEntries);
+            else rightItems.push(...newEntries);
+            
+            refreshPane(paneId);
+            showToast(`✅ ${newEntries.length}টি ইমেজ ${paneId === 'left' ? 'LEFT' : 'RIGHT'} প্যানেলে যোগ করা হয়েছে`, 1400);
+        }
+
+        function getFilteredSorted(paneId, searchTerm, sortType) {
+            let source = paneId === 'left' ? leftItems : rightItems;
+            let filtered = [...source];
+            if (searchTerm && searchTerm.trim()) {
+                let lower = searchTerm.toLowerCase();
+                filtered = filtered.filter(item => item.name.toLowerCase().includes(lower));
+            }
+            if (sortType === 'name_asc') filtered.sort((a, b) => a.name.localeCompare(b.name));
+            else if (sortType === 'name_desc') filtered.sort((a, b) => b.name.localeCompare(a.name));
+            else if (sortType === 'date_asc') filtered.sort((a, b) => a.lastModified - b.lastModified);
+            else if (sortType === 'date_desc') filtered.sort((a, b) => b.lastModified - a.lastModified);
+            return filtered;
+        }
+
+        function silentCopyToClipboard(text) {
+            if (!text) return;
+            globalCopiedName = text;
+            navigator.clipboard.writeText(text).catch(() => { });
+        }
+
+        function replaceRightPanelName(fileItemDiv, targetId, currentName) {
+            if (!globalCopiedName) return false;
+            const targetItem = rightItems.find(it => it.id === targetId);
+            if (targetItem) {
+                targetItem.name = globalCopiedName;
+                fileItemDiv.classList.add('paste-flash');
+                setTimeout(() => fileItemDiv.classList.remove('paste-flash'), 250);
+                refreshPane('right');
+                return true;
+            }
+            return false;
+        }
+
+        function canCopy(paneId) {
+            if (!directionalModeEnabled) return true;
+            return paneId === 'left';
+        }
+        
+        function canPaste(paneId) {
+            if (!directionalModeEnabled) return true;
+            return paneId === 'right';
+        }
+
+        function refreshPane(paneId) {
+            const searchBox = document.getElementById(`search${paneId === 'left' ? 'Left' : 'Right'}`);
+            const sortSelect = document.getElementById(`sort${paneId === 'left' ? 'Left' : 'Right'}`);
+            let searchVal = searchBox ? searchBox.value : "";
+            let sortVal = sortSelect ? sortSelect.value : "name_asc";
+            const data = getFilteredSorted(paneId, searchVal, sortVal);
+            const container = document.getElementById(`${paneId}FileList`);
+            if (!container) return;
+
+            if (data.length === 0) {
+                container.innerHTML = `<div class="empty-msg"><i class="fas fa-folder-open"></i> কোন ফাইল নেই</div>`;
+                updateAlphabetScroll(paneId, []);
+                return;
+            }
+
+            let html = '';
+            data.forEach(item => {
+                let safeName = escapeHtml(item.name);
+                let startingLetter = getStartingLetter(item.name);
+                html += `
+                <div class="file-item" data-id="${item.id}" data-filename="${item.name}" data-startletter="${startingLetter}">
+                    <img class="preview-img" src="${item.previewUrl}" alt="preview" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22%23666%22%3E%3Cpath%20d%3D%22M4%204h16v16H4z%22%2F%3E%3C%2Fsvg%3E'">
+                    <div class="file-name" data-filename-copy="${safeName}"><i class="fas fa-image"></i> ${safeName}</div>
+                    <div class="item-actions">
+                        <button class="action-icon copy-icon ${!canCopy(paneId) ? 'disabled-copy' : ''}" data-filename="${safeName}" title="Copy"><i class="fas fa-copy"></i></button>
+                        <button class="action-icon paste-icon ${!canPaste(paneId) ? 'disabled-paste' : ''}" data-filename="${safeName}" title="Paste"><i class="fas fa-paste"></i></button>
+                    </div>
+                </div>
+            `;
+            });
+            container.innerHTML = html;
+
+            attachFilenameTapEvents(container, paneId);
+            attachButtonEvents(container, paneId);
+            updateAlphabetScroll(paneId, data);
+
+            const fileListDiv = document.getElementById(`${paneId}FileList`);
+            if (directionalModeEnabled) {
+                if (paneId === 'left') {
+                    fileListDiv.classList.add('tap-copy-active');
+                    fileListDiv.classList.remove('tap-paste-active');
+                } else if (paneId === 'right') {
+                    fileListDiv.classList.add('tap-paste-active');
+                    fileListDiv.classList.remove('tap-copy-active');
+                }
+            } else {
+                fileListDiv.classList.remove('tap-copy-active', 'tap-paste-active');
+            }
+        }
+
+        function attachFilenameTapEvents(container, paneId) {
+            const filenameDivs = container.querySelectorAll('.file-name');
+            filenameDivs.forEach(div => {
+                div.removeEventListener('click', filenameTapHandler);
+                div.addEventListener('click', filenameTapHandler);
+            });
+
+            function filenameTapHandler(e) {
+                e.stopPropagation();
+                const fileItemDiv = this.closest('.file-item');
+                if (!fileItemDiv) return;
+
+                if (directionalModeEnabled) {
+                    if (paneId === 'left') {
+                        let filename = this.getAttribute('data-filename-copy');
+                        if (!filename) {
+                            let rawText = this.innerText.trim();
+                            filename = rawText.replace(/[^\w\s\.\-_]/g, '').trim();
+                        }
+                        if (filename) {
+                            silentCopyToClipboard(filename);
+                            this.style.transform = 'scale(0.97)';
+                            setTimeout(() => { if (this) this.style.transform = ''; }, 120);
+                        }
+                    }
+                    else if (paneId === 'right') {
+                        if (!globalCopiedName) {
+                            fileItemDiv.style.backgroundColor = '#ff555522';
+                            setTimeout(() => { if (fileItemDiv) fileItemDiv.style.backgroundColor = ''; }, 200);
+                            return;
+                        }
+                        const targetId = fileItemDiv.getAttribute('data-id');
+                        const targetItem = rightItems.find(it => it.id === targetId);
+                        if (targetItem) {
+                            targetItem.name = globalCopiedName;
+                            fileItemDiv.classList.add('paste-flash');
+                            this.style.transform = 'scale(0.97)';
+                            setTimeout(() => {
+                                if (this) this.style.transform = '';
+                                if (fileItemDiv) fileItemDiv.classList.remove('paste-flash');
+                            }, 200);
+                            refreshPane('right');
+                        }
+                    }
+                } else {
+                    let filename = this.getAttribute('data-filename-copy');
+                    if (!filename) {
+                        let rawText = this.innerText.trim();
+                        filename = rawText.replace(/[^\w\s\.\-_]/g, '').trim();
+                    }
+                    if (filename) {
+                        silentCopyToClipboard(filename);
+                        this.style.transform = 'scale(0.97)';
+                        setTimeout(() => { if (this) this.style.transform = ''; }, 120);
+                    }
+                }
+            }
+        }
+
+        function attachButtonEvents(container, paneId) {
+            container.querySelectorAll('.copy-icon').forEach(btn => {
+                btn.removeEventListener('click', copyHandler);
+                btn.addEventListener('click', copyHandler);
+            });
+            container.querySelectorAll('.paste-icon').forEach(btn => {
+                btn.removeEventListener('click', pasteHandler);
+                btn.addEventListener('click', pasteHandler);
+            });
+
+            function copyHandler(e) {
+                e.stopPropagation();
+                if (!canCopy(paneId)) {
+                    showToast("⛔ ডিরেকশনাল মোড: শুধু LEFT প্যানেল থেকে কপি করা যাবে", 1500);
+                    return;
+                }
+                let fname = this.getAttribute('data-filename');
+                if (fname) {
+                    globalCopiedName = fname;
+                    navigator.clipboard.writeText(fname).catch(() => { });
+                    showToast(`📋 কপি করা হয়েছে: ${fname}`, 1000);
+                }
+            }
+
+            function pasteHandler(e) {
+                e.stopPropagation();
+                if (!canPaste(paneId)) {
+                    showToast("⛔ ডিরেকশনাল মোড: শুধু RIGHT প্যানেলে পেস্ট করা যাবে", 1500);
+                    return;
+                }
+                if (!globalCopiedName) {
+                    showToast("⚠️ কিছু কপি করা হয়নি! প্রথমে LEFT প্যানেল থেকে কপি করুন", 1500);
+                    return;
+                }
+                const fileDiv = this.closest('.file-item');
+                if (!fileDiv) return;
+                const targetId = fileDiv.getAttribute('data-id');
+                const currentPaneItems = (paneId === 'left') ? leftItems : rightItems;
+                const targetItem = currentPaneItems.find(it => it.id === targetId);
+                if (targetItem) {
+                    const oldName = targetItem.name;
+                    targetItem.name = globalCopiedName;
+                    showToast(`✏️ নাম মার্জ করা হয়েছে: "${oldName}" → "${globalCopiedName}"`, 1500);
+                    refreshPane(paneId);
+                } else {
+                    showToast("টার্গেট পাওয়া যায়নি", 1000);
+                }
+            }
+        }
+
+        function updateAlphabetScroll(paneId, filteredData) {
+            const alphabetContainer = document.getElementById(`alphabet${paneId === 'left' ? 'Left' : 'Right'}`);
+            if (!alphabetContainer) return;
+            if (filteredData.length === 0) { alphabetContainer.innerHTML = ''; return; }
+
+            let lettersSet = new Set();
+            filteredData.forEach(item => lettersSet.add(getStartingLetter(item.name)));
+            let letters = Array.from(lettersSet).sort();
+            let html = '';
+            letters.forEach(letter => { html += `<span data-letter="${letter}">${letter}</span>`; });
+            alphabetContainer.innerHTML = html;
+
+            const fileContainer = document.getElementById(`${paneId}FileList`);
+            if (!fileContainer) return;
+            alphabetContainer.querySelectorAll('span').forEach(span => {
+                span.removeEventListener('click', alphabetClick);
+                span.addEventListener('click', alphabetClick);
+            });
+            function alphabetClick(e) {
+                e.stopPropagation();
+                const targetLetter = this.getAttribute('data-letter');
+                const items = fileContainer.querySelectorAll('.file-item');
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].getAttribute('data-startletter') === targetLetter) {
+                        items[i].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        items[i].classList.add('highlight-jump');
+                        setTimeout(() => items[i].classList.remove('highlight-jump'), 600);
+                        break;
+                    }
+                }
+            }
+        }
+
+        async function downloadPaneZip(paneId) {
+            let items = paneId === 'left' ? leftItems : rightItems;
+            if (!items.length) { showToast("ZIP করার মতো কোনো ফাইল নেই", 1200); return; }
+            const zip = new JSZip();
+            for (let item of items) {
+                zip.file(item.name, item.file);
+            }
+            const blob = await zip.generateAsync({ type: "blob" });
+            saveAs(blob, `${paneId}_panel_${Date.now()}.zip`);
+            showToast(`📦 ZIP প্রস্তুত (${items.length}টি ফাইল)`, 1500);
+        }
+
+        function bindSearchSort(paneId) {
+            const searchEl = document.getElementById(`search${paneId === 'left' ? 'Left' : 'Right'}`);
+            const sortEl = document.getElementById(`sort${paneId === 'left' ? 'Left' : 'Right'}`);
+            if (searchEl) searchEl.addEventListener('input', () => refreshPane(paneId));
+            if (sortEl) sortEl.addEventListener('change', () => refreshPane(paneId));
+        }
+
+        function initUpload(paneId, btnId, inputId) {
+            const btn = document.getElementById(btnId);
+            const fileInput = document.getElementById(inputId);
+            btn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) { 
+                    addFilesToPane(paneId, fileInput.files); 
+                    fileInput.value = ''; 
+                }
+            });
+            const paneDiv = document.getElementById(`pane${paneId === 'left' ? 'Left' : 'Right'}`);
+            paneDiv.addEventListener('dragover', e => e.preventDefault());
+            paneDiv.addEventListener('drop', e => {
+                e.preventDefault();
+                if (e.dataTransfer.files.length) addFilesToPane(paneId, e.dataTransfer.files);
+            });
+        }
+
+        function showToast(msg, duration) {
+            let old = document.querySelector('.toast');
+            if (old) old.remove();
+            let toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), duration);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+        }
+
+        function updateDirectionalUI() {
+            const leftPane = document.getElementById('paneLeft');
+            const rightPane = document.getElementById('paneRight');
+            const leftBadge = document.getElementById('leftBadge');
+            const rightBadge = document.getElementById('rightBadge');
+
+            if (directionalModeEnabled) {
+                leftPane.classList.add('direction-source');
+                rightPane.classList.add('direction-target');
+                leftBadge.innerHTML = '📤 [TAP = COPY NAME]';
+                rightBadge.innerHTML = '📥 [TAP = PASTE & MERGE NAME]';
+            } else {
+                leftPane.classList.remove('direction-source');
+                rightPane.classList.remove('direction-target');
+                leftBadge.innerHTML = '';
+                rightBadge.innerHTML = '';
+            }
+            refreshPane('left');
+            refreshPane('right');
+        }
+
+        function initToggle() {
+            const dirToggle = document.getElementById('directionalToggle');
+            const dirStatus = document.getElementById('dirStatus');
+            dirToggle.addEventListener('change', (e) => {
+                directionalModeEnabled = e.target.checked;
+                dirStatus.textContent = directionalModeEnabled ? 'ON' : 'OFF';
+                dirStatus.classList.toggle('active', directionalModeEnabled);
+                updateDirectionalUI();
+                if (directionalModeEnabled) {
+                    showToast("🔁 নাম মার্জার ON: LEFT ট্যাপ = কপি | RIGHT ট্যাপ = নাম রিপ্লেস (ছবি একই থাকবে)", 2500);
+                } else {
+                    showToast("🔓 নাম মার্জার OFF: সাধারণ কপি-পেস্ট মোড", 1500);
+                }
+            });
+        }
+
+        function init() {
+            initUpload('left', 'uploadLeftBtn', 'leftFileInput');
+            initUpload('right', 'uploadRightBtn', 'rightFileInput');
+            document.getElementById('zipLeftBtn').addEventListener('click', () => downloadPaneZip('left'));
+            document.getElementById('zipRightBtn').addEventListener('click', () => downloadPaneZip('right'));
+            bindSearchSort('left');
+            bindSearchSort('right');
+            initToggle();
+            refreshPane('left');
+            refreshPane('right');
+            updateDirectionalUI();
+        }
+
+        window.addEventListener('load', init);
+    </script>
+</body>
+
+</html>

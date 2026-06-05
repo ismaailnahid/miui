@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Android Drawable Pro | MIUI Theme Tool</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f7fb;
+      color: #1e293b;
+      line-height: 1.5;
+      padding: 16px;
+    }
+
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .material-card {
+      background: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+      margin-bottom: 24px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #eef2f6;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .card-header:hover {
+      background: #fafbfc;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-left .material-icons {
+      font-size: 26px;
+      color: #f97316;
+    }
+
+    .header-left h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .header-left p {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .toggle-icon {
+      color: #64748b;
+      transition: transform 0.2s;
+    }
+
+    .card-header.collapsed .toggle-icon {
+      transform: rotate(-90deg);
+    }
+
+    .card-content {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card-content.collapsed {
+      display: none;
+    }
+
+    .upload-zone {
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: #fafcff;
+      border: 2px dashed #cbd5e1;
+      border-radius: 20px;
+      margin: 20px;
+      transition: all 0.2s;
+    }
+
+    .upload-zone:hover {
+      background: #f1f5f9;
+      border-color: #f97316;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      color: #f97316;
+      margin-bottom: 12px;
+    }
+
+    .upload-title {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .upload-sub {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+
+    .dual-upload {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .upload-option {
+      background: #f1f5f9;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .upload-option:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 16px 20px;
+      border-bottom: 1px solid #eef2f6;
+    }
+
+    .material-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #f1f5f9;
+      color: #1e293b;
+      white-space: nowrap;
+      width: auto;
+      flex-shrink: 0;
+    }
+
+    .material-btn .material-icons {
+      font-size: 18px;
+    }
+
+    .material-btn-primary {
+      background: #f97316;
+      color: white;
+    }
+
+    .material-btn-primary:hover {
+      background: #ea580c;
+    }
+
+    .material-btn-outline {
+      background: transparent;
+      border: 1px solid #cbd5e1;
+    }
+
+    .material-btn-outline:hover {
+      background: #f8fafc;
+      border-color: #f97316;
+    }
+
+    .material-btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .material-btn-success {
+      background: #22c55e;
+      color: white;
+    }
+
+    .material-btn-success:hover {
+      background: #16a34a;
+    }
+
+    .material-btn-purple {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .material-btn-purple:hover {
+      background: #7c3aed;
+    }
+
+    .material-btn-teal {
+      background: #14b8a6;
+      color: white;
+    }
+
+    .material-btn-teal:hover {
+      background: #0d9488;
+    }
+
+    .material-btn-pink {
+      background: #ec4899;
+      color: white;
+    }
+
+    .material-btn-pink:hover {
+      background: #db2777;
+    }
+
+    .material-btn-orange {
+      background: #ea580c;
+      color: white;
+    }
+
+    .material-btn-orange:hover {
+      background: #c2410c;
+    }
+
+    @media (max-width: 640px) {
+      .btn-group {
+        gap: 8px;
+      }
+
+      .material-btn {
+        white-space: nowrap;
+        width: auto;
+        flex-shrink: 0;
+      }
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      backdrop-filter: blur(4px);
+    }
+
+    .loading-content {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 24px;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #f97316;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 20px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .stat-chip {
+      background: white;
+      padding: 4px 12px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 20px;
+      border-bottom: 1px solid #eef2f6;
+    }
+
+    .filter-chip {
+      background: #f1f5f9;
+      padding: 5px 14px;
+      border-radius: 32px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-chip.active {
+      background: #f97316;
+      color: white;
+    }
+
+    .toggle-group-horizontal {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 20px;
+      background: white;
+      border-bottom: 1px solid #eef2f6;
+      flex-wrap: wrap;
+    }
+
+    .toggle-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 5px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .toggle-switch {
+      width: 40px;
+      height: 22px;
+      background: #cbd5e1;
+      border-radius: 30px;
+      position: relative;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .toggle-switch.active {
+      background: #f97316;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 3px;
+      transition: 0.2s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(18px);
+    }
+
+    .drawable-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      padding: 20px;
+      max-height: 550px;
+      overflow-y: auto;
+      background: #f9fafb;
+    }
+
+    @media (max-width: 640px) {
+      .drawable-grid {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+    }
+
+    .asset-card {
+      background: white;
+      border-radius: 20px;
+      border: 1px solid #eef2f6;
+      transition: all 0.2s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .asset-card.selected {
+      border: 2px solid #f97316;
+      background: #fffaf5;
+    }
+
+    .preview-container {
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
+      padding: 16px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .preview-img {
+      max-width: 100%;
+      max-height: 100px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .preview-container img[src*="data:image/png"] {
+      background-image: repeating-conic-gradient(#e2e8f0 0% 25%, #ffffff 0% 50%);
+      background-size: 20px 20px;
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .asset-info {
+      padding: 12px;
+    }
+
+    .asset-name {
+      font-family: monospace;
+      font-size: 0.7rem;
+      background: #f8fafc;
+      padding: 6px 8px;
+      border-radius: 12px;
+      word-break: break-all;
+      text-align: center;
+    }
+
+    .feature-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+      justify-content: center;
+    }
+
+    .feat-tag {
+      font-size: 0.6rem;
+      background: #f1f5f9;
+      padding: 3px 10px;
+      border-radius: 30px;
+    }
+
+    .color-refs {
+      font-size: 0.65rem;
+      background: #fef9e6;
+      border-radius: 14px;
+      padding: 8px;
+      margin-top: 8px;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .color-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 4px 4px 0;
+      padding: 4px 8px;
+      background: white;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      display: inline-block;
+    }
+
+    .color-hex {
+      font-family: monospace;
+      font-size: 0.6rem;
+      color: #475569;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .mini-btn {
+      flex: 1;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 6px;
+      border-radius: 40px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .checkbox-select {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: #94a3b8;
+    }
+
+    .toast-message {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      left: auto;
+      background: #1e293b;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 48px;
+      font-size: 0.8rem;
+      z-index: 2000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      max-width: 90%;
+    }
+
+    @media (max-width: 640px) {
+      .toast-message {
+        left: 16px;
+        right: 16px;
+        text-align: center;
+      }
+    }
+
+    .color-list-standalone {
+      max-height: 200px;
+      overflow-y: auto;
+      background: #f9f9ff;
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+
+    .status-box {
+      background: #fef9e6;
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin: 0 20px 20px 20px;
+      font-size: 0.75rem;
+    }
+
+    .standalone-color-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .standalone-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      flex-shrink: 0;
+    }
+
+    .valid-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #22c55e;
+      color: white;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-weight: bold;
+      z-index: 5;
+    }
+
+    .invalid-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #ef4444;
+      color: white;
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-weight: bold;
+      z-index: 5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Standalone Color Processor Card -->
+    <div class="material-card" id="standaloneCard">
+      <div class="card-header" onclick="toggleCard('standaloneContent')">
+        <div class="header-left">
+          <span class="material-icons">palette</span>
+          <div>
+            <h2>Standalone Color Processor</h2>
+            <p>Any colors.xml | resolution | MIUI Theme Converter</p>
+          </div>
+        </div>
+        <span class="material-icons toggle-icon">expand_more</span>
+      </div>
+      <div id="standaloneContent" class="card-content">
+        <div class="btn-group">
+          <button class="material-btn material-btn-primary" id="standaloneUploadBtn"><span
+              class="material-icons">upload_file</span> Upload XML</button>
+          <button class="material-btn material-btn-outline" id="standaloneResolveBtn" disabled><span
+              class="material-icons">sync</span> Resolve</button>
+          <button class="material-btn material-btn-success" id="standaloneConvertToMIUIBtn" disabled><span
+              class="material-icons">transform</span> MIUI</button>
+          <button class="material-btn material-btn-outline" id="standaloneDownloadFullBtn" disabled><span
+              class="material-icons">download</span> Full File</button>
+          <button class="material-btn material-btn-outline" id="standaloneDownloadNonSystemBtn" disabled><span
+              class="material-icons">filter_alt</span> Non System</button>
+          <button class="material-btn material-btn-danger" id="standaloneClearBtn" disabled><span
+              class="material-icons">clear</span> Clear</button>
+        </div>
+        <div id="standaloneStatusBox" class="status-box">⚠️ No XML file uploaded</div>
+        <div id="standaloneColorListPanel" style="margin: 0 20px 20px 20px; display: none;"></div>
+      </div>
+    </div>
+
+    <!-- Drawable Studio Pro Card -->
+    <div class="material-card" id="drawableCard">
+      <div class="card-header" onclick="toggleCard('drawableContent')">
+        <div class="header-left">
+          <span class="material-icons">draw</span>
+          <div>
+            <h2>Drawable Studio Pro</h2>
+            <p>.xml | .png | .9.png | MIUI Theme Format</p>
+          </div>
+        </div>
+        <span class="material-icons toggle-icon">expand_more</span>
+      </div>
+      <div id="drawableContent" class="card-content">
+        <div
+          style="padding: 16px 20px; background:#fefce8; border-bottom:1px solid #fde68a; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+          <button class="material-btn material-btn-outline" id="colorUploadBtn"><span
+              class="material-icons">color_lens</span> Upload XML</button>
+          <button class="material-btn" id="clearColorMapBtn"><span class="material-icons">delete</span> Remove</button>
+          <button class="material-btn material-btn-primary" id="resolveRelativeColorsBtn"><span
+              class="material-icons">link</span> Resolve </button>
+          <div id="colorStatusDisplay"
+            style="font-size:0.7rem; background:white; border-radius:40px; padding:6px 14px;">⚠️ No colors.xml</div>
+        </div>
+
+        <div id="uploadZoneWrapper">
+          <div class="upload-zone" id="uploadArea">
+            <div class="upload-icon material-icons">cloud_upload</div>
+            <div class="upload-title">Upload Drawable Files</div>
+            <div class="upload-sub">Drag & drop or click below</div>
+            <div class="dual-upload">
+              <div class="upload-option" id="uploadFilesBtn">
+                <span class="material-icons">insert_drive_file</span> Select Files
+              </div>
+              <div class="upload-option" id="uploadZipBtn">
+                <span class="material-icons">folder_zip</span> Upload ZIP
+              </div>
+            </div>
+            <input type="file" id="fileInput" multiple accept=".xml,.png,.9.png" style="display:none">
+            <input type="file" id="zipInput" accept=".zip" style="display:none">
+          </div>
+        </div>
+
+        <div id="mainControls" style="display: none;">
+          <div class="toggle-group-horizontal">
+            <div class="toggle-chip" id="xmlToggleChip">
+              <span class="material-icons">code</span> XML
+              <span id="xmlToggleSwitch" class="toggle-switch active"></span>
+            </div>
+            <div class="toggle-chip" id="pngToggleChip">
+              <span class="material-icons">image</span> PNG
+              <span id="pngToggleSwitch" class="toggle-switch active"></span>
+            </div>
+            <div class="toggle-chip" id="selectAllChip">
+              <span class="material-icons">select_all</span> Select All
+              <input type="checkbox" id="globalSelectCb" style="width:18px;height:18px; margin-left:6px;">
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="material-btn material-btn-outline" id="addMoreFilesBtn"><span
+                class="material-icons">add</span> Add Files</button>
+            <button class="material-btn material-btn-outline" id="extractColorsBtn"><span
+                class="material-icons">format_paint</span> Extract Colors</button>
+            <button class="material-btn material-btn-outline" id="downloadSelectedBtn"><span
+                class="material-icons">checklist</span> Selected</button>
+            <button class="material-btn material-btn-outline" id="downloadZipBtn"><span
+                class="material-icons">folder_zip</span> ZIP</button>
+            <button class="material-btn material-btn-purple" id="convertAllXmlsBtn"><span
+                class="material-icons">auto_awesome</span> XML > png</button>
+            <button class="material-btn material-btn-teal" id="mergeToThemeFallbackBtn"><span
+                class="material-icons">merge_type</span> fallback Merge</button>
+            <button class="material-btn material-btn-pink" id="extractBgButtonDrawablesBtn"><span
+                class="material-icons">style</span> fallback Formatter</button>
+            <button class="material-btn material-btn-orange" id="downloadThemeWithImagesBtn"><span
+                class="material-icons">folder_zip</span> fallback Images</button>
+            <button class="material-btn material-btn-danger" id="clearAllBtn"><span
+                class="material-icons">delete_sweep</span> Clear All</button>
+          </div>
+
+          <div class="stats-row" id="statsRow"></div>
+          <div class="filter-row" id="filterRow"></div>
+          <div class="drawable-grid" id="drawableGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="hiddenColorFileInput" accept=".xml" style="display:none">
+  <input type="file" id="standaloneFileInput" accept=".xml" style="display:none">
+
+  <script>
+    // ==================== ANDROID SYSTEM COLORS ====================
+    const ANDROID_SYSTEM_COLORS = {
+      system_error_light: '#F44336',
+      system_error_dark: '#D32F2F',
+      system_neutral1_500: '#757575',
+      system_accent1_light: '#2196F3',
+      system_accent1_dark: '#1976D2',
+      system_accent2_light: '#FF9800',
+      system_accent2_dark: '#F57C00'
+    };
+
+    function getAndroidSystemColorValue(name) {
+      return ANDROID_SYSTEM_COLORS[name] || '#FF9800';
+    }
+
+    // ==================== GLOBAL STATE ====================
+    let currentFiles = [];
+    let selectedIds = new Set();
+    let colorMap = new Map();
+    let currentFilter = 'all';
+    let toggleXml = true, togglePng = true;
+
+    // Standalone state (separate to avoid conflict)
+    let standaloneState = {
+      colorMap: new Map(),
+      fileName: null,
+      resolved: false,
+      rawContent: null
+    };
+
+    // Store object URLs for cleanup
+    let objectURLs = [];
+
+    function revokeAllObjectURLs() {
+      objectURLs.forEach(url => {
+        if (url) URL.revokeObjectURL(url);
+      });
+      objectURLs = [];
+    }
+
+    // ==================== HELPER FUNCTIONS ====================
+    function showToast(msg) {
+      let t = document.createElement('div');
+      t.className = 'toast-message';
+      t.innerText = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    function showLoading(message = 'Processing files...') {
+      let overlay = document.createElement('div');
+      overlay.className = 'loading-overlay';
+      overlay.id = 'loadingOverlay';
+      overlay.innerHTML = `<div class="loading-content"><div class="spinner"></div><div style="font-weight: 500;">${message}</div><div style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Please wait...</div></div>`;
+      document.body.appendChild(overlay);
+    }
+
+    function hideLoading() {
+      let overlay = document.getElementById('loadingOverlay');
+      if (overlay) overlay.remove();
+    }
+
+    function updateColorStatusText() {
+      const total = colorMap.size;
+      const relative = [...colorMap.values()].filter(c => c.isRelative).length;
+      document.getElementById('colorStatusDisplay').innerHTML = total ? `✅ ${total} colors (${relative} relative)` : '⚠️ No colors.xml';
+    }
+
+    // ==================== IMPROVED COLOR RESOLUTION (RECURSIVE) ====================
+    function resolveRelativeColors(map) {
+      const resolved = new Map();
+      const visited = new Set();
+
+      function resolveValue(name) {
+        if (visited.has(name)) return null; // Circular reference detected
+        visited.add(name);
+
+        const data = map.get(name);
+        if (!data) return null;
+
+        if (!data.isRelative) {
+          visited.delete(name);
+          return data.value;
+        }
+
+        if (data.isAndroidRelative) {
+          const resolvedVal = getAndroidSystemColorValue(data.parent);
+          visited.delete(name);
+          return resolvedVal;
+        }
+
+        if (data.parent) {
+          const parentVal = resolveValue(data.parent);
+          visited.delete(name);
+          return parentVal;
+        }
+
+        visited.delete(name);
+        return null;
+      }
+
+      for (let [name, data] of map) {
+        if (!data.isRelative) {
+          resolved.set(name, data.value);
+        } else {
+          const val = resolveValue(name);
+          if (val) {
+            resolved.set(name, val);
+            data.value = val;
+          } else {
+            resolved.set(name, '#A855F7'); // fallback
+            data.value = '#A855F7';
+          }
+        }
+      }
+
+      return resolved;
+    }
+
+    // ==================== IMPROVED colors.xml PARSING ====================
+    async function parseColorsXml(content) {
+      colorMap.clear();
+      const regex = /<color\s+name="([^"]+)"\s*>([^<]+)<\/color>/g;
+      let match;
+      let temp = [];
+
+      while ((match = regex.exec(content)) !== null) {
+        temp.push({ name: match[1], raw: match[2].trim() });
+      }
+
+      for (let { name, raw } of temp) {
+        if (raw.startsWith('@android:color/')) {
+          let parent = raw.replace('@android:color/', '');
+          colorMap.set(name, {
+            value: null,
+            isRelative: true,
+            isAndroidRelative: true,
+            parent,
+            originalRaw: raw
+          });
+        } else if (raw.startsWith('@color/')) {
+          let parent = raw.replace('@color/', '');
+          colorMap.set(name, {
+            value: null,
+            isRelative: true,
+            isAndroidRelative: false,
+            parent,
+            originalRaw: raw
+          });
+        } else {
+          colorMap.set(name, {
+            value: raw,
+            isRelative: false,
+            isAndroidRelative: false,
+            parent: null,
+            originalRaw: raw
+          });
+        }
+      }
+
+      // Use improved recursive resolution
+      resolveRelativeColors(colorMap);
+      updateColorStatusText();
+    }
+
+    function getExactColorValue(colorName) {
+      if (colorMap.has(colorName)) {
+        let d = colorMap.get(colorName);
+        if (d.value) return d.value;
+        if (d.parent && colorMap.has(d.parent)) {
+          let parentVal = colorMap.get(d.parent).value;
+          if (parentVal) return parentVal;
+        }
+      }
+      return null;
+    }
+
+    // ==================== IMPROVED VECTOR TO PNG CONVERSION ====================
+    async function vectorXmlToPng(xmlContent, targetWidth = null, targetHeight = null) {
+      return new Promise((resolve) => {
+        try {
+          let processed = xmlContent;
+
+          // Replace color references
+          const colorRefs = [...xmlContent.matchAll(/@color\/([a-zA-Z0-9_]+)/g)];
+          for (let match of colorRefs) {
+            let full = match[0], name = match[1];
+            let exactVal = getExactColorValue(name);
+            if (exactVal) {
+              processed = processed.replace(new RegExp(full.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), exactVal);
+            }
+          }
+
+          // Extract dimensions
+          let width = targetWidth || 24;
+          let height = targetHeight || 24;
+          const wm = processed.match(/android:width="(\d+)dp"/);
+          const hm = processed.match(/android:height="(\d+)dp"/);
+          if (wm && !targetWidth) width = parseInt(wm[1]);
+          if (hm && !targetHeight) height = parseInt(hm[1]);
+
+          // Extract paths
+          let paths = [];
+          const pathRegex = /<path\s+([^>]+)>/g;
+          let pMatch;
+
+          while ((pMatch = pathRegex.exec(processed)) !== null) {
+            let attrs = pMatch[1];
+            let pdMatch = attrs.match(/android:pathData="([^"]+)"/);
+            let fillMatch = attrs.match(/android:fillColor="([^"]+)"/);
+            let fill = fillMatch ? fillMatch[1] : '#000000';
+            if (pdMatch) {
+              paths.push(`<path d="${pdMatch[1]}" fill="${fill}"/>`);
+            }
+          }
+
+          // Also check for group tags
+          const groupRegex = /<group\s+([^>]+)>([\s\S]*?)<\/group>/g;
+          let gMatch;
+          while ((gMatch = groupRegex.exec(processed)) !== null) {
+            const groupContent = gMatch[2];
+            const groupPathRegex = /<path\s+([^>]+)>/g;
+            let gpMatch;
+            while ((gpMatch = groupPathRegex.exec(groupContent)) !== null) {
+              let attrs = gpMatch[1];
+              let pdMatch = attrs.match(/android:pathData="([^"]+)"/);
+              let fillMatch = attrs.match(/android:fillColor="([^"]+)"/);
+              let fill = fillMatch ? fillMatch[1] : '#000000';
+              if (pdMatch) {
+                paths.push(`<path d="${pdMatch[1]}" fill="${fill}"/>`);
+              }
+            }
+          }
+
+          if (paths.length === 0) {
+            resolve(null);
+            return;
+          }
+
+          let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">${paths.join('')}</svg>`;
+          let img = new Image();
+          let url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+          objectURLs.push(url);
+
+          img.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            // Remove from objectURLs array
+            const index = objectURLs.indexOf(url);
+            if (index > -1) objectURLs.splice(index, 1);
+            resolve(canvas.toDataURL('image/png'));
+          };
+
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            const index = objectURLs.indexOf(url);
+            if (index > -1) objectURLs.splice(index, 1);
+            resolve(null);
+          };
+
+          img.src = url;
+        } catch (e) {
+          console.error('Vector to PNG conversion error:', e);
+          resolve(null);
+        }
+      });
+    }
+
+    // Alias for backward compatibility
+    const xmlToPng = vectorXmlToPng;
+
+    function extractColorNamesFromXml(content) {
+      let set = new Set();
+      let reg = /@color\/([a-zA-Z0-9_]+)/g;
+      let m;
+      while ((m = reg.exec(content))) set.add(m[1]);
+      return [...set];
+    }
+
+    function detectFeatures(content) {
+      return {
+        hasColor: /@color\//.test(content),
+        hasDimen: /@dimen\//.test(content),
+        hasAnimation: /<animate|<set|<objectAnimator/.test(content),
+        hasStroke: /android:strokeColor/.test(content),
+        hasGradient: /<gradient/.test(content),
+        hasAlpha: /android:alpha/.test(content)
+      };
+    }
+
+    function isValidVectorDrawable(xmlContent) {
+      try {
+        const hasVectorTag = /<vector\s/.test(xmlContent);
+        const hasPathData = /android:pathData="[^"]+"/.test(xmlContent);
+        const hasGroupOrPath = /<(path|group)\s/.test(xmlContent);
+        return hasVectorTag && (hasPathData || hasGroupOrPath);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function detectDrawableType(xmlContent) {
+      if (/<selector\s/.test(xmlContent)) return 'selector';
+      if (/<layer-list\s/.test(xmlContent)) return 'layer-list';
+      if (/<shape\s/.test(xmlContent)) return 'shape';
+      if (/<vector\s/.test(xmlContent)) return 'vector';
+      if (/<ripple\s/.test(xmlContent)) return 'ripple';
+      return 'drawable';
+    }
+
+    function isBgOrButtonDrawable(file) {
+      let nameLower = file.name.toLowerCase();
+      if (nameLower.includes('bg') || nameLower.includes('background') ||
+        nameLower.includes('btn') || nameLower.includes('button') ||
+        nameLower.includes('card') || nameLower.includes('panel')) return true;
+      return false;
+    }
+
+    async function processFile(file) {
+      let type = 'xml';
+      let isNinePng = file.name.endsWith('.9.png');
+      if (isNinePng) type = 'nine';
+      else if (file.name.endsWith('.png')) type = 'png';
+
+      let preview = null, content = null, colors = [], features = {};
+      let isValidIcon = false;
+      let originalExtension = 'xml';
+      let drawableType = 'unknown';
+
+      if (type === 'png' || type === 'nine') {
+        preview = URL.createObjectURL(file);
+        objectURLs.push(preview);
+        isValidIcon = true;
+        originalExtension = type === 'nine' ? '9.png' : 'png';
+        drawableType = type;
+      } else {
+        try {
+          content = await file.text();
+          colors = extractColorNamesFromXml(content);
+          features = detectFeatures(content);
+          isValidIcon = isValidVectorDrawable(content);
+          drawableType = detectDrawableType(content);
+          if (isValidIcon) {
+            preview = await vectorXmlToPng(content);
+          }
+        } catch (e) {
+          console.error('Error processing XML:', e);
+          isValidIcon = false;
+        }
+      }
+
+      return {
+        id: Date.now() + Math.random() + Math.random(),
+        name: file.name,
+        type,
+        file,
+        preview,
+        content,
+        colors,
+        features,
+        isValidIcon,
+        originalExtension,
+        drawableType
+      };
+    }
+
+    async function handleFiles(files) {
+      showLoading(`Processing ${files.length} file(s)...`);
+      let newFiles = [];
+      for (let file of files) {
+        let processed = await processFile(file);
+        newFiles.push(processed);
+      }
+      currentFiles.push(...newFiles);
+      if (currentFiles.length > 0) {
+        document.getElementById('uploadZoneWrapper').style.display = 'none';
+        document.getElementById('mainControls').style.display = 'block';
+      }
+      hideLoading();
+      updateUIAndRender();
+      let validCount = newFiles.filter(f => f.isValidIcon).length;
+      showToast(`✅ ${newFiles.length} file(s) uploaded (${validCount} valid icons)`);
+    }
+
+    async function handleZipUpload(zipFile) {
+      showLoading('Extracting ZIP file...');
+      try {
+        let zip = await JSZip.loadAsync(zipFile);
+        let xmlFiles = [], pngFiles = [];
+
+        for (let [filename, fileData] of Object.entries(zip.files)) {
+          if (fileData.dir) continue;
+          let name = filename.split('/').pop();
+          if (name.endsWith('.xml') || name.endsWith('.png') || name.endsWith('.9.png')) {
+            let blob = await fileData.async('blob');
+            let processedFile = new File([blob], name, { type: blob.type });
+            if (name.endsWith('.9.png') || name.endsWith('.png')) {
+              pngFiles.push(processedFile);
+            } else {
+              xmlFiles.push(processedFile);
+            }
+          }
+        }
+
+        let allFiles = [...xmlFiles, ...pngFiles];
+        if (allFiles.length === 0) {
+          hideLoading();
+          showToast('⚠️ No valid drawable files found in ZIP');
+          return;
+        }
+
+        let newFiles = [];
+        for (let file of allFiles) {
+          let processed = await processFile(file);
+          newFiles.push(processed);
+        }
+
+        currentFiles.push(...newFiles);
+        if (currentFiles.length > 0) {
+          document.getElementById('uploadZoneWrapper').style.display = 'none';
+          document.getElementById('mainControls').style.display = 'block';
+        }
+        hideLoading();
+        updateUIAndRender();
+        let validCount = newFiles.filter(f => f.isValidIcon).length;
+        showToast(`✅ Extracted ${newFiles.length} file(s) (${validCount} valid icons)`);
+      } catch (error) {
+        hideLoading();
+        showToast('❌ Error extracting ZIP file');
+        console.error(error);
+      }
+    }
+
+    // ==================== CONVERT ALL XML TO PNG ====================
+    async function convertAllValidXmlsToOriginalFormat() {
+      const validXmlFiles = currentFiles.filter(f => f.type === 'xml' && f.isValidIcon === true);
+
+      if (validXmlFiles.length === 0) {
+        showToast('⚠️ কোনো ভ্যালিড ভেক্টর XML আইকন পাওয়া যায়নি!');
+        return;
+      }
+
+      showLoading(`${validXmlFiles.length} টি XML কে কনভার্ট করা হচ্ছে...`);
+
+      let zip = new JSZip();
+      let convertedCount = 0;
+      let pngCount = 0;
+      let ninePngCount = 0;
+
+      for (let file of validXmlFiles) {
+        let pngDataUrl = await vectorXmlToPng(file.content);
+        if (pngDataUrl) {
+          let blob = await (await fetch(pngDataUrl)).blob();
+          let outputFileName;
+
+          if (file.name.includes('.9.') || file.originalExtension === '9.png') {
+            outputFileName = file.name.replace(/\.xml$/i, '.9.png');
+            ninePngCount++;
+          } else {
+            outputFileName = file.name.replace(/\.xml$/i, '.png');
+            pngCount++;
+          }
+
+          zip.file(outputFileName, blob);
+          convertedCount++;
+        }
+      }
+
+      if (convertedCount > 0) {
+        let zipBlob = await zip.generateAsync({ type: 'blob' });
+        saveAs(zipBlob, `drawables_converted.zip`);
+        showToast(`✅ ${convertedCount} টি কনভার্ট হয়েছে (${pngCount} PNG, ${ninePngCount} 9.png)`);
+      } else {
+        showToast('❌ কোনো ফাইল কনভার্ট করা সম্ভব হয়নি');
+      }
+      hideLoading();
+    }
+
+    // ==================== MERGE TO THEME_FALLBACK ====================
+    async function mergeToThemeFallback() {
+      const validFiles = currentFiles.filter(f => f.type === 'xml');
+
+      if (validFiles.length === 0) {
+        showToast('⚠️ কোনো XML ড্রয়েবল পাওয়া যায়নি!');
+        return;
+      }
+
+      showLoading(`${validFiles.length} টি ড্রয়েবল প্রসেস করা হচ্ছে...`);
+
+      let themeXml = '<?xml version=\'1.0\' encoding=\'utf-8\' standalone=\'yes\' ?>\n';
+      themeXml += '<MIUI_Theme_Values>\n';
+      themeXml += '\t<!-- ========================================== -->\n';
+      themeXml += '\t<!-- THEME FALLBACK DRAWABLES - AUTO GENERATED -->\n';
+      themeXml += '\t<!-- Generated by Android Drawable Pro Tool      -->\n';
+      themeXml += '\t<!-- ========================================== -->\n\n';
+
+      for (let file of validFiles) {
+        let originalName = file.name;
+        let drawableName = file.name.replace(/\.xml$/i, '');
+        drawableName = drawableName.replace(/[^a-zA-Z0-9_]/g, '_');
+        themeXml += `\t<drawable name="${originalName}">${drawableName}.9.png</drawable>\n`;
+      }
+
+      themeXml += '\n\t<!-- Default Theme Fallbacks -->\n';
+
+      if (validFiles.length > 0) {
+        let firstFile = validFiles[0].name.replace(/\.xml$/i, '').replace(/[^a-zA-Z0-9_]/g, '_');
+        themeXml += `\t<drawable name="theme_fallback">${firstFile}.9.png</drawable>\n`;
+        themeXml += `\t<drawable name="android:windowBackground">${firstFile}.9.png</drawable>\n`;
+        themeXml += `\t<drawable name="android:button">${firstFile}.9.png</drawable>\n`;
+      }
+
+      themeXml += '</MIUI_Theme_Values>';
+
+      let blob = new Blob([themeXml], { type: 'text/xml' });
+      saveAs(blob, `theme_fallback.xml`);
+
+      hideLoading();
+      showToast(`✅ ${validFiles.length} টি ড্রয়েবল প্রসেস করে theme_fallback.xml তৈরি হয়েছে!`);
+    }
+
+    // ==================== EXTRACT BG/BUTTON DRAWABLES ====================
+    async function extractBgButtonDrawables() {
+      const bgButtonFiles = currentFiles.filter(f => f.type === 'xml' && isBgOrButtonDrawable(f));
+
+      if (bgButtonFiles.length === 0) {
+        showToast('⚠️ কোনো ব্যাকগ্রাউন্ড বা বাটন ড্রয়েবল পাওয়া যায়নি!');
+        return;
+      }
+
+      showLoading(`${bgButtonFiles.length} টি BG/বাটন ড্রয়েবল প্রসেস করা হচ্ছে...`);
+
+      let formatterXml = '<?xml version=\'1.0\' encoding=\'utf-8\' standalone=\'yes\' ?>\n';
+      formatterXml += '<MIUI_Theme_Values>\n';
+
+      let backgrounds = bgButtonFiles.filter(f =>
+        f.name.toLowerCase().includes('bg') ||
+        f.name.toLowerCase().includes('background') ||
+        f.name.toLowerCase().includes('card') ||
+        f.name.toLowerCase().includes('panel')
+      );
+
+      for (let bg of backgrounds) {
+        let name = bg.name.replace(/\.xml$/i, '');
+        formatterXml += `\t<drawable name="${name}.9.png">${name}.9.png</drawable>\n`;
+      }
+
+      let buttons = bgButtonFiles.filter(f =>
+        f.name.toLowerCase().includes('btn') ||
+        f.name.toLowerCase().includes('button') ||
+        f.drawableType === 'selector'
+      );
+
+      for (let btn of buttons) {
+        let name = btn.name.replace(/\.xml$/i, '');
+        formatterXml += `\t<drawable name="${name}.9.png">${name}.9.png</drawable>\n`;
+      }
+
+      formatterXml += '</MIUI_Theme_Values>';
+
+      let blob = new Blob([formatterXml], { type: 'text/xml' });
+      saveAs(blob, `theme_fallback_bg_btn.xml`);
+
+      hideLoading();
+      showToast(`✅ ${bgButtonFiles.length} টি BG/বাটন ড্রয়েবল ফরম্যাট করা হয়েছে!`);
+    }
+
+    // ==================== DOWNLOAD THEME WITH IMAGES ====================
+    async function downloadThemeWithImages() {
+      const validFiles = currentFiles.filter(f => f.type === 'xml');
+
+      if (validFiles.length === 0) {
+        showToast('⚠️ কোনো XML ড্রয়েবল পাওয়া যায়নি!');
+        return;
+      }
+
+      showLoading(`থিম ফাইল + ${validFiles.length} টি ইমেজ প্রসেস করা হচ্ছে...`);
+
+      let mainZip = new JSZip();
+
+      let themeXml = '<?xml version=\'1.0\' encoding=\'utf-8\' standalone=\'yes\' ?>\n';
+      themeXml += '<MIUI_Theme_Values>\n';
+      themeXml += '\t<!-- ========================================== -->\n';
+      themeXml += '\t<!-- THEME FALLBACK DRAWABLES - AUTO GENERATED -->\n';
+      themeXml += '\t<!-- Generated by Android Drawable Pro Tool      -->\n';
+      themeXml += '\t<!-- ========================================== -->\n\n';
+
+      for (let file of validFiles) {
+        let originalName = file.name;
+        let drawableName = file.name.replace(/\.xml$/i, '');
+        drawableName = drawableName.replace(/[^a-zA-Z0-9_]/g, '_');
+        themeXml += `\t<drawable name="${originalName}">${drawableName}.9.png</drawable>\n`;
+      }
+
+      themeXml += '\n\t<!-- Default Theme Fallbacks -->\n';
+
+      if (validFiles.length > 0) {
+        let firstFile = validFiles[0].name.replace(/\.xml$/i, '').replace(/[^a-zA-Z0-9_]/g, '_');
+        themeXml += `\t<drawable name="theme_fallback">${firstFile}.9.png</drawable>\n`;
+        themeXml += `\t<drawable name="android:windowBackground">${firstFile}.9.png</drawable>\n`;
+        themeXml += `\t<drawable name="android:button">${firstFile}.9.png</drawable>\n`;
+      }
+
+      themeXml += '</MIUI_Theme_Values>';
+
+      mainZip.file("theme_fallback.xml", themeXml);
+
+      let convertedCount = 0;
+      let failedCount = 0;
+
+      for (let file of validFiles) {
+        if (file.isValidIcon && file.content) {
+          let pngDataUrl = await vectorXmlToPng(file.content);
+          if (pngDataUrl) {
+            let blob = await (await fetch(pngDataUrl)).blob();
+            let outputName = file.name.replace(/\.xml$/i, '.9.png');
+            mainZip.file(outputName, blob);
+            convertedCount++;
+          } else {
+            failedCount++;
+          }
+        } else if (file.type === 'png' || file.type === 'nine') {
+          let blob = await file.file.arrayBuffer();
+          mainZip.file(file.name, blob);
+          convertedCount++;
+        }
+      }
+
+      let finalZipBlob = await mainZip.generateAsync({ type: 'blob' });
+      saveAs(finalZipBlob, `theme_with_images.zip`);
+
+      hideLoading();
+      showToast(`✅ ${convertedCount} টি ইমেজ + theme_fallback.xml জিপ করা হয়েছে! (${failedCount} ব্যর্থ)`);
+    }
+
+    // ==================== UI RENDER FUNCTIONS ====================
+    function updateUIAndRender() {
+      let xmlC = currentFiles.filter(f => f.type === 'xml').length;
+      let validXmlC = currentFiles.filter(f => f.type === 'xml' && f.isValidIcon).length;
+      let pngC = currentFiles.filter(f => f.type === 'png').length;
+      let nineC = currentFiles.filter(f => f.type === 'nine').length;
+      let selCount = selectedIds.size;
+      let colorSet = new Set();
+      let bgButtonCount = currentFiles.filter(f => f.type === 'xml' && isBgOrButtonDrawable(f)).length;
+      currentFiles.forEach(f => { f.colors?.forEach(c => colorSet.add(c)); });
+
+      document.getElementById('statsRow').innerHTML = `
+        <div class="stat-chip">📁 Total: ${currentFiles.length}</div>
+        <div class="stat-chip">🎨 XML: ${xmlC} (✅Valid: ${validXmlC})</div>
+        <div class="stat-chip">🖼️ PNG: ${pngC}</div>
+        <div class="stat-chip">🔟 9.png: ${nineC}</div>
+        <div class="stat-chip">✅ Selected: ${selCount}</div>
+        <div class="stat-chip">🎨 Colors: ${colorSet.size}</div>
+        <div class="stat-chip">🎯 BG/BTN: ${bgButtonCount}</div>`;
+
+      let filters = ['all', 'valid_only', 'hasColor', 'hasDimen', 'hasAnimation', 'hasStroke', 'hasGradient', 'bg_button_only'];
+      let filterNames = { all: 'All', valid_only: '✅ Valid Only', hasColor: '🎨 Color', hasDimen: '📏 Dimension', hasAnimation: '🔄 Animation', hasStroke: '✒️ Stroke', hasGradient: '🌈 Gradient', bg_button_only: '🎯 BG/BTN Only' };
+
+      document.getElementById('filterRow').innerHTML = filters.map(f =>
+        `<div class="filter-chip ${currentFilter === f ? 'active' : ''}" data-filter="${f}">${filterNames[f]}</div>`
+      ).join('');
+
+      document.querySelectorAll('.filter-chip').forEach(el => {
+        el.addEventListener('click', (e) => {
+          currentFilter = el.dataset.filter;
+          document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+          el.classList.add('active');
+          applyFilterAndRender();
+        });
+      });
+      applyFilterAndRender();
+    }
+
+    function applyFilterAndRender() {
+      let filtered = currentFiles.filter(f => {
+        if (f.type === 'xml' && !toggleXml) return false;
+        if ((f.type === 'png' || f.type === 'nine') && !togglePng) return false;
+        if (currentFilter === 'valid_only') {
+          if (f.type !== 'xml') return false;
+          return f.isValidIcon === true;
+        }
+        if (currentFilter === 'bg_button_only') {
+          if (f.type !== 'xml') return false;
+          return isBgOrButtonDrawable(f);
+        }
+        if (currentFilter !== 'all' && currentFilter !== 'valid_only' && currentFilter !== 'bg_button_only' && f.type !== 'xml') return false;
+        if (currentFilter !== 'all' && currentFilter !== 'valid_only' && currentFilter !== 'bg_button_only' && !f.features[currentFilter]) return false;
+        return true;
+      });
+      renderGrid(filtered);
+    }
+
+    function renderGrid(files) {
+      if (!files.length) {
+        document.getElementById('drawableGrid').innerHTML = '<div class="empty-state">🔍 No files found or filters disabled</div>';
+        return;
+      }
+
+      document.getElementById('drawableGrid').innerHTML = files.map(file => {
+        let colorTagsHtml = '';
+        if (file.colors && file.colors.length) {
+          colorTagsHtml = `<div class="color-refs">${file.colors.map(cn => {
+            let exactColor = getExactColorValue(cn);
+            let isRel = colorMap.get(cn)?.isRelative;
+            let displayColor = exactColor || '#CCCCCC';
+            return `<div class="color-chip"><div class="color-swatch" style="background: ${displayColor};"></div><code class="color-hex">${cn}${isRel ? '↗' : ''}</code></div>`;
+          }).join('')}</div>`;
+        }
+
+        let previewSrc = file.preview || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="%2394a3b8"%3E%3Cpath d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 8h-4v4h-4v-4H6V9h4V5h4v4h4v2z"/%3E%3C/svg%3E';
+
+        let badge = '';
+        if (file.type === 'xml') {
+          if (file.isValidIcon) badge = '<div class="valid-badge">✅ Valid</div>';
+          else badge = '<div class="invalid-badge">⚠️ Skip</div>';
+        }
+
+        let isBgBtn = isBgOrButtonDrawable(file);
+        let bgBtnBadge = isBgBtn ? `<div style="position:absolute;top:12px;left:40px;background:#ec4899;color:white;font-size:9px;padding:2px 6px;border-radius:10px;">BG/BTN</div>` : '';
+
+        let typeBadge = file.drawableType && file.drawableType !== 'unknown' ?
+          `<div style="position:absolute;bottom:8px;right:8px;background:#f97316;color:white;font-size:9px;padding:2px 6px;border-radius:10px;">${file.drawableType}</div>` : '';
+
+        const displayName = file.name.length > 45 ? file.name.substring(0, 42) + '...' : file.name;
+
+        return `<div class="asset-card ${selectedIds.has(file.id) ? 'selected' : ''}" data-id="${file.id}">
+          <input type="checkbox" class="checkbox-select" ${selectedIds.has(file.id) ? 'checked' : ''} onchange="window.toggleSelect('${file.id}', this.checked)">
+          ${badge}
+          ${typeBadge}
+          ${bgBtnBadge}
+          <div class="preview-container"><img class="preview-img" src="${previewSrc}" alt="preview" loading="lazy"></div>
+          <div class="asset-info">
+            <div class="asset-name">${displayName}</div>
+            <div class="feature-tags">${file.features?.hasColor ? '<span class="feat-tag">🎨 Color</span>' : ''}${file.features?.hasDimen ? '<span class="feat-tag">📏 dimen</span>' : ''}${file.features?.hasAnimation ? '<span class="feat-tag">🔄 Animation</span>' : ''}</div>
+            ${colorTagsHtml}
+            <div class="action-buttons">
+              ${file.type === 'xml' && file.isValidIcon ? `<button class="mini-btn" onclick="window.convertSingleToPng('${file.id}')"><span class="material-icons" style="font-size:14px">image</span> ${file.originalExtension === '9.png' ? '9.png' : 'PNG'}</button>` : ''}
+              <button class="mini-btn" onclick="window.downloadSingleFile('${file.id}')"><span class="material-icons" style="font-size:14px">download</span> Download</button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // Global functions for inline event handlers
+    window.toggleSelect = (id, checked) => {
+      if (checked) selectedIds.add(id);
+      else selectedIds.delete(id);
+      updateUIAndRender();
+    };
+
+    window.downloadSingleFile = (id) => {
+      let f = currentFiles.find(f => f.id == id);
+      if (f) {
+        saveAs(f.file, f.name);
+        showToast(`✅ ${f.name}`);
+      }
+    };
+
+    window.convertSingleToPng = async (id) => {
+      let f = currentFiles.find(f => f.id == id);
+      if (f && f.type === 'xml' && f.isValidIcon) {
+        showToast('🔄 Converting...');
+        let pngData = await vectorXmlToPng(f.content);
+        if (pngData) {
+          let a = document.createElement('a');
+          let outputName;
+          if (f.originalExtension === '9.png' || f.name.includes('.9.')) {
+            outputName = f.name.replace(/\.xml$/i, '.9.png');
+          } else {
+            outputName = f.name.replace(/\.xml$/i, '.png');
+          }
+          a.download = outputName;
+          a.href = pngData;
+          a.click();
+          showToast(`✅ ${outputName} created`);
+        } else showToast('❌ Conversion failed');
+      } else showToast('⚠️ This file is not a valid icon');
+    };
+
+    async function downloadSelectedFiles() {
+      let selected = currentFiles.filter(f => selectedIds.has(f.id));
+      if (!selected.length) { showToast('Please select files'); return; }
+      selected.forEach(f => saveAs(f.file, f.name));
+      showToast(`✅ ${selected.length} file(s) downloaded`);
+    }
+
+    async function downloadZip() {
+      let selected = currentFiles.filter(f => selectedIds.has(f.id));
+      if (!selected.length) { showToast('Please select files'); return; }
+      showLoading('Creating ZIP...');
+      let zip = new JSZip();
+      for (let f of selected) {
+        let content = await f.file.arrayBuffer();
+        zip.file(f.name, content);
+      }
+      let blob = await zip.generateAsync({ type: 'blob' });
+      saveAs(blob, 'drawables_selected.zip');
+      hideLoading();
+      showToast('📦 ZIP ready');
+    }
+
+    function clearAll() {
+      if (confirm('Delete all files?')) {
+        revokeAllObjectURLs();
+        currentFiles = [];
+        selectedIds.clear();
+        document.getElementById('uploadZoneWrapper').style.display = 'block';
+        document.getElementById('mainControls').style.display = 'none';
+        renderGrid([]);
+        showToast('🗑️ All cleared');
+      }
+    }
+
+    function downloadExtractedColors() {
+      let usedColors = new Map();
+      for (let file of currentFiles) {
+        if (file.colors) file.colors.forEach(cn => {
+          if (colorMap.has(cn)) usedColors.set(cn, colorMap.get(cn));
+          else usedColors.set(cn, { value: null, isRelative: false, originalRaw: '#A855F7' });
+        });
+      }
+      if (usedColors.size === 0) { showToast('No colors found'); return; }
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+      for (let [name, data] of usedColors) {
+        let val = data.value || (data.isRelative ? `@color/${data.parent}` : (data.originalRaw || '#A855F7'));
+        xml += `    <color name="${name}">${val}</color>\n`;
+      }
+      xml += '</resources>';
+      saveAs(new Blob([xml], { type: 'text/xml' }), 'extracted_colors.xml');
+      showToast('✅ colors.xml extracted');
+    }
+
+    // ==================== STANDALONE PROCESSOR (Fixed) ====================
+    function parseStandaloneXml(content) {
+      standaloneState.rawContent = content;
+      standaloneState.colorMap.clear();
+      standaloneState.resolved = false;
+
+      const regex = /<color\s+name="([^"]+)"\s*>([^<]+)<\/color>/g;
+      let m;
+      while ((m = regex.exec(content)) !== null) {
+        let name = m[1], val = m[2].trim();
+        if (val.startsWith('@android:color/')) {
+          let parent = val.replace('@android:color/', '');
+          standaloneState.colorMap.set(name, { value: null, isRelative: true, isAndroidRelative: true, parent, original: val });
+        } else if (val.startsWith('@color/')) {
+          let parent = val.replace('@color/', '');
+          standaloneState.colorMap.set(name, { value: null, isRelative: true, isAndroidRelative: false, parent, original: val });
+        } else {
+          standaloneState.colorMap.set(name, { value: val, isRelative: false, isAndroidRelative: false, parent: null, original: val });
+        }
+      }
+      updateStandaloneUI();
+      enableStandaloneButtons(true);
+    }
+
+    function resolveStandalone() {
+      if (standaloneState.colorMap.size === 0) return;
+
+      // Use the same improved recursive resolution
+      const resolvedMap = new Map();
+      const visited = new Set();
+
+      function resolveValue(name) {
+        if (visited.has(name)) return null;
+        visited.add(name);
+
+        const data = standaloneState.colorMap.get(name);
+        if (!data) return null;
+
+        if (!data.isRelative) {
+          visited.delete(name);
+          return data.value;
+        }
+
+        if (data.isAndroidRelative) {
+          const resolvedVal = getAndroidSystemColorValue(data.parent);
+          visited.delete(name);
+          return resolvedVal;
+        }
+
+        if (data.parent) {
+          const parentVal = resolveValue(data.parent);
+          visited.delete(name);
+          return parentVal;
+        }
+
+        visited.delete(name);
+        return null;
+      }
+
+      for (let [name, data] of standaloneState.colorMap) {
+        if (!data.isRelative) {
+          resolvedMap.set(name, data.value);
+          data.value = data.value;
+        } else {
+          const val = resolveValue(name);
+          if (val) {
+            resolvedMap.set(name, val);
+            data.value = val;
+          } else {
+            resolvedMap.set(name, '#A855F7');
+            data.value = '#A855F7';
+          }
+        }
+      }
+
+      standaloneState.resolved = true;
+      updateStandaloneUI();
+      showToast('✅ Relative colors resolved');
+    }
+
+    function convertToMIUIFormat() {
+      if (standaloneState.colorMap.size === 0) { showToast('⚠️ No color data to convert'); return; }
+      let miuiXml = '<?xml version=\'1.0\' encoding=\'UTF-8\'?>\n<MIUI_Theme_Values template="DarkTemplate">\n\n';
+      for (let [name, data] of standaloneState.colorMap) {
+        let colorValue = (standaloneState.resolved && data.value) ? data.value : (data.value || data.original || '#A855F7');
+        if (!colorValue.startsWith('#')) colorValue = '#' + colorValue;
+        miuiXml += `    <color name="${name}">${colorValue}</color>\n`;
+      }
+      miuiXml += '\n</MIUI_Theme_Values>';
+      let downloadName = standaloneState.fileName ? standaloneState.fileName.replace('.xml', '_miui.xml') : 'miui_colors.xml';
+      saveAs(new Blob([miuiXml], { type: 'text/xml' }), downloadName);
+      showToast('✅ Converted to MIUI Theme format');
+    }
+
+    function updateStandaloneUI() {
+      let statusDiv = document.getElementById('standaloneStatusBox');
+      let total = standaloneState.colorMap.size, rel = [...standaloneState.colorMap.values()].filter(c => c.isRelative).length;
+      statusDiv.innerHTML = `<strong>📄 ${standaloneState.fileName || 'No file'}</strong> | Colors: ${total} (Relative: ${rel}) ${standaloneState.resolved ? '✨ Resolved' : ''}`;
+      let panel = document.getElementById('standaloneColorListPanel');
+      if (total === 0) { panel.style.display = 'none'; return; }
+      panel.style.display = 'block';
+      let html = '<div class="color-list-standalone">';
+      for (let [name, data] of standaloneState.colorMap.entries()) {
+        let displayVal = data.value || (data.isRelative ? data.original : '#ccc');
+        let bgColor = (data.value && !data.isRelative) ? data.value : (data.value || '#ccc');
+        html += `<div class="standalone-color-item"><div class="standalone-swatch" style="background: ${bgColor};"></div><code><strong>${name}</strong></code><span style="flex:1;"></span><code style="color: ${data.value ? '#2e7d32' : '#ff9800'};">${displayVal}</code>${data.isRelative ? '<span style="background:#ff9800; color:white; padding:2px 6px; border-radius:12px; font-size:9px; margin-left:8px;">↗ relative</span>' : ''}</div>`;
+      }
+      html += '</div>';
+      panel.innerHTML = html;
+    }
+
+    function enableStandaloneButtons(enable) {
+      ['standaloneResolveBtn', 'standaloneConvertToMIUIBtn', 'standaloneDownloadFullBtn', 'standaloneDownloadNonSystemBtn', 'standaloneClearBtn'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.disabled = !enable;
+      });
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    document.getElementById('colorUploadBtn').onclick = () => document.getElementById('hiddenColorFileInput').click();
+    document.getElementById('hiddenColorFileInput').onchange = async (e) => {
+      if (e.target.files[0]) {
+        let content = await e.target.files[0].text();
+        await parseColorsXml(content);
+        showToast(`✅ ${e.target.files[0].name} loaded`);
+      }
+    };
+    document.getElementById('clearColorMapBtn').onclick = () => { colorMap.clear(); updateColorStatusText(); showToast('Color map cleared'); };
+    document.getElementById('resolveRelativeColorsBtn').onclick = () => {
+      if (colorMap.size) {
+        resolveRelativeColors(colorMap);
+        updateUIAndRender();
+        showToast('✅ Relative colors resolved');
+      } else showToast('⚠️ Please upload colors.xml first');
+    };
+    document.getElementById('extractColorsBtn').onclick = downloadExtractedColors;
+    document.getElementById('downloadSelectedBtn').onclick = downloadSelectedFiles;
+    document.getElementById('downloadZipBtn').onclick = downloadZip;
+    document.getElementById('convertAllXmlsBtn').onclick = convertAllValidXmlsToOriginalFormat;
+    document.getElementById('mergeToThemeFallbackBtn').onclick = mergeToThemeFallback;
+    document.getElementById('extractBgButtonDrawablesBtn').onclick = extractBgButtonDrawables;
+    document.getElementById('downloadThemeWithImagesBtn').onclick = downloadThemeWithImages;
+    document.getElementById('clearAllBtn').onclick = clearAll;
+    document.getElementById('addMoreFilesBtn').onclick = () => document.getElementById('fileInput').click();
+
+    const xmlToggleSwitch = document.getElementById('xmlToggleSwitch');
+    const pngToggleSwitch = document.getElementById('pngToggleSwitch');
+    xmlToggleSwitch.onclick = (e) => { e.stopPropagation(); toggleXml = !toggleXml; xmlToggleSwitch.classList.toggle('active', toggleXml); applyFilterAndRender(); };
+    pngToggleSwitch.onclick = (e) => { e.stopPropagation(); togglePng = !togglePng; pngToggleSwitch.classList.toggle('active', togglePng); applyFilterAndRender(); };
+
+    document.getElementById('globalSelectCb').onchange = (e) => {
+      let visible = currentFiles.filter(f => {
+        if (f.type === 'xml' && !toggleXml) return false;
+        if ((f.type === 'png' || f.type === 'nine') && !togglePng) return false;
+        return true;
+      });
+      if (e.target.checked) visible.forEach(f => selectedIds.add(f.id));
+      else visible.forEach(f => selectedIds.delete(f.id));
+      updateUIAndRender();
+    };
+
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInputEl = document.getElementById('fileInput');
+    const zipInputEl = document.getElementById('zipInput');
+
+    document.getElementById('uploadFilesBtn').onclick = (e) => { e.stopPropagation(); fileInputEl.click(); };
+    document.getElementById('uploadZipBtn').onclick = (e) => { e.stopPropagation(); zipInputEl.click(); };
+    fileInputEl.onchange = (e) => { if (e.target.files.length) handleFiles(Array.from(e.target.files)); fileInputEl.value = ''; };
+    zipInputEl.onchange = (e) => { if (e.target.files[0]) handleZipUpload(e.target.files[0]); zipInputEl.value = ''; };
+
+    uploadArea.ondragover = (e) => { e.preventDefault(); uploadArea.style.background = '#fef3e2'; };
+    uploadArea.ondragleave = () => uploadArea.style.background = '#fafcff';
+    uploadArea.ondrop = async (e) => {
+      e.preventDefault();
+      uploadArea.style.background = '#fafcff';
+      let items = Array.from(e.dataTransfer.files);
+      let zipFiles = items.filter(f => f.name.endsWith('.zip'));
+      let drawableFiles = items.filter(f => !f.name.endsWith('.zip') && (f.name.endsWith('.xml') || f.name.endsWith('.png') || f.name.endsWith('.9.png')));
+      if (zipFiles.length > 0) await handleZipUpload(zipFiles[0]);
+      if (drawableFiles.length > 0) await handleFiles(drawableFiles);
+    };
+
+    // Standalone event listeners
+    document.getElementById('standaloneUploadBtn').onclick = () => document.getElementById('standaloneFileInput').click();
+    document.getElementById('standaloneFileInput').onchange = async (e) => {
+      let file = e.target.files[0];
+      if (file && file.name.endsWith('.xml')) {
+        standaloneState.fileName = file.name;
+        let content = await file.text();
+        parseStandaloneXml(content);
+        showToast(`✅ ${file.name} loaded`);
+      } else showToast('⚠️ Only .xml files supported');
+    };
+    document.getElementById('standaloneResolveBtn').onclick = resolveStandalone;
+    document.getElementById('standaloneConvertToMIUIBtn').onclick = convertToMIUIFormat;
+    document.getElementById('standaloneDownloadFullBtn').onclick = () => {
+      if (standaloneState.colorMap.size === 0) return;
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+      for (let [name, data] of standaloneState.colorMap) {
+        let val = (standaloneState.resolved && data.value) ? data.value : data.original;
+        xml += `    <color name="${name}">${val}</color>\n`;
+      }
+      xml += '</resources>';
+      saveAs(new Blob([xml], { type: 'text/xml' }), standaloneState.fileName || 'colors_resolved.xml');
+      showToast('✅ Download complete');
+    };
+    document.getElementById('standaloneDownloadNonSystemBtn').onclick = () => {
+      let filtered = [...standaloneState.colorMap.entries()].filter(([_, d]) => !d.isAndroidRelative);
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+      for (let [name, data] of filtered) {
+        let val = (standaloneState.resolved && data.value && !data.isAndroidRelative) ? data.value : data.original;
+        xml += `    <color name="${name}">${val}</color>\n`;
+      }
+      xml += '</resources>';
+      saveAs(new Blob([xml], { type: 'text/xml' }), standaloneState.fileName || 'nonsystem_colors.xml');
+      showToast('✅ Non-system colors downloaded');
+    };
+    document.getElementById('standaloneClearBtn').onclick = () => {
+      standaloneState.colorMap.clear();
+      standaloneState.fileName = null;
+      standaloneState.resolved = false;
+      standaloneState.rawContent = null;
+      document.getElementById('standaloneStatusBox').innerHTML = '⚠️ No XML file uploaded';
+      document.getElementById('standaloneColorListPanel').style.display = 'none';
+      enableStandaloneButtons(false);
+      showToast('🗑️ Cleared');
+    };
+    enableStandaloneButtons(false);
+
+    window.toggleCard = (contentId) => {
+      const content = document.getElementById(contentId);
+      const header = content.previousElementSibling;
+      content.classList.toggle('collapsed');
+      header.classList.toggle('collapsed');
+    };
+  </script>
+</body>
+
+</html>

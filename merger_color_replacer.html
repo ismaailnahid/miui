@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎨 XML Color Replacer Tool</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <!-- =========================
+          A. CSS SECTION
+    ========================== -->
+    <style>
+      :root {
+        --bg-color: #181c24;
+        --card-bg: #23283a;
+        --text-color: #eaf7f0;
+        --accent: #43e97b;
+        --shadow: 0 6px 24px rgba(0, 0, 0, 0.35), 0 1.5px 1.5px rgba(255,255,255,0.08) inset;
+        --border-color: #2d3142;
+        --scrollbar-bg: #181c24;
+        --scrollbar-thumb: #23283a;
+        --scrollbar-thumb-hover: #44485a;
+        --input-bg: #23283a;
+        --input-border: #404060;
+        --button-hover: #9965f4;
+      }
+      /* --- Scrollbar --- */
+      ::-webkit-scrollbar { width: 12px; height: 12px; }
+      ::-webkit-scrollbar-track { background: var(--scrollbar-bg); border-radius: 6px; }
+      ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 6px; border: 3px solid var(--scrollbar-bg);}
+      ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover);}
+      * { scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg);}
+      /* --- Body & Header --- */
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #23283a 0%, #181c24 100%);
+        color: var(--text-color);
+        min-height: 100vh;
+        margin: 0;
+      }
+      header {
+        background: var(--card-bg);
+        padding: 18px 0;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+        display: flex; justify-content: center; align-items: center;
+        border-bottom: 2px solid var(--accent);
+      }
+      .logo {
+        font-size: clamp(22px, 5vw, 32px);
+        font-weight: bold;
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-shadow: 0 2px 8px #000, 0 1px 0 #fff2;
+        display: flex; align-items: center; gap: 10px;
+      }
+      /* --- Layout --- */
+      .container { width: 98%; max-width: 980px; margin: 30px auto; padding: 0 10px; }
+      .card {
+        background: linear-gradient(135deg, #23283a 60%, #23283a 100%);
+        border-radius: 20px;
+        padding: 22px 18px;
+        box-shadow: 0 8px 32px 0 #000a, 0 2px 8px #bb86fc22 inset;
+        margin-bottom: 24px;
+        border: 1.5px solid var(--border-color);
+        overflow-x: hidden;
+        color: var(--text-color);
+      }
+      /* --- Buttons & Inputs --- */
+      label, #colorArea h3, .color-inputs label, .selection-controls button, .button-group button, .replace-group button {
+        color: var(--text-color); font-weight: 500; letter-spacing: 0.2px;
+      }
+      .button-group button, .selection-controls button, .replace-group button {
+        color: #fff !important; text-shadow: 0 1px 2px #0006;
+      }
+      .button-group button:hover, .selection-controls button:hover, .replace-group button:hover {
+        color: #23283a !important; text-shadow: none;
+      }
+      input[type="text"], textarea {
+        color: #eaf7f0; background: var(--input-bg); border: 2px solid var(--input-border);
+      }
+      input[type="text"]:focus, textarea:focus {
+        color: #fff; border-color: var(--accent); background: #23283a;
+      }
+      input[type="color"] { border: 3px solid var(--accent);}
+      /* --- Color List --- */
+      .color-item label, .color-item code {
+        color: #ffeedd; font-family: "Fira Mono", "Consolas", "Menlo", monospace; font-size: 15px; background: none;
+      }
+      .color-item code { color: #aeeaff; background: #23283a; border-radius: 4px; padding: 2px 6px; font-size: 14px; font-weight: 400;}
+      .color-swatch { border: 2.5px solid var(--border-color);}
+
+      .preset-color { border: 3px solid var(--border-color);}
+      .preset-color.active {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 4px #43e97b99, 0 8px 24px #38f9d7aa, 0 2px 8px #fff2 inset;
+      }
+      #colorArea { color: var(--text-color);}
+      #colorArea h3 {
+        color: var(--accent); font-size: clamp(18px, 3vw, 22px); text-shadow: 0 1px 4px #0003;
+        display: flex; align-items: center; gap: 8px;
+      }
+      .color-item button.delete-btn { color: #fff; background: #e74c3c;}
+      .color-item button.delete-btn:hover { background: #c0392b; color: #fff;}
+      /* --- Placeholder --- */
+      ::-webkit-input-placeholder { color: #b0c4d4; opacity: 1;}
+      ::-moz-placeholder { color: #b0c4d4; opacity: 1;}
+      :-ms-input-placeholder { color: #b0c4d4; opacity: 1;}
+      ::placeholder { color: #b0c4d4; opacity: 1;}
+      /* --- Root Tag --- */
+      .root-tag-btn {
+        padding: 10px 22px; border-radius: 10px; border: none;
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: #23283a; font-weight: bold; font-size: 16px; cursor: pointer;
+        box-shadow: 0 2px 8px #38f9d755, 0 1px 1px #fff2 inset;
+        transition: background 0.2s, transform 0.15s; margin-bottom: 6px;
+        display: inline-flex; align-items: center; gap: 6px;
+      }
+      .root-tag-btn:hover {
+        background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        color: #fff; transform: scale(1.04);
+      }
+      .root-tag-select {
+        padding: 8px 16px; border-radius: 8px; border: 1.5px solid #43e97b;
+        background: #23283a; color: #fff; font-size: 15px; margin-right: 10px; margin-bottom: 6px;
+        box-shadow: 0 2px 8px #0002 inset; transition: border-color 0.2s;
+      }
+      .root-tag-select:focus { border-color: #1686d0; outline: none;}
+      .root-tag-apply-btn {
+        padding: 8px 18px; border-radius: 8px; border: none;
+        background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        color: #fff; font-weight: bold; font-size: 15px; cursor: pointer;
+        box-shadow: 0 2px 8px #38f9d755, 0 1px 1px #fff2 inset;
+        transition: background 0.2s, transform 0.15s; display: inline-flex; align-items: center; gap: 6px;
+      }
+      .root-tag-apply-btn:hover {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: #23283a; transform: scale(1.04);
+      }
+      /* --- Textarea --- */
+      textarea {
+        width: 100%; min-height: 120px; height: clamp(170px, 32vh, 260px);
+        font-family: monospace; border: 2px solid var(--input-border); border-radius: 12px;
+        padding: 12px; background: var(--input-bg); color: var(--text-color);
+        font-size: clamp(15px, 2.5vw, 17px); resize: vertical; box-shadow: 0 2px 8px #0004 inset;
+        transition: border-color 0.2s, box-shadow 0.2s; box-sizing: border-box;
+        scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-bg); overflow-y: auto;
+      }
+      textarea::-webkit-scrollbar { width: 12px; background: var(--scrollbar-bg); border-radius: 8px;}
+      textarea::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 8px; border: 3px solid var(--scrollbar-bg); min-height: 40px; box-shadow: 0 2px 8px #111a;}
+      textarea::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover);}
+      textarea::-webkit-scrollbar-corner { background: var(--scrollbar-bg);}
+      /* --- Button Groups --- */
+      .button-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; justify-content: center;}
+      .button-group button, .selection-controls button {
+        background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        border: none; color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer;
+        font-weight: bold; font-size: clamp(13px, 2.5vw, 15px); box-shadow: 0 3px 12px #0005, 0 1px 1px #fff1 inset;
+        transition: all 0.2s cubic-bezier(0.4, 2, 0.3, 1); min-width: max-content; white-space: nowrap; letter-spacing: 0.5px;
+        display: inline-flex; align-items: center; gap: 6px;
+      }
+      .button-group button:hover, .selection-controls button:hover {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        transform: translateY(-2px) scale(1.04); box-shadow: 0 6px 18px #38f9d755, 0 1px 1px #fff2 inset;
+      }
+      /* --- Color Inputs --- */
+      .color-inputs {
+        display: flex; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; justify-content: center;
+      }
+      .color-inputs label { font-weight: bold; font-size: clamp(15px, 2.5vw, 17px); display: flex; align-items: center; gap: 5px;}
+      .color-inputs input[type="text"] {
+        max-width: 110px; padding: 6px; border-radius: 6px; border: 2px solid var(--input-border);
+        background: var(--input-bg); color: var(--text-color); font-size: 15px; box-shadow: 0 1px 4px #0002 inset;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .color-inputs input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px #bb86fc33, 0 1px 4px #0002 inset;}
+      .color-inputs input[type="color"] {
+        border: 3px solid var(--accent); background: linear-gradient(135deg, #23283a 60%, #38f9d7 100%);
+        width: 52px; height: 52px; border-radius: 8%; box-shadow: 0 4px 18px #38f9d7aa, 0 2px 8px #fff2 inset;
+        cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s; padding: 0; outline: none; appearance: none; -webkit-appearance: none; display: inline-block;
+      }
+      .color-inputs input[type="color"]:hover, .color-inputs input[type="color"]:focus {
+        border-color: #43e97b; box-shadow: 0 0 0 4px #43e97b55, 0 8px 24px #38f9d7aa, 0 2px 8px #fff2 inset; transform: scale(1.08);
+      }
+      /* --- Preset Colors --- */
+      .preset-colors { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; justify-content: center;}
+      .preset-color {
+        width: 48px; height: 48px; border-radius: 50%; border: 3px solid var(--border-color); cursor: pointer;
+        box-shadow: 0 4px 16px #0005, 0 2px 8px #fff2 inset; transition: all 0.2s; margin: 2px; display: flex; align-items: center; justify-content: center;
+      }
+      .preset-color:hover {
+        border-color: var(--accent); transform: scale(1.13); box-shadow: 0 6px 18px #bb86fc55, 0 1px 1px #fff2 inset;
+      }
+      .preset-color.active {
+        border-color: var(--accent); box-shadow: 0 0 0 4px #43e97b99, 0 8px 24px #38f9d7aa, 0 2px 8px #fff2 inset; transform: scale(1.18); outline: none;
+      }
+      /* --- Color List --- */
+      .color-item {
+        margin: 12px 0; display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap;   justify-content: space-between;
+; padding: 8px 6px; border-radius: 10px;
+        transition: background-color 0.3s; box-shadow: 0 2px 8px #0002;
+        background: linear-gradient(135deg, #23283a 80%, #23283a 100%);
+        border: 2.5px solid var(--border-color);
+      }
+
+      .color-item > label {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  word-break: break-word;
+}
+.color-item > div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+      .color-item:hover { background: #23283a; box-shadow: 0 4px 16px #bb86fc33;}
+      .color-item input[type="checkbox"] {
+        width: clamp(18px, 3vw, 22px); height: clamp(18px, 3vw, 22px); cursor: pointer; accent-color: var(--accent);
+        background: #232323; border: 2.5px solid #444; border-radius: 7px; box-shadow: 0 2px 8px #0006, 0 1px 1px #fff2 inset; transition: box-shadow 0.2s, border-color 0.2s;
+      }
+      .color-item input[type="checkbox"]:hover { border-color: var(--accent); box-shadow: 0 4px 16px #bb86fc55, 0 1px 1px #fff2 inset;}
+      .color-item label { display: flex; align-items: center; gap: 10px; font-size: clamp(15px, 2.5vw, 17px); flex-wrap: wrap; cursor: pointer; font-weight: 500; letter-spacing: 0.2px;}
+      .color-item.selected {
+        border: 2.5px solid #43e97b !important; box-shadow: 0 0 0 3px #43e97b99, 0 2px 8px #38f9d755;
+        background: linear-gradient(90deg, #43e97b22 0%, #38f9d722 100%);
+        transition: background 0.2s, box-shadow 0.2s, border 0.2s;
+      }
+      .color-swatch {
+        display: inline-block; width: clamp(22px, 3vw, 26px); height: clamp(22px, 3vw, 26px); border-radius: 50%; border: 2.5px solid var(--border-color);
+        vertical-align: middle; box-shadow: 0 2px 8px #0005, 0 1px 1px #fff2 inset; margin-right: 2px;
+      }
+      .selection-controls { margin: 12px 0 22px 0; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;}
+      .color-item button.delete-btn {
+        margin-left: 8px; padding: 4px 10px; border-radius: 6px; background: #e74c3c; color: #fff; border: none; cursor: pointer; font-size: 13px;
+        transition: background 0.2s; display: flex; align-items: center; gap: 4px;
+      }
+      .color-item button.delete-btn:hover { background: #c0392b;}
+      /* --- Replace Group --- */
+      .replace-group { display: flex; gap: 10px; justify-content: center; margin: 18px 0; flex-wrap: wrap;}
+      .replace-group button {
+        background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        border: none; color: white; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-weight: bold;
+        font-size: clamp(13px, 2.5vw, 15px); box-shadow: 0 3px 12px #0005, 0 1px 1px #fff1 inset;
+        transition: all 0.2s cubic-bezier(0.4, 2, 0.3, 1); min-width: max-content; white-space: nowrap; letter-spacing: 0.5px;
+        display: inline-flex; align-items: center; gap: 6px;
+      }
+      .replace-group button:hover {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        transform: translateY(-2px) scale(1.04); box-shadow: 0 6px 18px #38f9d755, 0 1px 1px #fff2 inset;
+      }
+      /* --- Scroll Arrows --- */
+      #scroll-arrows {
+        position: fixed; right: 18px; bottom: 18px; display: flex; flex-direction: column; gap: 10px; z-index: 9999;
+      }
+      #scroll-arrows button {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: #23283a; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 26px; font-weight: bold;
+        box-shadow: 0 4px 16px #0005, 0 2px 8px #fff2 inset; cursor: pointer; transition: background 0.2s, transform 0.15s;
+        outline: none; display: flex; align-items: center; justify-content: center; opacity: 0.85;
+      }
+      #scroll-arrows button:hover {
+        background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        color: #fff; transform: scale(1.12); opacity: 1;
+      }
+      /* --- Floating Go Button & Modal --- */
+      #floatingGoBtn {
+        position: fixed; right: 18px; bottom: 130px; z-index: 10001;
+        background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);
+        color: #fff; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 22px; font-weight: bold;
+        box-shadow: 0 4px 16px #0005, 0 2px 8px #fff2 inset; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        opacity: 0.92; transition: background 0.2s, transform 0.15s;
+      }
+      #goModal {
+        display: none; position: fixed; right: 24px; bottom: 230px; z-index: 10002;
+        background: #23283a; border-radius: 14px; box-shadow: 0 4px 24px #000a;
+        padding: 18px 22px 14px 22px; min-width: 210px; border: 2px solid #43e97b; color: #fff; text-align: center;
+      }
+      /* --- Responsive --- */
+      @media (max-width: 900px) {
+        .container { max-width: 99vw; padding: 0 2vw;}
+        .card { padding: 14px 6px; border-radius: 14px;}
+        .button-group { gap: 7px;}
+      }
+      @media (max-width: 600px) {
+        .container { width: 100%; max-width: 100vw; padding: 0 2vw; margin: 10px 0;}
+        .card { padding: 8px 2vw; border-radius: 10px;}
+        .button-group, .replace-group { flex-direction: row !important; align-items: center !important; flex-wrap: wrap; gap: 8px; justify-content: center;}
+        .color-inputs { flex-direction: column; gap: 8px; align-items: stretch;}
+        .color-inputs input[type="color"] { width: 100%; min-width: 80px; max-width: 220px; height: 48px; margin: 0 auto; border-radius: 10px; display: block;}
+        .color-inputs input[type="text"] { width: 100%; min-width: 80px; max-width: 220px; margin: 0 auto; display: block;}
+        .color-inputs label, .color-inputs span { text-align: center; width: 100%; display: block;}
+        .preset-colors { gap: 6px;}
+        .color-item { flex-direction: row; align-items: flex-start; gap: 6px; padding: 7px 2px;}
+          .color-item > label {
+    font-size: 13px;
+    gap: 6px;
+  }
+  .color-item > div {
+    margin-left: auto;
+  }
+    .color-item button.delete-btn {
+    font-size: 20px !important;
+    padding: 4px 10px !important;
+  }
+  .color-item button.delete-btn span {
+    display: none !important;
+  }
+  .button-group button,
+  .selection-controls button,
+  .replace-group button {
+    font-size: 18px !important;
+    padding: 13px 20px !important;
+    min-width: 35;
+    min-height: 35;
+  }
+}
+
+          .root-tag-btn,
+  .root-tag-apply-btn {
+    font-size: 18px !important;
+    padding: 13px 24px !important;
+    border-radius: 12px !important;
+    min-width: 35px;
+    min-height: 35px;
+  }
+
+
+  .color-swatch {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    margin-right: 2px !important;
+  }
+
+        .color-item label code { font-size: 13px; word-break: break-all;}
+        #colorArea h3 { font-size: 17px;}
+        .selection-controls { flex-direction: row !important; align-items: center !important; flex-wrap: wrap; gap: 7px; justify-content: center;}
+        #scroll-arrows { right: 8px; bottom: 8px; gap: 7px;}
+        #scroll-arrows button { width: 38px; height: 38px; font-size: 20px;}
+
+      
+      @media (max-width: 400px) {
+        .logo { font-size: 16px;}
+        .card { padding: 4px 1vw; border-radius: 7px;}
+        .button-group button, .selection-controls button, .replace-group button { font-size: 12px; padding: 7px 8px; min-width: 0;}
+        .color-inputs label { font-size: 13px;}
+        .color-item label { font-size: 13px; gap: 6px;}
+        .color-item code { font-size: 11px; padding: 1px 4px;}
+        .color-swatch { width: 18px; height: 18px; margin-right: 1px;}
+        .preset-color { width: 32px; height: 32px;}
+        .root-tag-btn, .root-tag-apply-btn { font-size: 13px; padding: 7px 10px; border-radius: 7px;}
+        .root-tag-select { font-size: 12px; padding: 6px 10px; border-radius: 6px;}
+        .replace-group { gap: 6px; margin: 10px 0;}
+        .color-item button.delete-btn { font-size: 11px; padding: 3px 7px; border-radius: 4px; gap: 2px;}
+        .selection-controls { gap: 5px;}
+        #colorArea h3 { font-size: 14px; gap: 4px;}
+      }
+    </style>
+  </head>
+  <body>
+    <!-- =========================
+          B. HTML SECTION
+    ========================== -->
+    <header>
+      <div class="logo">🎨 Color HEX  Code Replacer Tool</div>
+    </header>
+    <div class="container">
+      <div class="card">
+        <!-- File Upload -->
+        <div style="margin-bottom: 24px">
+          <label for="xmlFile" style="font-weight: bold; margin-bottom: 10px; display: block">📁 Choose XML File:</label>
+          <div style="display: flex; align-items: center; gap: 15px">
+            <label for="xmlFile" id="customFileBtn" style="background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%); color: #fff; padding: 10px 22px; border-radius: 10px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px #38f9d755; display: inline-flex; align-items: center; gap: 8px; border: none; font-size: 16px; transition: background 0.2s, transform 0.15s;">
+              <span>📂 Browse</span>
+            </label>
+            <span id="fileName" style="color: #bbb; font-size: 15px">No file chosen</span>
+            <input type="file" id="xmlFile" accept=".xml" style="display: none"/>
+          </div>
+        </div>
+        <!-- Root Tag Change -->
+        <div id="rootTagChangeBox" style="text-align: center; margin: 18px 0">
+          <button id="showRootOptionsBtn" onclick="showRootTagOptions()" class="root-tag-btn">🏷️ Root</button>
+          <button id="refreshBtn" onclick="refreshPage()" class="root-tag-btn" style="margin-left: 12px">🔄 Refresh</button>
+          <div id="rootTagOptions" style="display: none; margin-top: 12px">
+            <select id="rootTagSelect" class="root-tag-select">
+              <option value="resources">📦 &lt;resources&gt;</option>
+              <option value="MIUI_Theme_Values">🧩 &lt;MIUI_Theme_Values&gt;</option>
+              <option value='MIUI_Theme_Values template="DarkTemplate"'>🌑 &lt;MIUI_Theme_Values template="DarkTemplate"&gt;</option>
+              <option value='MIUI_Theme_Values template="LightTemplate"'>🌕 &lt;MIUI_Theme_Values template="LightTemplate"&gt;</option>
+              <option value="ThemeValues">🎭 &lt;ThemeValues&gt;</option>
+            </select>
+            <button onclick="changeRootTagSelect()" class="root-tag-apply-btn">✅ Apply</button>
+          </div>
+        </div>
+        <!-- Main Textarea -->
+        <textarea id="input" placeholder="📝 Paste or upload your XML here..." spellcheck="false"></textarea>
+        <!-- Main Buttons -->
+        <div class="button-group" style="margin-bottom: 10px">
+          <button onclick="extractColors()">🎨 Show Colors</button>
+          <button onclick="downloadXML('colors.xml')">⬇️ Download</button>
+          <button onclick="downloadXML('theme_values.xml')">⬇️ Values</button>
+          <button onclick="downloadXML('theme_fallback.xml')">⬇️ Fallback</button>
+        </div>
+        <div class="button-group" style="margin-bottom: 10px">
+          <button onclick="undo()">↩️ Undo</button>
+          <button onclick="redo()">↪️ Redo</button>
+          <button onclick="formatXML()" title="Format XML">🧹 Format</button>
+          <button onclick="beautifyXML()" title="Beautify XML">✨ Beautify</button>
+          <button onclick="minifyXML()" title="Minify XML">🔻 Minify</button>
+        </div>
+        <div class="button-group" style="margin-bottom: 10px">
+          <button onclick="sortColorsAlpha()" title="Sort Colors Alphabetically">🔤 Sort</button>
+          <button onclick="restoreInitialXML()" title="Restore Initial XML">♻️ Restore</button>
+        </div>
+        <!-- Color Inputs -->
+        <div class="color-inputs">
+          <label for="newColor">🎯 New Color:</label>
+          <input type="color" id="newColor" value="#ff0000" />
+          <input type="text" id="newColorText" value="#ff0000" maxlength="7" aria-label="New color hex code"/>
+          <span id="newColorHex">#ff0000</span>
+        </div>
+        <div class="preset-colors" id="presetColors"></div>
+        <!-- Replace/Delete Group -->
+        <div class="replace-group">
+          <button onclick="replaceSelected()">🖌️ Replace Selected</button>
+          <button onclick="replaceAll()">🖍️ Replace All</button>
+          <button onclick="deleteSelectedColors()" style="background: #e74c3c">🗑️ Delete Selected</button>
+          <button onclick="deleteAllColors()" style="background: #e74c3c">🗑️ Delete All</button>
+        </div>
+      </div>
+      <!-- Color List Area -->
+      <div id="colorArea" class="card"></div>
+      <!-- Floating Go To Serial Button -->
+      <button id="floatingGoBtn" title="Go to Serial">➡️</button>
+      <!-- Go To Serial Modal -->
+      <div id="goModal">
+        <div style="margin-bottom: 10px; font-weight: bold; font-size: 17px;">Go to Serial</div>
+        <input id="goModalInput" type="number" min="1" placeholder="Serial No." style="width: 90px; padding: 8px 10px; border-radius: 8px; border: 1.5px solid #43e97b; background: #181c24; color: #fff; font-size: 16px; margin-bottom: 10px; text-align: center;" />
+        <br>
+        <button id="goModalGoBtn" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #23283a; border: none; border-radius: 8px; padding: 7px 18px; font-weight: bold; font-size: 15px; cursor: pointer; margin-right: 8px;">Go</button>
+        <button id="goModalCloseBtn" style="background: #e74c3c; color: #fff; border: none; border-radius: 8px; padding: 7px 14px; font-size: 15px; cursor: pointer;">Close</button>
+      </div>
+      <!-- Scroll Arrows -->
+      <div id="scroll-arrows">
+        <button id="scrollTopBtn" title="Go to Top">⬆️</button>
+        <button id="scrollBottomBtn" title="Go to Bottom">⬇️</button>
+      </div>
+    </div>
+    <!-- =========================
+          C. SCRIPT SECTION
+    ========================== -->
+    <script>
+/* =========================
+   1. GLOBALS & INITIAL STATE
+========================= */
+const presetColors = [
+  "#ff1686d0", "#ff006378", "#ff00ff62", "#ff061d2e", "#b80a2e39", "#ff041c30",
+  "#ffffc300", "#ffff7e29", "#ffff5ca1", "#ffe68585", "#ff7646ff", "#00000000"
+];
+const historyStack = [], redoStack = [];
+let initialState = "", colorFilter = "";
+
+/* =========================
+   2. UTILITY FUNCTIONS
+========================= */
+function hex8ToHex6(hex) {
+  if (!hex) return "#000000";
+  if (hex.length === 9) return "#" + hex.slice(3);
+  return hex;
+}
+function resolveColor(hex, colorMap, depth = 0) {
+  if (depth > 10) return "#cccccc";
+  if (/^@color\//.test(hex)) {
+    const refName = hex.replace("@color/", "");
+    if (colorMap[refName]) return resolveColor(colorMap[refName], colorMap, depth + 1);
+    return "#cccccc";
+  }
+  return hex;
+}
+function saveState() {
+  historyStack.push(document.getElementById("input").value);
+  if (historyStack.length > 100) historyStack.shift();
+  redoStack.length = 0;
+}
+function refreshPage() { window.location.reload(); }
+
+/* =========================
+   3. UI RENDER FUNCTIONS
+========================= */
+function renderPresetColors() {
+  const container = document.getElementById("presetColors");
+  container.innerHTML = "";
+  const current = document.getElementById("newColor").value.toLowerCase();
+  presetColors.forEach((color) => {
+    const div = document.createElement("div");
+    div.className = "preset-color";
+    div.style.backgroundColor = hex8ToHex6(color);
+    div.title = color;
+    div.onclick = () => updateColorInputs(color);
+    if (hex8ToHex6(color).toLowerCase() === current) div.classList.add("active");
+    container.appendChild(div);
+  });
+}
+function updateColorInputs(color) {
+  let color6 = hex8ToHex6(color);
+  document.getElementById("newColor").value = color6;
+  document.getElementById("newColorText").value = color6;
+  document.getElementById("newColorHex").innerText = color6;
+  renderPresetColors();
+}
+function updateSelectedEffect() {
+  document.querySelectorAll("#colorArea .color-item").forEach(div => {
+    const checkbox = div.querySelector("input[type='checkbox']");
+    if (checkbox && checkbox.checked) div.classList.add("selected");
+    else div.classList.remove("selected");
+  });
+}
+
+/* =========================
+   4. COLOR EXTRACTION & LIST
+========================= */
+function extractColors() {
+  // Preserve checked state
+  const prevChecked = {};
+  document.querySelectorAll("#colorArea input[type='checkbox']").forEach(cb => {
+    if (cb.checked) prevChecked[cb.id] = true;
+  });
+
+  const textArea = document.getElementById("input");
+  let text = textArea.value;
+  const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+  const matches = [...text.matchAll(regex)];
+  const colorMap = {};
+  matches.forEach((match) => { colorMap[match[1]] = match[2]; });
+  let lines = text.split("\n");
+  let colorIndex = 0;
+  for (let i = 0; i < lines.length; i++) {
+    if (regex.test(lines[i])) {
+      colorIndex++;
+      lines[i] = lines[i].replace(/^(\d+\.\s*)?/, "");
+      lines[i] = colorIndex + ". " + lines[i];
+    }
+    regex.lastIndex = 0;
+  }
+  textArea.value = lines.join("\n");
+  const container = document.getElementById("colorArea");
+  container.innerHTML = "<h3>🎨 Found Colors:</h3>";
+  container.innerHTML += `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+      <input id="colorSearch" type="text" placeholder="🔍 Search color name or hex..." style="flex:1;padding:7px 10px;border-radius:8px;border:1.5px solid #444;background:#23283a;color:#fff;font-size:15px;" value="${colorFilter || ""}">
+      <button onclick="selectByHex()" style="padding:7px 14px;border-radius:8px;border:none;background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);color:#222;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:4px;">🎯 Filter</button>
+    </div>
+  `;
+  let filtered = matches;
+  if (colorFilter && colorFilter.trim().length >= 3) {
+    const f = colorFilter.trim().toLowerCase();
+    filtered = matches.filter(
+      (m) => m[1].toLowerCase().includes(f) || m[2].toLowerCase().includes(f)
+    );
+  }
+  if (filtered.length === 0) {
+    container.innerHTML += "<p>🚫 No colors found.</p>";
+    return;
+  }
+  const controlsDiv = document.createElement("div");
+  controlsDiv.className = "selection-controls";
+  controlsDiv.innerHTML = `
+    <button onclick="selectAllColors()">✅ Select All</button>
+    <button onclick="deselectAllColors()">❌ Deselect All</button>
+    <button onclick="invertSelection()">🔄 Invert</button>
+  `;
+  container.appendChild(controlsDiv);
+  filtered.forEach((match, idx) => {
+    const colorName = match[1];
+    let hex = match[2];
+    let displayHex = resolveColor(hex, colorMap);
+    const div = document.createElement("div");
+    div.className = "color-item";
+    div.setAttribute("data-serial", idx + 1);
+div.innerHTML = `
+  <label for="chk-${colorName}" style="flex:1;display:flex;align-items:center;gap:10px;min-width:0;">
+    <b class="serial-link" style="cursor:pointer;color:#43e97b;" onclick="goToSerial(${idx + 1})">${idx + 1}.</b>
+    <span class="color-swatch" style="background:${displayHex};"></span> 
+    <code style="word-break:break-all;">${colorName} — ${displayHex}</code>
+  </label>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <input type='checkbox' data-target="${hex}" id="chk-${colorName}">
+    <button class="delete-btn" onclick="deleteColorByName('${colorName}')">🗑️ <span>Delete</span></button>
+  </div>
+`;
+    container.appendChild(div);
+    // Restore checked state and effect
+    setTimeout(() => {
+      const checkbox = div.querySelector(`#chk-${colorName}`);
+      if (prevChecked[checkbox.id]) checkbox.checked = true;
+      checkbox.addEventListener("change", function () { updateSelectedEffect(); });
+    }, 0);
+  });
+  setTimeout(() => {
+    const search = document.getElementById("colorSearch");
+    if (search) {
+      search.onkeydown = function (e) {
+        if (e.key === "Enter") {
+          colorFilter = this.value;
+          extractColors();
+        }
+      };
+    }
+    // সব চেকবক্স আনচেক করার অংশ শুধু তখনই, যখন কিছুই checked ছিল না
+    const anyChecked = Object.keys(prevChecked).length > 0;
+    if (!anyChecked) {
+      document.querySelectorAll("#colorArea input[type='checkbox']").forEach((cb) => (cb.checked = false));
+    }
+    updateSelectedEffect();
+  }, 0);
+}
+function selectByHex() {
+  const search = document.getElementById("colorSearch");
+  if (!search) return;
+  colorFilter = search.value.trim();
+  extractColors();
+  const hex = colorFilter.toLowerCase();
+  if (!hex) return;
+  document.querySelectorAll("#colorArea input[type='checkbox']").forEach((cb) => {
+    if (cb.getAttribute("data-target").toLowerCase() === hex) cb.checked = true;
+  });
+  updateSelectedEffect();
+}
+
+/* =========================
+   5. COLOR OPERATIONS
+========================= */
+function selectAllColors() {
+  document.querySelectorAll("#colorArea input[type='checkbox']").forEach((cb) => (cb.checked = true));
+  updateSelectedEffect();
+}
+function deselectAllColors() {
+  document.querySelectorAll("#colorArea input[type='checkbox']").forEach((cb) => (cb.checked = false));
+  updateSelectedEffect();
+}
+function invertSelection() {
+  document.querySelectorAll("#colorArea input[type='checkbox']").forEach((cb) => (cb.checked = !cb.checked));
+  updateSelectedEffect();
+}
+function deleteColorByName(colorName) {
+  saveState();
+  let text = document.getElementById("input").value;
+  const regex = new RegExp(
+    `^\\d*\\.?\\s*<color\\s+name="${colorName}">[^<]+<\\/color>\\s*$`,
+    "m"
+  );
+  text = text.replace(regex, "").replace(/^\s*\n/gm, "");
+  document.getElementById("input").value = text.trim();
+  extractColors();
+}
+function deleteSelectedColors() {
+  saveState();
+  let text = document.getElementById("input").value;
+  const selected = document.querySelectorAll("#colorArea input[type='checkbox']:checked");
+  if (selected.length === 0) {
+    alert("Please select at least one color to delete.");
+    return;
+  }
+  selected.forEach((cb) => {
+    const colorName = cb.id.replace("chk-", "");
+    const regex = new RegExp(
+      `^\\d*\\.?\\s*<color\\s+name="${colorName}">[^<]+<\\/color>\\s*$`,
+      "m"
+    );
+    text = text.replace(regex, "");
+  });
+  text = text.replace(/^\s*\n/gm, "");
+  document.getElementById("input").value = text.trim();
+  extractColors();
+}
+function deleteAllColors() {
+  if (!confirm("Delete all color lines? This cannot be undone!")) return;
+  saveState();
+  let text = document.getElementById("input").value;
+  text = text.replace(
+    /^\d*\.?\s*<color\s+name="[^"]+">[^<]+<\/color>\s*$/gm,
+    ""
+  );
+  text = text.replace(/^\s*\n/gm, "");
+  document.getElementById("input").value = text.trim();
+  extractColors();
+}
+function replaceSelected() {
+  saveState();
+  const textArea = document.getElementById("input");
+  let text = textArea.value;
+  const newColor = document.getElementById("newColorText").value.trim();
+  const selected = document.querySelectorAll("#colorArea input[type='checkbox']:checked");
+  if (selected.length === 0) {
+    alert("Please select at least one color to replace.");
+    return;
+  }
+  selected.forEach((cb) => {
+    const colorName = cb.id.replace("chk-", "");
+    const colorTagRegex = new RegExp(
+      `(<color\\s+name="${colorName}">)[^<]+(</color>)`,
+      "g"
+    );
+    text = text.replace(colorTagRegex, `$1${newColor}$2`);
+  });
+  textArea.value = text;
+  extractColors();
+}
+function replaceAll() {
+  saveState();
+  const textArea = document.getElementById("input");
+  let text = textArea.value;
+  const newColor = document.getElementById("newColorText").value.trim();
+  const regex = /(<color\s+name="[^"]+">)[^<]+(<\/color>)/g;
+  text = text.replace(regex, `$1${newColor}$2`);
+  textArea.value = text;
+  extractColors();
+}
+
+/* =========================
+   6. FILE & ROOT TAG HANDLING
+========================= */
+document.getElementById("xmlFile").addEventListener("change", function (e) {
+  const fileName = e.target.files.length ? e.target.files[0].name : "No file chosen";
+  document.getElementById("fileName").textContent = fileName;
+  const reader = new FileReader();
+  reader.onload = function () {
+    document.getElementById("input").value = reader.result;
+    initialState = reader.result;
+    saveState();
+    extractColors();
+    document.getElementById("rootTagChangeBox").style.display = "block";
+    document.getElementById("rootTagOptions").style.display = "none";
+    document.getElementById("showRootOptionsBtn").style.display = "inline-block";
+  };
+  if (e.target.files[0]) reader.readAsText(e.target.files[0]);
+});
+function changeRootTagSelect() {
+  const input = document.getElementById("input");
+  let xml = input.value;
+  const newRootRaw = document.getElementById("rootTagSelect").value;
+  const tagMatch = newRootRaw.match(/^([^\s]+)(.*)$/);
+  const newTag = tagMatch[1];
+  const newAttr = tagMatch[2] || "";
+  const match = xml.match(/<([a-zA-Z_][\w\-\.]*)([^>]*)>/);
+  if (!match) { alert("No root tag found!"); return; }
+  const oldRoot = match[1];
+  xml = xml
+    .replace(new RegExp(`<${oldRoot}([^>]*)>`, "i"), `<${newTag}${newAttr}>`)
+    .replace(new RegExp(`</${oldRoot}>`, "i"), `</${newTag}>`);
+  input.value = xml;
+  extractColors();
+  document.getElementById("rootTagOptions").style.display = "none";
+  document.getElementById("showRootOptionsBtn").style.display = "inline-block";
+}
+function showRootTagOptions() {
+  document.getElementById("rootTagOptions").style.display = "inline-block";
+  document.getElementById("showRootOptionsBtn").style.display = "none";
+}
+
+/* =========================
+   7. XML FORMATTING
+========================= */
+function formatXML() {
+  let text = document.getElementById("input").value;
+  try {
+    let formatted = text.replace(/>\s*</g, ">\n<");
+    let pad = 0, result = "";
+    formatted.split("\n").forEach((line) => {
+      if (line.match(/^<\/\w/)) pad--;
+      result += "  ".repeat(pad) + line + "\n";
+      if (line.match(/^<[^!?\/][^>]*[^\/]>$/)) pad++;
+    });
+    document.getElementById("input").value = result.trim();
+  } catch {}
+}
+function beautifyXML() {
+  let text = document.getElementById("input").value;
+  try {
+    let formatted = text.replace(/>\s*</g, ">\n<");
+    let pad = 0, result = "";
+    formatted.split("\n").forEach((line) => {
+      if (line.match(/^<\/\w/)) pad--;
+      result += "  ".repeat(pad) + line.trim() + "\n";
+      if (line.match(/^<[^!?\/][^>]*[^\/]>$/)) pad++;
+    });
+    document.getElementById("input").value = result.trim();
+  } catch {}
+}
+function minifyXML() {
+  let text = document.getElementById("input").value;
+  let minified = text.replace(/>\s+</g, "><").replace(/\s{2,}/g, " ").trim();
+  document.getElementById("input").value = minified;
+}
+
+/* =========================
+   8. UNDO/REDO & RESTORE
+========================= */
+function undo() {
+  if (historyStack.length > 1) {
+    redoStack.push(historyStack.pop());
+    document.getElementById("input").value = historyStack[historyStack.length - 1];
+    extractColors();
+  }
+}
+function redo() {
+  if (redoStack.length > 0) {
+    const state = redoStack.pop();
+    historyStack.push(state);
+    document.getElementById("input").value = state;
+    extractColors();
+  }
+}
+function restoreInitialXML() {
+  if (confirm("Restore the original XML? All changes will be lost!")) {
+    document.getElementById("input").value = initialState;
+    extractColors();
+  }
+}
+
+/* =========================
+   9. DOWNLOAD & SERIAL
+========================= */
+function downloadXML(filename) {
+  let text = document.getElementById("input").value;
+  // সিরিয়াল নাম্বার (যেমন 1. <color ...) রিমুভ করো
+  text = text.replace(/^\s*\d+\.\s*(<color\s+name=")/gm, "$1");
+  const blob = new Blob([text], { type: "text/xml" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+function goToSerial(num) {
+  if (!num) return;
+  const target = document.querySelector(`.color-item[data-serial="${num}"]`);
+  if (target) {
+    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.style.boxShadow = "0 0 0 4px #43e97b99, 0 4px 16px #38f9d7aa";
+    target.style.background = "#1e2a22";
+    setTimeout(() => {
+      target.style.boxShadow = "";
+      target.style.background = "";
+    }, 1200);
+  }
+}
+
+/* =========================
+   10. UI EVENTS & INIT
+========================= */
+document.getElementById("newColor").addEventListener("input", (e) => {
+  document.getElementById("newColorText").value = e.target.value;
+  document.getElementById("newColorHex").innerText = e.target.value;
+});
+document.getElementById("newColorText").addEventListener("input", (e) => {
+  const val = e.target.value;
+  if (/^#([0-9a-f]{6})$/i.test(val)) {
+    document.getElementById("newColor").value = val;
+    document.getElementById("newColorHex").innerText = val;
+  }
+});
+window.onload = function () {
+  initialState = document.getElementById("input").value;
+  saveState();
+  extractColors();
+};
+renderPresetColors();
+saveState();
+
+/* =========================
+   11. SCROLL & MODAL EVENTS
+========================= */
+document.getElementById("scrollTopBtn").onclick = function () {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+document.getElementById("scrollBottomBtn").onclick = function () {
+  window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+};
+// Floating Go Button Logic
+const floatingGoBtn = document.getElementById("floatingGoBtn");
+const goModal = document.getElementById("goModal");
+const goModalInput = document.getElementById("goModalInput");
+const goModalGoBtn = document.getElementById("goModalGoBtn");
+const goModalCloseBtn = document.getElementById("goModalCloseBtn");
+function showGoModal() {
+  goModal.style.display = "block";
+  goModalInput.value = "";
+  setTimeout(() => goModalInput.focus(), 100);
+}
+floatingGoBtn.onclick = showGoModal;
+goModalCloseBtn.onclick = function () { goModal.style.display = "none"; };
+goModalGoBtn.onclick = function () {
+  const num = parseInt(goModalInput.value, 10);
+  if (num > 0) {
+    goToSerial(num);
+    goModal.style.display = "none";
+  }
+};
+goModalInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") goModalGoBtn.click();
+  if (e.key === "Escape") goModalCloseBtn.click();
+});
+document.addEventListener("mousedown", function (e) {
+  if (
+    goModal.style.display === "block" &&
+    !goModal.contains(e.target) &&
+    e.target !== floatingGoBtn
+  ) {
+    goModal.style.display = "none";
+  }
+});
+
+/* =========================
+   12. KEYBOARD SHORTCUTS
+========================= */
+document.addEventListener("keydown", function (e) {
+  // File Upload: Ctrl+O
+  if (e.ctrlKey && e.key.toLowerCase() === "o") {
+    e.preventDefault();
+    document.getElementById("xmlFile").click();
+  }
+  // Undo: Ctrl+Z
+  if (e.ctrlKey && e.key.toLowerCase() === "z") { e.preventDefault(); undo(); }
+  // Redo: Ctrl+Y
+  if (e.ctrlKey && e.key.toLowerCase() === "y") { e.preventDefault(); redo(); }
+  // Show Color Search: Ctrl+F
+  if (e.ctrlKey && e.key.toLowerCase() === "f") {
+    e.preventDefault();
+    const search = document.getElementById("colorSearch");
+    if (search) search.focus();
+  }
+  // Replace Selected: Ctrl+R
+  if (e.ctrlKey && e.key.toLowerCase() === "r") { e.preventDefault(); replaceSelected(); }
+  // Select All Colors: Ctrl+A (but not if search box is focused)
+  if (e.ctrlKey && e.key.toLowerCase() === "a") {
+    const area = document.activeElement;
+    if (area && area.id === "colorSearch") return;
+    e.preventDefault();
+    selectAllColors();
+  }
+  // Go To Serial: Ctrl+G
+  if (e.ctrlKey && e.key.toLowerCase() === "g") { e.preventDefault(); showGoModal(); }
+  // Format XML: Ctrl+Shift+F
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "f") { e.preventDefault(); formatXML(); }
+  // Beautify XML: Ctrl+B
+  if (e.ctrlKey && e.key.toLowerCase() === "b") { e.preventDefault(); beautifyXML(); }
+  // Minify XML: Ctrl+M
+  if (e.ctrlKey && e.key.toLowerCase() === "m") { e.preventDefault(); minifyXML(); }
+  // Restore Initial XML: Ctrl+Shift+R
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "r") { e.preventDefault(); restoreInitialXML(); }
+  // Download XML: Ctrl+D
+  if (e.ctrlKey && e.key.toLowerCase() === "d") { e.preventDefault(); downloadXML('colors.xml'); }
+  // Download theme_values.xml: Ctrl+Shift+S
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "s") { e.preventDefault(); downloadXML('theme_values.xml'); }
+  // Download theme_fallback.xml: Ctrl+Shift+D
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "d") { e.preventDefault(); downloadXML('theme_fallback.xml'); }
+  // Select All Colors: Ctrl+Shift+A
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "a") { e.preventDefault(); selectAllColors(); }
+  // Deselect All Colors: Ctrl+Shift+X
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "x") { e.preventDefault(); deselectAllColors(); }
+  // Invert Selection: Ctrl+Shift+I
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") { e.preventDefault(); invertSelection(); }
+  // Delete Selected Colors: Ctrl+Shift+Delete
+  if (e.ctrlKey && e.shiftKey && e.key === "Delete") { e.preventDefault(); deleteSelectedColors(); }
+  // Delete All Colors: Ctrl+Shift+Backspace
+  if (e.ctrlKey && e.shiftKey && e.key === "Backspace") { e.preventDefault(); deleteAllColors(); }
+  // Focus New Color Input: Ctrl+Shift+N
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "n") {
+    e.preventDefault();
+    document.getElementById("newColorText").focus();
+  }
+  // Refresh/Reload: Ctrl+Shift+Q
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "q") { e.preventDefault(); refreshPage(); }
+  // Scroll to Live Preview: Ctrl+Shift+L
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "l") {
+    e.preventDefault();
+    const live = document.getElementById("livePreview");
+    if (live) live.scrollIntoView({behavior:"smooth"});
+  }
+  // Show Shortcut Popup: Ctrl+Shift+H
+  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "h") {
+    e.preventDefault();
+    showShortcutPopup();
+  }
+  // Escape: blur search
+  if (e.key === "Escape") {
+    const search = document.getElementById("colorSearch");
+    if (search) search.blur();
+  }
+});
+
+/* =========================
+   13. SHORTCUT POPUP
+========================= */
+function showShortcutPopup() {
+  if (document.getElementById("shortcutPopup")) return;
+  const popup = document.createElement("div");
+  popup.id = "shortcutPopup";
+  popup.style = `
+    position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:#23283a; color:#fff; border-radius:14px; box-shadow:0 8px 32px #000a;
+    padding:28px 28px 18px 28px; z-index:99999; min-width:320px; max-width:95vw;
+    border:2.5px solid #43e97b; font-size:16px; text-align:left;
+  `;
+  popup.innerHTML = `
+    <div style="font-size:22px;font-weight:bold;margin-bottom:12px;text-align:center;color:#43e97b;">
+      ⌨️ Keyboard Shortcuts
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:15px;">
+      <tr><td>Ctrl+O</td><td>File Upload</td></tr>
+      <tr><td>Ctrl+Z</td><td>Undo</td></tr>
+      <tr><td>Ctrl+Y</td><td>Redo</td></tr>
+      <tr><td>Ctrl+F</td><td>Search Color</td></tr>
+      <tr><td>Ctrl+R</td><td>Replace Selected</td></tr>
+      <tr><td>Ctrl+A</td><td>Select All Colors</td></tr>
+      <tr><td>Ctrl+G</td><td>Go To Serial</td></tr>
+      <tr><td>Ctrl+Shift+F</td><td>Format XML</td></tr>
+      <tr><td>Ctrl+B</td><td>Beautify XML</td></tr>
+      <tr><td>Ctrl+M</td><td>Minify XML</td></tr>
+      <tr><td>Ctrl+Shift+R</td><td>Restore Initial XML</td></tr>
+      <tr><td>Ctrl+D</td><td>Download colors.xml</td></tr>
+      <tr><td>Ctrl+Shift+S</td><td>Download theme_values.xml</td></tr>
+      <tr><td>Ctrl+Shift+D</td><td>Download theme_fallback.xml</td></tr>
+      <tr><td>Ctrl+Shift+A</td><td>Select All Colors</td></tr>
+      <tr><td>Ctrl+Shift+X</td><td>Deselect All Colors</td></tr>
+      <tr><td>Ctrl+Shift+I</td><td>Invert Selection</td></tr>
+      <tr><td>Ctrl+Shift+Del</td><td>Delete Selected Colors</td></tr>
+      <tr><td>Ctrl+Shift+Backspace</td><td>Delete All Colors</td></tr>
+      <tr><td>Ctrl+Shift+N</td><td>Focus New Color Input</td></tr>
+      <tr><td>Ctrl+Shift+Q</td><td>Refresh/Reload</td></tr>
+      <tr><td>Ctrl+Shift+L</td><td>Scroll to Live Preview</td></tr>
+      <tr><td>Escape</td><td>Blur Search/Close Popup</td></tr>
+    </table>
+    <div style="text-align:center;margin-top:18px;">
+      <button id="closeShortcutPopup" style="
+        background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%);
+        color:#23283a;font-weight:bold;font-size:16px;padding:7px 22px;
+        border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 8px #38f9d755;
+      ">Close</button>
+    </div>
+  `;
+  document.body.appendChild(popup);
+  document.getElementById("closeShortcutPopup").onclick = function() {
+    popup.remove();
+  };
+  // Escape key to close
+  document.addEventListener("keydown", function escClose(ev) {
+    if (ev.key === "Escape") {
+      if (document.getElementById("shortcutPopup")) popup.remove();
+      document.removeEventListener("keydown", escClose);
+    }
+  });
+}
+</script>
+  </body>
+</html>
