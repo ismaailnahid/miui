@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>IconForge Pro | Dual Color Replacement Studio</title>
+  <title>Icon Pro</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,8 +15,6 @@
       padding: 0;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-
-
     }
 
     ::-webkit-scrollbar {
@@ -33,12 +31,23 @@
       border-radius: 10px;
     }
 
-
     body {
       background: radial-gradient(circle at 20% 30%, #0a0f1a 0%, #05080f 100%);
       min-height: 100vh;
-      padding: clamp(0.75rem, 4vw, 2rem);
+      padding: 12px;
       font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      body {
+        padding: 32px;
+      }
     }
 
     .app-container {
@@ -47,19 +56,30 @@
     }
 
     .forge-card {
-      /* background: rgba(18, 22, 28, 0.92); */
+      background: rgba(18, 22, 28, 0.92);
       backdrop-filter: blur(12px);
-      border-radius: clamp(1rem, 5vw, 2rem);
+      border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       overflow: hidden;
       box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5);
-      border: #0dffb220 1px solid;
+    }
+
+    @media (min-width: 768px) {
+      .forge-card {
+        border-radius: 32px;
+      }
     }
 
     .premium-header {
       background: linear-gradient(135deg, #0f2642 0%, #1a2740 100%);
-      padding: clamp(1rem, 4vw, 1.5rem) clamp(1rem, 5vw, 2rem);
+      padding: 16px 20px;
       border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    @media (min-width: 768px) {
+      .premium-header {
+        padding: 24px 32px;
+      }
     }
 
     .logo-area {
@@ -67,11 +87,11 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 12px;
     }
 
     .logo-area h1 {
-      font-size: clamp(1.3rem, 5vw, 1.8rem);
+      font-size: 18px;
       background: linear-gradient(135deg, #fff, #60a5fa);
       -webkit-background-clip: text;
       background-clip: text;
@@ -79,22 +99,48 @@
       letter-spacing: -0.3px;
     }
 
+    @media (min-width: 480px) {
+      .logo-area h1 {
+        font-size: 22px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .logo-area h1 {
+        font-size: 28px;
+      }
+    }
+
     .badge-container {
       display: flex;
-      gap: 0.5rem;
+      gap: 8px;
       flex-wrap: wrap;
+      margin-top: 8px;
     }
 
     .pro-badge,
     .dual-badge,
     .blur-badge,
-    .smooth-badge {
-      padding: 0.3rem 0.8rem;
+    .smooth-badge,
+    .edge-badge {
+      padding: 4px 10px;
       border-radius: 40px;
-      font-size: clamp(0.6rem, 3vw, 0.7rem);
+      font-size: 10px;
       font-weight: bold;
       color: white;
       white-space: nowrap;
+    }
+
+    @media (min-width: 480px) {
+
+      .pro-badge,
+      .dual-badge,
+      .blur-badge,
+      .smooth-badge,
+      .edge-badge {
+        padding: 5px 12px;
+        font-size: 11px;
+      }
     }
 
     .pro-badge {
@@ -114,73 +160,94 @@
       background: linear-gradient(135deg, #14b8a6, #0d9488);
     }
 
+    .edge-badge {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+    }
+
     .simple-counter {
       background: rgba(0, 0, 0, 0.5);
       border-radius: 60px;
-      padding: 0.3rem 1rem;
-      font-size: clamp(0.65rem, 3vw, 0.75rem);
+      padding: 5px 12px;
+      font-size: 11px;
       color: #cbd5e1;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 8px;
       backdrop-filter: blur(4px);
-    }
-
-    .simple-counter i {
-      color: #60a5fa;
     }
 
     .main-workspace {
       display: flex;
-      flex-wrap: wrap;
-      gap: clamp(1rem, 3vw, 1.5rem);
-      padding: clamp(1rem, 4vw, 1.5rem);
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .main-workspace {
+        flex-direction: row;
+        gap: 24px;
+        padding: 24px;
+      }
     }
 
     .preview-section {
       flex: 1.2;
-      min-width: 250px;
+      min-width: 0;
       background: rgba(0, 0, 0, 0.4);
-      border-radius: 1.5rem;
-      padding: 1rem;
+      border-radius: 24px;
+      padding: 16px;
       backdrop-filter: blur(8px);
       border: 1px solid rgba(59, 130, 246, 0.4);
       height: fit-content;
-      position: sticky;
-      top: 0.5rem;
-      color: #00ff62;
+    }
+
+    @media (min-width: 768px) {
+      .preview-section {
+        position: sticky;
+        top: 12px;
+        padding: 20px;
+      }
     }
 
     .preview-title {
-      font-size: 0.9rem;
+      font-size: 14px;
       font-weight: bold;
       color: #e2e8f0;
-      margin-bottom: 1rem;
+      margin-bottom: 16px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    @media (min-width: 480px) {
+      .preview-title {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
     .zoom-controls {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      justify-content: center;
+      gap: 8px;
       background: rgba(0, 0, 0, 0.5);
-      padding: 0.2rem 0.5rem;
+      padding: 4px 10px;
       border-radius: 60px;
     }
 
     .zoom-btn {
       background: rgba(59, 130, 246, 0.3);
       border: none;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       color: white;
-      font-size: 0.8rem;
+      font-size: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -189,30 +256,31 @@
 
     .zoom-btn:active {
       transform: scale(0.95);
-      background: rgba(59, 130, 246, 0.6);
     }
 
     .zoom-level {
-      font-size: 0.7rem;
+      font-size: 12px;
       color: #60a5fa;
       min-width: 45px;
       text-align: center;
     }
 
-    .reset-zoom-btn {
-      background: rgba(239, 68, 68, 0.3);
-    }
-
     .preview-box {
       background: #0a0f1a;
-      border-radius: 1.2rem;
+      border-radius: 20px;
       border: 2px solid rgba(59, 130, 246, 0.5);
       position: relative;
-      min-height: 280px;
+      min-height: 220px;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .preview-box {
+        min-height: 280px;
+      }
     }
 
     .preview-inner {
@@ -227,129 +295,279 @@
     .preview-inner img {
       display: block;
       max-width: 100%;
-      max-height: 350px;
+      max-height: 220px;
       object-fit: contain;
       transition: transform 0.2s ease;
       pointer-events: none;
     }
 
+    @media (min-width: 768px) {
+      .preview-inner img {
+        max-height: 350px;
+      }
+    }
+
     .preview-filename {
-      font-size: 0.65rem;
+      font-size: 11px;
       color: #94a3b8;
       word-break: break-all;
       text-align: center;
-      margin-top: 0.5rem;
-      padding: 0.3rem;
+      margin-top: 8px;
+      padding: 6px;
       background: rgba(0, 0, 0, 0.3);
       border-radius: 20px;
     }
 
     .preview-note {
-      margin-top: 0.7rem;
-      font-size: 0.6rem;
+      margin-top: 12px;
+      font-size: 10px;
       color: #60a5fa;
       text-align: center;
     }
 
     .color-controls {
       flex: 2;
-      min-width: 260px;
+      min-width: 0;
     }
 
-    .mode-switch {
+    .top-control-row {
       display: flex;
-      gap: 0.8rem;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 0.4rem;
-      border-radius: 60px;
-      margin-bottom: 1rem;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 480px) {
+      .top-control-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
 
     .mode-btn {
-      flex: 1;
-      padding: 0.5rem 0.8rem;
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      padding: 10px 20px;
       border-radius: 60px;
       font-weight: bold;
       cursor: pointer;
-      background: transparent;
-      color: #94a3b8;
       border: none;
-      transition: all 0.3s;
-      font-size: clamp(0.7rem, 3.5vw, 0.85rem);
-      display: flex;
+      font-size: 14px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-    }
-
-    .mode-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      gap: 8px;
       color: white;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+      width: 100%;
     }
 
-    .dual-color-section {
-      background: rgba(139, 92, 246, 0.15);
-      border-radius: 1.2rem;
-      padding: 0.9rem;
-      margin-bottom: 1rem;
-      border: 1px solid rgba(139, 92, 246, 0.4);
+    @media (min-width: 480px) {
+      .mode-btn {
+        width: auto;
+        padding: 10px 24px;
+      }
     }
 
-    .dual-header {
+    .dual-header-compact {
+      background: rgba(139, 92, 246, 0.2);
+      border-radius: 60px;
+      padding: 6px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      gap: 12px;
       flex-wrap: wrap;
-      gap: 0.6rem;
     }
 
-    .dual-header h4 {
+    .dual-header-compact h4 {
       color: #cbd5e1;
-      font-size: 0.8rem;
+      font-size: 12px;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 6px;
     }
 
     .toggle-dual-btn {
       background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-      padding: 0.35rem 1rem;
+      padding: 5px 12px;
       border-radius: 60px;
-      font-size: 0.7rem;
+      font-size: 11px;
       font-weight: bold;
       color: white;
       border: none;
       cursor: pointer;
-      transition: 0.2s;
     }
 
     .toggle-dual-btn.off {
       background: linear-gradient(135deg, #475569, #334155);
     }
 
+    .effects-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .effects-row {
+        flex-direction: row;
+      }
+    }
+
+    .effect-item {
+      flex: 1;
+      min-width: 0;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 60px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .effect-item.blur {
+      border: 1px solid rgba(236, 72, 153, 0.4);
+    }
+
+    .effect-item.smooth {
+      border: 1px solid rgba(20, 184, 166, 0.4);
+    }
+
+    .effect-item.edge {
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .effect-label {
+      color: #cbd5e1;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .effect-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .effect-control input {
+      width: 80px;
+      height: 4px;
+      border-radius: 2px;
+      background: #334155;
+    }
+
+    .effect-value {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    .effect-value.blur-val {
+      background: #ec489a20;
+      color: #f472b6;
+    }
+
+    .effect-value.smooth-val {
+      background: #14b8a620;
+      color: #2dd4bf;
+    }
+
+    .effect-value.edge-val {
+      background: #f59e0b20;
+      color: #fbbf24;
+    }
+
+    .dual-color-section {
+      background: rgba(139, 92, 246, 0.15);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
     .color-pair {
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .color-pair {
+        flex-direction: row;
+      }
     }
 
     .color-item {
       flex: 1;
-      min-width: 180px;
+      min-width: 0;
       background: rgba(0, 0, 0, 0.35);
-      border-radius: 1rem;
-      padding: 0.8rem;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .color-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    @media (min-width: 480px) {
+      .color-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .color-picker-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+    }
+
+    .threshold-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 60px;
+    }
+
+    .threshold-group label {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .threshold-group input {
+      width: 70px;
+      height: 3px;
+    }
+
+    .threshold-group span {
+      font-size: 10px;
+      color: #facc15;
+      min-width: 35px;
     }
 
     .color-label {
-      font-size: 0.65rem;
+      font-size: 11px;
       font-weight: bold;
-      padding: 0.2rem 0.6rem;
+      padding: 4px 10px;
       border-radius: 20px;
       display: inline-block;
-      margin-bottom: 0.6rem;
+      margin-bottom: 10px;
     }
 
     .color-label.primary {
@@ -362,238 +580,160 @@
       color: white;
     }
 
-    .color-picker-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.6rem;
-      flex-wrap: wrap;
-    }
-
     .hex-input {
       background: #1e293b;
       border: 1px solid #3b82f6;
       border-radius: 50px;
-      padding: 0.45rem 0.7rem;
+      padding: 6px 8px;
       font-family: monospace;
       font-weight: bold;
-      width: 105px;
+      width: 85px;
       text-align: center;
       color: #facc15;
-      font-size: 0.75rem;
+      font-size: 11px;
     }
 
     .color-swatch {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid white;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      transition: transform 0.15s;
-    }
-
-    .threshold-row {
-      margin-top: 0.6rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-    }
-
-    .threshold-label {
-      font-size: 0.55rem;
-      color: #94a3b8;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .threshold-slider {
-      width: 100%;
-      height: 3px;
-      border-radius: 2px;
-      background: #334155;
-    }
-
-    .threshold-value {
-      font-size: 0.55rem;
-      color: #facc15;
     }
 
     .mini-preset-title {
-      font-size: 0.55rem;
+      font-size: 10px;
       color: #94a3b8;
-      margin: 0.5rem 0 0.3rem;
+      margin: 10px 0 6px;
     }
 
     .mini-preset-gallery {
       display: flex;
-      gap: 0.4rem;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .mini-preset {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       cursor: pointer;
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .dual-info {
-      font-size: 0.55rem;
+      font-size: 10px;
       color: #a78bfa;
-      margin-top: 0.6rem;
+      margin-top: 10px;
       text-align: center;
     }
 
-    .color-station {
+    .single-color-section {
       background: rgba(0, 0, 0, 0.35);
+      border-radius: 17px;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+    }
+
+    @media (min-width: 480px) {
+      .single-color-section {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+      }
+    }
+
+    .single-color-section.hidden {
+      display: none;
+    }
+
+    .single-color-section>span {
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .single-color-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+    }
+
+    .single-threshold-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
       border-radius: 60px;
-      padding: 0.5rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-      justify-content: space-between;
     }
 
-    .color-station>span {
-      color: #cbd5e1;
-      font-size: 0.75rem;
+    .single-threshold-group span {
+      font-size: 11px;
+      color: #94a3b8;
     }
 
-    .single-threshold-zone {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      color: #cbd5e1;
-      font-size: 0.7rem;
+    .single-threshold-group input {
+      width: 70px;
+      height: 3px;
     }
 
-    .single-threshold-zone input {
-      width: 120px;
-      height: 4px;
-      border-radius: 2px;
-      background: #334155;
-    }
-
-    .blur-section {
-      background: rgba(236, 72, 153, 0.15);
-      border-radius: 60px;
-      padding: 0.5rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-      justify-content: space-between;
-      border: 1px solid rgba(236, 72, 153, 0.4);
-    }
-
-    .blur-section>span {
-      color: #cbd5e1;
-      font-size: 0.75rem;
-    }
-
-    .blur-control {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      color: #cbd5e1;
-      font-size: 0.7rem;
-    }
-
-    .blur-control input {
-      width: 120px;
-      height: 4px;
-      border-radius: 2px;
-      background: #334155;
-    }
-
-    .blur-value {
-      background: #ec489a20;
-      padding: 0.2rem 0.5rem;
-      border-radius: 20px;
-      font-size: 0.65rem;
-      color: #f472b6;
-    }
-
-    .smooth-section {
-      background: rgba(20, 184, 166, 0.15);
-      border-radius: 60px;
-      padding: 0.5rem 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 1rem;
-      justify-content: space-between;
-      border: 1px solid rgba(20, 184, 166, 0.4);
-    }
-
-    .smooth-section>span {
-      color: #cbd5e1;
-      font-size: 0.75rem;
-    }
-
-    .smooth-control {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      color: #cbd5e1;
-      font-size: 0.7rem;
-    }
-
-    .smooth-control input {
-      width: 120px;
-      height: 4px;
-      border-radius: 2px;
-      background: #334155;
-    }
-
-    .smooth-value {
-      background: #14b8a620;
-      padding: 0.2rem 0.5rem;
-      border-radius: 20px;
-      font-size: 0.65rem;
-      color: #2dd4bf;
+    .single-threshold-group .threshold-val {
+      color: #facc15;
+      font-size: 10px;
+      min-width: 35px;
     }
 
     .preset-gallery {
       display: flex;
-      gap: 0.6rem;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 1rem;
+      margin-bottom: 16px;
       background: rgba(0, 0, 0, 0.3);
-      padding: 0.7rem;
-      border-radius: 60px;
+      padding: 12px;
+      border-radius: 17px;
       justify-content: center;
     }
 
     .preset {
-      width: 38px;
-      height: 38px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       cursor: pointer;
       border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
+    @media (min-width: 480px) {
+      .preset {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
     .upload-zone {
       background: rgba(30, 41, 59, 0.6);
-      padding: 0.7rem 1rem;
-      border-radius: 1rem;
+      padding: 12px;
+      border-radius: 16px;
       border: 2px dashed rgba(59, 130, 246, 0.5);
       display: flex;
       flex-wrap: wrap;
-      gap: 0.7rem;
+      gap: 12px;
       align-items: center;
       justify-content: center;
-      margin-bottom: 1rem;
-      transition: all 0.3s ease;
+      margin-bottom: 16px;
     }
 
     .upload-zone.hidden {
@@ -602,43 +742,39 @@
 
     .upload-btn {
       background: linear-gradient(135deg, #3b82f6, #2563eb);
-      padding: 0.5rem 1rem;
+      padding: 8px 16px;
       border-radius: 60px;
       color: white;
       font-weight: bold;
       cursor: pointer;
       border: none;
-      font-size: 0.75rem;
-
+      font-size: 12px;
     }
 
     .action-bar {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
+      gap: 8px;
+      margin-bottom: 16px;
       justify-content: center;
     }
 
     .action-btn {
-      padding: 0.4rem 0.8rem;
+      padding: 6px 12px;
       border-radius: 40px;
       font-weight: bold;
       cursor: pointer;
       border: none;
-      font-size: 0.7rem;
+      font-size: 11px;
       transition: 0.2s;
       white-space: nowrap;
     }
 
-    .action-btn:active {
-      transform: translateY(1px);
-    }
-
-    .action-btn:disabled {
-      opacity: 0.6;
-      transform: none;
-      cursor: not-allowed;
+    @media (min-width: 480px) {
+      .action-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+      }
     }
 
     .action-primary {
@@ -671,48 +807,98 @@
       color: white;
     }
 
-    .action-blur {
-      background: linear-gradient(135deg, #ec489a, #db2777);
-      color: white;
+    .action-btn:active {
+      transform: translateY(1px);
     }
 
-    .action-smooth {
-      background: linear-gradient(135deg, #14b8a6, #0d9488);
-      color: white;
+    .progress-section {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 60px;
+      padding: 12px 16px;
+      margin-top: 16px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .progress-status {
+      color: #60a5fa;
+      font-size: 11px;
+    }
+
+    .progress-percent {
+      color: #facc15;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .progress-bar-container {
+      background: #1e293b;
+      border-radius: 60px;
+      overflow: hidden;
+      height: 6px;
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      transition: width 0.3s ease;
+    }
+
+    .progress-detail {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 8px;
+      text-align: center;
     }
 
     .grid-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 0.9rem;
-      max-height: 420px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-height: 450px;
       overflow-y: auto;
-      padding: 0.2rem;
+      padding: 4px;
     }
 
-    .grid-container::-webkit-scrollbar {
-      width: 4px;
+    @media (min-width: 480px) {
+      .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
-    .grid-container::-webkit-scrollbar-track {
-      background: #1e293b;
-      border-radius: 10px;
+    @media (min-width: 768px) {
+      .grid-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
 
-    .grid-container::-webkit-scrollbar-thumb {
-      background: #3b82f6;
-      border-radius: 10px;
+    @media (min-width: 1024px) {
+      .grid-container {
+        grid-template-columns: repeat(5, 1fr);
+      }
     }
 
     .icon-card {
       background: linear-gradient(145deg, #1e293b, #0f172a);
-      border-radius: 1rem;
-      padding: 0.6rem;
+      border-radius: 16px;
+      padding: 12px 8px 10px 8px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s;
       border: 2px solid transparent;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .icon-card.processing {
@@ -728,9 +914,13 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 1.6rem;
+      font-size: 24px;
       color: #f59e0b;
       animation: spin 1s linear infinite;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px;
+      border-radius: 50%;
     }
 
     @keyframes spin {
@@ -753,45 +943,44 @@
       height: 70px;
       object-fit: contain;
       background: #0a0f1a;
-      border-radius: 10px;
-      padding: 0.2rem;
+      border-radius: 12px;
+      padding: 6px;
+      margin-bottom: 6px;
+    }
+
+    @media (min-width: 480px) {
+      .icon-card img {
+        width: 85px;
+        height: 85px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .icon-card img {
+        width: 100px;
+        height: 100px;
+      }
     }
 
     .card-title {
-      font-size: 0.55rem;
+      font-size: 10px;
       color: #facc15;
-      margin: 0.4rem 0 0.2rem;
+      margin: 6px 0;
       font-weight: 600;
       word-break: break-all;
+      text-align: center;
+      max-width: 100%;
     }
 
     .card-actions {
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 0.4rem;
-      margin-top: 0.4rem;
-    }
-
-    .icon-action {
-      padding: 0.2rem 0.5rem;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.6rem;
-    }
-
-    .download-btn {
-      background: #059669;
-      color: white;
-    }
-
-    .delete-btn {
-      background: #dc2626;
-      color: white;
-    }
-
-    .select-check {
-      margin-bottom: 0.3rem;
+      gap: 12px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
     }
 
     .select-check input {
@@ -799,6 +988,32 @@
       height: 16px;
       cursor: pointer;
       accent-color: #3b82f6;
+      margin: 0;
+    }
+
+    .icon-action {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 5px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .download-btn {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    .delete-btn {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
     }
 
     .toast-msg {
@@ -808,18 +1023,17 @@
       transform: translateX(-50%);
       background: linear-gradient(135deg, #1e293b, #0f172a);
       backdrop-filter: blur(16px);
-      padding: 0.7rem 1.5rem;
+      padding: 10px 20px;
       border-radius: 60px;
       color: #facc15;
       z-index: 1000;
       animation: slideUpFade 0.4s ease;
       border: 1px solid rgba(59, 130, 246, 0.5);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
       font-weight: 600;
-      font-size: 0.75rem;
+      font-size: 12px;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 10px;
       white-space: nowrap;
       max-width: 90vw;
     }
@@ -837,76 +1051,6 @@
         transform: translateX(-50%) translateY(0);
       }
     }
-
-    @media (max-width: 680px) {
-      body {
-        padding: 0.6rem;
-      }
-
-      .main-workspace {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 0.9rem;
-      }
-
-      .preview-section {
-        position: static;
-        margin-bottom: 0.2rem;
-      }
-
-      .preview-title {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .zoom-controls {
-        justify-content: center;
-      }
-
-      .preview-box {
-        min-height: 250px;
-      }
-
-      .preview-inner img {
-        max-height: 280px;
-      }
-
-      .action-bar {
-        justify-content: center;
-      }
-
-      .action-btn {
-        padding: 0.35rem 0.6rem;
-        font-size: 0.65rem;
-      }
-
-      .color-station,
-      .blur-section,
-      .smooth-section {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .single-threshold-zone,
-      .blur-control,
-      .smooth-control {
-        justify-content: space-between;
-      }
-
-      .color-pair {
-        flex-direction: column;
-      }
-
-      .grid-container {
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        max-height: 380px;
-      }
-
-      .icon-card img {
-        width: 65px;
-        height: 65px;
-      }
-    }
   </style>
 </head>
 
@@ -916,12 +1060,13 @@
       <div class="premium-header">
         <div class="logo-area">
           <div>
-            <h1><i class="fas fa-crown"></i> ICONFORGE PRO</h1>
-            <div class="badge-container" style="margin-top: 0.2rem;">
+            <h1><i class="fas fa-crown"></i> ICON RECOLOR PRO</h1>
+            <div class="badge-container">
               <span class="pro-badge"><i class="fas fa-eye"></i> LIVE PREVIEW</span>
               <span class="dual-badge"><i class="fas fa-layer-group"></i> DUAL COLOR</span>
               <span class="blur-badge"><i class="fas fa-tint"></i> BLUR</span>
-              <span class="smooth-badge"><i class="fas fa-feather-alt"></i> EDGE SMOOTH</span>
+              <span class="smooth-badge"><i class="fas fa-feather-alt"></i> SMOOTH</span>
+              <span class="edge-badge"><i class="fas fa-border-all"></i> EDGE DETECT</span>
             </div>
           </div>
           <div class="simple-counter">
@@ -949,121 +1094,130 @@
             </div>
           </div>
           <div class="preview-filename" id="previewFilename">Select an image</div>
-          <div class="preview-note"><i class="fas fa-info-circle"></i> Click any image → preview | Use +/- buttons to
-            zoom</div>
+          <div class="preview-note"><i class="fas fa-info-circle"></i> Click any image → preview | Use +/- to zoom</div>
         </div>
 
         <div class="color-controls">
-          <div class="mode-switch">
+          <div class="top-control-row">
             <button class="mode-btn active" data-mode="recolor"><i class="fas fa-paint-roller"></i> RECOLOR</button>
-            <button class="mode-btn" data-mode="trace"><i class="fas fa-magic"></i> TRACE HD</button>
+            <div class="dual-header-compact">
+              <h4><i class="fas fa-layer-group"></i> DUAL COLOR</h4>
+              <button id="toggleDualBtn" class="toggle-dual-btn off"><i class="fas fa-toggle-off"></i> OFF</button>
+            </div>
           </div>
 
-          <div class="dual-color-section">
-            <div class="dual-header">
-              <h4><i class="fas fa-layer-group"></i> DUAL COLOR REPLACEMENT</h4>
-              <button id="toggleDualBtn" class="toggle-dual-btn off"><i class="fas fa-toggle-off"></i> Dual OFF</button>
-            </div>
-            <div id="dualColorContainer" style="display: none;">
+          <div id="dualColorContainer" style="display: none;">
+            <div class="dual-color-section">
               <div class="color-pair">
                 <div class="color-item">
-                  <span class="color-label primary"><i class="fas fa-star"></i> PRIMARY COLOR</span>
-                  <div class="color-picker-row">
-                    <input type="text" id="primaryHex" class="hex-input" value="#3B82F6">
-                    <div id="primarySwatch" class="color-swatch" style="background:#3B82F6"></div>
-                  </div>
-                  <div class="threshold-row">
-                    <div class="threshold-label">
-                      <span><i class="fas fa-chart-line"></i> PRIMARY THRESHOLD</span>
-                      <span class="threshold-value" id="primaryThresholdValue">25%</span>
+                  <span class="color-label primary"><i class="fas fa-star"></i> PRIMARY</span>
+                  <div class="color-row">
+                    <div class="color-picker-group">
+                      <input type="text" id="primaryHex" class="hex-input" value="#3B82F6">
+                      <div id="primarySwatch" class="color-swatch" style="background:#3B82F6"></div>
                     </div>
-                    <input type="range" id="primaryThresholdSlider" class="threshold-slider" min="0" max="100"
-                      value="25">
+                    <div class="threshold-group">
+                      <label><i class="fas fa-chart-line"></i> TH</label>
+                      <input type="range" id="primaryThresholdSlider" min="0" max="100" value="25">
+                      <span id="primaryThresholdValue">25%</span>
+                    </div>
                   </div>
-                  <div class="mini-preset-title"><i class="fas fa-palette"></i> PRIMARY PRESETS</div>
+                  <div class="mini-preset-title"><i class="fas fa-palette"></i> PRESETS</div>
                   <div class="mini-preset-gallery" id="primaryMiniPresets"></div>
                 </div>
                 <div class="color-item">
-                  <span class="color-label secondary"><i class="fas fa-star-of-life"></i> SECONDARY COLOR</span>
-                  <div class="color-picker-row">
-                    <input type="text" id="secondaryHex" class="hex-input" value="#8B5CF6">
-                    <div id="secondarySwatch" class="color-swatch" style="background:#8B5CF6"></div>
-                  </div>
-                  <div class="threshold-row">
-                    <div class="threshold-label">
-                      <span><i class="fas fa-chart-line"></i> SECONDARY THRESHOLD</span>
-                      <span class="threshold-value" id="secondaryThresholdValue">25%</span>
+                  <span class="color-label secondary"><i class="fas fa-star-of-life"></i> SECONDARY</span>
+                  <div class="color-row">
+                    <div class="color-picker-group">
+                      <input type="text" id="secondaryHex" class="hex-input" value="#8B5CF6">
+                      <div id="secondarySwatch" class="color-swatch" style="background:#8B5CF6"></div>
                     </div>
-                    <input type="range" id="secondaryThresholdSlider" class="threshold-slider" min="0" max="100"
-                      value="25">
+                    <div class="threshold-group">
+                      <label><i class="fas fa-chart-line"></i> TH</label>
+                      <input type="range" id="secondaryThresholdSlider" min="0" max="100" value="25">
+                      <span id="secondaryThresholdValue">25%</span>
+                    </div>
                   </div>
-                  <div class="mini-preset-title"><i class="fas fa-palette"></i> SECONDARY PRESETS</div>
+                  <div class="mini-preset-title"><i class="fas fa-palette"></i> PRESETS</div>
                   <div class="mini-preset-gallery" id="secondaryMiniPresets"></div>
                 </div>
               </div>
-              <div class="dual-info"><i class="fas fa-info-circle"></i> Primary → dominant color | Secondary → 2nd
-                dominant color</div>
+              <div class="dual-info"><i class="fas fa-info-circle"></i> Primary & Secondary dominant colors</div>
             </div>
           </div>
 
-          <div class="color-station" id="singleColorStation">
+          <div id="singleColorSection" class="single-color-section">
             <span><i class="fas fa-eye-dropper"></i> SINGLE COLOR</span>
-            <input type="text" id="hexInput" class="hex-input" value="#1686D0">
-            <div id="colorSwatch" class="color-swatch" style="background:#1686D0"></div>
-            <div class="single-threshold-zone">
-              <span><i class="fas fa-chart-line"></i> THRESHOLD</span>
-              <input type="range" id="thresholdSlider" min="0" max="100" value="25">
-              <span id="thresholdValue">25%</span>
+            <div class="single-color-controls">
+              <div class="color-picker-row">
+                <input type="text" id="hexInput" class="hex-input" value="#1686D0">
+                <div id="colorSwatch" class="color-swatch" style="background:#1686D0"></div>
+              </div>
+              <div class="single-threshold-group">
+                <span><i class="fas fa-chart-line"></i> TH</span>
+                <input type="range" id="thresholdSlider" min="0" max="100" value="25">
+                <span id="thresholdValue" class="threshold-val">25%</span>
+              </div>
             </div>
           </div>
 
-          <div class="blur-section">
-            <span><i class="fas fa-tint"></i> BLUR EFFECT <span
-                style="font-size:0.55rem; background:#ec489a30; padding:2px 6px; border-radius:20px; margin-left:4px;">All
-                Modes</span></span>
-            <div class="blur-control">
-              <span><i class="fas fa-blur"></i> STRENGTH</span>
-              <input type="range" id="blurSlider" min="0" max="10" step="0.5" value="0">
-              <span id="blurValue" class="blur-value">0px</span>
+          <div class="effects-row">
+            <div class="effect-item blur">
+              <span class="effect-label"><i class="fas fa-tint"></i> BLUR</span>
+              <div class="effect-control">
+                <input type="range" id="blurSlider" min="0" max="15" step="0.5" value="0">
+                <span id="blurValue" class="effect-value blur-val">0px</span>
+              </div>
             </div>
-          </div>
-
-          <div class="smooth-section">
-            <span><i class="fas fa-feather-alt"></i> EDGE SMOOTHING <span
-                style="font-size:0.55rem; background:#14b8a630; padding:2px 6px; border-radius:20px; margin-left:4px;">Anti-aliasing</span></span>
-            <div class="smooth-control">
-              <span><i class="fas fa-sliders-h"></i> SMOOTH STRENGTH</span>
-              <input type="range" id="smoothSlider" min="0" max="100" value="30">
-              <span id="smoothValue" class="smooth-value">30%</span>
+            <div class="effect-item smooth">
+              <span class="effect-label"><i class="fas fa-feather-alt"></i> SMOOTH</span>
+              <div class="effect-control">
+                <input type="range" id="smoothSlider" min="0" max="200" value="0">
+                <span id="smoothValue" class="effect-value smooth-val">0%</span>
+              </div>
+            </div>
+            <div class="effect-item edge">
+              <span class="effect-label"><i class="fas fa-border-all"></i> EDGE</span>
+              <div class="effect-control">
+                <input type="range" id="edgeSlider" min="0" max="200" value="0">
+                <span id="edgeValue" class="effect-value edge-val">0%</span>
+              </div>
             </div>
           </div>
 
           <div class="preset-gallery" id="presetGallery"></div>
 
           <div class="upload-zone" id="uploadZone">
-            <button id="uploadBtn" class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> UPLOAD </button>
+            <button id="uploadBtn" class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> UPLOAD</button>
             <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.webp,.bmp,.zip" style="display:none">
           </div>
 
           <div class="action-bar">
             <button id="applyAllBtn" class="action-btn action-primary"><i class="fas fa-play"></i> APPLY ALL</button>
-            <button id="applyBlurBtn" class="action-btn action-blur"><i class="fas fa-tint"></i> APPLY BLUR</button>
-            <button id="applySmoothBtn" class="action-btn action-smooth"><i class="fas fa-feather-alt"></i> SMOOTH
-              EDGES</button>
-            <button id="selectAllBtn" class="action-btn action-select"><i class="fas fa-check-double"></i> ALL</button>
+            <button id="selectAllBtn" class="action-btn action-select"><i class="fas fa-check-double"></i> SELECT
+              ALL</button>
             <button id="deselectAllBtn" class="action-btn action-deselect"><i class="fas fa-times-circle"></i>
-              NONE</button>
+              SELECT NONE</button>
             <button id="invertSelectBtn" class="action-btn action-invert"><i class="fas fa-exchange-alt"></i>
               INVERT</button>
-
             <button id="clearAllBtn" class="action-btn action-danger"><i class="fas fa-trash"></i> CLEAR</button>
             <button id="zipSelectedBtn" class="action-btn action-success"><i class="fas fa-file-archive"></i>
-              ZIP</button>
+              COMPRESS</button>
           </div>
 
-          <div class="grid-container" id="gridContainer">
-            <!-- <div style="text-align:center; padding:2rem; color:#64748b;">Upload images</div> -->
+          <div id="progressSection" class="progress-section" style="display: none;">
+            <div class="progress-header">
+              <span id="progressStatus" class="progress-status"><i class="fas fa-spinner fa-pulse"></i>
+                Processing...</span>
+              <span id="progressPercent" class="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div id="progressBarFill" class="progress-bar-fill"></div>
+            </div>
+            <div id="progressDetail" class="progress-detail"></div>
           </div>
+
+          <div class="grid-container" id="gridContainer"></div>
         </div>
       </div>
     </div>
@@ -1071,6 +1225,41 @@
 
   <script>
     (function () {
+      // Audio player for success sound
+      function playSuccessSound() {
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const now = audioContext.currentTime;
+
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.value = 880;
+          gainNode.gain.value = 0.3;
+
+          oscillator.start();
+          gainNode.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
+          oscillator.stop(now + 0.5);
+
+          setTimeout(() => {
+            const oscillator2 = audioContext.createOscillator();
+            const gainNode2 = audioContext.createGain();
+            oscillator2.connect(gainNode2);
+            gainNode2.connect(audioContext.destination);
+            oscillator2.frequency.value = 660;
+            gainNode2.gain.value = 0.2;
+            oscillator2.start();
+            gainNode2.gain.exponentialRampToValueAtTime(0.00001, now + 1);
+            oscillator2.stop(now + 1);
+          }, 300);
+        } catch (e) {
+          console.log("Audio not supported");
+        }
+      }
+
       function debounce(func, delay = 300) {
         let timer;
         return function (...args) {
@@ -1084,16 +1273,22 @@
       let primaryThreshold = 25;
       let secondaryThreshold = 25;
       let blurStrength = 0;
-      let smoothStrength = 30;
-      let currentZoom = 1;
+      let smoothStrength = 0;
+      let edgeStrength = 0;
+      let currentZoom = 3;
       const MIN_ZOOM = 0.5;
-      const MAX_ZOOM = 3;
+      const MAX_ZOOM = 10;
       const ZOOM_STEP = 0.1;
 
       let isApplyingAll = false;
       let isZipping = false;
-      let isApplyingBlur = false;
-      let isApplyingSmooth = false;
+
+      // Upload progress tracking
+      let totalFilesToUpload = 0;
+      let uploadedFilesCount = 0;
+      let uploadProgressToast = null;
+
+      let progressSection, progressStatus, progressPercent, progressBarFill, progressDetail;
 
       const yourDefaultColorPalette = ["#1686D0", "#006378", "#00FF62", "#061D2E", "#0A2E39", "#041C30", "#FFC300", "#FF7E29", "#FF5CA1", "#E68585", "#7646FF", "#000000"];
       const primaryColorPalette = [...yourDefaultColorPalette];
@@ -1117,6 +1312,8 @@
         blurValue: document.getElementById('blurValue'),
         smoothSlider: document.getElementById('smoothSlider'),
         smoothValue: document.getElementById('smoothValue'),
+        edgeSlider: document.getElementById('edgeSlider'),
+        edgeValue: document.getElementById('edgeValue'),
         uploadBtn: document.getElementById('uploadBtn'),
         hiddenFileInput: document.getElementById('fileInput'),
         applyAllBtn: document.getElementById('applyAllBtn'),
@@ -1125,14 +1322,13 @@
         selectAllBtn: document.getElementById('selectAllBtn'),
         deselectAllBtn: document.getElementById('deselectAllBtn'),
         invertSelectBtn: document.getElementById('invertSelectBtn'),
-        applyBlurBtn: document.getElementById('applyBlurBtn'),
-        applySmoothBtn: document.getElementById('applySmoothBtn'),
         previewImg: document.getElementById('previewImg'),
         previewFilename: document.getElementById('previewFilename'),
         totalCountSpan: document.getElementById('totalCount'),
         selectedCountSpan: document.getElementById('selectedCount'),
         toggleDualBtn: document.getElementById('toggleDualBtn'),
         dualColorContainer: document.getElementById('dualColorContainer'),
+        singleColorSection: document.getElementById('singleColorSection'),
         presetGallery: document.getElementById('presetGallery'),
         uploadZone: document.getElementById('uploadZone'),
         previewInner: document.getElementById('previewInner'),
@@ -1141,6 +1337,49 @@
         resetZoomBtn: document.getElementById('resetZoomBtn'),
         zoomLevel: document.getElementById('zoomLevel')
       };
+
+      function initProgressElements() {
+        progressSection = document.getElementById('progressSection');
+        progressStatus = document.getElementById('progressStatus');
+        progressPercent = document.getElementById('progressPercent');
+        progressBarFill = document.getElementById('progressBarFill');
+        progressDetail = document.getElementById('progressDetail');
+      }
+
+      function showProgress(total, show = true) {
+        if (!progressSection) initProgressElements();
+        if (progressSection) {
+          progressSection.style.display = show ? 'block' : 'none';
+          if (show) {
+            updateProgress(0, total, 'Starting...');
+          }
+        }
+      }
+
+      function updateProgress(current, total, fileName = '') {
+        if (!progressBarFill) initProgressElements();
+        if (!progressBarFill) return;
+        let percent = total > 0 ? (current / total) * 100 : 0;
+        progressBarFill.style.width = `${percent}%`;
+        progressPercent.innerText = `${Math.round(percent)}% (${current}/${total})`;
+        if (fileName) {
+          let shortName = fileName.length > 35 ? fileName.slice(0, 32) + '...' : fileName;
+          progressDetail.innerText = `${current}/${total} - ${shortName}`;
+          progressStatus.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> Processing: ${current}/${total} - ${shortName}`;
+        } else {
+          progressStatus.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> Processing ${current}/${total} images...`;
+        }
+        if (current === total && total > 0) {
+          progressStatus.innerHTML = `<i class="fas fa-check-circle"></i> Completed! ${total} images done.`;
+          setTimeout(() => {
+            if (progressSection) progressSection.style.display = 'none';
+          }, 2500);
+        }
+      }
+
+      function getFileExtension(filename) {
+        return filename.split('.').pop().toLowerCase();
+      }
 
       function normalizeHex(hex) {
         let h = hex.trim();
@@ -1152,10 +1391,18 @@
         return null;
       }
 
-      function toast(msg, ok = true) {
+      // Updated toast with upload progress support
+      function toast(msg, ok = true, isProgress = false, current = null, total = null) {
         let t = document.createElement('div');
         t.className = 'toast-msg';
-        t.innerHTML = `<i class="fas ${ok ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${msg}`;
+
+        if (isProgress && current !== null && total !== null) {
+          let percent = Math.round((current / total) * 100);
+          t.innerHTML = `<i class="fas ${ok ? 'fa-cloud-upload-alt' : 'fa-info-circle'}"></i> ${msg} (${current}/${total}) ${percent}%`;
+        } else {
+          t.innerHTML = `<i class="fas ${ok ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${msg}`;
+        }
+
         document.body.appendChild(t);
         setTimeout(() => {
           t.style.animation = 'slideUpFade 0.3s ease reverse';
@@ -1163,7 +1410,27 @@
         }, 2300);
       }
 
-      function shortName(n) { return n.length > 28 ? n.slice(0, 25) + '...' : n; }
+      function updateUploadProgress(current, total, fileName) {
+        // Remove existing upload progress toast if any
+        const existingToasts = document.querySelectorAll('.toast-msg');
+        for (let toastEl of existingToasts) {
+          if (toastEl.innerText.includes('Uploading') || toastEl.innerText.includes('📤')) {
+            toastEl.remove();
+          }
+        }
+
+        let percent = Math.round((current / total) * 100);
+        let t = document.createElement('div');
+        t.className = 'toast-msg';
+        t.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> 📤 Uploading: ${current}/${total} files (${percent}%) - ${fileName.length > 25 ? fileName.slice(0, 22) + '...' : fileName}`;
+        document.body.appendChild(t);
+
+        setTimeout(() => {
+          if (t && t.remove) t.remove();
+        }, 2000);
+      }
+
+      function shortName(n) { return n.length > 25 ? n.slice(0, 22) + '...' : n; }
 
       function getImageSize(blob) {
         return new Promise(r => {
@@ -1193,7 +1460,6 @@
         if (currentZoom < MAX_ZOOM) {
           currentZoom = Math.min(MAX_ZOOM, currentZoom + ZOOM_STEP);
           updateZoom();
-          toast(`Zoom: ${Math.round(currentZoom * 100)}%`, true);
         }
       }
 
@@ -1201,14 +1467,54 @@
         if (currentZoom > MIN_ZOOM) {
           currentZoom = Math.max(MIN_ZOOM, currentZoom - ZOOM_STEP);
           updateZoom();
-          toast(`Zoom: ${Math.round(currentZoom * 100)}%`, true);
         }
       }
 
       function resetZoom() {
         currentZoom = 1;
         updateZoom();
-        toast(`Zoom reset to 100%`, true);
+      }
+
+      function applyEdgeDetectAndEnhance(imgData, strength) {
+        if (strength <= 0) return false;
+        let data = imgData.data;
+        let w = imgData.width;
+        let h = imgData.height;
+        let edgeIntensity = strength / 100;
+        let originalData = new Uint8ClampedArray(data);
+        let changed = false;
+        for (let y = 1; y < h - 1; y++) {
+          for (let x = 1; x < w - 1; x++) {
+            let idx = (y * w + x) * 4;
+            let gx_r = 0, gx_g = 0, gx_b = 0;
+            let gy_r = 0, gy_g = 0, gy_b = 0;
+            const sobelX = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]];
+            const sobelY = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]];
+            for (let ky = -1; ky <= 1; ky++) {
+              for (let kx = -1; kx <= 1; kx++) {
+                let nidx = ((y + ky) * w + (x + kx)) * 4;
+                let weightX = sobelX[ky + 1][kx + 1];
+                let weightY = sobelY[ky + 1][kx + 1];
+                gx_r += originalData[nidx] * weightX;
+                gx_g += originalData[nidx + 1] * weightX;
+                gx_b += originalData[nidx + 2] * weightX;
+                gy_r += originalData[nidx] * weightY;
+                gy_g += originalData[nidx + 1] * weightY;
+                gy_b += originalData[nidx + 2] * weightY;
+              }
+            }
+            let magnitude = Math.sqrt(gx_r * gx_r + gy_r * gy_r) + Math.sqrt(gx_g * gx_g + gy_g * gy_g) + Math.sqrt(gx_b * gx_b + gy_b * gy_b);
+            magnitude = magnitude / 3;
+            if (magnitude > 20) {
+              let factor = edgeIntensity * (magnitude / 255) * 1.5;
+              data[idx] = Math.min(255, Math.max(0, originalData[idx] + (originalData[idx] - 128) * factor));
+              data[idx + 1] = Math.min(255, Math.max(0, originalData[idx + 1] + (originalData[idx + 1] - 128) * factor));
+              data[idx + 2] = Math.min(255, Math.max(0, originalData[idx + 2] + (originalData[idx + 2] - 128) * factor));
+              changed = true;
+            }
+          }
+        }
+        return changed;
       }
 
       function applyEdgeSmoothing(imgData, strength) {
@@ -1216,10 +1522,9 @@
         let data = imgData.data;
         let w = imgData.width;
         let h = imgData.height;
-        let smoothFactor = strength / 200;
+        let smoothFactor = Math.min(0.5, strength / 400);
         let originalData = new Uint8ClampedArray(data);
         let changed = false;
-
         for (let y = 1; y < h - 1; y++) {
           for (let x = 1; x < w - 1; x++) {
             let idx = (y * w + x) * 4;
@@ -1249,7 +1554,7 @@
                 avgG /= neighbors.length;
                 avgB /= neighbors.length;
                 let diff = Math.abs(data[idx] - avgR) + Math.abs(data[idx + 1] - avgG) + Math.abs(data[idx + 2] - avgB);
-                if (diff > 30) {
+                if (diff > 20) {
                   let factor = smoothFactor * (diff / 255);
                   data[idx] = Math.round(data[idx] * (1 - factor) + avgR * factor);
                   data[idx + 1] = Math.round(data[idx + 1] * (1 - factor) + avgG * factor);
@@ -1261,82 +1566,6 @@
           }
         }
         return changed;
-      }
-
-      async function applySmoothToImage(blob, smoothStr, origW, origH, itemId = null) {
-        if (itemId) {
-          let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
-          if (card) card.classList.add('processing');
-        }
-        return new Promise(resolve => {
-          let img = new Image(), url = URL.createObjectURL(blob);
-          img.onload = () => {
-            let canvas = document.createElement('canvas');
-            canvas.width = origW;
-            canvas.height = origH;
-            let ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, origW, origH);
-            let imgData = ctx.getImageData(0, 0, origW, origH);
-            if (smoothStr > 0) {
-              applyEdgeSmoothing(imgData, smoothStr);
-              ctx.putImageData(imgData, 0, 0);
-            }
-            canvas.toBlob(resBlob => {
-              URL.revokeObjectURL(url);
-              if (itemId) {
-                let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
-                if (card) card.classList.remove('processing');
-              }
-              resolve(resBlob);
-            }, 'image/png');
-          };
-          img.onerror = () => {
-            URL.revokeObjectURL(url);
-            if (itemId) {
-              let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
-              if (card) card.classList.remove('processing');
-            }
-            resolve(blob);
-          };
-          img.src = url;
-        });
-      }
-
-      async function applyBlurToImage(blob, blurPx, origW, origH, itemId = null) {
-        if (itemId) {
-          let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
-          if (card) card.classList.add('processing');
-        }
-        return new Promise(resolve => {
-          let img = new Image(), url = URL.createObjectURL(blob);
-          img.onload = () => {
-            let canvas = document.createElement('canvas');
-            canvas.width = origW;
-            canvas.height = origH;
-            let ctx = canvas.getContext('2d');
-            if (blurPx > 0) {
-              ctx.filter = `blur(${blurPx}px)`;
-            }
-            ctx.drawImage(img, 0, 0, origW, origH);
-            canvas.toBlob(resBlob => {
-              URL.revokeObjectURL(url);
-              if (itemId) {
-                let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
-                if (card) card.classList.remove('processing');
-              }
-              resolve(resBlob);
-            }, 'image/png');
-          };
-          img.onerror = () => {
-            URL.revokeObjectURL(url);
-            if (itemId) {
-              let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
-              if (card) card.classList.remove('processing');
-            }
-            resolve(blob);
-          };
-          img.src = url;
-        });
       }
 
       function dualColorReplace(imgData, priRGB, secRGB, priThr, secThr) {
@@ -1401,39 +1630,77 @@
         return changed;
       }
 
-      function applyTraceSmoothing(imgData) {
-        let data = imgData.data, w = imgData.width, h = imgData.height;
-        for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) {
-          let idx = (y * w + x) * 4;
-          if (data[idx + 3] > 20) {
-            let rs = 0, gs = 0, bs = 0, cnt = 0;
-            for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-              let nidx = ((y + dy) * w + (x + dx)) * 4;
-              if (data[nidx + 3] > 20) { rs += data[nidx]; gs += data[nidx + 1]; bs += data[nidx + 2]; cnt++; }
-            }
-            if (cnt > 0) { data[idx] = (data[idx] + rs / cnt) / 2; data[idx + 1] = (data[idx + 1] + gs / cnt) / 2; data[idx + 2] = (data[idx + 2] + bs / cnt) / 2; }
-          }
-        }
+      function isWebPFile(blob, filename) {
+        return blob.type === 'image/webp' || filename.toLowerCase().endsWith('.webp');
       }
 
-      async function processImage(blob, mode, origW, origH, itemId = null) {
+      async function convertWebPToPNG(webpBlob) {
+        return new Promise((resolve) => {
+          let img = new Image();
+          let url = URL.createObjectURL(webpBlob);
+          img.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((pngBlob) => {
+              URL.revokeObjectURL(url);
+              resolve(pngBlob);
+            }, 'image/png');
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(webpBlob);
+          };
+          img.src = url;
+        });
+      }
+
+      async function convertPNGToWebP(pngBlob, quality = 0.92) {
+        return new Promise((resolve) => {
+          let img = new Image();
+          let url = URL.createObjectURL(pngBlob);
+          img.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((webpBlob) => {
+              URL.revokeObjectURL(url);
+              resolve(webpBlob);
+            }, 'image/webp', quality);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(pngBlob);
+          };
+          img.src = url;
+        });
+      }
+
+      async function processImageWithAllEffects(blob, mode, origW, origH, itemId = null) {
         if (itemId) {
           let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
           if (card) card.classList.add('processing');
         }
         return new Promise(resolve => {
-          let img = new Image(), url = URL.createObjectURL(blob);
+          let img = new Image();
+          let url = URL.createObjectURL(blob);
           img.onload = () => {
-            let procWidth = Math.max(img.width, 1024), procHeight = Math.floor((procWidth / img.width) * img.height);
+            let procWidth = Math.min(img.width, 900);
+            let procHeight = Math.floor((procWidth / img.width) * img.height);
             let procCanvas = document.createElement('canvas');
-            procCanvas.width = procWidth; procCanvas.height = procHeight;
+            procCanvas.width = procWidth;
+            procCanvas.height = procHeight;
             let ctx = procCanvas.getContext('2d', { alpha: true });
             ctx.imageSmoothingQuality = 'high';
             ctx.drawImage(img, 0, 0, procWidth, procHeight);
             let imgData = ctx.getImageData(0, 0, procWidth, procHeight);
-
             if (dualColorEnabled) {
-              let priHex = normalizeHex(dom.primaryHex.value) || "#3B82F6", secHex = normalizeHex(dom.secondaryHex.value) || "#8B5CF6";
+              let priHex = normalizeHex(dom.primaryHex.value) || "#3B82F6";
+              let secHex = normalizeHex(dom.secondaryHex.value) || "#8B5CF6";
               let priRGB = { r: parseInt(priHex.slice(1, 3), 16), g: parseInt(priHex.slice(3, 5), 16), b: parseInt(priHex.slice(5, 7), 16) };
               let secRGB = { r: parseInt(secHex.slice(1, 3), 16), g: parseInt(secHex.slice(3, 5), 16), b: parseInt(secHex.slice(5, 7), 16) };
               dualColorReplace(imgData, priRGB, secRGB, primaryThreshold, secondaryThreshold);
@@ -1442,18 +1709,17 @@
               let targetRGB = { r: parseInt(targetHex.slice(1, 3), 16), g: parseInt(targetHex.slice(3, 5), 16), b: parseInt(targetHex.slice(5, 7), 16) };
               forceColorReplace(imgData, targetRGB, singleThreshold);
             }
-
-            if (mode === 'trace') applyTraceSmoothing(imgData);
             if (smoothStrength > 0) applyEdgeSmoothing(imgData, smoothStrength);
+            if (edgeStrength > 0) applyEdgeDetectAndEnhance(imgData, edgeStrength);
             ctx.putImageData(imgData, 0, 0);
-
             let finalCanvas = document.createElement('canvas');
             finalCanvas.width = origW;
             finalCanvas.height = origH;
             let fCtx = finalCanvas.getContext('2d');
-            if (blurStrength > 0) fCtx.filter = `blur(${blurStrength}px)`;
+            if (blurStrength > 0) {
+              fCtx.filter = `blur(${blurStrength}px)`;
+            }
             fCtx.drawImage(procCanvas, 0, 0, procWidth, procHeight, 0, 0, origW, origH);
-
             finalCanvas.toBlob(resBlob => {
               URL.revokeObjectURL(url);
               if (itemId) {
@@ -1481,18 +1747,54 @@
           dom.previewFilename.innerText = "Select an image";
           return;
         }
-        let newBlob = await processImage(currentPreviewItem.originalBlob, currentMode, currentPreviewItem.origW, currentPreviewItem.origH, currentPreviewItem.id);
+        let newBlob = await processImageWithAllEffects(currentPreviewItem.originalBlob, currentMode, currentPreviewItem.origW, currentPreviewItem.origH, currentPreviewItem.id);
         if (previewProcessedBlob) URL.revokeObjectURL(previewProcessedBlob);
         previewProcessedBlob = newBlob;
         dom.previewImg.src = URL.createObjectURL(newBlob);
-        dom.previewFilename.innerText = shortName(currentPreviewItem.name) + " (preview)";
-        resetZoom();
+        let displayName = currentPreviewItem.isOriginalWebP ? currentPreviewItem.originalName : currentPreviewItem.name;
+        dom.previewFilename.innerText = shortName(displayName) + " (preview)";
       }, 200);
 
-      async function addItemWithoutProcessing(blob, name) {
+      let batchWebPCount = 0;
+      let batchConvertedCount = 0;
+      let conversionToastShown = false;
+
+      async function addItemWithoutProcessing(blob, name, showUploadProgress = true, currentFileNum = null, totalFiles = null) {
         let id = nextId++;
-        let dims = await getImageSize(blob);
-        iconItems.push({ id, name, originalBlob: blob, origW: dims.width, origH: dims.height, processedBlob: null, processedURL: null, selected: true });
+        let finalBlob = blob;
+        let finalName = name;
+        let originalName = name;
+        let isOriginalWebP = isWebPFile(blob, name);
+
+        if (showUploadProgress && currentFileNum && totalFiles) {
+          updateUploadProgress(currentFileNum, totalFiles, name);
+        }
+
+        if (isOriginalWebP) {
+          batchWebPCount++;
+          if (!conversionToastShown) {
+            conversionToastShown = true;
+            toast(`🔄 Converting WebP file(s) to PNG for editing...`, true);
+          }
+          finalBlob = await convertWebPToPNG(blob);
+          finalName = name.replace(/\.webp$/i, '.png');
+          batchConvertedCount++;
+        }
+
+        let dims = await getImageSize(finalBlob);
+        iconItems.push({
+          id,
+          name: finalName,
+          originalName: originalName,
+          originalBlob: finalBlob,
+          originalWebPBlob: isOriginalWebP ? blob : null,
+          isOriginalWebP: isOriginalWebP,
+          origW: dims.width,
+          origH: dims.height,
+          processedBlob: null,
+          processedURL: null,
+          selected: true
+        });
         renderGrid();
         if (iconItems.length === 1 && !currentPreviewItem) setCurrentPreviewItem(iconItems[0]);
         updateCounters();
@@ -1505,9 +1807,23 @@
         renderGrid();
       }
 
+      async function downloadSingleImage(item) {
+        toast(`🔄 Processing ${shortName(item.name)}...`, true);
+        let processedPNG = await processImageWithAllEffects(item.originalBlob, currentMode, item.origW, item.origH, item.id);
+        let finalBlob = processedPNG;
+        let finalName = item.name;
+        if (item.isOriginalWebP) {
+          finalBlob = await convertPNGToWebP(processedPNG, 0.92);
+          finalName = item.originalName;
+        }
+        saveAs(finalBlob, finalName);
+        toast(`✅ Downloaded: ${shortName(finalName)}`, true);
+        playSuccessSound();
+      }
+
       function renderGrid() {
         if (iconItems.length === 0) {
-          dom.gridContainer.innerHTML = `<div style="text-align:center; padding:2rem; color:#64748b;">Upload images or ZIP archives</div>`;
+          dom.gridContainer.innerHTML = `<div style="text-align:center; padding:20px; color:#64748b; grid-column:1/-1;">📸 Upload images or ZIP archives</div>`;
           if (dom.uploadZone) dom.uploadZone.classList.remove('hidden');
           return;
         }
@@ -1515,18 +1831,20 @@
         for (let item of iconItems) {
           let isPreview = (currentPreviewItem && currentPreviewItem.id === item.id);
           let imgSrc = item.processedURL ? item.processedURL : URL.createObjectURL(item.originalBlob);
+          let displayName = item.isOriginalWebP ? item.originalName : item.name;
           html += `<div class="icon-card ${isPreview ? 'selected-for-preview' : ''}" data-id="${item.id}">
-            <div class="select-check"><input type="checkbox" class="item-checkbox" data-id="${item.id}" ${item.selected ? 'checked' : ''}></div>
             <img src="${imgSrc}" alt="${item.name}" loading="lazy">
-            <div class="card-title">${shortName(item.name)}</div>
+            <div class="card-title">${shortName(displayName)}</div>
             <div class="card-actions">
+              <div class="select-check">
+                <input type="checkbox" class="item-checkbox" data-id="${item.id}" ${item.selected ? 'checked' : ''}>
+              </div>
               <button class="icon-action download-btn" data-id="${item.id}" data-action="download"><i class="fas fa-download"></i></button>
               <button class="icon-action delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
             </div>
           </div>`;
         }
         dom.gridContainer.innerHTML = html;
-
         document.querySelectorAll('.icon-card').forEach(card => {
           let id = parseInt(card.dataset.id);
           card.addEventListener('click', debounce((e) => {
@@ -1535,31 +1853,24 @@
             if (item) setCurrentPreviewItem(item);
           }, 200));
         });
-
         document.querySelectorAll('.item-checkbox').forEach(cb => {
           cb.addEventListener('change', (e) => {
+            e.stopPropagation();
             let id = parseInt(cb.dataset.id);
             let item = iconItems.find(i => i.id === id);
             if (item) { item.selected = cb.checked; updateCounters(); }
           });
         });
-
         document.querySelectorAll('.download-btn').forEach(btn => {
           btn.addEventListener('click', debounce(async (e) => {
             e.stopPropagation();
             let id = parseInt(btn.dataset.id);
             let item = iconItems.find(i => i.id === id);
             if (item) {
-              toast(`⬇️ Downloading: ${item.name}`, true);
-              let finalBlob = await processImage(item.originalBlob, currentMode, item.origW, item.origH, item.id);
-              let hexVal = normalizeHex(dualColorEnabled ? dom.primaryHex.value : dom.hexInput.value)?.replace('#', '') || 'color';
-              let filename = item.name.replace(/\.[^/.]+$/, '') + `_${currentMode}_${hexVal}_blur${blurStrength}_smooth${smoothStrength}.png`;
-              saveAs(finalBlob, filename);
-              toast(`✅ Download complete!`, true);
+              await downloadSingleImage(item);
             }
           }, 300));
         });
-
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', debounce((e) => {
             e.stopPropagation();
@@ -1583,24 +1894,61 @@
       }
 
       async function handleFiles(files) {
+        batchWebPCount = 0;
+        batchConvertedCount = 0;
+        conversionToastShown = false;
+
+        let validFiles = [];
         for (let file of files) {
-          let ext = file.name.split('.').pop().toLowerCase();
-          if (file.type.startsWith('image/') || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(ext))
-            await addItemWithoutProcessing(file, file.name);
-          else if (ext === 'zip' || file.type === 'application/zip') {
+          let ext = getFileExtension(file.name);
+          if (file.type.startsWith('image/') || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(ext)) {
+            validFiles.push({ file, type: 'image' });
+          } else if (ext === 'zip' || file.type === 'application/zip') {
+            validFiles.push({ file, type: 'zip' });
+          }
+        }
+
+        totalFilesToUpload = validFiles.length;
+        uploadedFilesCount = 0;
+
+        for (let i = 0; i < validFiles.length; i++) {
+          let { file, type } = validFiles[i];
+          uploadedFilesCount++;
+
+          if (type === 'image') {
+            await addItemWithoutProcessing(file, file.name, true, uploadedFilesCount, totalFilesToUpload);
+          } else if (type === 'zip') {
             try {
               let zip = await JSZip.loadAsync(file);
-              let pngs = [];
-              for (let [path, data] of Object.entries(zip.files))
-                if (!data.dir && /\.png$/i.test(path)) {
+              let images = [];
+              for (let [path, data] of Object.entries(zip.files)) {
+                if (!data.dir && /\.(png|jpg|jpeg|webp|bmp)$/i.test(path)) {
                   let blob = await data.async('blob');
-                  pngs.push({ blob, name: path.split('/').pop() });
+                  images.push({ blob, name: path.split('/').pop() });
                 }
-              if (pngs.length === 0) { toast(`⚠️ No PNG found in ${file.name}`, false); continue; }
-              for (let p of pngs) await addItemWithoutProcessing(p.blob, p.name);
-              toast(`✅ Extracted ${pngs.length} PNGs`, true);
-            } catch (e) { toast(`❌ ZIP failed: ${file.name}`, false); }
-          } else toast(`⚠️ Skipped: ${file.name}`, false);
+              }
+              if (images.length === 0) {
+                toast(`⚠️ No images found in ${file.name}`, false);
+                continue;
+              }
+              toast(`📦 Extracting ${images.length} images from ${file.name}...`, true);
+              for (let img of images) {
+                await addItemWithoutProcessing(img.blob, img.name, false);
+              }
+              toast(`✅ Extracted ${images.length} images from ${file.name}`, true);
+            } catch (e) {
+              toast(`❌ ZIP failed: ${file.name}`, false);
+            }
+          }
+        }
+
+        if (batchWebPCount > 0 && batchConvertedCount === batchWebPCount) {
+          toast(`✅ ${batchWebPCount} WebP file(s) converted to PNG. Will save back as WebP on download.`, true);
+        }
+
+        if (totalFilesToUpload > 0) {
+          toast(`✅ Upload complete! ${iconItems.length} total images added.`, true);
+          playSuccessSound();
         }
       }
 
@@ -1630,60 +1978,30 @@
         if (!iconItems.length) { toast(`No images to process`, false); return; }
         isApplyingAll = true;
         dom.applyAllBtn.disabled = true;
-        toast(`🎨 Applying ${dualColorEnabled ? "DUAL" : "SINGLE"} mode to ${iconItems.length} images...`, true);
-        for (let item of iconItems) {
-          let newBlob = await processImage(item.originalBlob, currentMode, item.origW, item.origH, item.id);
+        let itemsToProcess = iconItems.filter(i => i.selected);
+        let total = itemsToProcess.length;
+        if (total === 0) {
+          toast(`No images selected!`, false);
+          isApplyingAll = false;
+          dom.applyAllBtn.disabled = false;
+          return;
+        }
+        showProgress(total, true);
+        let processed = 0;
+        for (let item of itemsToProcess) {
+          processed++;
+          updateProgress(processed, total, item.name);
+          let newBlob = await processImageWithAllEffects(item.originalBlob, currentMode, item.origW, item.origH, item.id);
           if (item.processedURL) URL.revokeObjectURL(item.processedURL);
           item.processedBlob = newBlob;
           item.processedURL = URL.createObjectURL(newBlob);
         }
         renderGrid();
         if (currentPreviewItem) await updatePreviewWithCurrentColor();
-        toast(`✨ Process completed!`, true);
+        toast(`✨ Process completed! ${total} images done.`, true);
+        playSuccessSound();
         dom.applyAllBtn.disabled = false;
         isApplyingAll = false;
-      }, 400);
-
-      const applyBlurToSelected = debounce(async () => {
-        if (isApplyingBlur) { toast("Blur in progress, please wait...", false); return; }
-        let selected = iconItems.filter(i => i.selected);
-        if (selected.length === 0) { toast(`Select at least one image`, false); return; }
-        if (blurStrength === 0) { toast(`Blur strength is 0, no effect applied`, false); return; }
-        isApplyingBlur = true;
-        dom.applyBlurBtn.disabled = true;
-        toast(`🌀 Applying ${blurStrength}px blur to ${selected.length} images...`, true);
-        for (let item of selected) {
-          let newBlob = await applyBlurToImage(item.originalBlob, blurStrength, item.origW, item.origH, item.id);
-          if (item.processedURL) URL.revokeObjectURL(item.processedURL);
-          item.processedBlob = newBlob;
-          item.processedURL = URL.createObjectURL(newBlob);
-        }
-        renderGrid();
-        if (currentPreviewItem) await updatePreviewWithCurrentColor();
-        toast(`✅ Blur applied successfully!`, true);
-        dom.applyBlurBtn.disabled = false;
-        isApplyingBlur = false;
-      }, 400);
-
-      const applySmoothToSelected = debounce(async () => {
-        if (isApplyingSmooth) { toast("Smoothing in progress, please wait...", false); return; }
-        let selected = iconItems.filter(i => i.selected);
-        if (selected.length === 0) { toast(`Select at least one image`, false); return; }
-        if (smoothStrength === 0) { toast(`Smooth strength is 0, no effect applied`, false); return; }
-        isApplyingSmooth = true;
-        dom.applySmoothBtn.disabled = true;
-        toast(`🌀 Applying ${smoothStrength}% edge smoothing to ${selected.length} images...`, true);
-        for (let item of selected) {
-          let newBlob = await applySmoothToImage(item.originalBlob, smoothStrength, item.origW, item.origH, item.id);
-          if (item.processedURL) URL.revokeObjectURL(item.processedURL);
-          item.processedBlob = newBlob;
-          item.processedURL = URL.createObjectURL(newBlob);
-        }
-        renderGrid();
-        if (currentPreviewItem) await updatePreviewWithCurrentColor();
-        toast(`✅ Edge smoothing applied successfully!`, true);
-        dom.applySmoothBtn.disabled = false;
-        isApplyingSmooth = false;
       }, 400);
 
       const zipSelected = debounce(async () => {
@@ -1692,16 +2010,26 @@
         if (selected.length === 0) { toast(`Select at least one image`, false); return; }
         isZipping = true;
         dom.zipSelectedBtn.disabled = true;
+        showProgress(selected.length, true);
         toast(`📦 Creating ZIP archive...`, true);
         let zip = new JSZip();
+        let processed = 0;
         for (let item of selected) {
-          let finalBlob = await processImage(item.originalBlob, currentMode, item.origW, item.origH, item.id);
-          let hexVal = normalizeHex(dualColorEnabled ? dom.primaryHex.value : dom.hexInput.value)?.replace('#', '') || 'color';
-          zip.file(item.name.replace(/\.[^/.]+$/, '') + `_${currentMode}_${hexVal}_blur${blurStrength}_smooth${smoothStrength}.png`, finalBlob);
+          processed++;
+          updateProgress(processed, selected.length, item.name);
+          let processedPNG = await processImageWithAllEffects(item.originalBlob, currentMode, item.origW, item.origH, item.id);
+          let finalBlob = processedPNG;
+          let finalName = item.name;
+          if (item.isOriginalWebP) {
+            finalBlob = await convertPNGToWebP(processedPNG, 0.92);
+            finalName = item.originalName;
+          }
+          zip.file(finalName, finalBlob);
         }
         let zipBlob = await zip.generateAsync({ type: "blob" });
-        saveAs(zipBlob, `icons_${currentMode}_${Date.now()}.zip`);
-        toast(`✅ ZIP ready!`, true);
+        saveAs(zipBlob, `icons_processed_${Date.now()}.zip`);
+        toast(`✅ ZIP ready! ${selected.length} files.`, true);
+        playSuccessSound();
         dom.zipSelectedBtn.disabled = false;
         isZipping = false;
       }, 500);
@@ -1709,6 +2037,9 @@
       function clearAll() {
         iconItems.forEach(i => { if (i.processedURL) URL.revokeObjectURL(i.processedURL); });
         iconItems = [];
+        batchWebPCount = 0;
+        batchConvertedCount = 0;
+        conversionToastShown = false;
         if (previewProcessedBlob) URL.revokeObjectURL(previewProcessedBlob);
         currentPreviewItem = null;
         dom.previewImg.src = "";
@@ -1722,15 +2053,21 @@
         dualColorEnabled = !dualColorEnabled;
         if (dualColorEnabled) {
           dom.dualColorContainer.style.display = "block";
-          dom.toggleDualBtn.innerHTML = '<i class="fas fa-toggle-on"></i> Dual ON';
+          dom.toggleDualBtn.innerHTML = '<i class="fas fa-toggle-on"></i> ON';
           dom.toggleDualBtn.classList.remove('off');
           dom.presetGallery.style.display = "none";
+          if (dom.singleColorSection) {
+            dom.singleColorSection.classList.add('hidden');
+          }
           toast(`🎨 Dual Color Mode Activated`, true);
         } else {
           dom.dualColorContainer.style.display = "none";
-          dom.toggleDualBtn.innerHTML = '<i class="fas fa-toggle-off"></i> Dual OFF';
+          dom.toggleDualBtn.innerHTML = '<i class="fas fa-toggle-off"></i> OFF';
           dom.toggleDualBtn.classList.add('off');
           dom.presetGallery.style.display = "flex";
+          if (dom.singleColorSection) {
+            dom.singleColorSection.classList.remove('hidden');
+          }
           toast(`🎨 Single Color Mode`, true);
         }
         if (currentPreviewItem) updatePreviewWithCurrentColor();
@@ -1797,6 +2134,7 @@
         dom.secondaryThresholdSlider.oninput = (e) => { secondaryThreshold = parseInt(e.target.value); dom.secondaryThresholdValue.innerText = secondaryThreshold + '%'; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); };
         dom.blurSlider.oninput = (e) => { blurStrength = parseFloat(e.target.value); dom.blurValue.innerText = blurStrength + 'px'; if (currentPreviewItem) updatePreviewWithCurrentColor(); };
         dom.smoothSlider.oninput = (e) => { smoothStrength = parseInt(e.target.value); dom.smoothValue.innerText = smoothStrength + '%'; if (currentPreviewItem) updatePreviewWithCurrentColor(); };
+        dom.edgeSlider.oninput = (e) => { edgeStrength = parseInt(e.target.value); dom.edgeValue.innerText = edgeStrength + '%'; if (currentPreviewItem) updatePreviewWithCurrentColor(); };
       }
 
       function initZoomControls() {
@@ -1813,28 +2151,18 @@
       dom.invertSelectBtn.onclick = invertSelection;
       dom.toggleDualBtn.onclick = toggleDualColor;
       dom.applyAllBtn.onclick = applyToAllItems;
-      dom.applyBlurBtn.onclick = applyBlurToSelected;
-      dom.applySmoothBtn.onclick = applySmoothToSelected;
       dom.zipSelectedBtn.onclick = zipSelected;
 
       dom.hexInput.oninput = debounce(() => { let v = normalizeHex(dom.hexInput.value); if (v) dom.colorSwatch.style.backgroundColor = v; if (currentPreviewItem && !dualColorEnabled) updatePreviewWithCurrentColor(); }, 150);
       dom.primaryHex.oninput = debounce(() => { let v = normalizeHex(dom.primaryHex.value); if (v) dom.primarySwatch.style.backgroundColor = v; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); }, 150);
       dom.secondaryHex.oninput = debounce(() => { let v = normalizeHex(dom.secondaryHex.value); if (v) dom.secondarySwatch.style.backgroundColor = v; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); }, 150);
 
-      document.querySelectorAll('.mode-btn').forEach(btn => {
-        btn.onclick = debounce(() => {
-          document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentMode = btn.dataset.mode;
-          if (currentPreviewItem) updatePreviewWithCurrentColor();
-        }, 200);
-      });
-
       buildMainPresetGallery();
       buildMiniPresetGalleries();
       initColorPickers();
       initSliders();
       initZoomControls();
+      initProgressElements();
 
       dom.hexInput.value = "#1686D0";
       dom.colorSwatch.style.backgroundColor = "#1686D0";
@@ -1846,7 +2174,8 @@
       dom.primaryThresholdSlider.value = 25; primaryThreshold = 25; dom.primaryThresholdValue.innerText = "25%";
       dom.secondaryThresholdSlider.value = 25; secondaryThreshold = 25; dom.secondaryThresholdValue.innerText = "25%";
       dom.blurSlider.value = 0; blurStrength = 0; dom.blurValue.innerText = "0px";
-      dom.smoothSlider.value = 30; smoothStrength = 30; dom.smoothValue.innerText = "30%";
+      dom.smoothSlider.value = 0; smoothStrength = 0; dom.smoothValue.innerText = "0%";
+      dom.edgeSlider.value = 0; edgeStrength = 0; dom.edgeValue.innerText = "0%";
       updateCounters();
       updateZoom();
     })();
