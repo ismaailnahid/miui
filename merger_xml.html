@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Material Dark XML Merger | MIUI Theme Studio | Color Resolver</title>
+  <title>XML Color Merger</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet">
   <style>
@@ -473,9 +473,9 @@
   <div class="app-container">
     <div class="header">
       <h1>🎨 MIUI Theme Studio</h1>
-      <p>Professional XML Merger & Color Resolver | Material Design Dark Theme</p>
+      <p>Professional XML Merger & Color Resolver</p>
       <div class="badge-container">
-        <span class="badge">🔧 MIUI_Theme_Values Format</span>
+        <span class="badge">🔧 MIUI Theme Values Format</span>
         <span class="badge">🎨 Material 3 Colors</span>
         <span class="badge">📱 MIUI Theme Support</span>
         <span class="badge">✨ Auto Format Convert</span>
@@ -541,37 +541,39 @@
 
     <div class="action-bar">
       <button class="btn btn-primary" id="mergeActionBtn" data-shortcut="Ctrl+M">🔄 MERGE</button>
+      <button class="btn btn-cyan" id="extractMatchingBtn">🔍 MATCH</button>
       <button class="btn btn-success" id="downloadBtn" data-shortcut="Ctrl+S">⬇️ DOWNLOAD</button>
       <button class="btn btn-purple" id="resetExampleBtn" data-shortcut="Ctrl+R">✨ RESET</button>
+
     </div>
 
     <div class="category-grid">
-      <button class="btn btn-warning category-btn" id="exportBgBtn">🎨 BUTTON-BG</button>
+      <button class="btn btn-warning category-btn" id="exportBgBtn">🎨 BACKGROUND</button>
       <button class="btn btn-cyan category-btn" id="exportTextBtn">✍️ TEXT</button>
-      <button class="btn btn-pink category-btn" id="extractNonSystemBtn">🚫 EXTRACT NON-SYSTEM</button>
+      <button class="btn btn-pink category-btn" id="extractNonSystemBtn">🚫 NON-SYSTEM</button>
     </div>
 
     <div class="category-grid">
-      <button class="btn btn-danger category-btn" id="replaceBgWithColorBtn">🎨 BG-BTN #061D2E</button>
-      <button class="btn btn-primary category-btn" id="replaceTextWithColorBtn">✍️ TEXT #1686D0</button>
+      <button class="btn btn-danger category-btn" id="replaceBgWithColorBtn">🎨 061D2E</button>
+      <button class="btn btn-primary category-btn" id="replaceTextWithColorBtn">✍️ 1686D0</button>
     </div>
 
     <div class="resolver-panel">
       <div class="resolver-header" id="toggleResolverHeader">
         <div class="resolver-title">
-          <span>🎨 RESOLVED COLORS</span>
-          <span class="badge">MIUI_Theme_Values Format</span>
+          <span>🎨 RESOLVED COLORS PANEL</span>
+          <span class="badge">Theme Values </span>
         </div>
         <div style="display: flex; gap: 8px;">
-          <button class="btn btn-sm btn-purple" id="resolveColorsBtn">🔍 FORCE RESOLVE</button>
-          <button class="btn btn-sm btn-success" id="cleanDownloadBtn">⬇️ CLEAN DOWNLOAD</button>
+          <button class="btn btn-sm btn-purple" id="resolveColorsBtn">🔍 RESOLVE</button>
+          <button class="btn btn-sm btn-success" id="cleanDownloadBtn">⬇️ DOWNLOAD</button>
           <span id="toggleIcon" style="cursor: pointer;">▼</span>
         </div>
       </div>
       <div id="resolverContent" class="resolver-content">
         <div id="colorListContainer" class="color-grid">
           <div style="text-align: center; padding: 40px; color: #94a3b8;">
-            ✨ Click "FORCE RESOLVE" to convert all dynamic colors to HEX<br>
+            ✨ Click "RESOLVE" to convert all dynamic colors to HEX<br>
             Supports Android Dynamic + Material 3 + MIUI colors
           </div>
         </div>
@@ -580,14 +582,9 @@
   </div>
 
   <script>
-    // ===============================================================================
-    // NON-SYSTEM COLOR EXTRACTOR - COMPLETE JAVASCRIPT CODE
-    // ===============================================================================
 
-    // ===============================================================================
     // ANDROID SYSTEM COLORS DATABASE
-    // ===============================================================================
-
+    // This is a predefined set of Android system colors that can be referenced in XML files. The keys are the color names, and the values are their corresponding HEX color codes.
     const ANDROID_SYSTEM_COLORS = {
       'system_accent1_dark': '#1976D2',
       'system_accent1_light': '#2196F3',
@@ -1128,8 +1125,88 @@
     let rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>
 <MIUI_Theme_Values template="DarkTemplate">
     <color name="accent">#FF03DAC5</color>
+    <color name="primary">#6750A4</color>
+    <color name="text_title">#FFFFFF</color>
     <dimen name="spacing_medium">16dp</dimen>
 </MIUI_Theme_Values>`;
+
+    // ===============================================================================
+    // EXTRACT MATCHING COLORS FROM MASTER & TARGET
+    // ===============================================================================
+
+    function extractMatchingColors() {
+      try {
+        // ১. Master এবং Target XML পার্স করা
+        const masterParsed = parseXml(leftRawXml);
+        const targetParsed = parseXml(rightRawXml);
+
+        // ২. শুধু কালার আইটেমগুলো আলাদা করা
+        const masterColors = new Map();
+        const targetColors = new Map();
+
+        masterParsed.itemMap.forEach((item, key) => {
+          if (key.startsWith('color::')) {
+            const name = key.replace('color::', '');
+            masterColors.set(name, item.value);
+          }
+        });
+
+        targetParsed.itemMap.forEach((item, key) => {
+          if (key.startsWith('color::')) {
+            const name = key.replace('color::', '');
+            targetColors.set(name, item.value);
+          }
+        });
+
+        // ৩. ম্যাচিং কালার খুঁজে বের করা
+        const matchingColors = [];
+
+        masterColors.forEach((masterValue, name) => {
+          if (targetColors.has(name)) {
+            const targetValue = targetColors.get(name);
+            // ভ্যালু ম্যাচ করছে কিনা চেক করা (অপশনাল)
+            // যদি শুধু নাম ম্যাচ করলেই হবে, তাহলে নিচের লাইন কমেন্ট করুন
+            // if (masterValue === targetValue) {
+            matchingColors.push({
+              name: name,
+              masterValue: masterValue,
+              targetValue: targetValue
+            });
+            // }
+          }
+        });
+
+        // ৪. কোনো ম্যাচ না পেলে মেসেজ দেখানো
+        if (matchingColors.length === 0) {
+          showToast('⚠️ কোনো ম্যাচিং কালার পাওয়া যায়নি!');
+          return;
+        }
+
+        // ৫. ম্যাচিং কালারগুলো XML আকারে তৈরি করা
+        let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+        xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+
+
+        matchingColors.forEach(color => {
+          xml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.masterValue)}</color>\n`;
+        });
+
+        xml += `</MIUI_Theme_Values>`;
+
+        // ৬. ডাউনলোড করা
+        const blob = new Blob([xml], { type: 'application/xml' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'theme_values.xml';
+        a.click();
+        URL.revokeObjectURL(a.href);
+
+        showToast(`✅ ${matchingColors.length} DOWNLOADED MATCHING COLORS!`);
+
+      } catch (e) {
+        showToast(`❌ এরর: ${e.message}`);
+      }
+    }
 
     function updateEditors() {
       document.getElementById('leftEditor').value = leftRawXml;
@@ -1151,7 +1228,7 @@
         });
         leftRawXml = buildXml(leftParsed.rootTag, mergedMap);
         updateEditors();
-        showToast(`✓ Merged: +${added} new items added in MIUI_Theme_Values format`);
+        showToast(`✓ Merged: +${added} new items added`);
       } catch (e) {
         showToast(`Error: ${e.message}`);
       }
@@ -1164,7 +1241,7 @@
       a.download = 'theme_values.xml';
       a.click();
       URL.revokeObjectURL(a.href);
-      showToast('✓ Downloaded in MIUI_Theme_Values format');
+      showToast('✓ Downloaded MIUI_Theme_Values');
     }
 
     function downloadCleanResolved() {
@@ -1182,10 +1259,10 @@
       const blob = new Blob([resolvedXml], { type: 'application/xml' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'theme_values_resolved.xml';
+      a.download = 'theme_values.xml';
       a.click();
       URL.revokeObjectURL(a.href);
-      showToast('✓ Clean resolved XML downloaded in MIUI_Theme_Values format');
+      showToast('✓ Clean resolved downloaded');
     }
 
     function escapeRegex(str) {
@@ -1333,13 +1410,14 @@
       updateEditors();
       showToast('Reset to default MIUI_Theme_Values format');
     });
-    document.getElementById('exportBgBtn').addEventListener('click', () => exportColorsByCategory(isBgButtonColor, 'button_background_colors'));
-    document.getElementById('exportTextBtn').addEventListener('click', () => exportColorsByCategory(isTextColor, 'text_colors'));
+    document.getElementById('exportBgBtn').addEventListener('click', () => exportColorsByCategory(isBgButtonColor, 'theme_values'));
+    document.getElementById('exportTextBtn').addEventListener('click', () => exportColorsByCategory(isTextColor, 'theme_values'));
     document.getElementById('extractNonSystemBtn').addEventListener('click', extractNonSystemFromCurrentXml);
     document.getElementById('replaceBgWithColorBtn').addEventListener('click', replaceBgColors);
     document.getElementById('replaceTextWithColorBtn').addEventListener('click', replaceTextColorsSmart);
     document.getElementById('resolveColorsBtn').addEventListener('click', renderColorResolver);
     document.getElementById('cleanDownloadBtn').addEventListener('click', downloadCleanResolved);
+    document.getElementById('extractMatchingBtn').addEventListener('click', extractMatchingColors);
 
     document.getElementById('leftFileInput').addEventListener('change', (e) => {
       const f = e.target.files[0];
