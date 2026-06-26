@@ -206,6 +206,11 @@
       color: white;
     }
 
+    .btn-orange {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: white;
+    }
+
     textarea {
       width: 100%;
       min-height: 280px;
@@ -523,6 +528,7 @@
               <input type="file" id="rightFileInput" accept=".xml,text/xml" style="display:none;">
             </label>
             <button class="btn btn-sm btn-secondary" id="clearRightBtn">🗑️ CLEAR</button>
+            <button class="btn btn-sm btn-orange" id="formatTargetBtn">🔧 FORMAT</button>
           </div>
         </div>
         <div class="editor-area" style="padding: 16px;">
@@ -583,8 +589,233 @@
   </div>
 
   <script>
+    // ===============================================================================
+    // XML FORMATTER - NEW FEATURE
+    // ===============================================================================
 
+    function formatXML(xmlString) {
+      try {
+        // Clean the input
+        let cleaned = xmlString.trim();
+
+        // If empty, return empty
+        if (!cleaned) return '';
+
+        // Try to parse with DOMParser
+        try {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(cleaned, 'text/xml');
+
+          // Check for parsing errors
+          const parserError = xmlDoc.querySelector('parsererror');
+          if (parserError) {
+            // If parsing fails, try to fix common issues
+            return fixMalformedXML(cleaned);
+          }
+
+          // If parsing succeeds, format it properly
+          return formatXMLNode(xmlDoc.documentElement);
+        } catch (e) {
+          // If DOMParser fails, use manual fixing
+          return fixMalformedXML(cleaned);
+        }
+      } catch (e) {
+        showToast('❌ XML ফরম্যাট করতে ব্যর্থ: ' + e.message);
+        return xmlString;
+      }
+    }
+
+    function formatXMLNode(node, indent = 0) {
+      const spaces = '    '.repeat(indent);
+      let result = '';
+
+      // Opening tag
+      result += spaces + '<' + node.nodeName;
+
+      // Attributes
+      if (node.attributes) {
+        for (let attr of node.attributes) {
+          result += ` ${attr.name}="${attr.value}"`;
+        }
+      }
+
+      // Check if node has children
+      if (node.childNodes.length === 0) {
+        // Self-closing or empty
+        result += ' />\n';
+        return result;
+      }
+
+      // Check if all children are text nodes
+      let hasElementChildren = false;
+      for (let child of node.childNodes) {
+        if (child.nodeType === 1) { // Element node
+          hasElementChildren = true;
+          break;
+        }
+      }
+
+      if (!hasElementChildren) {
+        // Only text content
+        const textContent = node.textContent.trim();
+        if (textContent) {
+          result += '>' + textContent + '</' + node.nodeName + '>\n';
+        } else {
+          result += '></' + node.nodeName + '>\n';
+        }
+        return result;
+      }
+
+      // Has element children
+      result += '>\n';
+
+      // Process child nodes
+      for (let child of node.childNodes) {
+        if (child.nodeType === 3) { // Text node
+          const text = child.textContent.trim();
+          if (text) {
+            result += spaces + '    ' + text + '\n';
+          }
+        } else if (child.nodeType === 1) { // Element node
+          result += formatXMLNode(child, indent + 1);
+        }
+      }
+
+      // Closing tag
+      result += spaces + '</' + node.nodeName + '>\n';
+
+      return result;
+    }
+
+    function fixMalformedXML(xmlString) {
+      // Try to fix common XML issues
+      let fixed = xmlString;
+
+      // Remove empty lines
+      fixed = fixed.replace(/^\s*[\r\n]/gm, '');
+
+      // Ensure proper root tag
+      if (!fixed.includes('<?xml')) {
+        fixed = `<?xml version='1.0' encoding='UTF-8'?>\n` + fixed;
+      }
+
+      // Check if it has a root tag
+      const rootMatch = fixed.match(/<([A-Za-z_][A-Za-z0-9_\-:]*)[\s>]/);
+      if (!rootMatch) {
+        // No root tag found, wrap in MIUI_Theme_Values
+        fixed = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n${fixed}\n</MIUI_Theme_Values>`;
+      }
+
+      // Fix unclosed tags
+      const tagRegex = /<([A-Za-z_][A-Za-z0-9_\-:]*)([^>]*)>/g;
+      const tags = [];
+      let match;
+
+      while ((match = tagRegex.exec(fixed)) !== null) {
+        tags.push({
+          name: match[1],
+          attributes: match[2],
+          full: match[0],
+          index: match.index,
+          length: match[0].length
+        });
+      }
+
+      // Find unclosed tags
+      const stack = [];
+      const unclosed = [];
+
+      for (let tag of tags) {
+        if (tag.attributes.includes('/')) {
+          // Self-closing tag
+          continue;
+        }
+
+        if (tag.name.startsWith('/')) {
+          // Closing tag
+          if (stack.length > 0 && stack[stack.length - 1] === tag.name.substring(1)) {
+            stack.pop();
+          }
+        } else {
+          // Opening tag
+          stack.push(tag.name);
+        }
+      }
+
+      // Add missing closing tags
+      if (stack.length > 0) {
+        let closing = '';
+        while (stack.length > 0) {
+          const tagName = stack.pop();
+          closing += `</${tagName}>\n`;
+        }
+        fixed = fixed.trim() + '\n' + closing;
+      }
+
+      // Format with proper indentation
+      return beautifyXML(fixed);
+    }
+
+    function beautifyXML(xmlString) {
+      // Simple beautifier for XML
+      let formatted = '';
+      let indent = 0;
+      const lines = xmlString.split('\n');
+
+      for (let line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+
+        // Check if it's a closing tag
+        if (trimmed.startsWith('</')) {
+          indent--;
+        }
+
+        // Add indentation
+        formatted += '    '.repeat(Math.max(0, indent)) + trimmed + '\n';
+
+        // Check if it's an opening tag (not self-closing)
+        if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>')) {
+          if (!trimmed.includes('/>')) {
+            indent++;
+          }
+        }
+      }
+
+      return formatted;
+    }
+
+    function formatTargetXML() {
+      try {
+        const rightEditor = document.getElementById('rightEditor');
+        const currentXml = rightEditor.value;
+
+        if (!currentXml || currentXml.trim() === '') {
+          showToast('⚠️ TARGET সোর্সে কিছুই নেই!');
+          return;
+        }
+
+        // Format the XML
+        const formatted = formatXML(currentXml);
+
+        // Update the editor
+        rightEditor.value = formatted;
+        rightRawXml = formatted;
+
+        // Update stats
+        updateStats();
+
+        showToast('✅ TARGET সোর্স ফরম্যাট করা হয়েছে!');
+
+      } catch (e) {
+        showToast('❌ ফরম্যাট করতে ব্যর্থ: ' + e.message);
+      }
+    }
+
+    // ===============================================================================
     // ANDROID SYSTEM COLORS DATABASE
+    // ===============================================================================
+
     const ANDROID_SYSTEM_COLORS = {
       'system_accent1_dark': '#1976D2',
       'system_accent1_light': '#2196F3',
@@ -688,8 +919,7 @@
             parent: parent,
             originalRaw: rawValue
           });
-        }
-        else if (rawValue.startsWith('@color/')) {
+        } else if (rawValue.startsWith('@color/')) {
           const parent = rawValue.replace('@color/', '');
           nonSystemColorMap.set(name, {
             value: null,
@@ -698,8 +928,7 @@
             parent: parent,
             originalRaw: rawValue
           });
-        }
-        else {
+        } else {
           nonSystemColorMap.set(name, {
             value: rawValue,
             isRelative: false,
@@ -851,19 +1080,19 @@
         }
 
         html += `
-          <div class="color-item">
-            <div class="color-preview" style="background: ${resolvedColor};"></div>
-            <div class="color-info">
-              <div class="color-name">
-                ${escapeHtml(color.name)} 
-                ${badges}
+              <div class="color-item">
+                <div class="color-preview" style="background: ${resolvedColor};"></div>
+                <div class="color-info">
+                  <div class="color-name">
+                    ${escapeHtml(color.name)} 
+                    ${badges}
+                  </div>
+                  <div class="color-value">📄 Original: ${escapeHtml(color.originalRaw)}</div>
+                  <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
+                  ${color.isRelative ? `<div class="color-value" style="color: #f59e0b;">🔗 Parent: ${escapeHtml(color.parent)}</div>` : ''}
+                </div>
               </div>
-              <div class="color-value">📄 Original: ${escapeHtml(color.originalRaw)}</div>
-              <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
-              ${color.isRelative ? `<div class="color-value" style="color: #f59e0b;">🔗 Parent: ${escapeHtml(color.parent)}</div>` : ''}
-            </div>
-          </div>
-        `;
+            `;
       }
 
       container.innerHTML = html;
@@ -1075,7 +1304,8 @@
     function updateStats() {
       try {
         const leftParsed = parseXml(leftRawXml);
-        let colors = 0, dimens = 0;
+        let colors = 0,
+          dimens = 0;
         leftParsed.itemMap.forEach((v, k) => {
           if (k.startsWith('color::')) colors++;
           else if (k.startsWith('dimen::')) dimens++;
@@ -1091,7 +1321,8 @@
 
       try {
         const rightParsed = parseXml(rightRawXml);
-        let colors = 0, dimens = 0;
+        let colors = 0,
+          dimens = 0;
         rightParsed.itemMap.forEach((v, k) => {
           if (k.startsWith('color::')) colors++;
           else if (k.startsWith('dimen::')) dimens++;
@@ -1107,26 +1338,26 @@
     }
 
     let leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-<MIUI_Theme_Values template="DarkTemplate">
-    <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
-    <color name="button_bg">@color/primary</color>
-    <color name="text_title">#E2E2F0</color>
-    <color name="text_subtitle">#A9B1D6</color>
-    <color name="text_hint">#6C6C8A</color>
-    <color name="background_main">#0A0C15</color>
-    <color name="error_red">#FF4444</color>
-    <color name="success_green">#00C851</color>
-    <color name="system_accent">@android:color/system_accent1_dark</color>
-    <dimen name="spacing_large">24dp</dimen>
-</MIUI_Theme_Values>`;
+    <MIUI_Theme_Values template="DarkTemplate">
+        <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
+        <color name="button_bg">@color/primary</color>
+        <color name="text_title">#E2E2F0</color>
+        <color name="text_subtitle">#A9B1D6</color>
+        <color name="text_hint">#6C6C8A</color>
+        <color name="background_main">#0A0C15</color>
+        <color name="error_red">#FF4444</color>
+        <color name="success_green">#00C851</color>
+        <color name="system_accent">@android:color/system_accent1_dark</color>
+        <dimen name="spacing_large">24dp</dimen>
+    </MIUI_Theme_Values>`;
 
     let rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-<MIUI_Theme_Values template="DarkTemplate">
-    <color name="accent">#FF03DAC5</color>
-    <color name="primary">#6750A4</color>
-    <color name="text_title">#FFFFFF</color>
-    <dimen name="spacing_medium">16dp</dimen>
-</MIUI_Theme_Values>`;
+    <MIUI_Theme_Values template="DarkTemplate">
+        <color name="accent">#FF03DAC5</color>
+        <color name="primary">#6750A4</color>
+        <color name="text_title">#FFFFFF</color>
+        <dimen name="spacing_medium">16dp</dimen>
+    </MIUI_Theme_Values>`;
 
     // ===============================================================================
     // EXTRACT MATCHING COLORS FROM MASTER & TARGET (Target → Master)
@@ -1313,59 +1544,59 @@
 
         if (nonMatchingColors.length > 0) {
           html += `
-            <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(239, 68, 68, 0.15); border-radius: 12px; border-left: 5px solid #ef4444; margin-bottom: 10px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <div>
-                  <span style="font-weight: 700; color: #ef4444; font-size: 1.1rem;">🚫 NON-MATCHING COLORS</span>
-                  <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 12px;">${nonMatchingColors.length} colors</span>
+                <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(239, 68, 68, 0.15); border-radius: 12px; border-left: 5px solid #ef4444; margin-bottom: 10px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                      <span style="font-weight: 700; color: #ef4444; font-size: 1.1rem;">🚫 NON-MATCHING COLORS</span>
+                      <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 12px;">${nonMatchingColors.length} colors</span>
+                    </div>
+                    <span style="font-size: 0.7rem; color: #94a3b8;">⚠️ Target only - Not found in Master</span>
+                  </div>
                 </div>
-                <span style="font-size: 0.7rem; color: #94a3b8;">⚠️ Target only - Not found in Master</span>
-              </div>
-            </div>
-          `;
+              `;
 
           nonMatchingColors.forEach(color => {
             html += `
-              <div class="color-item" style="border-color: rgba(239, 68, 68, 0.3); border-left: 3px solid #ef4444;">
-                <div class="color-preview" style="background: ${color.targetValue};"></div>
-                <div class="color-info">
-                  <div class="color-name">
-                    ${escapeHtml(color.name)}
-                    <span class="color-badge" style="background: #ef4444; color: white;">🚫 No Match</span>
+                  <div class="color-item" style="border-color: rgba(239, 68, 68, 0.3); border-left: 3px solid #ef4444;">
+                    <div class="color-preview" style="background: ${color.targetValue};"></div>
+                    <div class="color-info">
+                      <div class="color-name">
+                        ${escapeHtml(color.name)}
+                        <span class="color-badge" style="background: #ef4444; color: white;">🚫 No Match</span>
+                      </div>
+                      <div class="color-value">📄 Target Value: ${escapeHtml(color.targetValue)}</div>
+                      <div class="color-value" style="color: #ef4444; font-weight: 500;">❌ Not found in Master</div>
+                    </div>
                   </div>
-                  <div class="color-value">📄 Target Value: ${escapeHtml(color.targetValue)}</div>
-                  <div class="color-value" style="color: #ef4444; font-weight: 500;">❌ Not found in Master</div>
-                </div>
-              </div>
-            `;
+                `;
           });
         }
 
         if (matchingColors.length > 0) {
           if (nonMatchingColors.length > 0) {
             html += `
-              <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; border-left: 5px solid #10b981; margin: 16px 0 10px 0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                  <div>
-                    <span style="font-weight: 700; color: #10b981; font-size: 1.1rem;">✅ MATCHING COLORS</span>
-                    <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 12px;">${matchingColors.length} colors</span>
+                  <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; border-left: 5px solid #10b981; margin: 16px 0 10px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                      <div>
+                        <span style="font-weight: 700; color: #10b981; font-size: 1.1rem;">✅ MATCHING COLORS</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 12px;">${matchingColors.length} colors</span>
+                      </div>
+                      <span style="font-size: 0.7rem; color: #94a3b8;">✔ Found in both Target and Master</span>
+                    </div>
                   </div>
-                  <span style="font-size: 0.7rem; color: #94a3b8;">✔ Found in both Target and Master</span>
-                </div>
-              </div>
-            `;
+                `;
           } else {
             html += `
-              <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; border-left: 5px solid #10b981; margin-bottom: 10px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                  <div>
-                    <span style="font-weight: 700; color: #10b981; font-size: 1.1rem;">✅ MATCHING COLORS</span>
-                    <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 12px;">${matchingColors.length} colors</span>
+                  <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; border-left: 5px solid #10b981; margin-bottom: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                      <div>
+                        <span style="font-weight: 700; color: #10b981; font-size: 1.1rem;">✅ MATCHING COLORS</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8; margin-left: 12px;">${matchingColors.length} colors</span>
+                      </div>
+                      <span style="font-size: 0.7rem; color: #94a3b8;">✔ Found in both Target and Master</span>
+                    </div>
                   </div>
-                  <span style="font-size: 0.7rem; color: #94a3b8;">✔ Found in both Target and Master</span>
-                </div>
-              </div>
-            `;
+                `;
           }
 
           matchingColors.forEach(color => {
@@ -1376,29 +1607,29 @@
               `<div class="color-value">📄 Target: ${escapeHtml(color.targetValue)} | Master: ${escapeHtml(color.masterValue)}</div>`;
 
             html += `
-              <div class="color-item" style="border-color: rgba(16, 185, 129, 0.3); border-left: 3px solid #10b981;">
-                <div class="color-preview" style="background: ${resolvedColor};"></div>
-                <div class="color-info">
-                  <div class="color-name">
-                    ${escapeHtml(color.name)}
-                    <span class="color-badge" style="background: #10b981; color: white;">✅ Match</span>
+                  <div class="color-item" style="border-color: rgba(16, 185, 129, 0.3); border-left: 3px solid #10b981;">
+                    <div class="color-preview" style="background: ${resolvedColor};"></div>
+                    <div class="color-info">
+                      <div class="color-name">
+                        ${escapeHtml(color.name)}
+                        <span class="color-badge" style="background: #10b981; color: white;">✅ Match</span>
+                      </div>
+                      ${valueDisplay}
+                      <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
+                    </div>
                   </div>
-                  ${valueDisplay}
-                  <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
-                </div>
-              </div>
-            `;
+                `;
           });
         }
 
         if (targetColors.size === 0) {
           html = `
-            <div style="text-align: center; padding: 60px 20px; color: #94a3b8;">
-              <div style="font-size: 3rem; margin-bottom: 16px;">🔍</div>
-              <h3 style="color: #e2e8f0; margin-bottom: 8px;">No Colors Found in Target</h3>
-              <p>Please add some colors to Target XML</p>
-            </div>
-          `;
+                <div style="text-align: center; padding: 60px 20px; color: #94a3b8;">
+                  <div style="font-size: 3rem; margin-bottom: 16px;">🔍</div>
+                  <h3 style="color: #e2e8f0; margin-bottom: 8px;">No Colors Found in Target</h3>
+                  <p>Please add some colors to Target XML</p>
+                </div>
+              `;
         }
 
         container.innerHTML = html;
@@ -1573,7 +1804,8 @@
     function replaceTextColorsSmart() {
       let modified = leftRawXml;
       const colorMap = extractColorMap(leftRawXml);
-      let primary = 0, secondary = 0;
+      let primary = 0,
+        secondary = 0;
       colorMap.forEach((value, name) => {
         if (isTextColor(name)) {
           const newColor = getTextReplaceColor(name);
@@ -1626,18 +1858,18 @@
         const isSame = isOriginalHex && originalValue.toUpperCase() === resolvedColor.toUpperCase();
 
         html += `
-          <div class="color-item">
-            <div class="color-preview" style="background: ${resolvedColor};"></div>
-            <div class="color-info">
-              <div class="color-name">
-                ${escapeHtml(name)} 
-                ${badges}
+              <div class="color-item">
+                <div class="color-preview" style="background: ${resolvedColor};"></div>
+                <div class="color-info">
+                  <div class="color-name">
+                    ${escapeHtml(name)} 
+                    ${badges}
+                  </div>
+                  <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
+                  ${!isSame ? `<div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>` : ''}
+                </div>
               </div>
-              <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
-              ${!isSame ? `<div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>` : ''}
-            </div>
-          </div>
-        `;
+            `;
       }
 
       container.innerHTML = html;
@@ -1652,18 +1884,18 @@
     document.getElementById('compareColorsBtn').addEventListener('click', renderColorComparison);
     document.getElementById('resetExampleBtn').addEventListener('click', () => {
       leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-<MIUI_Theme_Values template="DarkTemplate">
-    <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
-    <color name="button_bg">@color/primary</color>
-    <color name="text_title">#E2E2F0</color>
-    <color name="text_subtitle">#A9B1D6</color>
-    <color name="text_hint">#6C6C8A</color>
-    <color name="background_main">#0A0C15</color>
-    <color name="error_red">#FF4444</color>
-    <color name="success_green">#00C851</color>
-    <color name="system_accent">@android:color/system_accent1_dark</color>
-    <dimen name="spacing_large">24dp</dimen>
-</MIUI_Theme_Values>`;
+    <MIUI_Theme_Values template="DarkTemplate">
+        <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
+        <color name="button_bg">@color/primary</color>
+        <color name="text_title">#E2E2F0</color>
+        <color name="text_subtitle">#A9B1D6</color>
+        <color name="text_hint">#6C6C8A</color>
+        <color name="background_main">#0A0C15</color>
+        <color name="error_red">#FF4444</color>
+        <color name="success_green">#00C851</color>
+        <color name="system_accent">@android:color/system_accent1_dark</color>
+        <dimen name="spacing_large">24dp</dimen>
+    </MIUI_Theme_Values>`;
       updateEditors();
       showToast('Reset to default MIUI_Theme_Values format');
     });
@@ -1674,6 +1906,9 @@
     document.getElementById('replaceTextWithColorBtn').addEventListener('click', replaceTextColorsSmart);
     document.getElementById('resolveColorsBtn').addEventListener('click', renderColorResolver);
     document.getElementById('cleanDownloadBtn').addEventListener('click', downloadCleanResolved);
+
+    // FORMAT TARGET BUTTON - NEW
+    document.getElementById('formatTargetBtn').addEventListener('click', formatTargetXML);
 
     document.getElementById('leftFileInput').addEventListener('change', (e) => {
       const f = e.target.files[0];
