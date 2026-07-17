@@ -95,7 +95,7 @@ Drag-and-drop filename management tool.
 
 ---
 
-### 6. Icon Maker Pro ✨ **NEW**
+### 6. Launcher Icon ✨ **NEW**
 
 Professional icon creation tool with background overlay.
 
