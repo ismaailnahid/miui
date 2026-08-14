@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Dell Latitude E5450 | XML Color Replacer - Final</title>
+  <title>Dell Latitude E5450 | XML Color Replacer - 8 Digit Hex</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
+    /* আপনার আগের CSS গুলো ঠিক আছে - কিছু নতুন CSS যোগ করছি */
     * {
       margin: 0;
       padding: 0;
@@ -39,7 +40,6 @@
       min-height: 100vh;
     }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -59,7 +59,6 @@
       background: var(--md-primary-light);
     }
 
-    /* Header */
     .header {
       background: linear-gradient(135deg, var(--md-surface-2), var(--md-surface-1));
       padding: 12px 20px;
@@ -91,14 +90,12 @@
       font-weight: 600;
     }
 
-    /* Container - Single Column */
     .container {
       max-width: 1000px;
       margin: 0 auto;
       padding: 16px;
     }
 
-    /* Cards */
     .card {
       background: var(--md-surface-2);
       border-radius: 20px;
@@ -126,7 +123,6 @@
       font-size: 15px;
     }
 
-    /* Buttons */
     .btn {
       border: none;
       padding: 8px 14px;
@@ -175,7 +171,6 @@
       justify-content: center;
     }
 
-    /* Textarea */
     .md-textarea {
       width: 100%;
       min-height: 200px;
@@ -195,7 +190,6 @@
       border-color: var(--md-primary);
     }
 
-    /* Color Inputs */
     .color-inputs {
       display: flex;
       gap: 12px;
@@ -221,7 +215,7 @@
       border: 1.5px solid var(--md-outline);
       font-family: monospace;
       font-size: 14px;
-      width: 130px;
+      width: 170px;
       text-align: center;
     }
 
@@ -230,7 +224,6 @@
       border-color: var(--md-primary);
     }
 
-    /* Preset Colors */
     .preset-grid {
       display: flex;
       flex-wrap: wrap;
@@ -253,7 +246,6 @@
       border-color: var(--md-primary);
     }
 
-    /* File Upload */
     .file-zone {
       display: flex;
       flex-wrap: wrap;
@@ -273,6 +265,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      color: white;
     }
 
     .file-name {
@@ -285,14 +278,13 @@
       text-align: center;
     }
 
-    /* Color List */
     .color-list-container {
       max-height: 450px;
       overflow-y: auto;
       margin-top: 8px;
+      scroll-behavior: smooth;
     }
 
-    /* Color Item - Single Line */
     .color-grid-item {
       background: var(--md-surface-1);
       border: 1px solid var(--md-outline);
@@ -313,6 +305,29 @@
     .color-grid-item.selected {
       border-color: var(--md-primary);
       background: rgba(22, 134, 208, 0.1);
+    }
+
+    .color-grid-item.highlighted {
+      border-color: var(--md-secondary);
+      background: rgba(0, 255, 98, 0.1);
+      animation: pulse 1s ease;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 255, 98, 0.7);
+      }
+
+      50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 20px 10px rgba(0, 255, 98, 0.3);
+      }
+
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(0, 255, 98, 0);
+      }
     }
 
     .color-info-block {
@@ -370,7 +385,6 @@
       accent-color: var(--md-primary);
     }
 
-    /* Selection Controls */
     .selection-bar {
       display: flex;
       flex-wrap: wrap;
@@ -379,7 +393,6 @@
       margin: 12px 0;
     }
 
-    /* Search Box */
     .search-input {
       width: 100%;
       padding: 10px 14px;
@@ -396,7 +409,6 @@
       border-color: var(--md-primary);
     }
 
-    /* FAB Buttons */
     .fab-group {
       position: fixed;
       right: 16px;
@@ -421,13 +433,32 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     .fab:hover {
       transform: scale(1.05);
     }
 
-    /* Modal */
+    .fab .tooltip {
+      position: absolute;
+      right: 52px;
+      background: var(--md-surface-2);
+      color: var(--md-on-surface);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 10px;
+      white-space: nowrap;
+      border: 1px solid var(--md-outline);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .fab:hover .tooltip {
+      opacity: 1;
+    }
+
     .md-modal {
       display: none;
       position: fixed;
@@ -453,13 +484,17 @@
       margin: 10px 0;
     }
 
+    .md-modal input:focus {
+      outline: none;
+      border-color: var(--md-primary);
+    }
+
     .modal-btns {
       display: flex;
       gap: 10px;
       justify-content: center;
     }
 
-    /* Empty State */
     .empty-state {
       text-align: center;
       padding: 40px;
@@ -472,12 +507,29 @@
       opacity: 0.5;
     }
 
-    /* Target for scroll */
     #colorListCard {
       scroll-margin-top: 70px;
     }
 
-    /* Dell Latitude E5450 - 1366x768 Optimized */
+    .hex-badge {
+      background: var(--md-primary-dark);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 8px;
+      font-weight: 600;
+      color: white;
+      margin-left: 6px;
+    }
+
+    .scroll-info {
+      text-align: center;
+      color: var(--md-on-surface-variant);
+      font-size: 10px;
+      padding: 6px;
+      margin-top: 4px;
+      border-top: 1px solid var(--md-outline);
+    }
+
     @media (min-width: 1024px) and (max-width: 1366px) {
       .container {
         max-width: 900px;
@@ -493,7 +545,6 @@
       }
     }
 
-    /* Responsive */
     @media (max-width: 600px) {
       .container {
         padding: 10px;
@@ -519,7 +570,7 @@
       }
 
       .hex-input {
-        width: 110px;
+        width: 140px;
         font-size: 13px;
       }
 
@@ -541,6 +592,10 @@
         height: 40px;
         font-size: 16px;
       }
+
+      .fab .tooltip {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -550,12 +605,11 @@
   <div class="header">
     <div class="logo">
       <i class="fas fa-laptop-code"></i>
-      🎨 Color HEX Replacer <!-- <span class="badge">XML Color Replacer</span> -->
+      🎨 Color HEX Replacer <span class="badge">8 Digit Hex</span>
     </div>
   </div>
 
   <div class="container">
-    <!-- Main Card -->
     <div class="card">
       <div class="card-title">
         <i class="fas fa-cloud-upload-alt"></i>
@@ -577,13 +631,16 @@
 
       <div class="btn-group">
         <button class="btn btn-primary" onclick="formatAndResolve()">
-          <i class="fas fa-magic"></i> Format
+          <i class="fas fa-magic"></i> Format & Resolve
         </button>
         <button class="btn btn-secondary" onclick="extractColorList()">
           <i class="fas fa-eye"></i> Show Colors
         </button>
         <button class="btn btn-primary" onclick="downloadResolvedXML()">
           <i class="fas fa-download"></i> Download
+        </button>
+        <button class="btn btn-primary" onclick="convertAllTo8Digit()">
+          <i class="fas fa-arrows-alt-h"></i> Convert to 8-Digit
         </button>
       </div>
 
@@ -604,12 +661,13 @@
 
       <div class="card-title">
         <i class="fas fa-fill-drip"></i>
-        Replace Colors
+        Replace Colors <span class="hex-badge">8-Digit Hex Supported</span>
       </div>
       <div class="color-inputs">
-        <div class="color-preview" id="colorPreviewBox" style="background: #1686D0;"></div>
+        <div class="color-preview" id="colorPreviewBox" style="background: #1686D0FF;"></div>
         <input type="color" id="newColorPicker" value="#1686D0" style="display: none;">
-        <input type="text" id="newColorHex" class="hex-input" value="#1686D0" maxlength="7">
+        <input type="text" id="newColorHex" class="hex-input" value="#1686D0FF" maxlength="9"
+          placeholder="#RRGGBB or #RRGGBBAA">
       </div>
 
       <div class="preset-grid" id="presetColorsGrid"></div>
@@ -630,11 +688,10 @@
       </div>
     </div>
 
-    <!-- Color List Card -->
     <div class="card" id="colorListCard">
       <div class="card-title">
         <i class="fas fa-palette"></i>
-        Color Palette Preview
+        Color Palette Preview <span class="hex-badge">All 8-Digit</span>
       </div>
       <div id="colorListArea">
         <div class="empty-state">
@@ -645,28 +702,36 @@
     </div>
   </div>
 
-  <!-- FAB Buttons -->
   <div class="fab-group">
     <button class="fab" id="scrollToBottomFab" title="Go to Bottom of Color List">
       <i class="fas fa-arrow-down"></i>
+      <span class="tooltip">Bottom</span>
     </button>
-    <button class="fab" id="scrollToTopFab" title="Go to Top">
+    <button class="fab" id="scrollToTopFab" title="Go to Top of Color List">
       <i class="fas fa-arrow-up"></i>
+      <span class="tooltip">Top</span>
     </button>
-    <button class="fab" id="goToSerialFab" title="Go to Serial">
+    <button class="fab" id="goToSerialFab" title="Go to Serial Number">
       <i class="fas fa-hashtag"></i>
+      <span class="tooltip">Go to #</span>
     </button>
   </div>
 
-  <!-- Modal -->
   <div class="md-modal" id="serialModal">
     <div style="text-align: center; font-weight: 600; font-size: 14px; margin-bottom: 8px;">
-      <i class="fas fa-hashtag"></i> Go to Serial
+      <i class="fas fa-hashtag"></i> Go to Serial Number
     </div>
-    <input type="number" id="serialNumberInput" min="1" placeholder="Enter number">
+    <input type="number" id="serialNumberInput" min="1" placeholder="Enter number (1-999)" autofocus>
     <div class="modal-btns">
-      <button class="btn btn-primary" onclick="gotoSerialNumber()">Go</button>
-      <button class="btn btn-danger" onclick="closeSerialModal()">Close</button>
+      <button class="btn btn-primary" onclick="gotoSerialNumber()">
+        <i class="fas fa-arrow-right"></i> Go
+      </button>
+      <button class="btn btn-danger" onclick="closeSerialModal()">
+        <i class="fas fa-times"></i> Close
+      </button>
+    </div>
+    <div style="text-align: center; color: var(--md-on-surface-variant); font-size: 10px; margin-top: 8px;">
+      Press Enter to go
     </div>
   </div>
 
@@ -677,10 +742,331 @@
     let originalXmlContent = "";
     let allColorsArray = [];
 
-    // Custom Preset Colors
-    const customPresetColors = ["#1686D0", "#006378", "#00FF62", "#061D2E", "#0A2E39", "#041C30", "#FFC300", "#FF7E29", "#FF5CA1", "#E68585", "#7646FF", "#000000"];
+    const customPresetColors = ["#1686D0FF", "#006378FF", "#00FF62FF", "#061D2EFF", "#0A2E39FF", "#041C30FF", "#FFC300FF", "#FF7E29FF", "#FF5CA1FF", "#E68585FF", "#7646FFFF", "#000000FF"];
 
-    // ======================== UTILITIES ========================
+    // ======================== 8-DIGIT HEX CONVERTER ========================
+    function convertTo8DigitHex(colorValue) {
+      colorValue = colorValue.trim();
+
+      if (/^#([0-9A-Fa-f]{6})$/i.test(colorValue)) {
+        return colorValue + 'FF';
+      }
+
+      if (/^#([0-9A-Fa-f]{8})$/i.test(colorValue)) {
+        return colorValue;
+      }
+
+      if (/^#([0-9A-Fa-f]{3})$/i.test(colorValue)) {
+        const r = colorValue[1],
+          g = colorValue[2],
+          b = colorValue[3];
+        return `#${r}${r}${g}${g}${b}${b}FF`;
+      }
+
+      if (/^#([0-9A-Fa-f]{4})$/i.test(colorValue)) {
+        const r = colorValue[1],
+          g = colorValue[2],
+          b = colorValue[3],
+          a = colorValue[4];
+        return `#${r}${r}${g}${g}${b}${b}${a}${a}`;
+      }
+
+      const rgbMatch = colorValue.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/i);
+      if (rgbMatch) {
+        const r = parseInt(rgbMatch[1]);
+        const g = parseInt(rgbMatch[2]);
+        const b = parseInt(rgbMatch[3]);
+        const a = rgbMatch[4] ? Math.round(parseFloat(rgbMatch[4]) * 255) : 255;
+
+        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+        const cr = clamp(r, 0, 255);
+        const cg = clamp(g, 0, 255);
+        const cb = clamp(b, 0, 255);
+        const ca = clamp(a, 0, 255);
+
+        const hexR = cr.toString(16).padStart(2, '0');
+        const hexG = cg.toString(16).padStart(2, '0');
+        const hexB = cb.toString(16).padStart(2, '0');
+        const hexA = ca.toString(16).padStart(2, '0');
+
+        return `#${hexR}${hexG}${hexB}${hexA}`.toUpperCase();
+      }
+
+      return colorValue;
+    }
+
+    function convertAllTo8Digit() {
+      if (!confirm('Convert all hex colors to 8-digit format? (6-digit will get FF alpha)')) return;
+
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      const matches = [...text.matchAll(regex)];
+
+      for (const match of matches) {
+        const fullTag = match[0];
+        const name = match[1];
+        const value = match[2].trim();
+        const converted = convertTo8DigitHex(value);
+
+        if (converted !== value) {
+          const newTag = `<color name="${name}">${converted}</color>`;
+          text = text.replace(fullTag, newTag);
+        }
+      }
+
+      document.getElementById('xmlEditor').value = text;
+      saveToHistory();
+      extractColorList();
+
+      const convertedCount = (text.match(/<color\s+name="[^"]+">#[0-9A-Fa-f]{8}<\/color>/g) || []).length;
+      alert(`✅ Converted all colors to 8-digit hex!\nTotal 8-digit colors: ${convertedCount}`);
+    }
+
+    // ======================== COLOR PARSER FOR PREVIEW ========================
+    function parseColorValue(colorValue) {
+      if (!colorValue) return '#6b7280';
+
+      colorValue = colorValue.trim();
+
+      if (/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/i.test(colorValue)) {
+        if (colorValue.length === 4) {
+          const r = colorValue[1],
+            g = colorValue[2],
+            b = colorValue[3];
+          return `#${r}${r}${g}${g}${b}${b}`;
+        }
+        if (colorValue.length === 5) {
+          const r = colorValue[1],
+            g = colorValue[2],
+            b = colorValue[3],
+            a = colorValue[4];
+          return `#${r}${r}${g}${g}${b}${b}${a}${a}`;
+        }
+        return colorValue;
+      }
+
+      const rgbMatch = colorValue.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/i);
+      if (rgbMatch) {
+        const r = parseInt(rgbMatch[1]);
+        const g = parseInt(rgbMatch[2]);
+        const b = parseInt(rgbMatch[3]);
+        const a = rgbMatch[4] ? parseFloat(rgbMatch[4]) : 1;
+
+        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+        const cr = clamp(r, 0, 255);
+        const cg = clamp(g, 0, 255);
+        const cb = clamp(b, 0, 255);
+        const ca = clamp(a, 0, 1);
+
+        if (ca < 1) {
+          return `rgba(${cr}, ${cg}, ${cb}, ${ca})`;
+        }
+        return `rgb(${cr}, ${cg}, ${cb})`;
+      }
+
+      const hslMatch = colorValue.match(/^hsla?\((\d+),\s*([\d.]+)%,\s*([\d.]+)%(?:,\s*([\d.]+))?\)$/i);
+      if (hslMatch) {
+        const h = parseInt(hslMatch[1]);
+        const s = parseFloat(hslMatch[2]);
+        const l = parseFloat(hslMatch[3]);
+        const a = hslMatch[4] ? parseFloat(hslMatch[4]) : 1;
+
+        const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+        const ch = clamp(h, 0, 360);
+        const cs = clamp(s, 0, 100);
+        const cl = clamp(l, 0, 100);
+        const ca = clamp(a, 0, 1);
+
+        if (ca < 1) {
+          return `hsla(${ch}, ${cs}%, ${cl}%, ${ca})`;
+        }
+        return `hsl(${ch}, ${cs}%, ${cl}%)`;
+      }
+
+      const namedColors = [
+        'aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure',
+        'beige', 'bisque', 'black', 'blanchedalmond', 'blue',
+        'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse',
+        'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson',
+        'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray',
+        'darkgreen', 'darkgrey', 'darkkhaki', 'darkmagenta', 'darkolivegreen',
+        'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen',
+        'darkslateblue', 'darkslategray', 'darkslategrey', 'darkturquoise',
+        'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey',
+        'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia',
+        'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray',
+        'green', 'greenyellow', 'grey', 'honeydew', 'hotpink',
+        'indianred', 'indigo', 'ivory', 'khaki', 'lavender',
+        'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral',
+        'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgreen', 'lightgrey',
+        'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray',
+        'lightslategrey', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen',
+        'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue',
+        'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue',
+        'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue',
+        'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy',
+        'oldlace', 'olive', 'olivedrab', 'orange', 'orangered',
+        'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred',
+        'papayawhip', 'peachpuff', 'peru', 'pink', 'plum',
+        'powderblue', 'purple', 'rebeccapurple', 'red', 'rosybrown',
+        'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen',
+        'seashell', 'sienna', 'silver', 'skyblue', 'slateblue',
+        'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue',
+        'tan', 'teal', 'thistle', 'tomato', 'transparent',
+        'turquoise', 'violet', 'wheat', 'white', 'whitesmoke',
+        'yellow', 'yellowgreen'
+      ];
+
+      if (namedColors.includes(colorValue.toLowerCase())) {
+        return colorValue;
+      }
+
+      return '#6b7280';
+    }
+
+    // ======================== COLOR RESOLVER ========================
+    function buildColorMapFromXML(xmlText) {
+      const map = {};
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      let match;
+      while ((match = regex.exec(xmlText)) !== null) {
+        map[match[1]] = match[2].trim();
+      }
+      return map;
+    }
+
+    function isValidHexColor(value) {
+      return /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/i.test(value);
+    }
+
+    function resolveSingleColor(value, colorMap, visited = new Set(), depth = 0) {
+      if (depth > 30) return value;
+      if (typeof value !== 'string') return value;
+
+      value = value.trim();
+
+      if (value.startsWith('@color/')) {
+        const refName = value.replace('@color/', '');
+        if (visited.has(refName)) return value;
+        if (colorMap[refName]) {
+          visited.add(refName);
+          return resolveSingleColor(colorMap[refName], colorMap, visited, depth + 1);
+        }
+        return value;
+      }
+
+      if (value.startsWith('@android:color/')) {
+        const androidName = value.replace('@android:color/', '');
+        const mapping = {
+          'system_accent1_800': '#1686D0FF',
+          'primary': '#1686D0FF',
+          'primary_dark': '#0E6BA8FF',
+          'secondary': '#00FF62FF',
+          'background': '#0F1117FF',
+          'surface': '#161A24FF',
+          'error': '#FF5CA1FF',
+          'warning': '#FF7E29FF',
+          'white': '#FFFFFFFF',
+          'black': '#FF000000',
+          'transparent': '#00000000'
+        };
+        return mapping[androidName] || value;
+      }
+
+      if (isValidHexColor(value)) {
+        if (value.length === 4) {
+          const r = value[1],
+            g = value[2],
+            b = value[3];
+          return `#${r}${r}${g}${g}${b}${b}FF`;
+        }
+        if (value.length === 5) {
+          const r = value[1],
+            g = value[2],
+            b = value[3],
+            a = value[4];
+          return `#${r}${r}${g}${g}${b}${b}${a}${a}`;
+        }
+        if (value.length === 7) {
+          return value + 'FF';
+        }
+        return value;
+      }
+
+      return value;
+    }
+
+    function resolveAllColorReferences(xmlText) {
+      let colorMap = buildColorMapFromXML(xmlText);
+      let changed = true;
+      let passes = 0;
+      const maxPasses = 20;
+
+      while (changed && passes < maxPasses) {
+        changed = false;
+        const newMap = {};
+        for (const [name, val] of Object.entries(colorMap)) {
+          const resolved = resolveSingleColor(val, colorMap);
+          if (resolved !== val) changed = true;
+          newMap[name] = resolved;
+        }
+        colorMap = newMap;
+        passes++;
+      }
+
+      let result = xmlText;
+      for (const [name, resolvedVal] of Object.entries(colorMap)) {
+        const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(<color\\s+name="${escapedName}">)([^<]*)(<\\/color>)`, 'g');
+        result = result.replace(regex, `$1${resolvedVal}$3`);
+      }
+
+      return result;
+    }
+
+    // ======================== FORMAT FUNCTIONS ========================
+    function formatXML(xmlText) {
+      let resolved = resolveAllColorReferences(xmlText);
+
+      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
+      const colors = [];
+      let match;
+      while ((match = regex.exec(resolved)) !== null) {
+        colors.push({
+          name: match[1],
+          value: match[2].trim()
+        });
+      }
+
+      colors.sort((a, b) => a.name.localeCompare(b.name));
+
+      let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      if (colors.length > 0) {
+        formatted += colors.map(c => `    <color name="${c.name}">${c.value}</color>`).join('\n');
+        formatted += '\n';
+      }
+      formatted += `</MIUI_Theme_Values>`;
+
+      return formatted;
+    }
+
+    function formatAndResolve() {
+      let text = document.getElementById('xmlEditor').value;
+      if (!text.trim()) {
+        alert('Please enter XML content');
+        return;
+      }
+
+      const formatted = formatXML(text);
+      document.getElementById('xmlEditor').value = formatted;
+      saveToHistory();
+      extractColorList();
+    }
+
+    // ======================== HISTORY MANAGEMENT ========================
     function saveToHistory() {
       const current = document.getElementById('xmlEditor').value;
       historyStack.push(current);
@@ -714,128 +1100,9 @@
     }
 
     function resetPage() {
-      location.reload();
-    }
-
-    function scrollToBottomOfColorList() {
-      const colorListContainer = document.querySelector('.color-list-container');
-      if (colorListContainer) {
-        colorListContainer.scrollTo({
-          top: colorListContainer.scrollHeight,
-          behavior: 'smooth'
-        });
-        // Highlight effect on last item
-        const lastItem = colorListContainer.querySelector('.color-grid-item:last-child');
-        if (lastItem) {
-          lastItem.style.boxShadow = '0 0 0 2px var(--md-primary)';
-          setTimeout(() => lastItem.style.boxShadow = '', 1500);
-        }
-      } else {
-        // If no color list container, scroll to the color list card
-        const target = document.getElementById('colorListCard');
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
+      if (confirm('Reset page? All unsaved changes will be lost!')) {
+        location.reload();
       }
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // ======================== COLOR RESOLVER ========================
-    function buildColorMapFromXML(xmlText) {
-      const map = {};
-      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
-      let match;
-      while ((match = regex.exec(xmlText)) !== null) {
-        map[match[1]] = match[2].trim();
-      }
-      return map;
-    }
-
-    function resolveSingleColor(value, colorMap, visited = new Set(), depth = 0) {
-      if (depth > 30) return value;
-      if (typeof value !== 'string') return value;
-
-      if (value.startsWith('@color/')) {
-        const refName = value.replace('@color/', '');
-        if (visited.has(refName)) return value;
-        if (colorMap[refName]) {
-          visited.add(refName);
-          return resolveSingleColor(colorMap[refName], colorMap, visited, depth + 1);
-        }
-        return value;
-      }
-
-      if (value.startsWith('@android:color/')) {
-        const androidName = value.replace('@android:color/', '');
-        const mapping = {
-          'system_accent1_800': '#FF1686D0',
-          'primary': '#FF1686D0',
-          'secondary': '#FF00FF62',
-          'background': '#FF0F1117',
-          'surface': '#FF161A24',
-          'error': '#FFFF5CA1',
-          'white': '#FFFFFFFF',
-          'black': '#FF000000'
-        };
-        return mapping[androidName] || '#FF6B7280';
-      }
-
-      if (/^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/i.test(value)) {
-        return value;
-      }
-      return value;
-    }
-
-    function resolveAllColorReferences(xmlText) {
-      let colorMap = buildColorMapFromXML(xmlText);
-      let changed = true;
-      let passes = 0;
-      const maxPasses = 15;
-
-      while (changed && passes < maxPasses) {
-        changed = false;
-        const newMap = {};
-        for (const [name, val] of Object.entries(colorMap)) {
-          const resolved = resolveSingleColor(val, colorMap);
-          if (resolved !== val) changed = true;
-          newMap[name] = resolved;
-        }
-        colorMap = newMap;
-        passes++;
-      }
-
-      let result = xmlText;
-      for (const [name, resolvedVal] of Object.entries(colorMap)) {
-        const regex = new RegExp(`(<color\\s+name="${name}">)[^<]*(<\\/color>)`, 'g');
-        result = result.replace(regex, `$1${resolvedVal}$2`);
-      }
-      return result;
-    }
-
-    function formatAndResolve() {
-      let text = document.getElementById('xmlEditor').value;
-      text = resolveAllColorReferences(text);
-
-      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
-      const colors = [];
-      let match;
-      while ((match = regex.exec(text)) !== null) {
-        colors.push(`    <color name="${match[1]}">${match[2].trim()}</color>`);
-      }
-
-      let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-      if (colors.length > 0) {
-        formatted += colors.join('\n') + '\n';
-      }
-      formatted += `</MIUI_Theme_Values>`;
-
-      document.getElementById('xmlEditor').value = formatted;
-      saveToHistory();
-      extractColorList();
     }
 
     // ======================== EXTRACT & DISPLAY ========================
@@ -856,11 +1123,11 @@
 
       if (colors.length === 0) {
         document.getElementById('colorListArea').innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-palette"></i>
-                        <p>No colors found in XML</p>
-                    </div>
-                `;
+                <div class="empty-state">
+                    <i class="fas fa-palette"></i>
+                    <p>No colors found in XML</p>
+                </div>
+            `;
         return;
       }
 
@@ -870,14 +1137,18 @@
     function renderColorPalette(colors) {
       const container = document.getElementById('colorListArea');
       container.innerHTML = `
-                <input type="text" id="searchColorInput" class="search-input" placeholder="🔍 Search by color name or hex value...">
-                <div class="selection-bar">
-                    <button class="btn" onclick="selectAllColors()"><i class="fas fa-check-double"></i> Select All</button>
-                    <button class="btn" onclick="deselectAllColors()"><i class="fas fa-times-circle"></i> Deselect All</button>
-                    <button class="btn btn-secondary" onclick="invertColorSelection()"><i class="fas fa-exchange-alt"></i> Invert</button>
-                </div>
-                <div class="color-list-container" id="colorListContainer"></div>
-            `;
+            <input type="text" id="searchColorInput" class="search-input" placeholder="🔍 Search by color name or hex value...">
+            <div class="selection-bar">
+                <button class="btn" onclick="selectAllColors()"><i class="fas fa-check-double"></i> Select All</button>
+                <button class="btn" onclick="deselectAllColors()"><i class="fas fa-times-circle"></i> Deselect All</button>
+                <button class="btn btn-secondary" onclick="invertColorSelection()"><i class="fas fa-exchange-alt"></i> Invert</button>
+                <button class="btn btn-primary" onclick="convertAllTo8Digit()"><i class="fas fa-arrows-alt-h"></i> Convert All to 8-Digit</button>
+            </div>
+            <div class="color-list-container" id="colorListContainer"></div>
+            <div class="scroll-info">
+                <i class="fas fa-arrows-alt-v"></i> Use FAB buttons to navigate | <i class="fas fa-hashtag"></i> Go to serial
+            </div>
+        `;
 
       const searchInput = document.getElementById('searchColorInput');
       if (searchInput) {
@@ -906,25 +1177,28 @@
       listContainer.innerHTML = '';
 
       colors.forEach((color, idx) => {
-        const isHex = /^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/i.test(color.value);
-        const paletteColor = isHex ? color.value : '#6b7280';
+        const previewColor = parseColorValue(color.value);
+
+        const is8Digit = /^#[0-9A-Fa-f]{8}$/i.test(color.value);
+        const digitBadge = is8Digit ? '8' : (color.value.startsWith('#') ? color.value.length - 1 : '?');
 
         const item = document.createElement('div');
         item.className = 'color-grid-item';
         item.setAttribute('data-serial-idx', idx + 1);
+        item.setAttribute('data-color-name', color.name);
         item.innerHTML = `
-                    <div class="color-info-block">
-                        <span class="serial-number" onclick="goToSerial(${idx + 1})">${idx + 1}</span>
-                        <div class="color-palette-preview" style="background: ${paletteColor};"></div>
-                        <div class="color-text-details">
-                            <div class="color-name-text">${escapeHtml(color.name)}</div>
-                            <div class="color-hex-value">${escapeHtml(color.value)}</div>
-                        </div>
+                <div class="color-info-block">
+                    <span class="serial-number" onclick="goToSerial(${idx + 1})">${idx + 1}</span>
+                    <div class="color-palette-preview" style="background: ${previewColor};"></div>
+                    <div class="color-text-details">
+                        <div class="color-name-text">${escapeHtml(color.name)} <span style="color: var(--md-on-surface-variant); font-size: 8px;">${digitBadge}-digit</span></div>
+                        <div class="color-hex-value">${escapeHtml(color.value)}</div>
                     </div>
-                    <div class="color-actions-block">
-                        <input type="checkbox" class="md-checkbox" data-color-name="${escapeHtml(color.name)}" data-color-value="${escapeHtml(color.value)}">
-                    </div>
-                `;
+                </div>
+                <div class="color-actions-block">
+                    <input type="checkbox" class="md-checkbox" data-color-name="${escapeHtml(color.name)}" data-color-value="${escapeHtml(color.value)}">
+                </div>
+            `;
         listContainer.appendChild(item);
       });
 
@@ -946,12 +1220,98 @@
     }
 
     function escapeHtml(str) {
-      return str.replace(/[&<>]/g, function (m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-      });
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ======================== NAVIGATION FUNCTIONS ========================
+    function scrollToTopOfColorList() {
+      const container = document.querySelector('.color-list-container');
+      if (container) {
+        container.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        // Highlight first item
+        const firstItem = container.querySelector('.color-grid-item:first-child');
+        if (firstItem) {
+          firstItem.classList.add('highlighted');
+          setTimeout(() => firstItem.classList.remove('highlighted'), 1500);
+        }
+      } else {
+        document.getElementById('colorListCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function scrollToBottomOfColorList() {
+      const container = document.querySelector('.color-list-container');
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
+        // Highlight last item
+        const lastItem = container.querySelector('.color-grid-item:last-child');
+        if (lastItem) {
+          lastItem.classList.add('highlighted');
+          setTimeout(() => lastItem.classList.remove('highlighted'), 1500);
+        }
+      } else {
+        document.getElementById('colorListCard').scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }
+
+    function goToSerial(serialNum) {
+      const target = document.querySelector(`.color-grid-item[data-serial-idx="${serialNum}"]`);
+      if (target) {
+        // Remove previous highlights
+        document.querySelectorAll('.color-grid-item.highlighted').forEach(el => el.classList.remove('highlighted'));
+
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        target.classList.add('highlighted');
+
+        // Remove highlight after animation
+        setTimeout(() => {
+          target.classList.remove('highlighted');
+        }, 2000);
+
+        // Also highlight the serial number briefly
+        const serialSpan = target.querySelector('.serial-number');
+        if (serialSpan) {
+          serialSpan.style.color = 'var(--md-secondary)';
+          setTimeout(() => {
+            serialSpan.style.color = '';
+          }, 2000);
+        }
+      } else {
+        alert(`Color #${serialNum} not found. Total colors: ${allColorsArray.length}`);
+      }
+    }
+
+    function gotoSerialNumber() {
+      const input = document.getElementById('serialNumberInput');
+      const num = parseInt(input.value);
+      if (num && num > 0) {
+        goToSerial(num);
+        closeSerialModal();
+      } else {
+        alert('Please enter a valid serial number');
+        input.focus();
+        input.select();
+      }
+    }
+
+    function closeSerialModal() {
+      document.getElementById('serialModal').style.display = 'none';
+    }
+
+    function openSerialModal() {
+      const modal = document.getElementById('serialModal');
+      modal.style.display = 'block';
+      const input = document.getElementById('serialNumberInput');
+      input.focus();
+      input.select();
     }
 
     // ======================== SELECTION ========================
@@ -970,39 +1330,17 @@
       updateSelectionHighlight();
     }
 
-    // ======================== DELETE ========================
-    function deleteSelectedColors() {
-      const selected = document.querySelectorAll('.color-grid-item .md-checkbox:checked');
-      if (selected.length === 0) {
-        alert('Please select colors to delete');
-        return;
-      }
-      saveToHistory();
-      let text = document.getElementById('xmlEditor').value;
-      selected.forEach(cb => {
-        const colorName = cb.getAttribute('data-color-name');
-        const regex = new RegExp(`<color\\s+name="${colorName}">[^<]*<\\/color>`, 'g');
-        text = text.replace(regex, '');
-      });
-      text = text.replace(/\n\s*\n/g, '\n');
-      document.getElementById('xmlEditor').value = text;
-      extractColorList();
-    }
-
-    function deleteAllColors() {
-      if (confirm('⚠️ Delete ALL colors? This action cannot be undone!')) {
-        saveToHistory();
-        let text = document.getElementById('xmlEditor').value;
-        text = text.replace(/<color\s+name="[^"]+">[^<]*<\/color>/g, '');
-        text = text.replace(/\n\s*\n/g, '\n');
-        document.getElementById('xmlEditor').value = text;
-        extractColorList();
-      }
-    }
-
-    // ======================== REPLACE (NO CONFIRMATION) ========================
+    // ======================== REPLACE FUNCTIONS ========================
     function getNewColorValue() {
       return document.getElementById('newColorHex').value.trim();
+    }
+
+    function validateColor(color) {
+      if (!isValidHexColor(color)) {
+        alert('Please enter a valid hex color (e.g., #FF0000, #FF0000FF)');
+        return false;
+      }
+      return true;
     }
 
     function replaceSelectedColors() {
@@ -1011,33 +1349,79 @@
         alert('Please select colors to replace');
         return;
       }
+
       const newColor = getNewColorValue();
-      if (!/^#([0-9A-Fa-f]{6})$/i.test(newColor)) {
-        alert('Please enter a valid 6-digit hex color (e.g., #FF0000)');
-        return;
-      }
+      if (!validateColor(newColor)) return;
+
       saveToHistory();
       let text = document.getElementById('xmlEditor').value;
+
       selected.forEach(cb => {
         const colorName = cb.getAttribute('data-color-name');
-        const regex = new RegExp(`(<color\\s+name="${colorName}">)[^<]*(<\\/color>)`, 'g');
+        const escapedName = colorName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(<color\\s+name="${escapedName}">)[^<]*(<\\/color>)`, 'g');
         text = text.replace(regex, `$1${newColor}$2`);
       });
+
       document.getElementById('xmlEditor').value = text;
+      saveToHistory();
       extractColorList();
     }
 
     function replaceAllColors() {
       const newColor = getNewColorValue();
-      if (!/^#([0-9A-Fa-f]{6})$/i.test(newColor)) {
-        alert('Please enter a valid 6-digit hex color');
-        return;
-      }
-      // No confirmation - direct replace
+      if (!validateColor(newColor)) return;
+
+      if (!confirm(`Replace ALL colors with ${newColor}?`)) return;
+
       saveToHistory();
       let text = document.getElementById('xmlEditor').value;
+
       text = text.replace(/(<color\s+name="[^"]+">)[^<]*(<\/color>)/g, `$1${newColor}$2`);
+
       document.getElementById('xmlEditor').value = text;
+      saveToHistory();
+      extractColorList();
+    }
+
+    // ======================== DELETE FUNCTIONS ========================
+    function deleteSelectedColors() {
+      const selected = document.querySelectorAll('.color-grid-item .md-checkbox:checked');
+      if (selected.length === 0) {
+        alert('Please select colors to delete');
+        return;
+      }
+
+      if (!confirm(`Delete ${selected.length} selected color(s)?`)) return;
+
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+
+      selected.forEach(cb => {
+        const colorName = cb.getAttribute('data-color-name');
+        const escapedName = colorName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`<color\\s+name="${escapedName}">[^<]*<\\/color>\\n?`, 'g');
+        text = text.replace(regex, '');
+      });
+
+      text = text.replace(/\n\s*\n/g, '\n');
+      text = text.replace(/(\n\s*){3,}/g, '\n\n');
+
+      document.getElementById('xmlEditor').value = text;
+      saveToHistory();
+      extractColorList();
+    }
+
+    function deleteAllColors() {
+      if (!confirm('⚠️ Delete ALL colors? This action cannot be undone!')) return;
+
+      saveToHistory();
+      let text = document.getElementById('xmlEditor').value;
+      text = text.replace(/<color\s+name="[^"]+">[^<]*<\/color>\n?/g, '');
+      text = text.replace(/\n\s*\n/g, '\n');
+
+      document.getElementById('xmlEditor').value = text;
+      saveToHistory();
       extractColorList();
     }
 
@@ -1045,77 +1429,51 @@
     function sortColorsByName() {
       saveToHistory();
       let text = document.getElementById('xmlEditor').value;
+
       const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
       const colors = [];
       let match;
       while ((match = regex.exec(text)) !== null) {
-        colors.push(`<color name="${match[1]}">${match[2]}</color>`);
+        colors.push({
+          name: match[1],
+          value: match[2]
+        });
       }
-      colors.sort((a, b) => {
-        const nameA = a.match(/name="([^"]+)"/)[1];
-        const nameB = b.match(/name="([^"]+)"/)[1];
-        return nameA.localeCompare(nameB);
-      });
+
+      colors.sort((a, b) => a.name.localeCompare(b.name));
 
       let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
       formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-      formatted += colors.map(c => `    ${c}`).join('\n') + '\n';
+      if (colors.length > 0) {
+        formatted += colors.map(c => `    <color name="${c.name}">${c.value}</color>`).join('\n');
+        formatted += '\n';
+      }
       formatted += `</MIUI_Theme_Values>`;
 
       document.getElementById('xmlEditor').value = formatted;
+      saveToHistory();
       extractColorList();
     }
 
     // ======================== DOWNLOAD ========================
     function downloadResolvedXML() {
       let text = document.getElementById('xmlEditor').value;
+      if (!text.trim()) {
+        alert('No content to download');
+        return;
+      }
+
       text = resolveAllColorReferences(text);
+      const formatted = formatXML(text);
 
-      const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
-      const colors = [];
-      let match;
-      while ((match = regex.exec(text)) !== null) {
-        colors.push(`    <color name="${match[1]}">${match[2].trim()}</color>`);
-      }
-
-      let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-      if (colors.length > 0) {
-        formatted += colors.join('\n') + '\n';
-      }
-      formatted += `</MIUI_Theme_Values>`;
-
-      const blob = new Blob([formatted], { type: 'text/xml' });
+      const blob = new Blob([formatted], { type: 'text/xml;charset=utf-8' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'theme_values_resolved.xml';
+      document.body.appendChild(link);
       link.click();
-    }
-
-    // ======================== SERIAL ========================
-    function goToSerial(serialNum) {
-      const target = document.querySelector(`.color-grid-item[data-serial-idx="${serialNum}"]`);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        target.style.boxShadow = '0 0 0 2px var(--md-primary)';
-        setTimeout(() => target.style.boxShadow = '', 1500);
-      } else {
-        alert(`Color #${serialNum} not found`);
-      }
-    }
-
-    function gotoSerialNumber() {
-      const num = parseInt(document.getElementById('serialNumberInput').value);
-      if (num && num > 0) {
-        goToSerial(num);
-        closeSerialModal();
-      } else {
-        alert('Please enter a valid serial number');
-      }
-    }
-
-    function closeSerialModal() {
-      document.getElementById('serialModal').style.display = 'none';
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
     }
 
     // ======================== PRESET COLORS ========================
@@ -1127,7 +1485,7 @@
         swatch.className = 'preset-swatch';
         swatch.style.backgroundColor = color;
         swatch.onclick = () => {
-          document.getElementById('newColorPicker').value = color;
+          document.getElementById('newColorPicker').value = color.substring(0, 7);
           document.getElementById('newColorHex').value = color;
           document.getElementById('colorPreviewBox').style.backgroundColor = color;
         };
@@ -1139,28 +1497,20 @@
     document.getElementById('xmlFileInput').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
-      document.getElementById('fileNameDisplay').innerHTML = file.name;
+
+      document.getElementById('fileNameDisplay').textContent = file.name;
+
       const reader = new FileReader();
       reader.onload = (ev) => {
         let content = ev.target.result;
-        content = resolveAllColorReferences(content);
-
-        const regex = /<color\s+name="([^"]+)">([^<]+)<\/color>/g;
-        const colors = [];
-        let match;
-        while ((match = regex.exec(content)) !== null) {
-          colors.push(`    <color name="${match[1]}">${match[2].trim()}</color>`);
-        }
-
-        let formatted = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-        formatted += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-        if (colors.length > 0) formatted += colors.join('\n') + '\n';
-        formatted += `</MIUI_Theme_Values>`;
-
-        document.getElementById('xmlEditor').value = formatted;
-        originalXmlContent = formatted;
+        content = formatXML(content);
+        document.getElementById('xmlEditor').value = content;
+        originalXmlContent = content;
         saveToHistory();
         extractColorList();
+      };
+      reader.onerror = () => {
+        alert('Error reading file');
       };
       reader.readAsText(file);
     });
@@ -1168,8 +1518,8 @@
     // ======================== EVENT LISTENERS ========================
     document.getElementById('newColorHex').addEventListener('input', (e) => {
       const val = e.target.value;
-      if (/^#([0-9A-Fa-f]{6})$/i.test(val)) {
-        document.getElementById('newColorPicker').value = val;
+      if (isValidHexColor(val)) {
+        document.getElementById('newColorPicker').value = val.substring(0, 7);
         document.getElementById('colorPreviewBox').style.backgroundColor = val;
       }
     });
@@ -1180,17 +1530,24 @@
 
     document.getElementById('newColorPicker').addEventListener('input', (e) => {
       const val = e.target.value;
-      document.getElementById('newColorHex').value = val;
-      document.getElementById('colorPreviewBox').style.backgroundColor = val;
+      document.getElementById('newColorHex').value = val + 'FF';
+      document.getElementById('colorPreviewBox').style.backgroundColor = val + 'FF';
     });
 
-    // FAB Events
-    document.getElementById('goToSerialFab').onclick = () => {
-      document.getElementById('serialModal').style.display = 'block';
-      document.getElementById('serialNumberInput').focus();
-    };
-    document.getElementById('scrollToTopFab').onclick = scrollToTop;
+    // FAB Events - UPDATED
+    document.getElementById('goToSerialFab').onclick = openSerialModal;
+
+    document.getElementById('scrollToTopFab').onclick = scrollToTopOfColorList;
+
     document.getElementById('scrollToBottomFab').onclick = scrollToBottomOfColorList;
+
+    // Serial Modal - Enter key support
+    document.getElementById('serialNumberInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        gotoSerialNumber();
+      }
+    });
 
     // Close modal on outside click
     document.addEventListener('click', (e) => {
@@ -1203,34 +1560,60 @@
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'z') { e.preventDefault(); undoAction(); }
-      if (e.ctrlKey && e.key === 'y') { e.preventDefault(); redoAction(); }
+      if (e.ctrlKey && e.key === 'z') {
+        e.preventDefault();
+        undoAction();
+      }
+      if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault();
+        redoAction();
+      }
       if (e.key === 'Escape') { closeSerialModal(); }
+
+      // Alt + T for top, Alt + B for bottom
+      if (e.altKey && e.key === 't') {
+        e.preventDefault();
+        scrollToTopOfColorList();
+      }
+      if (e.altKey && e.key === 'b') {
+        e.preventDefault();
+        scrollToBottomOfColorList();
+      }
+      if (e.altKey && e.key === 'g') {
+        e.preventDefault();
+        openSerialModal();
+      }
     });
 
     // ======================== INITIALIZE ========================
     const defaultXmlData = `<?xml version='1.0' encoding='UTF-8'?>
 <MIUI_Theme_Values template="DarkTemplate">
-    <color name="primary_color">#1686D0</color>
-    <color name="secondary_color">#006378</color>
-    <color name="success_color">#00FF62</color>
-    <color name="dark_bg">#061D2E</color>
-    <color name="surface_color">#0A2E39</color>
-    <color name="warning_color">#FFC300</color>
-    <color name="accent_color">#FF7E29</color>
-    <color name="error_color">#FF5CA1</color>
-    <color name="custom_color">#E68585</color>
-    <color name="extra_color">#7646FF</color>
-    <color name="black_color">#000000</color>
-    <color name="dark_extra">#041C30</color>
+    <color name="primary_color">#1686D0FF</color>
+    <color name="secondary_color">#006378FF</color>
+    <color name="success_color">#00FF62FF</color>
+    <color name="dark_bg">#061D2EFF</color>
+    <color name="surface_color">#0A2E39FF</color>
+    <color name="warning_color">#FFC300FF</color>
+    <color name="accent_color">#FF7E29FF</color>
+    <color name="error_color">#FF5CA1FF</color>
+    <color name="custom_color">#E68585FF</color>
+    <color name="extra_color">#7646FFFF</color>
+    <color name="black_color">#000000FF</color>
+    <color name="dark_extra">#041C30FF</color>
 </MIUI_Theme_Values>`;
 
-    const resolvedDefault = resolveAllColorReferences(defaultXmlData);
-    document.getElementById('xmlEditor').value = resolvedDefault;
-    originalXmlContent = resolvedDefault;
+    document.getElementById('xmlEditor').value = defaultXmlData;
+    originalXmlContent = defaultXmlData;
     saveToHistory();
     extractColorList();
     loadPresetColorsUI();
+
+    console.log('✅ Navigation Features Added!');
+    console.log('  - Top button: Scroll to top of color list');
+    console.log('  - Bottom button: Scroll to bottom of color list');
+    console.log('  - Go to Serial: Jump to specific color by number');
+    console.log('  - Keyboard shortcuts: Alt+T (top), Alt+B (bottom), Alt+G (go to)');
+    console.log('  - Enter key works in modal');
   </script>
 </body>
 
