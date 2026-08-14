@@ -212,7 +212,7 @@
       display: none;
     }
 
-    /* ===== SINGLE ACTION BAR - ALL BUTTONS TOGETHER ===== */
+    /* ===== SINGLE ACTION BAR ===== */
     .action-bar {
       background: rgba(18, 18, 28, 0.95);
       backdrop-filter: blur(10px);
@@ -343,34 +343,42 @@
       overflow: hidden;
     }
 
-    /* ===== MULTIPLE UPLOAD COMPACT ===== */
+    /* ===== MULTIPLE UPLOAD ===== */
     .multi-upload-header {
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(5, 150, 105, 0.12) 100%);
     }
 
-    .drop-zone {
-      border: 2px dashed rgba(102, 126, 234, 0.25);
-      border-radius: 12px;
-      padding: 24px 16px;
-      text-align: center;
-      transition: all 0.3s;
+    /* ছোট আপলোড বাটন - Master XML এর মতো */
+    .upload-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .upload-section .btn-sm {
+      padding: 4px 10px;
+      font-size: 0.6rem;
+      border-radius: 30px;
+      font-weight: 500;
       cursor: pointer;
-      background: rgba(0, 0, 0, 0.15);
+      transition: all 0.2s;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(51, 51, 68, 0.8);
+      color: #e2e8f0;
+      border: 1px solid rgba(102, 126, 234, 0.3);
     }
 
-    .drop-zone:hover {
-      border-color: #667eea;
-      background: rgba(102, 126, 234, 0.05);
+    .upload-section .btn-sm:hover {
+      background: rgba(102, 126, 234, 0.3);
     }
 
-    .drop-zone.dragover {
-      border-color: #10b981;
-      background: rgba(16, 185, 129, 0.08);
-    }
-
-    .drop-zone-icon {
-      font-size: 2rem;
-      margin-bottom: 6px;
+    .upload-section .btn-sm input[type="file"] {
+      display: none;
     }
 
     .file-list {
@@ -502,7 +510,7 @@
       box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
     }
 
-    /* ===== ANALYSIS COMPACT ===== */
+    /* ===== ANALYSIS ===== */
     .analysis-header {
       background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(219, 39, 119, 0.12) 100%);
     }
@@ -610,63 +618,79 @@
 
     .analysis-empty {
       text-align: center;
-      padding: 24px 16px;
+      padding: 12px 14px;
       color: #94a3b8;
     }
 
     .analysis-empty .icon {
-      font-size: 2rem;
-      margin-bottom: 6px;
-      display: block;
+      font-size: 1.1rem;
+      margin-right: 6px;
+      display: inline-block;
+      vertical-align: middle;
     }
 
     .analysis-empty div {
-      font-size: 0.8rem;
+      font-size: 0.68rem;
+      display: inline;
+      vertical-align: middle;
     }
 
-    .analysis-drop-zone {
-      border: 2px dashed rgba(236, 72, 153, 0.2);
-      border-radius: 12px;
-      padding: 20px 16px;
+    .inline-empty-state {
       text-align: center;
-      transition: all 0.3s;
-      cursor: pointer;
-      background: rgba(0, 0, 0, 0.1);
-      margin-bottom: 10px;
+      padding: 12px 10px;
+      color: #94a3b8;
+      font-size: 0.68rem;
+      line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .analysis-drop-zone:hover {
-      border-color: #ec4899;
-      background: rgba(236, 72, 153, 0.04);
+    /* ছোট আপলোড সেকশন - ANALYSIS */
+    .analysis-upload-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: rgba(236, 72, 153, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(236, 72, 153, 0.1);
     }
 
-    .analysis-drop-zone.dragover {
-      border-color: #10b981;
-      background: rgba(16, 185, 129, 0.06);
-    }
-
-    .analysis-drop-zone .icon {
-      font-size: 1.8rem;
-      display: block;
-      margin-bottom: 4px;
-    }
-
-    .analysis-upload-btn {
-      background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
-      color: white;
-      border: none;
-      padding: 6px 18px;
+    .analysis-upload-section .btn-sm {
+      padding: 4px 10px;
+      font-size: 0.6rem;
       border-radius: 30px;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
+      border: none;
       font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(51, 51, 68, 0.8);
+      color: #e2e8f0;
+      border: 1px solid rgba(236, 72, 153, 0.3);
     }
 
-    .analysis-upload-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(236, 72, 153, 0.25);
+    .analysis-upload-section .btn-sm:hover {
+      background: rgba(236, 72, 153, 0.3);
+    }
+
+    .analysis-upload-section .btn-sm input[type="file"] {
+      display: none;
+    }
+
+    .analysis-upload-section .btn-sm.pink {
+      background: rgba(236, 72, 153, 0.2);
+      border-color: rgba(236, 72, 153, 0.4);
+    }
+
+    .analysis-upload-section .btn-sm.pink:hover {
+      background: rgba(236, 72, 153, 0.4);
     }
 
     .copy-btn {
@@ -690,7 +714,7 @@
       transform: scale(0.95);
     }
 
-    /* ===== RESOLVER COMPACT ===== */
+    /* ===== RESOLVER ===== */
     .resolver-header {
       background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
     }
@@ -884,172 +908,6 @@
       }
 
       .action-bar {
-        padding: 8px 10px;
-        gap: 4px;
-        border-radius: 12px;
-        margin: 10px 0;
-      }
-
-      .action-bar .btn {
-        padding: 3px 8px !important;
-        font-size: 0.5rem !important;
-        border-radius: 20px !important;
-        gap: 3px !important;
-      }
-
-      .action-bar .btn .btn-icon {
-        font-size: 0.6rem;
-      }
-
-      .action-bar .btn .btn-label {
-        font-size: 0.45rem;
-        letter-spacing: 0.1px;
-      }
-
-      .action-bar .btn[data-shortcut]::after {
-        display: none;
-      }
-
-      textarea {
-        min-height: 120px;
-        font-size: 9px;
-        padding: 8px;
-      }
-
-      .compact-body {
-        padding: 8px 12px 12px 12px;
-      }
-
-      .analysis-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .color-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .analysis-stats {
-        font-size: 0.55rem;
-        gap: 4px;
-        flex-wrap: wrap;
-      }
-
-      .multi-stats {
-        font-size: 0.55rem;
-        gap: 4px;
-        flex-wrap: wrap;
-      }
-
-      .drop-zone {
-        padding: 16px 12px;
-      }
-
-      .drop-zone-icon {
-        font-size: 1.5rem;
-      }
-
-      .analysis-preview {
-        width: 32px;
-        height: 32px;
-      }
-
-      .color-preview {
-        width: 32px;
-        height: 32px;
-      }
-
-      .compact-header .card-title {
-        font-size: 0.7rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .action-bar {
-        padding: 6px 8px;
-        gap: 3px;
-        border-radius: 10px;
-      }
-
-      .action-bar .btn {
-        padding: 2px 6px !important;
-        font-size: 0.4rem !important;
-        border-radius: 14px !important;
-        gap: 2px !important;
-      }
-
-      .action-bar .btn .btn-icon {
-        font-size: 0.5rem;
-      }
-
-      .action-bar .btn .btn-label {
-        font-size: 0.35rem;
-        letter-spacing: 0px;
-      }
-
-      .dual-pane {
-        gap: 10px;
-      }
-
-      .card-header {
-        padding: 8px 12px;
-      }
-
-      .card-title {
-        font-size: 0.7rem;
-      }
-
-      .btn-sm {
-        font-size: 0.5rem;
-        padding: 3px 8px;
-      }
-
-      .btn-compact {
-        font-size: 0.55rem;
-        padding: 4px 10px;
-      }
-
-      .btn-resolve {
-        font-size: 0.55rem;
-        padding: 4px 10px;
-      }
-
-      .compact-header {
-        padding: 8px 12px;
-      }
-
-      .compact-body {
-        padding: 6px 10px 10px 10px;
-      }
-
-      .analysis-item {
-        padding: 6px 10px;
-      }
-
-      .color-item {
-        padding: 6px 10px;
-      }
-
-      .file-item {
-        padding: 4px 10px;
-      }
-    }
-
-    /* ===== RESPONSIVE - MOBILE BUTTONS BIGGER ===== */
-    @media (max-width: 768px) {
-      body {
-        padding: 10px;
-      }
-
-      .header h1 {
-        font-size: 1.3rem;
-      }
-
-      .header p {
-        font-size: 0.7rem;
-      }
-
-      /* ===== MOBILE ACTION BAR - BIGGER BUTTONS ===== */
-      .action-bar {
         padding: 10px 12px;
         gap: 6px;
         border-radius: 14px;
@@ -1108,14 +966,6 @@
         flex-wrap: wrap;
       }
 
-      .drop-zone {
-        padding: 16px 12px;
-      }
-
-      .drop-zone-icon {
-        font-size: 1.5rem;
-      }
-
       .analysis-preview {
         width: 32px;
         height: 32px;
@@ -1130,7 +980,6 @@
         font-size: 0.7rem;
       }
 
-      /* ===== COMPACT BUTTONS BIGGER ON MOBILE ===== */
       .btn-compact {
         padding: 6px 16px !important;
         font-size: 0.7rem !important;
@@ -1152,20 +1001,12 @@
         min-height: 28px !important;
       }
 
-      .analysis-upload-btn {
-        padding: 8px 20px !important;
-        font-size: 0.75rem !important;
-        border-radius: 30px !important;
-        min-height: 36px !important;
-      }
-
       .file-item-remove {
         width: 28px !important;
         height: 28px !important;
         font-size: 0.7rem !important;
       }
 
-      /* ===== DUAL PANE MOBILE ===== */
       .dual-pane {
         gap: 10px;
       }
@@ -1177,11 +1018,21 @@
       .card-title {
         font-size: 0.7rem;
       }
+
+      .upload-section .btn-sm {
+        padding: 5px 12px !important;
+        font-size: 0.65rem !important;
+        min-height: 28px !important;
+      }
+
+      .analysis-upload-section .btn-sm {
+        padding: 5px 12px !important;
+        font-size: 0.65rem !important;
+        min-height: 28px !important;
+      }
     }
 
     @media (max-width: 480px) {
-
-      /* ===== EXTRA SMALL - BUTTONS STILL BIG ENOUGH ===== */
       .action-bar {
         padding: 8px 10px;
         gap: 5px;
@@ -1222,12 +1073,6 @@
         min-height: 26px !important;
       }
 
-      .analysis-upload-btn {
-        padding: 6px 16px !important;
-        font-size: 0.7rem !important;
-        min-height: 32px !important;
-      }
-
       .compact-header {
         padding: 8px 12px;
       }
@@ -1252,6 +1097,18 @@
         width: 24px !important;
         height: 24px !important;
         font-size: 0.6rem !important;
+      }
+
+      .upload-section .btn-sm {
+        padding: 4px 10px !important;
+        font-size: 0.6rem !important;
+        min-height: 26px !important;
+      }
+
+      .analysis-upload-section .btn-sm {
+        padding: 4px 10px !important;
+        font-size: 0.6rem !important;
+        min-height: 26px !important;
       }
     }
   </style>
@@ -1332,11 +1189,16 @@
       </div>
     </div>
 
-    <!-- ===== ALL BUTTONS IN ONE DIV ===== -->
+    <!-- ===== ACTION BAR ===== -->
     <div class="action-bar">
       <button class="btn" id="mergeActionBtn" data-shortcut="Ctrl+M">
         <span class="btn-icon">🔄</span>
         <span class="btn-label">MERGE</span>
+      </button>
+      <button class="btn" id="smartTargetMergeBtn"
+        style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; border: none;">
+        <span class="btn-icon">🎯</span>
+        <span class="btn-label">TARGET MERGE</span>
       </button>
       <button class="btn" id="replaceMiuixM3ColorsBtn">
         <span class="btn-icon">🎨</span>
@@ -1388,7 +1250,7 @@
       </button>
     </div>
 
-    <!-- ===== MULTIPLE XML UPLOAD ===== -->
+    <!-- ===== MULTIPLE XML UPLOAD - ছোট আপলোড বাটন সহ ===== -->
     <div class="compact-panel">
       <div class="compact-header multi-upload-header" id="multiUploadHeader">
         <div class="card-title">
@@ -1405,11 +1267,13 @@
         </div>
       </div>
       <div class="compact-body" id="multiUploadBody">
-        <div class="drop-zone" id="dropZone">
-          <div class="drop-zone-icon">📁</div>
-          <div style="font-weight: 600; font-size: 0.9rem;">Drop XML files here</div>
-          <div style="font-size: 0.7rem; color: #94a3b8;">or click to browse</div>
-          <input type="file" id="multiFileInput" accept=".xml,text/xml" multiple style="display:none;">
+        <!-- ছোট আপলোড সেকশন - Master XML এর মতো -->
+        <div class="upload-section">
+          <label class="btn-sm" id="multiUploadLabel">
+            📂 ADD XML
+            <input type="file" id="multiFileInput" accept=".xml,text/xml" multiple>
+          </label>
+          <span style="font-size: 0.6rem; color: #94a3b8;">or drag & drop files here</span>
         </div>
         <div class="file-list" id="fileList"></div>
         <div class="multi-actions">
@@ -1420,7 +1284,7 @@
       </div>
     </div>
 
-    <!-- ===== COLOR ANALYSIS ===== -->
+    <!-- ===== COLOR ANALYSIS - ছোট আপলোড বাটন সহ ===== -->
     <div class="compact-panel">
       <div class="compact-header analysis-header" id="toggleAnalysisHeader">
         <div class="card-title">
@@ -1439,17 +1303,18 @@
         </div>
       </div>
       <div class="compact-body" id="analysisContent">
-        <div class="analysis-drop-zone" id="analysisDropZone">
-          <span class="icon">📁</span>
-          <div style="font-weight: 600; font-size: 0.85rem;">Drop XML file here</div>
-          <div style="font-size: 0.65rem; color: #94a3b8; margin-bottom: 6px;">or click to browse</div>
-          <button class="analysis-upload-btn" id="analysisUploadBtn">📤 Upload</button>
-          <input type="file" id="analysisFileInput" accept=".xml,text/xml" style="display:none;">
+        <!-- ছোট আপলোড সেকশন - Master XML এর মতো -->
+        <div class="analysis-upload-section">
+          <label class="btn-sm pink" id="analysisUploadLabel">
+            📂 UPLOAD XML
+            <input type="file" id="analysisFileInput" accept=".xml,text/xml">
+          </label>
+          <span style="font-size: 0.6rem; color: #94a3b8;">or drag & drop here</span>
         </div>
         <div id="analysisListContainer" class="analysis-grid">
-          <div class="analysis-empty">
+          <div class="analysis-empty inline-empty-state">
             <span class="icon">📊</span>
-            <div>No data to display</div>
+            <div>No data</div>
           </div>
         </div>
       </div>
@@ -1471,8 +1336,8 @@
       </div>
       <div class="compact-body" id="resolverContent">
         <div id="colorListContainer" class="color-grid">
-          <div style="text-align: center; padding: 24px; color: #94a3b8; font-size: 0.8rem;">
-            ✨ Click "RESOLVE" to convert all dynamic colors to HEX
+          <div class="inline-empty-state">
+            ✨ Resolve: dynamic colors → HEX
           </div>
         </div>
       </div>
@@ -1481,274 +1346,37 @@
 
   <script>
     // ================================================================
-    // আপনার পুরো JavaScript কোড এখানে বসান
+    // COMPLETE JAVASCRIPT - ALL FIXES APPLIED
     // ================================================================
-    console.log('✅ আপনার JavaScript কোড এখানে বসান');
-
-    function showToast(msg) {
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
 
     // ================================================================
-    // টগল ফাংশনালিটি
+    // 1. GLOBAL VARIABLES
     // ================================================================
-    document.querySelectorAll('.compact-header').forEach(header => {
-      header.addEventListener('click', function (e) {
-        // বাটনে ক্লিক করলে টগল হবে না
-        if (e.target.closest('button')) return;
 
-        const body = this.nextElementSibling;
-        const icon = this.querySelector('.toggle-icon');
-        if (body) {
-          body.classList.toggle('collapsed');
-          if (icon) {
-            icon.textContent = body.classList.contains('collapsed') ? '▲' : '▼';
-          }
-        }
-      });
-    });
+    let leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
+    <MIUI_Theme_Values template="DarkTemplate">
+
+    </MIUI_Theme_Values>`;
+
+    let rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>
+    <MIUI_Theme_Values template="DarkTemplate">
+
+    </MIUI_Theme_Values>`;
+
+    let nonSystemColorMap = new Map();
+    let nonSystemResolvedMap = new Map();
+    let uploadedFiles = [];
+    let mergedXmlContent = '';
+    let analysisData = [];
+    let isPanelOpen = true;
+    let isAnalysisOpen = true;
 
     // ================================================================
-    // আপনার বাকি সব JS কোড এখানে পেস্ট করুন
+    // 2. ANDROID SYSTEM COLORS DATABASE
     // ================================================================
-  </script>
-
-
-  <script>
-    // ===============================================================================
-    // XML FORMATTER - NEW FEATURE
-    // ===============================================================================
-
-    function formatXML(xmlString) {
-      try {
-        // Clean the input
-        let cleaned = xmlString.trim();
-
-        // If empty, return empty
-        if (!cleaned) return '';
-
-        // Try to parse with DOMParser
-        try {
-          const parser = new DOMParser();
-          const xmlDoc = parser.parseFromString(cleaned, 'text/xml');
-
-          // Check for parsing errors
-          const parserError = xmlDoc.querySelector('parsererror');
-          if (parserError) {
-            // If parsing fails, try to fix common issues
-            return fixMalformedXML(cleaned);
-          }
-
-          // If parsing succeeds, format it properly
-          return formatXMLNode(xmlDoc.documentElement);
-        } catch (e) {
-          // If DOMParser fails, use manual fixing
-          return fixMalformedXML(cleaned);
-        }
-      } catch (e) {
-        showToast('❌ XML ফরম্যাট করতে ব্যর্থ: ' + e.message);
-        return xmlString;
-      }
-    }
-
-    function formatXMLNode(node, indent = 0) {
-      const spaces = '    '.repeat(indent);
-      let result = '';
-
-      // Opening tag
-      result += spaces + '<' + node.nodeName;
-
-      // Attributes
-      if (node.attributes) {
-        for (let attr of node.attributes) {
-          result += ` ${attr.name}="${attr.value}"`;
-        }
-      }
-
-      // Check if node has children
-      if (node.childNodes.length === 0) {
-        // Self-closing or empty
-        result += ' />\n';
-        return result;
-      }
-
-      // Check if all children are text nodes
-      let hasElementChildren = false;
-      for (let child of node.childNodes) {
-        if (child.nodeType === 1) { // Element node
-          hasElementChildren = true;
-          break;
-        }
-      }
-
-      if (!hasElementChildren) {
-        // Only text content
-        const textContent = node.textContent.trim();
-        if (textContent) {
-          result += '>' + textContent + '</' + node.nodeName + '>\n';
-        } else {
-          result += '></' + node.nodeName + '>\n';
-        }
-        return result;
-      }
-
-      // Has element children
-      result += '>\n';
-
-      // Process child nodes
-      for (let child of node.childNodes) {
-        if (child.nodeType === 3) { // Text node
-          const text = child.textContent.trim();
-          if (text) {
-            result += spaces + '    ' + text + '\n';
-          }
-        } else if (child.nodeType === 1) { // Element node
-          result += formatXMLNode(child, indent + 1);
-        }
-      }
-
-      // Closing tag
-      result += spaces + '</' + node.nodeName + '>\n';
-
-      return result;
-    }
-
-    function fixMalformedXML(xmlString) {
-      // Try to fix common XML issues
-      let fixed = xmlString;
-
-      // Remove empty lines
-      fixed = fixed.replace(/^\s*[\r\n]/gm, '');
-
-      // Ensure proper root tag
-      if (!fixed.includes('<?xml')) {
-        fixed = `<?xml version='1.0' encoding='UTF-8'?>\n` + fixed;
-      }
-
-      // Check if it has a root tag
-      const rootMatch = fixed.match(/<([A-Za-z_][A-Za-z0-9_\-:]*)[\s>]/);
-      if (!rootMatch) {
-        // No root tag found, wrap in MIUI_Theme_Values
-        fixed = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n${fixed}\n</MIUI_Theme_Values>`;
-      }
-
-      // Fix unclosed tags
-      const tagRegex = /<([A-Za-z_][A-Za-z0-9_\-:]*)([^>]*)>/g;
-      const tags = [];
-      let match;
-
-      while ((match = tagRegex.exec(fixed)) !== null) {
-        tags.push({
-          name: match[1],
-          attributes: match[2],
-          full: match[0],
-          index: match.index,
-          length: match[0].length
-        });
-      }
-
-      // Find unclosed tags
-      const stack = [];
-      const unclosed = [];
-
-      for (let tag of tags) {
-        if (tag.attributes.includes('/')) {
-          // Self-closing tag
-          continue;
-        }
-
-        if (tag.name.startsWith('/')) {
-          // Closing tag
-          if (stack.length > 0 && stack[stack.length - 1] === tag.name.substring(1)) {
-            stack.pop();
-          }
-        } else {
-          // Opening tag
-          stack.push(tag.name);
-        }
-      }
-
-      // Add missing closing tags
-      if (stack.length > 0) {
-        let closing = '';
-        while (stack.length > 0) {
-          const tagName = stack.pop();
-          closing += `</${tagName}>\n`;
-        }
-        fixed = fixed.trim() + '\n' + closing;
-      }
-
-      // Format with proper indentation
-      return beautifyXML(fixed);
-    }
-
-    function beautifyXML(xmlString) {
-      // Simple beautifier for XML
-      let formatted = '';
-      let indent = 0;
-      const lines = xmlString.split('\n');
-
-      for (let line of lines) {
-        const trimmed = line.trim();
-        if (!trimmed) continue;
-
-        // Check if it's a closing tag
-        if (trimmed.startsWith('</')) {
-          indent--;
-        }
-
-        // Add indentation
-        formatted += '    '.repeat(Math.max(0, indent)) + trimmed + '\n';
-
-        // Check if it's an opening tag (not self-closing)
-        if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>')) {
-          if (!trimmed.includes('/>')) {
-            indent++;
-          }
-        }
-      }
-
-      return formatted;
-    }
-
-    function formatTargetXML() {
-      try {
-        const rightEditor = document.getElementById('rightEditor');
-        const currentXml = rightEditor.value;
-
-        if (!currentXml || currentXml.trim() === '') {
-          showToast('⚠️ TARGET সোর্সে কিছুই নেই!');
-          return;
-        }
-
-        // Format the XML
-        const formatted = formatXML(currentXml);
-
-        // Update the editor
-        rightEditor.value = formatted;
-        rightRawXml = formatted;
-
-        // Update stats
-        updateStats();
-
-        showToast('✅ TARGET সোর্স ফরম্যাট করা হয়েছে!');
-
-      } catch (e) {
-        showToast('❌ ফরম্যাট করতে ব্যর্থ: ' + e.message);
-      }
-    }
-
-    // ===============================================================================
-    // ANDROID SYSTEM COLORS DATABASE
-    // ===============================================================================
 
     const ANDROID_SYSTEM_COLORS = {
       'system_accent1_dark': '#1976D2',
-      'system_accent1_light': '#2196F3',
       'system_accent2_dark': '#F57C00',
       'system_accent2_light': '#FF9800',
       'system_error_dark': '#D32F2F',
@@ -1763,83 +1391,368 @@
       'android:color/system_neutral1_500': '#757575'
     };
 
+    const universalColorDB = new Map();
+    const androidDynamicColors = {
+      'm3_ref_palette_dynamic_primary40': '#6750A4',
+      'm3_ref_palette_dynamic_secondary40': '#625B71',
+      'm3_ref_palette_dynamic_tertiary40': '#7D5260',
+      'm3_ref_palette_dynamic_neutral60': '#949397',
+      'system_surface': '#FFFBFE',
+      'system_surface_container_high': '#E6E1E5',
+      'white': '#FFFFFF',
+      'black': '#000000',
+      'transparent': '#00000000'
+    };
+    const miuiColors = {
+      'miuix_color_primary': '#FF6200EE',
+      'miuix_color_accent': '#FF03DAC5',
+      'miuix_color_background': '#FFFFFFFF',
+      'miuix_color_dark_background': '#121212'
+    };
+    Object.entries(androidDynamicColors).forEach(([k, v]) => universalColorDB.set(k, v));
+    Object.entries(miuiColors).forEach(([k, v]) => universalColorDB.set(k, v));
+
+    // ================================================================
+    // 3. KEYWORD DETECTION
+    // ================================================================
+
+    const bgButtonKeywords = ['background', 'bg', 'surface', 'container', 'card', 'dialog', 'panel', 'button', 'btn',
+      'primary', 'accent', 'error', 'warning', 'success', 'info', 'fab', 'toolbar', 'navbar', 'statusbar'
+    ];
+    const primaryTextKeywords = ['text', 'label', 'title', 'body', 'headline', 'content', 'message'];
+    const secondaryTextKeywords = ['secondary', 'subtitle', 'caption', 'hint', 'placeholder', 'helper'];
+
+    function isBgButtonColor(name) {
+      const lower = name.toLowerCase();
+      return bgButtonKeywords.some(kw => lower.includes(kw));
+    }
+
+    function isTextColor(name) {
+      const lower = name.toLowerCase();
+      return primaryTextKeywords.some(kw => lower.includes(kw)) || secondaryTextKeywords.some(kw => lower.includes(kw));
+    }
+
+    function getTextReplaceColor(name) {
+      const lower = name.toLowerCase();
+      if (secondaryTextKeywords.some(kw => lower.includes(kw))) return '#00FF62';
+      return '#1686D0';
+    }
+
     function getAndroidSystemColorValue(colorName) {
       const cleanName = colorName.replace('@android:color/', '');
       return ANDROID_SYSTEM_COLORS[cleanName] || ANDROID_SYSTEM_COLORS[colorName] || null;
     }
 
-    // ===============================================================================
-    // CORE STATE MANAGEMENT FOR NON-SYSTEM EXTRACTOR
-    // ===============================================================================
+    // ================================================================
+    // 4. CORE UTILITY FUNCTIONS
+    // ================================================================
 
-    let nonSystemColorMap = new Map();
-    let nonSystemResolvedMap = new Map();
-
-    // ===============================================================================
-    // RESOLVE RELATIVE COLORS (RECURSIVE FUNCTION)
-    // ===============================================================================
-
-    function resolveRelativeColorsNonSystem() {
-      const resolved = new Map();
-      const visited = new Set();
-
-      function resolveValue(name) {
-        if (visited.has(name)) return null;
-        visited.add(name);
-
-        const data = nonSystemColorMap.get(name);
-        if (!data) return null;
-
-        if (!data.isRelative) {
-          visited.delete(name);
-          return data.value;
-        }
-
-        if (data.isAndroidRelative) {
-          const resolvedVal = getAndroidSystemColorValue(data.parent);
-          visited.delete(name);
-          return resolvedVal || '#A855F7';
-        }
-
-        if (data.parent) {
-          const parentVal = resolveValue(data.parent);
-          visited.delete(name);
-          return parentVal || '#A855F7';
-        }
-
-        visited.delete(name);
-        return null;
-      }
-
-      for (let [name, data] of nonSystemColorMap) {
-        if (!data.isRelative) {
-          resolved.set(name, data.value);
-        } else {
-          const val = resolveValue(name);
-          resolved.set(name, val || '#A855F7');
-          data.value = val || '#A855F7';
-        }
-      }
-
-      nonSystemResolvedMap = resolved;
-      return resolved;
+    function showToast(msg) {
+      const existing = document.querySelector('.toast');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
     }
 
-    // ===============================================================================
-    // PARSE COLORS.XML FILE FOR NON-SYSTEM EXTRACTOR
-    // ===============================================================================
+    function escapeHtml(str) {
+      if (!str) return '';
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(str).replace(/[&<>"']/g, m => map[m]);
+    }
 
-    async function parseColorsXmlForNonSystem(content) {
+    function escapeXml(str) {
+      return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
+    }
+
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function isValidHexColor(color) {
+      if (!color || typeof color !== 'string') return false;
+      return /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/i.test(color);
+    }
+
+    function fallbackCopy(text) {
+      try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.cssText = 'position:fixed;opacity:0;left:-9999px;top:-9999px;';
+        document.body.appendChild(textarea);
+        textarea.select();
+        const success = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        if (success) {
+          showToast(`✅ "${text}" কপি করা হয়েছে!`);
+        } else {
+          showToast('❌ কপি করতে ব্যর্থ!');
+        }
+      } catch (e) {
+        showToast('❌ কপি করতে ব্যর্থ!');
+      }
+    }
+
+    // ================================================================
+    // 5. XML PARSING & FORMATTING
+    // ================================================================
+
+    function extractColorMap(xmlString) {
+      const map = new Map();
+      const colorMatches = xmlString.matchAll(/<color\s+name="([^"]+)"[^>]*>([^<]*?)<\/color>/gs);
+      for (const match of colorMatches) {
+        map.set(match[1], match[2].trim());
+      }
+      return map;
+    }
+
+    function parseXml(xmlString) {
+      const normalized = normalizeXml(xmlString);
+      const items = [];
+      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]*?)<\/color>/gs;
+      let match;
+      while ((match = colorRegex.exec(normalized)) !== null) {
+        items.push({ tagName: 'color', name: match[1], value: match[2].trim() });
+      }
+      const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]*?)<\/dimen>/gs;
+      while ((match = dimenRegex.exec(normalized)) !== null) {
+        items.push({ tagName: 'dimen', name: match[1], value: match[2].trim() });
+      }
+      const itemMap = new Map();
+      items.forEach(item => itemMap.set(`${item.tagName}::${item.name}`, item));
+      return { rootTag: 'MIUI_Theme_Values', itemMap };
+    }
+
+    function normalizeXml(xmlString) {
+      let content = xmlString.trim();
+      if (content.includes('<MIUI_Theme_Values')) {
+        return content;
+      }
+      return convertToMIUIFormat(content);
+    }
+
+    function convertToMIUIFormat(xmlString) {
+      const colorMatches = [];
+      const dimenMatches = [];
+      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]*?)<\/color>/gs;
+      let match;
+      while ((match = colorRegex.exec(xmlString)) !== null) {
+        colorMatches.push({ name: match[1], value: match[2].trim() });
+      }
+      const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]*?)<\/dimen>/gs;
+      while ((match = dimenRegex.exec(xmlString)) !== null) {
+        dimenMatches.push({ name: match[1], value: match[2].trim() });
+      }
+      let miuiXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      miuiXml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      if (colorMatches.length > 0) {
+        colorMatches.forEach(c => {
+          miuiXml += `    <color name="${escapeXml(c.name)}">${escapeXml(c.value)}</color>\n`;
+        });
+      }
+      if (dimenMatches.length > 0) {
+        if (colorMatches.length > 0) miuiXml += `\n`;
+        dimenMatches.forEach(d => {
+          miuiXml += `    <dimen name="${escapeXml(d.name)}">${escapeXml(d.value)}</dimen>\n`;
+        });
+      }
+      miuiXml += `</MIUI_Theme_Values>`;
+      return miuiXml;
+    }
+
+    function buildXml(rootTag, itemMap) {
+      const items = Array.from(itemMap.values());
+      const colors = items.filter(i => i.tagName === 'color').sort((a, b) => a.name.localeCompare(b.name));
+      const dimens = items.filter(i => i.tagName === 'dimen').sort((a, b) => a.name.localeCompare(b.name));
+      let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      colors.forEach(item => {
+        xml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
+      });
+      if (colors.length > 0 && dimens.length > 0) xml += `\n`;
+      dimens.forEach(item => {
+        xml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
+      });
+      xml += `</MIUI_Theme_Values>`;
+      return xml;
+    }
+
+    function formatXML(xmlString) {
+      try {
+        let cleaned = xmlString.trim();
+        if (!cleaned) return '';
+        try {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(cleaned, 'text/xml');
+          const parserError = xmlDoc.querySelector('parsererror');
+          if (parserError) {
+            return fixMalformedXML(cleaned);
+          }
+          return formatXMLNode(xmlDoc.documentElement);
+        } catch (e) {
+          return fixMalformedXML(cleaned);
+        }
+      } catch (e) {
+        showToast('❌ XML ফরম্যাট করতে ব্যর্থ: ' + e.message);
+        return xmlString;
+      }
+    }
+
+    function formatXMLNode(node, indent = 0) {
+      const spaces = '    '.repeat(indent);
+      let result = '';
+      result += spaces + '<' + node.nodeName;
+      if (node.attributes) {
+        for (let attr of node.attributes) {
+          result += ` ${attr.name}="${attr.value}"`;
+        }
+      }
+      if (node.childNodes.length === 0) {
+        result += ' />\n';
+        return result;
+      }
+      let hasElementChildren = false;
+      for (let child of node.childNodes) {
+        if (child.nodeType === 1) {
+          hasElementChildren = true;
+          break;
+        }
+      }
+      if (!hasElementChildren) {
+        const textContent = node.textContent.trim();
+        if (textContent) {
+          result += '>' + textContent + '</' + node.nodeName + '>\n';
+        } else {
+          result += '></' + node.nodeName + '>\n';
+        }
+        return result;
+      }
+      result += '>\n';
+      for (let child of node.childNodes) {
+        if (child.nodeType === 3) {
+          const text = child.textContent.trim();
+          if (text) {
+            result += spaces + '    ' + text + '\n';
+          }
+        } else if (child.nodeType === 1) {
+          result += formatXMLNode(child, indent + 1);
+        }
+      }
+      result += spaces + '</' + node.nodeName + '>\n';
+      return result;
+    }
+
+    function fixMalformedXML(xmlString) {
+      let fixed = xmlString;
+      fixed = fixed.replace(/^\s*[\r\n]/gm, '');
+      if (!fixed.match(/<\?xml/i)) {
+        fixed = `<?xml version='1.0' encoding='UTF-8'?>\n` + fixed;
+      }
+      const rootMatch = fixed.match(/<([A-Za-z_][A-Za-z0-9_\-:]*)[\s>]/);
+      if (!rootMatch) {
+        fixed = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n${fixed}\n</MIUI_Theme_Values>`;
+      }
+      return beautifyXML(fixed);
+    }
+
+    function beautifyXML(xmlString) {
+      let formatted = '';
+      let indent = 0;
+      const lines = xmlString.split('\n');
+      for (let line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (trimmed.startsWith('</')) {
+          indent--;
+        }
+        formatted += '    '.repeat(Math.max(0, indent)) + trimmed + '\n';
+        if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>')) {
+          if (!trimmed.includes('/>')) {
+            indent++;
+          }
+        }
+      }
+      return formatted;
+    }
+
+    function formatTargetXML() {
+      try {
+        const rightEditor = document.getElementById('rightEditor');
+        const currentXml = rightEditor.value;
+        if (!currentXml || currentXml.trim() === '') {
+          showToast('⚠️ TARGET সোর্সে কিছুই নেই!');
+          return;
+        }
+        const formatted = formatXML(currentXml);
+        rightEditor.value = formatted;
+        rightRawXml = formatted;
+        updateStats();
+        showToast('✅ TARGET সোর্স ফরম্যাট করা হয়েছে!');
+      } catch (e) {
+        showToast('❌ ফরম্যাট করতে ব্যর্থ: ' + e.message);
+      }
+    }
+
+    // ================================================================
+    // 6. COLOR RESOLVER (RECURSIVE)
+    // ================================================================
+
+    function forceResolveColor(rawValue, colorMap, visited = new Set()) {
+      if (!rawValue || typeof rawValue !== 'string') return rawValue || '#888888';
+      let trimmed = String(rawValue).trim();
+      if (isValidHexColor(trimmed)) {
+        return trimmed.toUpperCase();
+      }
+      let refMatch = trimmed.match(/^@(?:color|android:color)\/([a-zA-Z0-9_\.]+)$/);
+      if (!refMatch) refMatch = trimmed.match(/^@([a-zA-Z0-9_\.]+)$/);
+      if (refMatch && refMatch[1]) {
+        const refName = refMatch[1];
+        if (visited.has(refName)) {
+          console.warn(`Circular reference detected: ${refName}`);
+          return '#FF6B6B';
+        }
+        visited.add(refName);
+        if (colorMap && colorMap.has(refName)) {
+          return forceResolveColor(colorMap.get(refName), colorMap, visited);
+        }
+        if (universalColorDB.has(refName)) {
+          return universalColorDB.get(refName);
+        }
+        const lowerRef = refName.toLowerCase();
+        if (lowerRef.includes('primary')) return '#6750A4';
+        if (lowerRef.includes('secondary')) return '#625B71';
+        if (lowerRef.includes('surface')) return '#E6E1E5';
+        if (lowerRef.includes('background')) return '#0A0C15';
+        return '#9CA3AF';
+      }
+      if (trimmed.includes('?attr')) {
+        if (trimmed.toLowerCase().includes('primary')) return '#6750A4';
+        if (trimmed.toLowerCase().includes('secondary')) return '#625B71';
+        return '#9CA3AF';
+      }
+      return trimmed;
+    }
+
+    // ================================================================
+    // 7. NON-SYSTEM COLOR EXTRACTOR
+    // ================================================================
+
+    function parseColorsXmlForNonSystem(content) {
       nonSystemColorMap.clear();
       nonSystemResolvedMap.clear();
-
-      const regex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
+      const regex = /<color\s+name="([^"]+)"[^>]*>([^<]*?)<\/color>/gs;
       let match;
-
       while ((match = regex.exec(content)) !== null) {
         const name = match[1];
         const rawValue = match[2].trim();
-
         if (rawValue.startsWith('@android:color/')) {
           const parent = rawValue.replace('@android:color/', '');
           nonSystemColorMap.set(name, {
@@ -1868,29 +1781,58 @@
           });
         }
       }
-
       resolveRelativeColorsNonSystem();
       return nonSystemColorMap.size;
     }
 
-    // ===============================================================================
-    // GET NON-SYSTEM COLORS ONLY
-    // ===============================================================================
+    function resolveRelativeColorsNonSystem() {
+      const resolved = new Map();
+      const visited = new Set();
+
+      function resolveValue(name) {
+        if (visited.has(name)) return null;
+        visited.add(name);
+        const data = nonSystemColorMap.get(name);
+        if (!data) return null;
+        if (!data.isRelative) {
+          visited.delete(name);
+          return data.value;
+        }
+        if (data.isAndroidRelative) {
+          const resolvedVal = getAndroidSystemColorValue(data.parent);
+          visited.delete(name);
+          return resolvedVal || '#A855F7';
+        }
+        if (data.parent) {
+          const parentVal = resolveValue(data.parent);
+          visited.delete(name);
+          return parentVal || '#A855F7';
+        }
+        visited.delete(name);
+        return null;
+      }
+
+      for (let [name, data] of nonSystemColorMap) {
+        if (!data.isRelative) {
+          resolved.set(name, data.value);
+        } else {
+          const val = resolveValue(name);
+          resolved.set(name, val || '#A855F7');
+          data.value = val || '#A855F7';
+        }
+      }
+      nonSystemResolvedMap = resolved;
+      return resolved;
+    }
 
     function getNonSystemColorsOnly() {
       const nonSystemColors = [];
-
       for (let [name, data] of nonSystemColorMap) {
-        if (data.isAndroidRelative) {
-          continue;
-        }
-
+        if (data.isAndroidRelative) continue;
         let finalValue = nonSystemResolvedMap.get(name) || data.value;
-
         if (data.isRelative && !finalValue) {
           finalValue = '#A855F7';
         }
-
         nonSystemColors.push({
           name: name,
           value: finalValue,
@@ -1899,56 +1841,37 @@
           parent: data.parent
         });
       }
-
       return nonSystemColors;
     }
 
-    // ===============================================================================
-    // GENERATE NON-SYSTEM COLORS XML
-    // ===============================================================================
-
     function generateNonSystemXml() {
       const nonSystemColors = getNonSystemColorsOnly();
-
-      if (nonSystemColors.length === 0) {
-        return null;
-      }
-
+      if (nonSystemColors.length === 0) return null;
       let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
       xml += '<resources>\n\n';
-
       for (let color of nonSystemColors) {
         const finalValue = color.value || color.originalRaw;
         xml += `    <color name="${color.name}">${finalValue}</color>\n`;
       }
-
       xml += '\n</resources>';
       return xml;
     }
 
-    // ===============================================================================
-    // DOWNLOAD NON-SYSTEM COLORS AS XML FILE
-    // ===============================================================================
-
     function downloadNonSystemColors(originalFileName) {
       const nonSystemColors = getNonSystemColorsOnly();
-
       if (nonSystemColors.length === 0) {
         showToast('⚠️ কোনো Non-System কালার পাওয়া যায়নি!');
         return;
       }
-
       const xmlContent = generateNonSystemXml();
       if (!xmlContent) {
         showToast('❌ XML জেনারেট করতে ব্যর্থ!');
         return;
       }
-
       const blob = new Blob([xmlContent], { type: 'text/xml' });
       const downloadName = originalFileName ?
         originalFileName.replace('.xml', '_non_system.xml') :
         'non_system_colors.xml';
-
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -1957,366 +1880,61 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-
       showToast(`✅ ${nonSystemColors.length} টি Non-System কালার ডাউনলোড হয়েছে!`);
     }
-
-    // ===============================================================================
-    // MAIN FUNCTION - EXTRACT NON-SYSTEM COLORS FROM CURRENT XML
-    // ===============================================================================
 
     async function extractNonSystemFromCurrentXml() {
       if (!leftRawXml || leftRawXml.trim() === '') {
         showToast('⚠️ আগে একটি XML ফাইল লোড করুন বা এডিটরে কিছু লিখুন!');
         return;
       }
-
-      await parseColorsXmlForNonSystem(leftRawXml);
+      parseColorsXmlForNonSystem(leftRawXml);
       downloadNonSystemColors('theme_values');
     }
 
-    // ===============================================================================
-    // NON-SYSTEM COLOR VISUALIZATION IN RESOLVER
-    // ===============================================================================
+    // ================================================================
+    // 8. MERGE & EXTRACT FUNCTIONS
+    // ================================================================
 
-    function renderNonSystemColorsInResolver() {
-      const nonSystemColors = getNonSystemColorsOnly();
-      const container = document.getElementById('colorListContainer');
-
-      if (nonSystemColors.length === 0) {
-        if (colorMap.size === 0) {
-          container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No colors found in XML</div>';
-        }
-        return;
-      }
-
-      let html = '';
-
-      for (let color of nonSystemColors) {
-        const resolvedColor = color.value || '#A855F7';
-
-        let badges = '<span class="color-badge non-system-badge">🚫 Non-System</span>';
-
-        if (color.isRelative) {
-          badges += '<span class="color-badge relative-badge">🔗 Relative</span>';
-        }
-
-        if (isBgButtonColor(color.name)) {
-          badges += '<span class="color-badge" style="background:#10b981;">🎨 BG/BTN</span>';
-        }
-        if (isTextColor(color.name)) {
-          const type = getTextReplaceColor(color.name) === '#00FF62' ? 'Secondary' : 'Primary';
-          badges += `<span class="color-badge" style="background:#f59e0b;">✍️ ${type}</span>`;
-        }
-
-        html += `
-              <div class="color-item">
-                <div class="color-preview" style="background: ${resolvedColor};"></div>
-                <div class="color-info">
-                  <div class="color-name">
-                    ${escapeHtml(color.name)} 
-                    ${badges}
-                  </div>
-                  <div class="color-value">📄 Original: ${escapeHtml(color.originalRaw)}</div>
-                  <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
-                  ${color.isRelative ? `<div class="color-value" style="color: #f59e0b;">🔗 Parent: ${escapeHtml(color.parent)}</div>` : ''}
-                </div>
-              </div>
-            `;
-      }
-
-      container.innerHTML = html;
-      showToast(`🎨 Non-System কালার দেখানো হচ্ছে: ${nonSystemColors.length} টি`);
-    }
-
-    // Color Database
-    const androidDynamicColors = {
-      'm3_ref_palette_dynamic_primary40': '#6750A4',
-      'm3_ref_palette_dynamic_secondary40': '#625B71',
-      'm3_ref_palette_dynamic_tertiary40': '#7D5260',
-      'm3_ref_palette_dynamic_neutral60': '#949397',
-      'system_surface': '#FFFBFE',
-      'system_surface_container_high': '#E6E1E5',
-      'white': '#FFFFFF',
-      'black': '#000000',
-      'transparent': '#00000000'
-    };
-
-    const miuiColors = {
-      'miuix_color_primary': '#FF6200EE',
-      'miuix_color_accent': '#FF03DAC5',
-      'miuix_color_background': '#FFFFFFFF',
-      'miuix_color_dark_background': '#121212'
-    };
-
-    const universalColorDB = new Map();
-    Object.entries(androidDynamicColors).forEach(([k, v]) => universalColorDB.set(k, v));
-    Object.entries(miuiColors).forEach(([k, v]) => universalColorDB.set(k, v));
-
-    // Keywords
-    const bgButtonKeywords = ['background', 'bg', 'surface', 'container', 'card', 'dialog', 'panel', 'button', 'btn', 'primary', 'accent', 'error', 'warning', 'success', 'info', 'fab', 'toolbar', 'navbar', 'statusbar'];
-    const primaryTextKeywords = ['text', 'label', 'title', 'body', 'headline', 'content', 'message'];
-    const secondaryTextKeywords = ['secondary', 'subtitle', 'caption', 'hint', 'placeholder', 'helper'];
-
-    function isBgButtonColor(name) {
-      const lower = name.toLowerCase();
-      return bgButtonKeywords.some(kw => lower.includes(kw));
-    }
-
-    function isTextColor(name) {
-      const lower = name.toLowerCase();
-      return primaryTextKeywords.some(kw => lower.includes(kw)) || secondaryTextKeywords.some(kw => lower.includes(kw));
-    }
-
-    function getTextReplaceColor(name) {
-      const lower = name.toLowerCase();
-      if (secondaryTextKeywords.some(kw => lower.includes(kw))) return '#00FF62';
-      return '#1686D0';
-    }
-
-    function isValidHexColor(color) {
-      if (!color || typeof color !== 'string') return false;
-      return /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/i.test(color);
-    }
-
-    function forceResolveColor(rawValue, colorMap, visited = new Set()) {
-      if (!rawValue || typeof rawValue !== 'string') return rawValue || '#888888';
-      let trimmed = String(rawValue).trim();
-
-      if (isValidHexColor(trimmed)) {
-        return trimmed.toUpperCase();
-      }
-
-      let refMatch = trimmed.match(/^@(?:color|android:color)\/([a-zA-Z0-9_\.]+)$/);
-      if (!refMatch) refMatch = trimmed.match(/^@([a-zA-Z0-9_\.]+)$/);
-
-      if (refMatch && refMatch[1]) {
-        const refName = refMatch[1];
-        if (visited.has(refName)) return '#FFA500';
-        visited.add(refName);
-
-        if (colorMap && colorMap.has(refName)) {
-          return forceResolveColor(colorMap.get(refName), colorMap, visited);
-        }
-        if (universalColorDB.has(refName)) {
-          return universalColorDB.get(refName);
-        }
-
-        const lowerRef = refName.toLowerCase();
-        if (lowerRef.includes('primary')) return '#6750A4';
-        if (lowerRef.includes('secondary')) return '#625B71';
-        if (lowerRef.includes('surface')) return '#E6E1E5';
-        if (lowerRef.includes('background')) return '#0A0C15';
-        return '#9CA3AF';
-      }
-
-      if (trimmed.includes('?attr')) {
-        if (trimmed.toLowerCase().includes('primary')) return '#6750A4';
-        if (trimmed.toLowerCase().includes('secondary')) return '#625B71';
-        return '#9CA3AF';
-      }
-
-      return trimmed;
-    }
-
-    function extractColorMap(xmlString) {
-      const map = new Map();
-      const colorMatches = xmlString.matchAll(/<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g);
-      for (const match of colorMatches) {
-        map.set(match[1], match[2].trim());
-      }
-      return map;
-    }
-
-    function convertToMIUIFormat(xmlString) {
-      const colorMatches = [];
-      const dimenMatches = [];
-
-      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
-      let match;
-      while ((match = colorRegex.exec(xmlString)) !== null) {
-        colorMatches.push({ name: match[1], value: match[2].trim() });
-      }
-
-      const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]+)<\/dimen>/g;
-      while ((match = dimenRegex.exec(xmlString)) !== null) {
-        dimenMatches.push({ name: match[1], value: match[2].trim() });
-      }
-
-      let miuiXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      miuiXml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-
-      if (colorMatches.length > 0) {
-        colorMatches.forEach(c => {
-          miuiXml += `    <color name="${escapeXml(c.name)}">${escapeXml(c.value)}</color>\n`;
-        });
-      }
-
-      if (dimenMatches.length > 0) {
-        if (colorMatches.length > 0) miuiXml += `\n`;
-        dimenMatches.forEach(d => {
-          miuiXml += `    <dimen name="${escapeXml(d.name)}">${escapeXml(d.value)}</dimen>\n`;
-        });
-      }
-
-      miuiXml += `</MIUI_Theme_Values>`;
-      return miuiXml;
-    }
-
-    function buildXml(rootTag, itemMap) {
-      const items = Array.from(itemMap.values());
-      const colors = items.filter(i => i.tagName === 'color').sort((a, b) => a.name.localeCompare(b.name));
-      const dimens = items.filter(i => i.tagName === 'dimen').sort((a, b) => a.name.localeCompare(b.name));
-
-      let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-
-      colors.forEach(item => {
-        xml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
-      });
-
-      if (colors.length > 0 && dimens.length > 0) xml += `\n`;
-
-      dimens.forEach(item => {
-        xml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
-      });
-
-      xml += `</MIUI_Theme_Values>`;
-      return xml;
-    }
-
-    function normalizeXml(xmlString) {
-      let content = xmlString.trim();
-
-      if (content.includes('<MIUI_Theme_Values')) {
-        return content;
-      }
-
-      return convertToMIUIFormat(content);
-    }
-
-    function parseXml(xmlString) {
-      const normalized = normalizeXml(xmlString);
-      const items = [];
-
-      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
-      let match;
-      while ((match = colorRegex.exec(normalized)) !== null) {
-        items.push({ tagName: 'color', name: match[1], value: match[2].trim() });
-      }
-
-      const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]+)<\/dimen>/g;
-      while ((match = dimenRegex.exec(normalized)) !== null) {
-        items.push({ tagName: 'dimen', name: match[1], value: match[2].trim() });
-      }
-
-      const itemMap = new Map();
-      items.forEach(item => itemMap.set(`${item.tagName}::${item.name}`, item));
-      return { rootTag: 'MIUI_Theme_Values', itemMap };
-    }
-
-    function escapeXml(str) {
-      return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m]));
-    }
-
-    function escapeHtml(str) {
-      return str ? str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])) : '';
-    }
-
-    function showToast(msg) {
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    function updateStats() {
+    function mergeFiles() {
       try {
         const leftParsed = parseXml(leftRawXml);
-        let colors = 0,
-          dimens = 0;
-        leftParsed.itemMap.forEach((v, k) => {
-          if (k.startsWith('color::')) colors++;
-          else if (k.startsWith('dimen::')) dimens++;
-        });
-        document.getElementById('leftStats').innerHTML = `📄 Ready`;
-        const leftStatsDiv = document.querySelector('#leftStats + .stats');
-        if (leftStatsDiv) {
-          leftStatsDiv.children[0].innerHTML = `🎨 Colors: ${colors}`;
-          leftStatsDiv.children[1].innerHTML = `📏 Dimen: ${dimens}`;
-          leftStatsDiv.children[2].innerHTML = `📦 Total: ${leftParsed.itemMap.size}`;
-        }
-      } catch (e) { }
-
-      try {
         const rightParsed = parseXml(rightRawXml);
-        let colors = 0,
-          dimens = 0;
-        rightParsed.itemMap.forEach((v, k) => {
-          if (k.startsWith('color::')) colors++;
-          else if (k.startsWith('dimen::')) dimens++;
+        const mergedMap = new Map(leftParsed.itemMap);
+        let added = 0;
+        rightParsed.itemMap.forEach((item, key) => {
+          if (!mergedMap.has(key)) {
+            mergedMap.set(key, item);
+            added++;
+          }
         });
-        document.getElementById('rightStats').innerHTML = `📄 Ready`;
-        const rightStatsDiv = document.querySelector('#rightStats + .stats');
-        if (rightStatsDiv) {
-          rightStatsDiv.children[0].innerHTML = `🎨 Colors: ${colors}`;
-          rightStatsDiv.children[1].innerHTML = `📏 Dimen: ${dimens}`;
-          rightStatsDiv.children[2].innerHTML = `📦 Total: ${rightParsed.itemMap.size}`;
-        }
-      } catch (e) { }
+        leftRawXml = buildXml(leftParsed.rootTag, mergedMap);
+        updateEditors();
+        showToast(`✓ Merged: +${added} new items added`);
+      } catch (e) {
+        showToast(`Error: ${e.message}`);
+      }
     }
-
-    let leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-    <MIUI_Theme_Values template="DarkTemplate">
-        <color name="primary">@color/m3_ref_palette_dynamic_primary40</color>
-        <color name="button_bg">@color/primary</color>
-        <color name="text_title">#E2E2F0</color>
-        <color name="text_subtitle">#A9B1D6</color>
-        <color name="text_hint">#6C6C8A</color>
-        <color name="background_main">#0A0C15</color>
-        <color name="error_red">#FF4444</color>
-        <color name="success_green">#00C851</color>
-        <color name="system_accent">@android:color/system_accent1_dark</color>
-        <dimen name="spacing_large">24dp</dimen>
-    </MIUI_Theme_Values>`;
-
-    let rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>
-    <MIUI_Theme_Values template="DarkTemplate">
-        <color name="accent">#FF03DAC5</color>
-        <color name="primary">#6750A4</color>
-        <color name="text_title">#FFFFFF</color>
-        <dimen name="spacing_medium">16dp</dimen>
-    </MIUI_Theme_Values>`;
-
-    // ===============================================================================
-    // EXTRACT MATCHING COLORS FROM MASTER & TARGET (Target → Master)
-    // ===============================================================================
 
     function extractMatchingColors() {
       try {
         const masterParsed = parseXml(leftRawXml);
         const targetParsed = parseXml(rightRawXml);
-
         const masterColors = new Map();
         const targetColors = new Map();
-
         masterParsed.itemMap.forEach((item, key) => {
           if (key.startsWith('color::')) {
             const name = key.replace('color::', '');
             masterColors.set(name, item.value);
           }
         });
-
         targetParsed.itemMap.forEach((item, key) => {
           if (key.startsWith('color::')) {
             const name = key.replace('color::', '');
             targetColors.set(name, item.value);
           }
         });
-
         const matchingColors = [];
-
         targetColors.forEach((targetValue, name) => {
           if (masterColors.has(name)) {
             matchingColors.push({
@@ -2326,63 +1944,47 @@
             });
           }
         });
-
         if (matchingColors.length === 0) {
           showToast('⚠️ কোনো ম্যাচিং কালার পাওয়া যায়নি!');
           return;
         }
-
         let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
         xml += `<MIUI_Theme_Values template="DarkTemplate">\n\n`;
-
         matchingColors.forEach(color => {
           xml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.masterValue)}</color>\n`;
         });
-
         xml += `\n</MIUI_Theme_Values>`;
-
         const blob = new Blob([xml], { type: 'application/xml' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = 'theme_values.xml';
         a.click();
         URL.revokeObjectURL(a.href);
-
         showToast(`✅ ${matchingColors.length} টি ম্যাচিং কালার ডাউনলোড হয়েছে!`);
-
       } catch (e) {
         showToast(`❌ এরর: ${e.message}`);
       }
     }
 
-    // ===============================================================================
-    // EXTRACT NON-MATCHING COLORS FROM MASTER & TARGET (Target → Master)
-    // ===============================================================================
-
     function extractNonMatchingColors() {
       try {
         const masterParsed = parseXml(leftRawXml);
         const targetParsed = parseXml(rightRawXml);
-
         const masterColors = new Map();
         const targetColors = new Map();
-
         masterParsed.itemMap.forEach((item, key) => {
           if (key.startsWith('color::')) {
             const name = key.replace('color::', '');
             masterColors.set(name, item.value);
           }
         });
-
         targetParsed.itemMap.forEach((item, key) => {
           if (key.startsWith('color::')) {
             const name = key.replace('color::', '');
             targetColors.set(name, item.value);
           }
         });
-
         const nonMatchingColors = [];
-
         targetColors.forEach((targetValue, name) => {
           if (!masterColors.has(name)) {
             nonMatchingColors.push({
@@ -2392,64 +1994,48 @@
             });
           }
         });
-
         if (nonMatchingColors.length === 0) {
           showToast('✅ সব কালারই ম্যাচ করেছে! কোনো নন-ম্যাচিং কালার নেই।');
           return;
         }
-
         let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
         xml += `<MIUI_Theme_Values template="DarkTemplate">\n\n`;
-
         nonMatchingColors.forEach(color => {
           xml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.targetValue)}</color>\n`;
         });
-
         xml += `\n</MIUI_Theme_Values>`;
-
         const blob = new Blob([xml], { type: 'application/xml' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = 'theme_values.xml';
         a.click();
         URL.revokeObjectURL(a.href);
-
         showToast(`✅ ${nonMatchingColors.length} টি নন-ম্যাচিং কালার ডাউনলোড হয়েছে!`);
-
       } catch (e) {
         showToast(`❌ এরর: ${e.message}`);
       }
     }
 
-    // ===============================================================================
-    // COMPARE COLORS - SINGLE FILE (NON-MATCH UP, MATCH DOWN)
-    // ===============================================================================
-
     function renderColorComparison() {
       try {
         const masterParsed = parseXml(leftRawXml);
         const targetParsed = parseXml(rightRawXml);
-
         const masterColors = new Map();
         const targetColors = new Map();
-
         masterParsed.itemMap.forEach((item, key) => {
           if (key.startsWith('color::')) {
             const name = key.replace('color::', '');
             masterColors.set(name, item.value);
           }
         });
-
         targetParsed.itemMap.forEach((item, key) => {
           if (key.startsWith('color::')) {
             const name = key.replace('color::', '');
             targetColors.set(name, item.value);
           }
         });
-
         const matchingColors = [];
         const nonMatchingColors = [];
-
         targetColors.forEach((targetValue, name) => {
           if (masterColors.has(name)) {
             matchingColors.push({
@@ -2464,14 +2050,8 @@
             });
           }
         });
-
-        // =============================================
-        // UI তে দেখানো
-        // =============================================
-
         const container = document.getElementById('colorListContainer');
         let html = '';
-
         if (nonMatchingColors.length > 0) {
           html += `
                 <div style="grid-column: 1 / -1; padding: 14px 20px; background: rgba(239, 68, 68, 0.15); border-radius: 12px; border-left: 5px solid #ef4444; margin-bottom: 10px;">
@@ -2484,7 +2064,6 @@
                   </div>
                 </div>
               `;
-
           nonMatchingColors.forEach(color => {
             html += `
                   <div class="color-item" style="border-color: rgba(239, 68, 68, 0.3); border-left: 3px solid #ef4444;">
@@ -2501,7 +2080,6 @@
                 `;
           });
         }
-
         if (matchingColors.length > 0) {
           if (nonMatchingColors.length > 0) {
             html += `
@@ -2528,14 +2106,12 @@
                   </div>
                 `;
           }
-
           matchingColors.forEach(color => {
             const resolvedColor = forceResolveColor(color.targetValue, targetColors);
             const isSame = color.targetValue === color.masterValue;
             const valueDisplay = isSame ?
               `<div class="color-value">📄 Value: ${escapeHtml(color.targetValue)} (Same in both)</div>` :
               `<div class="color-value">📄 Target: ${escapeHtml(color.targetValue)} | Master: ${escapeHtml(color.masterValue)}</div>`;
-
             html += `
                   <div class="color-item" style="border-color: rgba(16, 185, 129, 0.3); border-left: 3px solid #10b981;">
                     <div class="color-preview" style="background: ${resolvedColor};"></div>
@@ -2551,7 +2127,6 @@
                 `;
           });
         }
-
         if (targetColors.size === 0) {
           html = `
                 <div style="text-align: center; padding: 60px 20px; color: #94a3b8;">
@@ -2561,37 +2136,19 @@
                 </div>
               `;
         }
-
         container.innerHTML = html;
-
-        // =============================================
-        // একটিমাত্র XML ফাইল তৈরি করা (কোনো কমেন্ট নেই)
-        // =============================================
-
         let finalXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
         finalXml += `<MIUI_Theme_Values template="DarkTemplate">\n\n`;
-
-        // ১. প্রথমে নন-ম্যাচ কালার (উপরে)
         nonMatchingColors.forEach(color => {
           finalXml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.targetValue)}</color>\n`;
         });
-
-        // নন-ম্যাচ ও ম্যাচ এর মধ্যে একটি খালি লাইন (যদি দুটোই থাকে)
         if (nonMatchingColors.length > 0 && matchingColors.length > 0) {
           finalXml += `\n`;
         }
-
-        // ২. তারপর ম্যাচ কালার (নিচে)
         matchingColors.forEach(color => {
           finalXml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.masterValue)}</color>\n`;
         });
-
         finalXml += `\n</MIUI_Theme_Values>`;
-
-        // =============================================
-        // একটিমাত্র ফাইল ডাউনলোড করা
-        // =============================================
-
         if (targetColors.size > 0) {
           const blob = new Blob([finalXml], { type: 'application/xml' });
           const a = document.createElement('a');
@@ -2602,12 +2159,9 @@
           document.body.removeChild(a);
           setTimeout(() => URL.revokeObjectURL(a.href), 100);
         }
-
-        // টোটাল কাউন্ট দেখানো
         const totalMatch = matchingColors.length;
         const totalNonMatch = nonMatchingColors.length;
         const totalTarget = targetColors.size;
-
         if (totalNonMatch > 0 && totalMatch > 0) {
           showToast(`📊 Downloaded: ${totalNonMatch} Non-Matching ↑ + ${totalMatch} Matching ↓ = ${totalTarget} Total Colors`);
         } else if (totalNonMatch > 0) {
@@ -2617,99 +2171,83 @@
         } else {
           showToast('⚠️ No colors found in Target!');
         }
-
       } catch (e) {
         showToast(`❌ Error: ${e.message}`);
       }
     }
 
-    function updateEditors() {
-      document.getElementById('leftEditor').value = leftRawXml;
-      document.getElementById('rightEditor').value = rightRawXml;
-      updateStats();
-    }
+    // ================================================================
+    // 9. REPLACE FUNCTIONS
+    // ================================================================
 
-    function mergeFiles() {
-      try {
-        const leftParsed = parseXml(leftRawXml);
-        const rightParsed = parseXml(rightRawXml);
-        const mergedMap = new Map(leftParsed.itemMap);
-        let added = 0;
-        rightParsed.itemMap.forEach((item, key) => {
-          if (!mergedMap.has(key)) {
-            mergedMap.set(key, item);
-            added++;
-          }
-        });
-        leftRawXml = buildXml(leftParsed.rootTag, mergedMap);
-        updateEditors();
-        showToast(`✓ Merged: +${added} new items added`);
-      } catch (e) {
-        showToast(`Error: ${e.message}`);
-      }
-    }
-
-    function downloadRaw() {
-      const blob = new Blob([leftRawXml], { type: 'application/xml' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'theme_values.xml';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast('✓ Downloaded MIUI_Theme_Values');
-    }
-
-    function downloadCleanResolved() {
-      let resolvedXml = leftRawXml;
+    function replaceMiuixM3Colors() {
+      let modified = leftRawXml;
       const colorMap = extractColorMap(leftRawXml);
+      let count = 0;
       colorMap.forEach((value, name) => {
-        const resolved = forceResolveColor(value, colorMap);
-        resolvedXml = resolvedXml.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'), `$1${resolved}$2`);
-      });
-
-      if (!resolvedXml.includes('<MIUI_Theme_Values')) {
-        resolvedXml = convertToMIUIFormat(resolvedXml);
-      }
-
-      const blob = new Blob([resolvedXml], { type: 'application/xml' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'theme_values.xml';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast('✓ Clean resolved downloaded');
-    }
-
-    function escapeRegex(str) {
-      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    }
-
-    function exportColorsByCategory(filter, categoryName) {
-      const colorMap = extractColorMap(leftRawXml);
-      const filtered = [];
-      colorMap.forEach((value, name) => {
-        if (filter(name)) {
-          const resolved = forceResolveColor(value, colorMap);
-          filtered.push({ name, value: resolved });
+        if (name.startsWith('miuix_') || name.startsWith('m3_')) {
+          const regex = new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g');
+          modified = modified.replace(regex, `$1#FFD696BB$2`);
+          count++;
         }
       });
-      if (filtered.length === 0) {
-        showToast(`No ${categoryName} colors found`);
-        return;
+      if (count > 0) {
+        leftRawXml = modified;
+        updateEditors();
+        showToast(`✅ ${count} টি MIUIX/M3 কালার #FFD696BB দিয়ে রিপ্লেস করা হয়েছে!`);
+      } else {
+        showToast('⚠️ কোনো "miuix_" বা "m3_" দিয়ে শুরু হওয়া কালার পাওয়া যায়নি!');
       }
+    }
 
-      let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-      xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-      filtered.forEach(c => xml += `    <color name="${c.name}">${c.value}</color>\n`);
-      xml += `</MIUI_Theme_Values>`;
-
-      const blob = new Blob([xml], { type: 'application/xml' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `${categoryName}.xml`;
-      a.click();
-      URL.revokeObjectURL(a.href);
-      showToast(`✓ Exported ${filtered.length} ${categoryName} colors in MIUI_Theme_Values format`);
+    function sortMiuixColors() {
+      try {
+        const parsed = parseXml(leftRawXml);
+        const items = Array.from(parsed.itemMap.values());
+        const miuixColors = [];
+        const normalColors = [];
+        const dimens = [];
+        items.forEach(item => {
+          if (item.tagName === 'dimen') {
+            dimens.push(item);
+          } else if (item.tagName === 'color') {
+            if (item.name.startsWith('miuix_') || item.name.startsWith('m3_')) {
+              miuixColors.push(item);
+            } else {
+              normalColors.push(item);
+            }
+          }
+        });
+        normalColors.sort((a, b) => a.name.localeCompare(b.name));
+        miuixColors.sort((a, b) => a.name.localeCompare(b.name));
+        dimens.sort((a, b) => a.name.localeCompare(b.name));
+        let newXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+        newXml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+        normalColors.forEach(item => {
+          newXml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
+        });
+        if (normalColors.length > 0 && miuixColors.length > 0) {
+          newXml += `\n`;
+        }
+        miuixColors.forEach(item => {
+          newXml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
+        });
+        if (dimens.length > 0) {
+          if (normalColors.length > 0 || miuixColors.length > 0) {
+            newXml += `\n`;
+          }
+          dimens.forEach(item => {
+            newXml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
+          });
+        }
+        newXml += `</MIUI_Theme_Values>`;
+        leftRawXml = newXml;
+        updateEditors();
+        const totalMiuix = miuixColors.length;
+        showToast(`✅ ${totalMiuix} টি MIUIX/M3 কালার লিস্টের শেষে সরানো হয়েছে!`);
+      } catch (e) {
+        showToast(`❌ এরর: ${e.message}`);
+      }
     }
 
     function replaceBgColors() {
@@ -2718,7 +2256,8 @@
       let count = 0;
       colorMap.forEach((value, name) => {
         if (isBgButtonColor(name)) {
-          modified = modified.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'), `$1#061D2E$2`);
+          modified = modified.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'),
+            `$1#061D2E$2`);
           count++;
         }
       });
@@ -2739,7 +2278,8 @@
       colorMap.forEach((value, name) => {
         if (isTextColor(name)) {
           const newColor = getTextReplaceColor(name);
-          modified = modified.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'), `$1${newColor}$2`);
+          modified = modified.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'),
+            `$1${newColor}$2`);
           if (newColor === '#00FF62') secondary++;
           else primary++;
         }
@@ -2753,157 +2293,66 @@
       }
     }
 
-
-    function replaceMiuixM3Colors() {
-      let modified = leftRawXml;
+    function exportColorsByCategory(filter, categoryName) {
       const colorMap = extractColorMap(leftRawXml);
-      let count = 0;
-
+      const filtered = [];
       colorMap.forEach((value, name) => {
-        // চেক করি নামটি "miuix_" বা "m3_" দিয়ে শুরু হয় কিনা
-        if (name.startsWith('miuix_') || name.startsWith('m3_')) {
-          // রেজেক্স দিয়ে পুরো ট্যাগটি রিপ্লেস করি
-          const regex = new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g');
-          modified = modified.replace(regex, `$1#FFD696BB$2`);
-          count++;
+        if (filter(name)) {
+          const resolved = forceResolveColor(value, colorMap);
+          filtered.push({ name, value: resolved });
         }
       });
-
-      if (count > 0) {
-        leftRawXml = modified;
-        updateEditors();
-        showToast(`✅ ${count} টি MIUIX/M3 কালার #FFD696BB দিয়ে রিপ্লেস করা হয়েছে!`);
-      } else {
-        showToast('⚠️ কোনো "miuix_" বা "m3_" দিয়ে শুরু হওয়া কালার পাওয়া যায়নি!');
+      if (filtered.length === 0) {
+        showToast(`No ${categoryName} colors found`);
+        return;
       }
+      let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+      xml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
+      filtered.forEach(c => xml += `    <color name="${c.name}">${c.value}</color>\n`);
+      xml += `</MIUI_Theme_Values>`;
+      const blob = new Blob([xml], { type: 'application/xml' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${categoryName}.xml`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast(`✓ Exported ${filtered.length} ${categoryName} colors in MIUI_Theme_Values format`);
     }
 
-
-    // ===============================================================================
-    // SORT MIUIX/M3 COLORS - NEW FEATURE
-    // ===============================================================================
-
-    function sortMiuixColors() {
-      try {
-        // বর্তমান XML পার্স করুন
-        const parsed = parseXml(leftRawXml);
-        const items = Array.from(parsed.itemMap.values());
-
-        // আলাদা করুন: miuix_ এবং m3_ দিয়ে শুরু হওয়া কালার
-        const miuixColors = [];
-        const normalColors = [];
-        const dimens = [];
-
-        items.forEach(item => {
-          if (item.tagName === 'dimen') {
-            dimens.push(item);
-          } else if (item.tagName === 'color') {
-            // চেক করুন নামটি miuix_ বা m3_ দিয়ে শুরু হয় কিনা
-            if (item.name.startsWith('miuix_') || item.name.startsWith('m3_')) {
-              miuixColors.push(item);
-            } else {
-              normalColors.push(item);
-            }
-          }
-        });
-
-        // সাজান: A-Z অনুযায়ী
-        normalColors.sort((a, b) => a.name.localeCompare(b.name));
-        miuixColors.sort((a, b) => a.name.localeCompare(b.name));
-        dimens.sort((a, b) => a.name.localeCompare(b.name));
-
-        // নতুন XML তৈরি করুন
-        let newXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-        newXml += `<MIUI_Theme_Values template="DarkTemplate">\n`;
-
-        // ১. প্রথমে normal colors (miuix_ বা m3_ নয়)
-        normalColors.forEach(item => {
-          newXml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
-        });
-
-        // নতুন লাইন (যদি দুই ধরনের কালার থাকে)
-        if (normalColors.length > 0 && miuixColors.length > 0) {
-          newXml += `\n`;
-        }
-
-        // ২. তারপর miuix_ এবং m3_ colors (সবশেষে)
-        miuixColors.forEach(item => {
-          newXml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
-        });
-
-        // ডাইমেনশন যোগ করুন (যদি থাকে)
-        if (dimens.length > 0) {
-          if (normalColors.length > 0 || miuixColors.length > 0) {
-            newXml += `\n`;
-          }
-          dimens.forEach(item => {
-            newXml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
-          });
-        }
-
-        newXml += `</MIUI_Theme_Values>`;
-
-        // আপডেট করুন
-        leftRawXml = newXml;
-        updateEditors();
-
-        const totalMiuix = miuixColors.length;
-        showToast(`✅ ${totalMiuix} টি MIUIX/M3 কালার লিস্টের শেষে সরানো হয়েছে!`);
-
-      } catch (e) {
-        showToast(`❌ এরর: ${e.message}`);
-      }
-    }
-    // ===============================================================================
-    // RENDER COLOR RESOLVER
-    // ===============================================================================
+    // ================================================================
+    // 10. RENDER COLOR RESOLVER
+    // ================================================================
 
     function renderColorResolver() {
       const colorMap = extractColorMap(leftRawXml);
       const container = document.getElementById('colorListContainer');
-
       if (colorMap.size === 0) {
-        container.innerHTML = '<div style="text-align: center; padding: 40px; color: #94a3b8;">No colors found in XML</div>';
+        container.innerHTML =
+          '<div style="text-align: center; padding: 40px; color: #94a3b8;">No colors found in XML</div>';
         return;
       }
-
-      // কালারগুলোকে অ্যারেতে নিয়ে সর্ট করুন
-      const colorEntries = Array.from(colorMap.entries());
-
-      // আলাদা করুন: miuix_ এবং m3_ দিয়ে শুরু হওয়া
-      const miuixColors = [];
       const normalColors = [];
-
-      colorEntries.forEach(([name, value]) => {
+      const miuixColors = [];
+      colorMap.forEach((value, name) => {
         if (name.startsWith('miuix_') || name.startsWith('m3_')) {
           miuixColors.push([name, value]);
         } else {
           normalColors.push([name, value]);
         }
       });
-
-      // সাজান A-Z অনুযায়ী
       normalColors.sort((a, b) => a[0].localeCompare(b[0]));
       miuixColors.sort((a, b) => a[0].localeCompare(b[0]));
-
-      // প্রথমে normal, তারপর miuix
-      const sortedColors = [...normalColors, ...miuixColors];
-
       let html = '';
-
-      // Normal কালারগুলোর জন্য হেডার
       if (normalColors.length > 0) {
         html += `
-      <div style="grid-column: 1 / -1; padding: 10px 16px; background: rgba(16, 185, 129, 0.1); border-radius: 10px; border-left: 4px solid #10b981; margin-bottom: 6px;">
-        <span style="font-weight: 600; font-size: 0.85rem; color: #10b981;">✅ NORMAL COLORS (${normalColors.length})</span>
-      </div>
-    `;
+              <div style="grid-column: 1 / -1; padding: 10px 16px; background: rgba(16, 185, 129, 0.1); border-radius: 10px; border-left: 4px solid #10b981; margin-bottom: 6px;">
+                <span style="font-weight: 600; font-size: 0.85rem; color: #10b981;">✅ NORMAL COLORS (${normalColors.length})</span>
+              </div>
+            `;
       }
-
       for (let [name, originalValue] of normalColors) {
         const resolvedColor = forceResolveColor(originalValue, colorMap);
         const isSystemColor = originalValue.includes('@android:color/');
-
         let badges = '';
         if (isSystemColor) {
           badges += '<span class="color-badge system-badge">📱 System</span>';
@@ -2917,35 +2366,30 @@
           const type = getTextReplaceColor(name) === '#00FF62' ? 'Secondary' : 'Primary';
           badges += `<span class="color-badge" style="background:#f59e0b;">✍️ ${type}</span>`;
         }
-
         html += `
-      <div class="color-item">
-        <div class="color-preview" style="background: ${resolvedColor};"></div>
-        <div class="color-info">
-          <div class="color-name">
-            ${escapeHtml(name)} 
-            ${badges}
-          </div>
-          <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
-          <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
-        </div>
-      </div>
-    `;
+              <div class="color-item">
+                <div class="color-preview" style="background: ${resolvedColor};"></div>
+                <div class="color-info">
+                  <div class="color-name">
+                    ${escapeHtml(name)} 
+                    ${badges}
+                  </div>
+                  <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
+                  <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
+                </div>
+              </div>
+            `;
       }
-
-      // MIUIX/M3 কালারগুলোর জন্য হেডার
       if (miuixColors.length > 0) {
         html += `
-      <div style="grid-column: 1 / -1; padding: 10px 16px; background: rgba(139, 92, 246, 0.15); border-radius: 10px; border-left: 4px solid #8b5cf6; margin: 12px 0 6px 0;">
-        <span style="font-weight: 600; font-size: 0.85rem; color: #8b5cf6;">🎨 MIUIX/M3 COLORS (${miuixColors.length})</span>
-        <span style="font-size: 0.7rem; color: #94a3b8; margin-left: 10px;">⬇️ Sorted to bottom</span>
-      </div>
-    `;
+              <div style="grid-column: 1 / -1; padding: 10px 16px; background: rgba(139, 92, 246, 0.15); border-radius: 10px; border-left: 4px solid #8b5cf6; margin: 12px 0 6px 0;">
+                <span style="font-weight: 600; font-size: 0.85rem; color: #8b5cf6;">🎨 MIUIX/M3 COLORS (${miuixColors.length})</span>
+                <span style="font-size: 0.7rem; color: #94a3b8; margin-left: 10px;">⬇️ Sorted to bottom</span>
+              </div>
+            `;
       }
-
       for (let [name, originalValue] of miuixColors) {
         const resolvedColor = forceResolveColor(originalValue, colorMap);
-
         let badges = '';
         badges += '<span class="color-badge" style="background: #8b5cf6; color: white;">🎨 MIUIX/M3</span>';
         if (isBgButtonColor(name)) {
@@ -2955,32 +2399,728 @@
           const type = getTextReplaceColor(name) === '#00FF62' ? 'Secondary' : 'Primary';
           badges += `<span class="color-badge" style="background:#f59e0b;">✍️ ${type}</span>`;
         }
-
         html += `
-      <div class="color-item" style="border-color: rgba(139, 92, 246, 0.3); border-left: 3px solid #8b5cf6;">
-        <div class="color-preview" style="background: ${resolvedColor};"></div>
-        <div class="color-info">
-          <div class="color-name">
-            ${escapeHtml(name)} 
-            ${badges}
-          </div>
-          <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
-          <div class="color-value" style="color: #8b5cf6;">🎯 Resolved: ${resolvedColor}</div>
-        </div>
-      </div>
-    `;
+              <div class="color-item" style="border-color: rgba(139, 92, 246, 0.3); border-left: 3px solid #8b5cf6;">
+                <div class="color-preview" style="background: ${resolvedColor};"></div>
+                <div class="color-info">
+                  <div class="color-name">
+                    ${escapeHtml(name)} 
+                    ${badges}
+                  </div>
+                  <div class="color-value">📄 Value: ${escapeHtml(originalValue)}</div>
+                  <div class="color-value" style="color: #8b5cf6;">🎯 Resolved: ${resolvedColor}</div>
+                </div>
+              </div>
+            `;
       }
-
       container.innerHTML = html;
       showToast(`✓ Sorted: ${normalColors.length} Normal + ${miuixColors.length} MIUIX/M3 colors`);
     }
 
-    // Event Listeners
+    function renderNonSystemColorsInResolver() {
+      const nonSystemColors = getNonSystemColorsOnly();
+      const container = document.getElementById('colorListContainer');
+      if (nonSystemColors.length === 0) {
+        if (nonSystemColorMap.size === 0) {
+          container.innerHTML =
+            '<div style="text-align: center; padding: 40px; color: #94a3b8;">No colors found in XML</div>';
+        }
+        return;
+      }
+      let html = '';
+      for (let color of nonSystemColors) {
+        const resolvedColor = color.value || '#A855F7';
+        let badges = '<span class="color-badge non-system-badge">🚫 Non-System</span>';
+        if (color.isRelative) {
+          badges += '<span class="color-badge relative-badge">🔗 Relative</span>';
+        }
+        if (isBgButtonColor(color.name)) {
+          badges += '<span class="color-badge" style="background:#10b981;">🎨 BG/BTN</span>';
+        }
+        if (isTextColor(color.name)) {
+          const type = getTextReplaceColor(color.name) === '#00FF62' ? 'Secondary' : 'Primary';
+          badges += `<span class="color-badge" style="background:#f59e0b;">✍️ ${type}</span>`;
+        }
+        html += `
+              <div class="color-item">
+                <div class="color-preview" style="background: ${resolvedColor};"></div>
+                <div class="color-info">
+                  <div class="color-name">
+                    ${escapeHtml(color.name)} 
+                    ${badges}
+                  </div>
+                  <div class="color-value">📄 Original: ${escapeHtml(color.originalRaw)}</div>
+                  <div class="color-value" style="color: #10b981;">🎯 Resolved: ${resolvedColor}</div>
+                  ${color.isRelative ? `<div class="color-value" style="color: #f59e0b;">🔗 Parent: ${escapeHtml(color.parent)}</div>` : ''}
+                </div>
+              </div>
+            `;
+      }
+      container.innerHTML = html;
+      showToast(`🎨 Non-System কালার দেখানো হচ্ছে: ${nonSystemColors.length} টি`);
+    }
+
+    // ================================================================
+    // 11. COLOR ANALYSIS
+    // ================================================================
+
+    function analyzeColors(xmlContent) {
+      try {
+        const colorMap = new Map();
+        let totalValues = 0;
+        const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]*?)<\/color>/gs;
+        let match;
+
+        while ((match = colorRegex.exec(xmlContent)) !== null) {
+          const name = match[1].trim();
+          const rawValue = match[2].trim();
+          totalValues++;
+          const colorMapForResolve = extractColorMap(xmlContent);
+          let resolved = forceResolveColor(rawValue, colorMapForResolve);
+          const key = resolved;
+
+          if (colorMap.has(key)) {
+            const entry = colorMap.get(key);
+            entry.count++;
+            if (!entry.names.includes(name)) {
+              entry.names.push(name);
+            }
+          } else {
+            colorMap.set(key, {
+              name: name,
+              names: [name],
+              value: rawValue,
+              resolved: resolved,
+              count: 1
+            });
+          }
+        }
+
+        analysisData = Array.from(colorMap.values())
+          .sort((a, b) => b.count - a.count);
+
+        const totalColorsEl = document.getElementById('analysisTotalColors');
+        const uniqueColorsEl = document.getElementById('analysisUniqueColors');
+
+        if (totalColorsEl) {
+          totalColorsEl.textContent = totalValues;
+        }
+        if (uniqueColorsEl) {
+          uniqueColorsEl.textContent = analysisData.length;
+        }
+
+        renderAnalysisList();
+
+      } catch (error) {
+        console.error('Analysis Error:', error);
+        showToast('❌ অ্যানালাইসিস করতে ব্যর্থ: ' + error.message);
+      }
+    }
+
+    function renderAnalysisList() {
+      const container = document.getElementById('analysisListContainer');
+
+      if (!container) {
+        console.warn('⚠️ analysisListContainer পাওয়া যায়নি!');
+        return;
+      }
+
+      if (analysisData.length === 0) {
+        container.innerHTML = `
+            <div class="analysis-empty inline-empty-state" style="grid-column: 1 / -1;">
+                <span class="icon">📊</span>
+                <div>No data</div>
+            </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      analysisData.forEach(function (item, index) {
+        const exactValue = item.value;
+        const resolvedValue = item.resolved || item.value;
+        const count = item.count;
+        const names = item.names || [item.name];
+        const displayName = names.length > 1 ? `${names[0]} (+${names.length - 1})` : names[0];
+
+        let countClass = 'low';
+        if (count >= 5) countClass = 'high';
+        else if (count >= 3) countClass = 'medium';
+
+        let previewColor = resolvedValue;
+        if (previewColor && previewColor.startsWith('#') && previewColor.length === 9) {
+          const red = previewColor.substring(3, 5);
+          const green = previewColor.substring(5, 7);
+          const blue = previewColor.substring(7, 9);
+          previewColor = `#${red}${green}${blue}`;
+        }
+        if (!isValidHexColor(previewColor)) {
+          previewColor = '#888888';
+        }
+
+        html += `
+            <div class="analysis-item">
+                <div class="analysis-preview" style="background: ${previewColor};"></div>
+                <div class="analysis-info">
+                    <div class="analysis-name">
+                        ${escapeHtml(displayName)}
+                        <span class="analysis-count ${countClass}">${count}x</span>
+                    </div>
+                    <div class="analysis-value" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="color: #94a3b8;">📄 ${escapeHtml(exactValue)}</span>
+                        <button class="copy-btn" data-copy="${escapeHtml(exactValue)}" title="Copy exact value" style="
+                            background: rgba(102, 126, 234, 0.2);
+                            border: none;
+                            color: #94a3b8;
+                            border-radius: 6px;
+                            padding: 2px 8px;
+                            cursor: pointer;
+                            font-size: 0.7rem;
+                            transition: all 0.2s;
+                            font-family: 'Inter', sans-serif;
+                        ">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="analysis-value" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <span style="color: #10b981;">🎯 ${escapeHtml(resolvedValue)}</span>
+                        <button class="copy-btn" data-copy="${escapeHtml(resolvedValue)}" title="Copy resolved color" style="
+                            background: rgba(16, 185, 129, 0.2);
+                            border: none;
+                            color: #10b981;
+                            border-radius: 6px;
+                            padding: 2px 8px;
+                            cursor: pointer;
+                            font-size: 0.7rem;
+                            transition: all 0.2s;
+                            font-family: 'Inter', sans-serif;
+                        ">
+                            📋 Copy
+                        </button>
+                    </div>
+                    ${names.length > 1 ? `<div class="analysis-value" style="color: #94a3b8; font-size: 0.6rem;">📌 ${names.length} aliases</div>` : ''}
+                </div>
+            </div>
+        `;
+      });
+
+      container.innerHTML = html;
+
+      document.querySelectorAll('.copy-btn').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const textToCopy = this.getAttribute('data-copy');
+          if (!textToCopy) {
+            showToast('⚠️ কিছুই কপি করা যাবে না!');
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToCopy).then(function () {
+              const originalText = this.innerHTML;
+              this.innerHTML = '✅ Copied!';
+              this.style.background = 'rgba(16, 185, 129, 0.3)';
+              this.style.color = '#10b981';
+              setTimeout(() => {
+                this.innerHTML = originalText;
+                this.style.background = '';
+                this.style.color = '';
+              }, 1500);
+              showToast(`✅ "${textToCopy}" কপি করা হয়েছে!`);
+            }.bind(this)).catch(function () {
+              fallbackCopy(textToCopy);
+            });
+          } else {
+            fallbackCopy(textToCopy);
+          }
+        });
+      });
+    }
+
+    function processAnalysisFile(file) {
+      if (!file) {
+        showToast('⚠️ কোনো ফাইল সিলেক্ট করা হয়নি!');
+        return;
+      }
+
+      const fileName = file.name.toLowerCase();
+      if (!fileName.endsWith('.xml') && file.type !== 'text/xml') {
+        showToast('⚠️ শুধুমাত্র XML ফাইল সাপোর্টেড!');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const content = e.target.result;
+          if (!content || content.trim() === '') {
+            showToast('⚠️ ফাইলটি খালি!');
+            return;
+          }
+          analyzeColors(content);
+          showToast(`✅ "${file.name}" অ্যানালাইসিস সম্পূর্ণ! (${analysisData.length}টি ইউনিক কালার)`);
+        } catch (error) {
+          showToast(`❌ ফাইল পড়তে ব্যর্থ: ${error.message}`);
+          console.error(error);
+        }
+      };
+      reader.onerror = function () {
+        showToast('❌ ফাইল পড়তে ব্যর্থ!');
+      };
+      reader.readAsText(file);
+    }
+
+    // ================================================================
+    // 12. MULTIPLE XML MERGE
+    // ================================================================
+
+    function handleFiles(files) {
+      if (!files || files.length === 0) {
+        showToast('⚠️ কোনো ফাইল সিলেক্ট করা হয়নি!');
+        return;
+      }
+      let loadedCount = 0;
+      let errorCount = 0;
+      const validFiles = [];
+      for (let file of files) {
+        const fileName = file.name.toLowerCase();
+        if (fileName.endsWith('.xml') || file.type === 'text/xml') {
+          validFiles.push(file);
+        } else {
+          showToast(`⚠️ "${file.name}" XML ফাইল নয়, বাদ দেয়া হলো`);
+        }
+      }
+      if (validFiles.length === 0) {
+        showToast('⚠️ কোনো বৈধ XML ফাইল নেই!');
+        return;
+      }
+      validFiles.forEach(function (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          try {
+            const content = e.target.result;
+            if (!content || content.trim() === '') {
+              showToast(`⚠️ "${file.name}" খালি ফাইল!`);
+              errorCount++;
+            } else {
+              uploadedFiles.push({
+                name: file.name,
+                content: content,
+                size: file.size
+              });
+              loadedCount++;
+            }
+          } catch (error) {
+            showToast(`❌ "${file.name}" পড়তে ব্যর্থ: ${error.message}`);
+            errorCount++;
+          }
+          if (loadedCount + errorCount === validFiles.length) {
+            renderFileList();
+            updateMultiStats();
+            if (loadedCount > 0) {
+              showToast(`✅ ${loadedCount} টি XML ফাইল আপলোড হয়েছে!`);
+            } else {
+              showToast('⚠️ কোনো ফাইল সফলভাবে লোড হয়নি!');
+            }
+          }
+        };
+        reader.onerror = function () {
+          errorCount++;
+          showToast(`❌ "${file.name}" পড়তে ব্যর্থ`);
+          if (loadedCount + errorCount === validFiles.length) {
+            renderFileList();
+            updateMultiStats();
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    function renderFileList() {
+      const fileList = document.getElementById('fileList');
+      if (uploadedFiles.length === 0) {
+        fileList.innerHTML = `
+            <div class="inline-empty-state">
+              📭 No files uploaded
+            </div>
+          `;
+        return;
+      }
+      let html = '';
+      uploadedFiles.forEach(function (file, index) {
+        const sizeInKB = (file.size / 1024).toFixed(1);
+        const sizeDisplay = file.size < 1024 ?
+          `${file.size} bytes` :
+          `${sizeInKB} KB`;
+        html += `
+            <div class="file-item">
+              <div class="file-item-info">
+                <span class="file-item-icon">📄</span>
+                <div>
+                  <div class="file-item-name">${escapeHtml(file.name)}</div>
+                  <div class="file-item-size">${sizeDisplay}</div>
+                </div>
+              </div>
+              <button class="file-item-remove" data-index="${index}" title="Remove file">✕</button>
+            </div>
+          `;
+      });
+      fileList.innerHTML = html;
+      document.querySelectorAll('.file-item-remove').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          const index = parseInt(this.dataset.index);
+          if (!isNaN(index) && index >= 0 && index < uploadedFiles.length) {
+            const fileName = uploadedFiles[index].name;
+            uploadedFiles.splice(index, 1);
+            renderFileList();
+            updateMultiStats();
+            mergedXmlContent = '';
+            document.getElementById('downloadMergedBtn').disabled = true;
+            showToast(`🗑️ "${fileName}" রিমুভ করা হয়েছে`);
+          }
+        });
+      });
+    }
+
+    function updateMultiStats() {
+      const count = uploadedFiles.length;
+      document.getElementById('fileCount').textContent = count;
+      let totalColors = 0;
+      uploadedFiles.forEach(function (file) {
+        if (file.content) {
+          const colorMatches = file.content.match(/<color\s+name="[^"]+"[^>]*>[^<]*<\/color>/gs);
+          if (colorMatches) {
+            totalColors += colorMatches.length;
+          }
+        }
+      });
+      document.getElementById('totalColorsCount').textContent = totalColors;
+      const mergeAllBtn = document.getElementById('mergeAllFilesBtn');
+      mergeAllBtn.disabled = (count === 0);
+      mergeAllBtn.style.opacity = (count === 0) ? '0.5' : '1';
+      mergeAllBtn.style.cursor = (count === 0) ? 'not-allowed' : 'pointer';
+    }
+
+    function mergeAllFiles() {
+      if (uploadedFiles.length === 0) {
+        showToast('⚠️ কোনো XML ফাইল নেই!');
+        return;
+      }
+      try {
+        const mergedMap = new Map();
+        let totalColors = 0;
+        let totalDimens = 0;
+        showToast(`⏳ মার্জ শুরু হচ্ছে... ${uploadedFiles.length} টি ফাইল`);
+        uploadedFiles.forEach(function (file) {
+          const content = file.content;
+          if (!content || content.trim() === '') return;
+          const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]*?)<\/color>/gs;
+          let match;
+          while ((match = colorRegex.exec(content)) !== null) {
+            const key = `color::${match[1]}`;
+            if (!mergedMap.has(key)) {
+              mergedMap.set(key, {
+                tagName: 'color',
+                name: match[1],
+                value: match[2].trim()
+              });
+              totalColors++;
+            }
+          }
+          const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]*?)<\/dimen>/gs;
+          while ((match = dimenRegex.exec(content)) !== null) {
+            const key = `dimen::${match[1]}`;
+            if (!mergedMap.has(key)) {
+              mergedMap.set(key, {
+                tagName: 'dimen',
+                name: match[1],
+                value: match[2].trim()
+              });
+              totalDimens++;
+            }
+          }
+        });
+        if (mergedMap.size === 0) {
+          showToast('⚠️ কোনো বৈধ কালার বা ডাইমেনশন পাওয়া যায়নি!');
+          return;
+        }
+        let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+        xml += `<MIUI_Theme_Values template="DarkTemplate">\n\n`;
+        const colors = [];
+        const dimens = [];
+        mergedMap.forEach(function (item) {
+          if (item.tagName === 'color') {
+            colors.push(item);
+          } else {
+            dimens.push(item);
+          }
+        });
+        colors.sort(function (a, b) {
+          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        });
+        dimens.sort(function (a, b) {
+          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        });
+        if (colors.length > 0) {
+          colors.forEach(function (item) {
+            xml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
+          });
+        }
+        if (dimens.length > 0) {
+          if (colors.length > 0) xml += `\n`;
+          dimens.forEach(function (item) {
+            xml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
+          });
+        }
+        xml += `\n</MIUI_Theme_Values>`;
+        mergedXmlContent = xml;
+        const downloadMergedBtn = document.getElementById('downloadMergedBtn');
+        downloadMergedBtn.disabled = false;
+        downloadMergedBtn.style.opacity = '1';
+        downloadMergedBtn.style.cursor = 'pointer';
+        document.getElementById('totalColorsCount').textContent = colors.length;
+        showToast(`✅ মার্জ সম্পূর্ণ! ${colors.length} কালার, ${dimens.length} ডাইমেনশন`);
+      } catch (e) {
+        showToast(`❌ মার্জ করতে ব্যর্থ: ${e.message}`);
+        console.error('Merge Error:', e);
+      }
+    }
+
+    function downloadMergedFile() {
+      if (!mergedXmlContent || mergedXmlContent.trim() === '') {
+        showToast('⚠️ আগে মার্জ করুন!');
+        return;
+      }
+      try {
+        const blob = new Blob([mergedXmlContent], { type: 'application/xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'merged_theme_values.xml';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () {
+          URL.revokeObjectURL(url);
+        }, 100);
+        showToast('✅ মার্জ করা XML ডাউনলোড হয়েছে!');
+      } catch (e) {
+        showToast(`❌ ডাউনলোড করতে ব্যর্থ: ${e.message}`);
+      }
+    }
+
+    function clearAllFiles() {
+      if (uploadedFiles.length === 0) {
+        showToast('⚠️ কোনো ফাইল নেই!');
+        return;
+      }
+      const count = uploadedFiles.length;
+      uploadedFiles = [];
+      mergedXmlContent = '';
+      renderFileList();
+      updateMultiStats();
+      document.getElementById('downloadMergedBtn').disabled = true;
+      showToast(`🗑️ ${count} টি ফাইল ক্লিয়ার করা হয়েছে`);
+    }
+
+    // ================================================================
+    // 13. UI UPDATE FUNCTIONS
+    // ================================================================
+
+    function updateStats() {
+      try {
+        const leftParsed = parseXml(leftRawXml);
+        let colors = 0,
+          dimens = 0;
+        leftParsed.itemMap.forEach((v, k) => {
+          if (k.startsWith('color::')) colors++;
+          else if (k.startsWith('dimen::')) dimens++;
+        });
+        document.getElementById('leftStats').innerHTML = `📄 Ready`;
+        const leftStatsDiv = document.querySelector('.card:first-child .stats');
+        if (leftStatsDiv) {
+          leftStatsDiv.children[0].innerHTML = `🎨 ${colors}`;
+          leftStatsDiv.children[1].innerHTML = `📏 ${dimens}`;
+          leftStatsDiv.children[2].innerHTML = `📦 ${leftParsed.itemMap.size}`;
+        }
+      } catch (e) { }
+
+      try {
+        const rightParsed = parseXml(rightRawXml);
+        let colors = 0,
+          dimens = 0;
+        rightParsed.itemMap.forEach((v, k) => {
+          if (k.startsWith('color::')) colors++;
+          else if (k.startsWith('dimen::')) dimens++;
+        });
+        document.getElementById('rightStats').innerHTML = `📄 Ready`;
+        const rightStatsDiv = document.querySelector('.card:last-child .stats');
+        if (rightStatsDiv) {
+          rightStatsDiv.children[0].innerHTML = `🎨 ${colors}`;
+          rightStatsDiv.children[1].innerHTML = `📏 ${dimens}`;
+          rightStatsDiv.children[2].innerHTML = `📦 ${rightParsed.itemMap.size}`;
+        }
+      } catch (e) { }
+    }
+
+    function updateEditors() {
+      document.getElementById('leftEditor').value = leftRawXml;
+      document.getElementById('rightEditor').value = rightRawXml;
+      updateStats();
+    }
+
+    function downloadRaw() {
+      const blob = new Blob([leftRawXml], { type: 'application/xml' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'theme_values.xml';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('✓ Downloaded MIUI_Theme_Values');
+    }
+
+    function downloadCleanResolved() {
+      let resolvedXml = leftRawXml;
+      const colorMap = extractColorMap(leftRawXml);
+      colorMap.forEach((value, name) => {
+        const resolved = forceResolveColor(value, colorMap);
+        resolvedXml = resolvedXml.replace(new RegExp(`(<color\\s+name="${escapeRegex(name)}">)[^<]*(</color>)`, 'g'),
+          `$1${resolved}$2`);
+      });
+      if (!resolvedXml.includes('<MIUI_Theme_Values')) {
+        resolvedXml = convertToMIUIFormat(resolvedXml);
+      }
+      const blob = new Blob([resolvedXml], { type: 'application/xml' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'theme_values.xml';
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('✓ Clean resolved downloaded');
+    }
+
+    // ================================================================
+    // 14. SMART TARGET MERGER
+    // ================================================================
+
+    function smartTargetMerger() {
+      try {
+        const masterParsed = parseXml(leftRawXml);
+        const targetParsed = parseXml(rightRawXml);
+
+        const masterColors = new Map();
+        const targetColors = new Map();
+
+        masterParsed.itemMap.forEach((item, key) => {
+          if (key.startsWith('color::')) {
+            const name = key.replace('color::', '');
+            masterColors.set(name, item.value);
+          }
+        });
+
+        targetParsed.itemMap.forEach((item, key) => {
+          if (key.startsWith('color::')) {
+            const name = key.replace('color::', '');
+            targetColors.set(name, item.value);
+          }
+        });
+
+        const newColors = [];
+        const existingColors = [];
+
+        targetColors.forEach((targetValue, name) => {
+          if (masterColors.has(name)) {
+            existingColors.push({
+              name: name,
+              value: masterColors.get(name),
+              targetValue: targetValue,
+              status: 'existing'
+            });
+          } else {
+            newColors.push({
+              name: name,
+              value: targetValue,
+              status: 'new'
+            });
+          }
+        });
+
+        let finalXml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
+        finalXml += `<MIUI_Theme_Values template="DarkTemplate">\n\n`;
+
+        if (newColors.length > 0) {
+          finalXml += `    <!-- 🆕 NEW COLORS (Not in Master) -->\n`;
+          newColors.forEach(color => {
+            finalXml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.value)}</color>\n`;
+          });
+          if (existingColors.length > 0) {
+            finalXml += `\n`;
+          }
+        }
+
+        if (existingColors.length > 0) {
+          finalXml += `    <!-- ✅ EXISTING COLORS (Values from Master) -->\n`;
+          existingColors.forEach(color => {
+            finalXml += `    <color name="${escapeXml(color.name)}">${escapeXml(color.value)}</color>\n`;
+          });
+        }
+
+        finalXml += `\n</MIUI_Theme_Values>`;
+
+        const blob = new Blob([finalXml], { type: 'application/xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'target_merged_theme_values.xml';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+
+        rightRawXml = finalXml;
+        document.getElementById('rightEditor').value = rightRawXml;
+        updateStats();
+
+        showToast(`✅ Target Merge: ${newColors.length} New ↑ + ${existingColors.length} Updated ↓`);
+
+        console.log('📊 SMART TARGET MERGE REPORT');
+        console.log('═══════════════════════════════════════');
+        console.log(`🆕 New Colors (Not in Master) - উপরে: ${newColors.length}`);
+        newColors.forEach(c => console.log(`   🔸 ${c.name}: ${c.value}`));
+        console.log(`\n✅ Updated Colors (Master values) - নীচে: ${existingColors.length}`);
+        existingColors.forEach(c => console.log(`   🔹 ${c.name}: ${c.value} (from Master) | Target was: ${c.targetValue}`));
+        console.log(`\n📥 Downloaded: target_merged_theme_values.xml`);
+
+      } catch (e) {
+        showToast(`❌ Smart Target Merge Error: ${e.message}`);
+        console.error('Smart Target Merge Error:', e);
+      }
+    }
+
+    // ================================================================
+    // 15. EVENT LISTENERS
+    // ================================================================
+
+    // Action bar buttons
     document.getElementById('mergeActionBtn').addEventListener('click', mergeFiles);
     document.getElementById('downloadBtn').addEventListener('click', downloadRaw);
     document.getElementById('extractMatchingBtn').addEventListener('click', extractMatchingColors);
     document.getElementById('extractNonMatchingBtn').addEventListener('click', extractNonMatchingColors);
     document.getElementById('compareColorsBtn').addEventListener('click', renderColorComparison);
+    document.getElementById('replaceMiuixM3ColorsBtn').addEventListener('click', replaceMiuixM3Colors);
+    document.getElementById('sortMiuixColorsBtn').addEventListener('click', sortMiuixColors);
+    document.getElementById('extractNonSystemBtn').addEventListener('click', extractNonSystemFromCurrentXml);
+    document.getElementById('replaceBgWithColorBtn').addEventListener('click', replaceBgColors);
+    document.getElementById('replaceTextWithColorBtn').addEventListener('click', replaceTextColorsSmart);
+    document.getElementById('resolveColorsBtn').addEventListener('click', renderColorResolver);
+    document.getElementById('cleanDownloadBtn').addEventListener('click', downloadCleanResolved);
+    document.getElementById('exportBgBtn').addEventListener('click', () => exportColorsByCategory(isBgButtonColor,
+      'theme_values'));
+    document.getElementById('exportTextBtn').addEventListener('click', () => exportColorsByCategory(isTextColor,
+      'theme_values'));
+    document.getElementById('formatTargetBtn').addEventListener('click', formatTargetXML);
+    document.getElementById('smartTargetMergeBtn').addEventListener('click', smartTargetMerger);
+
     document.getElementById('resetExampleBtn').addEventListener('click', () => {
       leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>
     <MIUI_Theme_Values template="DarkTemplate">
@@ -2998,18 +3138,8 @@
       updateEditors();
       showToast('Reset to default MIUI_Theme_Values format');
     });
-    document.getElementById('exportBgBtn').addEventListener('click', () => exportColorsByCategory(isBgButtonColor, 'theme_values'));
-    document.getElementById('exportTextBtn').addEventListener('click', () => exportColorsByCategory(isTextColor, 'theme_values'));
-    document.getElementById('extractNonSystemBtn').addEventListener('click', extractNonSystemFromCurrentXml);
-    document.getElementById('replaceBgWithColorBtn').addEventListener('click', replaceBgColors);
-    document.getElementById('replaceTextWithColorBtn').addEventListener('click', replaceTextColorsSmart);
-    document.getElementById('resolveColorsBtn').addEventListener('click', renderColorResolver);
-    document.getElementById('cleanDownloadBtn').addEventListener('click', downloadCleanResolved);
-    document.getElementById('replaceMiuixM3ColorsBtn').addEventListener('click', replaceMiuixM3Colors);
-    document.getElementById('sortMiuixColorsBtn').addEventListener('click', sortMiuixColors);
-    // FORMAT TARGET BUTTON - NEW
-    document.getElementById('formatTargetBtn').addEventListener('click', formatTargetXML);
 
+    // File input handlers
     document.getElementById('leftFileInput').addEventListener('change', (e) => {
       const f = e.target.files[0];
       if (f) {
@@ -3023,6 +3153,7 @@
         r.readAsText(f);
       }
     });
+
     document.getElementById('rightFileInput').addEventListener('change', (e) => {
       const f = e.target.files[0];
       if (f) {
@@ -3036,27 +3167,47 @@
         r.readAsText(f);
       }
     });
+
     document.getElementById('clearLeftBtn').addEventListener('click', () => {
       leftRawXml = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n\n</MIUI_Theme_Values>`;
       updateEditors();
     });
+
     document.getElementById('clearRightBtn').addEventListener('click', () => {
       rightRawXml = `<?xml version='1.0' encoding='UTF-8'?>\n<MIUI_Theme_Values template="DarkTemplate">\n\n</MIUI_Theme_Values>`;
       updateEditors();
     });
 
-    const leftEditor = document.getElementById('leftEditor');
-    const rightEditor = document.getElementById('rightEditor');
-    leftEditor.addEventListener('input', () => {
-      leftRawXml = leftEditor.value;
-      updateStats();
-    });
-    rightEditor.addEventListener('input', () => {
-      rightRawXml = rightEditor.value;
+    // Editor input handlers
+    document.getElementById('leftEditor').addEventListener('input', () => {
+      leftRawXml = document.getElementById('leftEditor').value;
       updateStats();
     });
 
-    let isPanelOpen = true;
+    document.getElementById('rightEditor').addEventListener('input', () => {
+      rightRawXml = document.getElementById('rightEditor').value;
+      updateStats();
+    });
+
+    // ================================================================
+    // 16. PANEL TOGGLE
+    // ================================================================
+
+    document.querySelectorAll('.compact-header').forEach(header => {
+      header.addEventListener('click', function (e) {
+        if (e.target.closest('button')) return;
+        const body = this.nextElementSibling;
+        const icon = this.querySelector('.toggle-icon');
+        if (body) {
+          body.classList.toggle('collapsed');
+          if (icon) {
+            icon.textContent = body.classList.contains('collapsed') ? '▲' : '▼';
+          }
+        }
+      });
+    });
+
+    // Resolver panel toggle
     document.getElementById('toggleResolverHeader').addEventListener('click', (e) => {
       if (e.target.id !== 'resolveColorsBtn' && e.target.id !== 'cleanDownloadBtn') {
         isPanelOpen = !isPanelOpen;
@@ -3065,890 +3216,112 @@
       }
     });
 
-    updateEditors();
+    // ================================================================
+    // 17. MULTIPLE UPLOAD EVENT LISTENERS
+    // ================================================================
 
-
-    // ===============================================================================
-    // MULTIPLE XML MERGE - FIXED VERSION
-    // ===============================================================================
-
-    let uploadedFiles = [];
-    let mergedXmlContent = '';
-
-    // DOM Elements
-    const dropZone = document.getElementById('dropZone');
     const multiFileInput = document.getElementById('multiFileInput');
-    const fileList = document.getElementById('fileList');
-    const fileCount = document.getElementById('fileCount');
-    const totalColorsCount = document.getElementById('totalColorsCount');
-    const mergeAllBtn = document.getElementById('mergeAllFilesBtn');
-    const downloadMergedBtn = document.getElementById('downloadMergedBtn');
-    const clearAllBtn = document.getElementById('clearAllFilesBtn');
 
-    // ===============================================================================
-    // FILE HANDLING - FIXED
-    // ===============================================================================
-
-    // Click to browse - FIXED
-    dropZone.addEventListener('click', function (e) {
-      e.stopPropagation();
-      multiFileInput.click();
-    });
-
-    // File selection - FIXED
     multiFileInput.addEventListener('change', function (e) {
       const files = e.target.files;
       if (files && files.length > 0) {
         handleFiles(files);
       }
-      // Reset input so same file can be selected again
       this.value = '';
     });
 
-    // Drag and Drop
-    dropZone.addEventListener('dragover', function (e) {
+    // Drag and drop for multiple upload
+    const multiUploadBody = document.getElementById('multiUploadBody');
+    multiUploadBody.addEventListener('dragover', function (e) {
       e.preventDefault();
-      this.classList.add('dragover');
+      this.style.borderColor = '#10b981';
+      this.style.background = 'rgba(16, 185, 129, 0.05)';
     });
 
-    dropZone.addEventListener('dragleave', function (e) {
+    multiUploadBody.addEventListener('dragleave', function (e) {
       e.preventDefault();
-      this.classList.remove('dragover');
+      this.style.borderColor = '';
+      this.style.background = '';
     });
 
-    dropZone.addEventListener('drop', function (e) {
+    multiUploadBody.addEventListener('drop', function (e) {
       e.preventDefault();
-      this.classList.remove('dragover');
+      this.style.borderColor = '';
+      this.style.background = '';
       const files = e.dataTransfer.files;
       if (files && files.length > 0) {
         handleFiles(files);
       }
     });
 
-    // Handle multiple files - FIXED
-    function handleFiles(files) {
-      if (!files || files.length === 0) {
-        showToast('⚠️ কোনো ফাইল সিলেক্ট করা হয়নি!');
-        return;
-      }
+    document.getElementById('mergeAllFilesBtn').addEventListener('click', mergeAllFiles);
+    document.getElementById('downloadMergedBtn').addEventListener('click', downloadMergedFile);
+    document.getElementById('clearAllFilesBtn').addEventListener('click', clearAllFiles);
 
-      let loadedCount = 0;
-      const totalFiles = files.length;
-      const validFiles = [];
+    // ================================================================
+    // 18. ANALYSIS EVENT LISTENERS
+    // ================================================================
 
-      // Filter valid XML files
-      for (let file of files) {
-        const fileName = file.name.toLowerCase();
-        if (fileName.endsWith('.xml') || file.type === 'text/xml') {
-          validFiles.push(file);
-        } else {
-          showToast(`⚠️ "${file.name}" XML ফাইল নয়, বাদ দেয়া হলো`);
-        }
-      }
-
-      if (validFiles.length === 0) {
-        showToast('⚠️ কোনো বৈধ XML ফাইল নেই!');
-        return;
-      }
-
-      // Process each valid file
-      validFiles.forEach(function (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-          try {
-            const content = e.target.result;
-
-            // Check if it's valid XML
-            if (!content || content.trim() === '') {
-              showToast(`⚠️ "${file.name}" খালি ফাইল!`);
-              return;
-            }
-
-            uploadedFiles.push({
-              name: file.name,
-              content: content,
-              size: file.size
-            });
-
-            loadedCount++;
-
-            if (loadedCount === validFiles.length) {
-              renderFileList();
-              updateMultiStats();
-              showToast(`✅ ${uploadedFiles.length} টি XML ফাইল আপলোড হয়েছে!`);
-            }
-          } catch (error) {
-            showToast(`❌ "${file.name}" পড়তে ব্যর্থ: ${error.message}`);
-          }
-        };
-
-        reader.onerror = function () {
-          showToast(`❌ "${file.name}" পড়তে ব্যর্থ`);
-        };
-
-        reader.readAsText(file);
-      });
-    }
-
-    // ===============================================================================
-    // RENDER FILE LIST - FIXED
-    // ===============================================================================
-
-    function renderFileList() {
-      if (uploadedFiles.length === 0) {
-        fileList.innerHTML = `
-            <div style="text-align: center; padding: 20px; color: #94a3b8; font-size: 0.85rem;">
-                📭 No files uploaded yet
-            </div>
-        `;
-        return;
-      }
-
-      let html = '';
-      uploadedFiles.forEach(function (file, index) {
-        const sizeInKB = (file.size / 1024).toFixed(1);
-        const sizeDisplay = file.size < 1024 ?
-          `${file.size} bytes` :
-          `${sizeInKB} KB`;
-
-        html += `
-            <div class="file-item">
-                <div class="file-item-info">
-                    <span class="file-item-icon">📄</span>
-                    <div>
-                        <div class="file-item-name">${escapeHtml(file.name)}</div>
-                        <div class="file-item-size">${sizeDisplay}</div>
-                    </div>
-                </div>
-                <button class="file-item-remove" data-index="${index}" title="Remove file">✕</button>
-            </div>
-        `;
-      });
-
-      fileList.innerHTML = html;
-
-      // Remove button events - FIXED
-      document.querySelectorAll('.file-item-remove').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-          const index = parseInt(this.dataset.index);
-          if (!isNaN(index) && index >= 0 && index < uploadedFiles.length) {
-            const fileName = uploadedFiles[index].name;
-            uploadedFiles.splice(index, 1);
-            renderFileList();
-            updateMultiStats();
-            mergedXmlContent = '';
-            downloadMergedBtn.disabled = true;
-            showToast(`🗑️ "${fileName}" রিমুভ করা হয়েছে`);
-          }
-        });
-      });
-    }
-
-    // ===============================================================================
-    // UPDATE STATS - FIXED
-    // ===============================================================================
-
-    function updateMultiStats() {
-      const count = uploadedFiles.length;
-      fileCount.textContent = count;
-
-      // Count total colors in all files
-      let totalColors = 0;
-      uploadedFiles.forEach(function (file) {
-        if (file.content) {
-          const colorMatches = file.content.match(/<color\s+name="[^"]+"[^>]*>[^<]+<\/color>/g);
-          if (colorMatches) {
-            totalColors += colorMatches.length;
-          }
-        }
-      });
-      totalColorsCount.textContent = totalColors;
-
-      // Enable/disable merge button
-      mergeAllBtn.disabled = (count === 0);
-      mergeAllBtn.style.opacity = (count === 0) ? '0.5' : '1';
-      mergeAllBtn.style.cursor = (count === 0) ? 'not-allowed' : 'pointer';
-    }
-
-    // ===============================================================================
-    // MERGE ALL FILES - FIXED
-    // ===============================================================================
-
-    function mergeAllFiles() {
-      if (uploadedFiles.length === 0) {
-        showToast('⚠️ কোনো XML ফাইল নেই!');
-        return;
-      }
-
-      try {
-        const mergedMap = new Map();
-        let totalColors = 0;
-        let totalDimens = 0;
-        let processedFiles = 0;
-
-        showToast(`⏳ মার্জ শুরু হচ্ছে... ${uploadedFiles.length} টি ফাইল`);
-
-        // Process each file
-        uploadedFiles.forEach(function (file) {
-          const content = file.content;
-          if (!content || content.trim() === '') return;
-
-          // Extract colors
-          const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
-          let match;
-          while ((match = colorRegex.exec(content)) !== null) {
-            const key = `color::${match[1]}`;
-            if (!mergedMap.has(key)) {
-              mergedMap.set(key, {
-                tagName: 'color',
-                name: match[1],
-                value: match[2].trim()
-              });
-              totalColors++;
-            }
-          }
-
-          // Extract dimens
-          const dimenRegex = /<dimen\s+name="([^"]+)"[^>]*>([^<]+)<\/dimen>/g;
-          while ((match = dimenRegex.exec(content)) !== null) {
-            const key = `dimen::${match[1]}`;
-            if (!mergedMap.has(key)) {
-              mergedMap.set(key, {
-                tagName: 'dimen',
-                name: match[1],
-                value: match[2].trim()
-              });
-              totalDimens++;
-            }
-          }
-
-          processedFiles++;
-        });
-
-        if (mergedMap.size === 0) {
-          showToast('⚠️ কোনো বৈধ কালার বা ডাইমেনশন পাওয়া যায়নি!');
-          return;
-        }
-
-        // Build XML
-        let xml = `<?xml version='1.0' encoding='UTF-8'?>\n`;
-        xml += `<MIUI_Theme_Values template="DarkTemplate">\n\n`;
-
-        // Sort items
-        const colors = [];
-        const dimens = [];
-        mergedMap.forEach(function (item) {
-          if (item.tagName === 'color') {
-            colors.push(item);
-          } else {
-            dimens.push(item);
-          }
-        });
-
-        // Sort alphabetically
-        colors.sort(function (a, b) {
-          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-        });
-        dimens.sort(function (a, b) {
-          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-        });
-
-        // Add colors
-        if (colors.length > 0) {
-          colors.forEach(function (item) {
-            xml += `    <color name="${escapeXml(item.name)}">${escapeXml(item.value)}</color>\n`;
-          });
-        }
-
-        // Add dimens
-        if (dimens.length > 0) {
-          if (colors.length > 0) xml += `\n`;
-          dimens.forEach(function (item) {
-            xml += `    <dimen name="${escapeXml(item.name)}">${escapeXml(item.value)}</dimen>\n`;
-          });
-        }
-
-        xml += `\n</MIUI_Theme_Values>`;
-
-        mergedXmlContent = xml;
-        downloadMergedBtn.disabled = false;
-        downloadMergedBtn.style.opacity = '1';
-        downloadMergedBtn.style.cursor = 'pointer';
-
-        // Update stats with merged count
-        totalColorsCount.textContent = colors.length;
-
-        showToast(`✅ মার্জ সম্পূর্ণ! ${colors.length} কালার, ${dimens.length} ডাইমেনশন`);
-
-      } catch (e) {
-        showToast(`❌ মার্জ করতে ব্যর্থ: ${e.message}`);
-        console.error('Merge Error:', e);
-      }
-    }
-
-    // ===============================================================================
-    // DOWNLOAD MERGED FILE - FIXED
-    // ===============================================================================
-
-    function downloadMergedFile() {
-      if (!mergedXmlContent || mergedXmlContent.trim() === '') {
-        showToast('⚠️ আগে মার্জ করুন!');
-        return;
-      }
-
-      try {
-        const blob = new Blob([mergedXmlContent], { type: 'application/xml;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'merged_theme_values.xml';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function () {
-          URL.revokeObjectURL(url);
-        }, 100);
-
-        showToast('✅ মার্জ করা XML ডাউনলোড হয়েছে!');
-      } catch (e) {
-        showToast(`❌ ডাউনলোড করতে ব্যর্থ: ${e.message}`);
-      }
-    }
-
-    // ===============================================================================
-    // CLEAR ALL FILES - FIXED
-    // ===============================================================================
-
-    function clearAllFiles() {
-      if (uploadedFiles.length === 0) {
-        showToast('⚠️ কোনো ফাইল নেই!');
-        return;
-      }
-
-      const count = uploadedFiles.length;
-      uploadedFiles = [];
-      mergedXmlContent = '';
-      renderFileList();
-      updateMultiStats();
-      downloadMergedBtn.disabled = true;
-      downloadMergedBtn.style.opacity = '0.5';
-      downloadMergedBtn.style.cursor = 'not-allowed';
-      showToast(`🗑️ ${count} টি ফাইল ক্লিয়ার করা হয়েছে`);
-    }
-
-    // ===============================================================================
-    // EVENT LISTENERS FOR MULTI-UPLOAD - FIXED
-    // ===============================================================================
-
-    // Make sure elements exist before adding listeners
-    if (mergeAllBtn) {
-      mergeAllBtn.addEventListener('click', mergeAllFiles);
-      mergeAllBtn.disabled = true;
-      mergeAllBtn.style.opacity = '0.5';
-      mergeAllBtn.style.cursor = 'not-allowed';
-    }
-
-    if (downloadMergedBtn) {
-      downloadMergedBtn.addEventListener('click', downloadMergedFile);
-      downloadMergedBtn.disabled = true;
-      downloadMergedBtn.style.opacity = '0.5';
-      downloadMergedBtn.style.cursor = 'not-allowed';
-    }
-
-    if (clearAllBtn) {
-      clearAllBtn.addEventListener('click', clearAllFiles);
-    }
-
-    // Initialize
-    renderFileList();
-    updateMultiStats();
-
-    console.log('✅ Multiple XML Merge initialized successfully!');
-
-
-
-    // ===============================================================================
-    // COLOR VALUE ANALYSIS - FIXED VERSION
-    // ===============================================================================
-
-    let analysisData = [];
-
-    // DOM Elements
-    const analysisDropZone = document.getElementById('analysisDropZone');
     const analysisFileInput = document.getElementById('analysisFileInput');
-    const analysisUploadBtn = document.getElementById('analysisUploadBtn');
-    const analysisListContainer = document.getElementById('analysisListContainer');
-    const analysisTotalColors = document.getElementById('analysisTotalColors');
-    const analysisUniqueColors = document.getElementById('analysisUniqueColors');
-    const analysisTotalValues = document.getElementById('analysisTotalValues');
+
+    analysisFileInput.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        processAnalysisFile(file);
+      }
+      this.value = '';
+    });
+
+    // Drag and drop for analysis
+    const analysisContent = document.getElementById('analysisContent');
+    analysisContent.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      this.style.borderColor = '#ec4899';
+      this.style.background = 'rgba(236, 72, 153, 0.05)';
+    });
+
+    analysisContent.addEventListener('dragleave', function (e) {
+      e.preventDefault();
+      this.style.borderColor = '';
+      this.style.background = '';
+    });
+
+    analysisContent.addEventListener('drop', function (e) {
+      e.preventDefault();
+      this.style.borderColor = '';
+      this.style.background = '';
+      const file = e.dataTransfer.files[0];
+      if (file) {
+        processAnalysisFile(file);
+      }
+    });
+
     const clearAnalysisBtn = document.getElementById('clearAnalysisBtn');
-
-    // Toggle panel
-    let isAnalysisOpen = true;
-    const toggleHeader = document.getElementById('toggleAnalysisHeader');
-    if (toggleHeader) {
-      toggleHeader.addEventListener('click', function (e) {
-        if (e.target.id !== 'clearAnalysisBtn' && e.target.id !== 'analysisUploadBtn' && e.target.tagName !== 'BUTTON') {
-          isAnalysisOpen = !isAnalysisOpen;
-          const content = document.getElementById('analysisContent');
-          if (content) {
-            content.classList.toggle('collapsed', !isAnalysisOpen);
-          }
-          const icon = document.getElementById('analysisToggleIcon');
-          if (icon) {
-            icon.textContent = isAnalysisOpen ? '▼' : '▲';
-          }
-        }
-      });
-    }
-
-    // ===============================================================================
-    // FILE UPLOAD HANDLING - FIXED
-    // ===============================================================================
-
-    // 1. Drop Zone Click - পুরো এলাকায় ক্লিক করলে ফাইল সিলেক্ট হবে
-    if (analysisDropZone) {
-      analysisDropZone.addEventListener('click', function (e) {
-        // চেক করি যে বাটনে ক্লিক করা হচ্ছে কিনা
-        if (e.target.id === 'analysisUploadBtn') {
-          // বাটনে ক্লিক করলে আলাদাভাবে হ্যান্ডেল করব
-          return;
-        }
-        analysisFileInput.click();
-      });
-    }
-
-    // 2. Upload Button Click - বাটনে ক্লিক করলে ফাইল সিলেক্ট হবে
-    if (analysisUploadBtn) {
-      analysisUploadBtn.addEventListener('click', function (e) {
-        e.stopPropagation(); // parent এ event propagate না করতে
-        analysisFileInput.click();
-      });
-    }
-
-    // 3. File Input Change - ফাইল সিলেক্ট হলে প্রসেস করবে
-    if (analysisFileInput) {
-      analysisFileInput.addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (file) {
-          processAnalysisFile(file);
-        }
-        this.value = ''; // রিসেট করি
-      });
-    }
-
-    // ===============================================================================
-    // DRAG AND DROP
-    // ===============================================================================
-
-    if (analysisDropZone) {
-      analysisDropZone.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        this.classList.add('dragover');
-      });
-
-      analysisDropZone.addEventListener('dragleave', function (e) {
-        e.preventDefault();
-        this.classList.remove('dragover');
-      });
-
-      analysisDropZone.addEventListener('drop', function (e) {
-        e.preventDefault();
-        this.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file) {
-          processAnalysisFile(file);
-        }
-      });
-    }
-
-    // ===============================================================================
-    // PROCESS FILE & ANALYZE COLORS
-    // ===============================================================================
-
-    function processAnalysisFile(file) {
-      // চেক করি ফাইল XML কিনা
-      const fileName = file.name.toLowerCase();
-      if (!fileName.endsWith('.xml') && file.type !== 'text/xml') {
-        showToast('⚠️ শুধুমাত্র XML ফাইল সাপোর্টেড!');
-        return;
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        try {
-          const content = e.target.result;
-          if (!content || content.trim() === '') {
-            showToast('⚠️ ফাইলটি খালি!');
-            return;
-          }
-
-          // XML পার্স করে কালার অ্যানালাইসিস করি
-          analyzeColors(content);
-          showToast(`✅ "${file.name}" অ্যানালাইসিস সম্পূর্ণ! (${analysisData.length}টি ইউনিক কালার)`);
-
-        } catch (error) {
-          showToast(`❌ ফাইল পড়তে ব্যর্থ: ${error.message}`);
-          console.error(error);
-        }
-      };
-
-      reader.onerror = function () {
-        showToast('❌ ফাইল পড়তে ব্যর্থ!');
-      };
-
-      reader.readAsText(file);
-    }
-
-    // ===============================================================================
-    // ANALYZE COLORS
-    // ===============================================================================
-
-    function analyzeColors(xmlContent) {
-      const colorMap = new Map();
-      let totalValues = 0;
-
-      const colorRegex = /<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g;
-      let match;
-
-      while ((match = colorRegex.exec(xmlContent)) !== null) {
-        const name = match[1].trim();
-        const rawValue = match[2].trim();
-        totalValues++;
-
-        const colorMapForResolve = extractColorMap(xmlContent);
-        let resolved = forceResolveColor(rawValue, colorMapForResolve);
-
-        // ============================================================
-        // FIX: ARGB কালারকে সঠিকভাবে রেজলভ করা
-        // ============================================================
-        // যদি #AARRGGBB ফরম্যাটে হয়, তাহলে #RRGGBB তে কনভার্ট করে স্টোর করুন
-        // কিন্তু ডিসপ্লেতে #AARRGGBB দেখাবেন
-        let displayResolved = resolved;
-        if (resolved && resolved.startsWith('#') && resolved.length === 9) {
-          // #RRGGBB অংশ নিন (প্রিভিউর জন্য)
-          // কিন্তু ডিসপ্লেতে পুরো #AARRGGBB দেখাবেন
-        }
-
-        const key = resolved;
-
-        if (colorMap.has(key)) {
-          const entry = colorMap.get(key);
-          entry.count++;
-          if (!entry.names.includes(name)) {
-            entry.names.push(name);
-          }
-        } else {
-          colorMap.set(key, {
-            name: name,
-            names: [name],
-            value: rawValue,
-            resolved: resolved, // পুরো ARGB সংরক্ষণ করুন
-            count: 1
-          });
-        }
-      }
-
-      analysisData = Array.from(colorMap.values())
-        .sort((a, b) => b.count - a.count);
-
-      analysisTotalColors.textContent = totalValues;
-      analysisUniqueColors.textContent = analysisData.length;
-      analysisTotalValues.textContent = totalValues;
-
-      renderAnalysisList();
-    }
-
-    // ===============================================================================
-    // RENDER ANALYSIS LIST - EXACT VALUE COPY (BOTH BUTTONS)
-    // ===============================================================================
-
-    function renderAnalysisList() {
-      if (!analysisListContainer) return;
-
-      if (analysisData.length === 0) {
-        analysisListContainer.innerHTML = `
-      <div class="analysis-empty" style="grid-column: 1 / -1;">
-        <span class="icon">📊</span>
-        <div style="font-size: 1rem; color: #e2e8f0; margin-bottom: 4px;">No data to display</div>
-        <div style="font-size: 0.85rem; color: #94a3b8;">Upload an XML file to analyze color values</div>
-      </div>
-    `;
-        return;
-      }
-
-      let html = '';
-
-      analysisData.forEach(function (item, index) {
-        // ============================================================
-        // এক্সাক্ট ভ্যালু - যেটা কপি হবে (দুটো বাটনেই একই)
-        // ============================================================
-        const exactValue = item.value; // আসল XML ভ্যালু (যেমন: #FF00FF62)
-        const resolvedValue = item.resolved || item.value; // রেজলভড ভ্যালু
-
-        const count = item.count;
-        const names = item.names || [item.name];
-        const displayName = names.length > 1 ? `${names[0]} (+${names.length - 1})` : names[0];
-
-        // Count badge class
-        let countClass = 'low';
-        if (count >= 5) countClass = 'high';
-        else if (count >= 3) countClass = 'medium';
-
-        // ============================================================
-        // প্রিভিউ কালার (শুধু RGB)
-        // ============================================================
-        let previewColor = resolvedValue;
-        if (previewColor && previewColor.startsWith('#') && previewColor.length === 9) {
-          previewColor = '#' + previewColor.substring(3);
-        }
-        if (!isValidHexColor(previewColor)) {
-          previewColor = '#888888';
-        }
-
-        // ============================================================
-        // ডিসপ্লে ভ্যালু (ARGB দেখান)
-        // ============================================================
-        let displayResolved = resolvedValue;
-
-        html += `
-      <div class="analysis-item">
-        <div class="analysis-preview" style="background: ${previewColor};"></div>
-        <div class="analysis-info">
-          <div class="analysis-name">
-            ${escapeHtml(displayName)}
-            <span class="analysis-count ${countClass}">${count}x</span>
-          </div>
-          
-          <!-- Original Value with Copy -->
-          <div class="analysis-value" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="color: #94a3b8;">📄 ${escapeHtml(exactValue)}</span>
-            <button class="copy-btn" data-copy="${escapeHtml(exactValue)}" title="Copy exact value" style="
-              background: rgba(102, 126, 234, 0.2);
-              border: none;
-              color: #94a3b8;
-              border-radius: 6px;
-              padding: 2px 8px;
-              cursor: pointer;
-              font-size: 0.7rem;
-              transition: all 0.2s;
-              font-family: 'Inter', sans-serif;
-            ">
-              📋 Copy
-            </button>
-          </div>
-          
-          <!-- Resolved Value with Copy -->
-          <div class="analysis-value" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span style="color: #10b981;">🎯 ${escapeHtml(displayResolved)}</span>
-            <button class="copy-btn" data-copy="${escapeHtml(displayResolved)}" title="Copy resolved color" style="
-              background: rgba(16, 185, 129, 0.2);
-              border: none;
-              color: #10b981;
-              border-radius: 6px;
-              padding: 2px 8px;
-              cursor: pointer;
-              font-size: 0.7rem;
-              transition: all 0.2s;
-              font-family: 'Inter', sans-serif;
-            ">
-              📋 Copy
-            </button>
-          </div>
-          
-          ${names.length > 1 ? `<div class="analysis-value" style="color: #94a3b8; font-size: 0.6rem;">📌 ${names.length} aliases</div>` : ''}
-        </div>
-      </div>
-    `;
-      });
-
-      analysisListContainer.innerHTML = html;
-
-      // ===========================================================================
-      // COPY BUTTON FUNCTIONALITY
-      // ===========================================================================
-
-      document.querySelectorAll('.copy-btn').forEach(function (btn) {
-        btn.addEventListener('click', function (e) {
-          e.stopPropagation();
-
-          // ============================================================
-          // এক্সাক্ট ভ্যালু কপি করা (data-copy অ্যাট্রিবিউট থেকে)
-          // ============================================================
-          const textToCopy = this.getAttribute('data-copy');
-
-          if (!textToCopy) {
-            showToast('⚠️ কিছুই কপি করা যাবে না!');
-            return;
-          }
-
-          // Copy to clipboard
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(textToCopy).then(function () {
-              const originalText = this.innerHTML;
-              this.innerHTML = '✅ Copied!';
-              this.style.background = 'rgba(16, 185, 129, 0.3)';
-              this.style.color = '#10b981';
-
-              setTimeout(() => {
-                this.innerHTML = originalText;
-                this.style.background = '';
-                this.style.color = '';
-              }, 1500);
-
-              showToast(`✅ "${textToCopy}" কপি করা হয়েছে!`);
-            }.bind(this)).catch(function () {
-              fallbackCopy(textToCopy);
-            });
-          } else {
-            fallbackCopy(textToCopy);
-          }
-        });
-      });
-    }
-
-    // ===============================================================================
-    // FALLBACK COPY FUNCTION
-    // ===============================================================================
-
-    function fallbackCopy(text) {
-      try {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        textarea.style.position = 'fixed';
-        textarea.style.opacity = '0';
-        textarea.style.left = '-9999px';
-        textarea.style.top = '-9999px';
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        showToast(`✅ "${text}" কপি করা হয়েছে!`);
-      } catch (e) {
-        showToast('❌ কপি করতে ব্যর্থ!');
-      }
-    }
-
-
-
-    // ===============================================================================
-    // CLEAR ANALYSIS DATA
-    // ===============================================================================
-
     if (clearAnalysisBtn) {
       clearAnalysisBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         analysisData = [];
-        if (analysisTotalColors) analysisTotalColors.textContent = '0';
-        if (analysisUniqueColors) analysisUniqueColors.textContent = '0';
-        if (analysisTotalValues) analysisTotalValues.textContent = '0';
+
+        const totalColorsEl = document.getElementById('analysisTotalColors');
+        const uniqueColorsEl = document.getElementById('analysisUniqueColors');
+        if (totalColorsEl) totalColorsEl.textContent = '0';
+        if (uniqueColorsEl) uniqueColorsEl.textContent = '0';
+
         renderAnalysisList();
         showToast('🗑️ অ্যানালাইসিস ডাটা ক্লিয়ার করা হয়েছে');
       });
     }
 
-    // ===============================================================================
-    // HELPER FUNCTIONS
-    // ===============================================================================
+    // ================================================================
+    // 19. INITIALIZATION
+    // ================================================================
 
-    function extractColorMap(xmlString) {
-      const map = new Map();
-      const colorMatches = xmlString.matchAll(/<color\s+name="([^"]+)"[^>]*>([^<]+)<\/color>/g);
-      for (const match of colorMatches) {
-        map.set(match[1], match[2].trim());
-      }
-      return map;
-    }
+    updateEditors();
+    renderFileList();
+    updateMultiStats();
 
-    // Make sure these functions exist globally
-    // If not, add them:
-
-    function isValidHexColor(color) {
-      if (!color || typeof color !== 'string') return false;
-      return /^#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})$/i.test(color);
-    }
-
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str).replace(/[&<>"]/g, function (m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        if (m === '"') return '&quot;';
-        return m;
-      });
-    }
-
-    function forceResolveColor(rawValue, colorMap, visited = new Set()) {
-      if (!rawValue || typeof rawValue !== 'string') return rawValue || '#888888';
-      let trimmed = String(rawValue).trim();
-
-      if (isValidHexColor(trimmed)) {
-        return trimmed.toUpperCase();
-      }
-
-      let refMatch = trimmed.match(/^@(?:color|android:color)\/([a-zA-Z0-9_\.]+)$/);
-      if (!refMatch) refMatch = trimmed.match(/^@([a-zA-Z0-9_\.]+)$/);
-
-      if (refMatch && refMatch[1]) {
-        const refName = refMatch[1];
-        if (visited.has(refName)) return '#FFA500';
-        visited.add(refName);
-
-        if (colorMap && colorMap.has(refName)) {
-          return forceResolveColor(colorMap.get(refName), colorMap, visited);
-        }
-
-        // Universal color DB
-        const universalDB = {
-          'm3_ref_palette_dynamic_primary40': '#6750A4',
-          'm3_ref_palette_dynamic_secondary40': '#625B71',
-          'm3_ref_palette_dynamic_tertiary40': '#7D5260',
-          'm3_ref_palette_dynamic_neutral60': '#949397',
-          'system_surface': '#FFFBFE',
-          'system_surface_container_high': '#E6E1E5',
-          'white': '#FFFFFF',
-          'black': '#000000',
-          'transparent': '#00000000',
-          'miuix_color_primary': '#FF6200EE',
-          'miuix_color_accent': '#FF03DAC5',
-          'miuix_color_background': '#FFFFFFFF',
-          'miuix_color_dark_background': '#121212'
-        };
-
-        if (universalDB[refName]) {
-          return universalDB[refName];
-        }
-
-        const lowerRef = refName.toLowerCase();
-        if (lowerRef.includes('primary')) return '#6750A4';
-        if (lowerRef.includes('secondary')) return '#625B71';
-        if (lowerRef.includes('surface')) return '#E6E1E5';
-        if (lowerRef.includes('background')) return '#0A0C15';
-        return '#9CA3AF';
-      }
-
-      return trimmed;
-    }
-
-    function showToast(msg) {
-      // Remove existing toast
-      const existing = document.querySelector('.toast');
-      if (existing) existing.remove();
-
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    console.log('✅ Color Analysis Panel initialized (FIXED)');
-
-
+    console.log('✅ MIUI Theme Studio initialized successfully!');
+    console.log('📊 All functions loaded and ready to use.');
   </script>
 </body>
 
