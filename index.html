@@ -5,12 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>MIUI Theme Studio | Redmi Note 15 5G</title>
+  <title>MIUI Theme Studio </title>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- JSZip + FileSaver for Folder Generator -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
@@ -26,7 +25,7 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: #eef2ff;
       min-height: 100vh;
-      padding: 12px;
+      padding: 8px 12px;
       overflow-x: hidden;
     }
 
@@ -50,39 +49,148 @@
     }
 
     .app-container {
-      max-width: 100%;
+      max-width: 1400px;
       margin: 0 auto;
+      padding: 0 4px;
     }
 
+    /* ===== HERO SECTION - PROFESSIONAL ===== */
     .hero-section {
       text-align: center;
-      margin-bottom: 20px;
-      padding: 12px 12px 10px;
+      margin-bottom: 10px;
+      padding: 14px 20px 12px;
       background: rgba(10, 18, 28, 0.55);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-radius: 28px;
+      border-radius: 24px;
       border: 1px solid rgba(59, 130, 246, 0.35);
       box-shadow: 0 20px 35px -15px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(96, 165, 250, 0.2) inset;
       transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
-    .hero-section h1 {
-      font-size: clamp(18px, 5vw, 26px);
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff, #60a5fa, #c084fc);
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.05), transparent 70%);
+      pointer-events: none;
+      animation: heroGlow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes heroGlow {
+      0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(1.2) rotate(5deg);
+        opacity: 1;
+      }
+    }
+
+    .hero-section>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 2px;
+      flex-wrap: wrap;
+    }
+
+    .hero-brand .brand-icon {
+      font-size: 28px;
+      color: #60a5fa;
+      filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.3));
+    }
+
+    .hero-brand .brand-name {
+      font-size: clamp(20px, 5.5vw, 30px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 30%, #60a5fa 60%, #c084fc 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
     }
 
-    .hero-section p {
-      font-size: 11px;
-      color: #b4d6ff;
-      max-width: 85%;
-      margin: 4px auto 0;
-      line-height: 1.3;
+    .hero-brand .brand-badge {
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      padding: 2px 12px;
+      border-radius: 40px;
+      font-size: 9px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      flex-shrink: 0;
+    }
+
+    .hero-tagline {
+      font-size: clamp(10px, 2vw, 13px);
+      font-weight: 500;
+      color: #94b8e8;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-top: 2px;
+      opacity: 0.85;
+    }
+
+    .hero-tagline i {
+      color: #3b82f6;
+      margin: 0 6px;
+      font-size: 6px;
+      vertical-align: middle;
+    }
+
+    .hero-divider {
+      width: 80px;
+      height: 2px;
+      margin: 6px auto 8px;
+      background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+      border-radius: 4px;
+      opacity: 0.6;
+    }
+
+    .hero-tools {
+      font-size: 12px;
+      color: #b8d4fc;
+      font-weight: 400;
+      letter-spacing: 0.3px;
+      line-height: 1.6;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    .hero-tools .tool-name {
+      color: #d6e8ff;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .hero-tools .tool-name:hover {
+      color: #60a5fa;
+    }
+
+    .hero-tools .separator {
+      color: #3b82f6;
+      opacity: 0.4;
+      margin: 0 4px;
+      font-size: 8px;
+      vertical-align: middle;
     }
 
     .stats-row {
@@ -90,36 +198,60 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .stat-chip {
       background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(8px);
-      padding: 3px 12px;
+      padding: 4px 14px;
       border-radius: 50px;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 600;
-      border: 0.5px solid #3b82f660;
+      border: 0.5px solid rgba(59, 130, 246, 0.3);
+      color: #c5dfff;
+      transition: all 0.2s;
+    }
+
+    .stat-chip:hover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.15);
     }
 
     .stat-chip i {
-      margin-right: 4px;
+      margin-right: 6px;
       color: #3b82f6;
+      font-size: 11px;
     }
 
+    /* ===== TOOLS GRID ===== */
     .tools-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 18px;
-      margin: 20px 0 20px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 10px 0 16px;
+    }
+
+    @media (max-width: 1100px) {
+      .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        max-width: 100%;
+      }
     }
 
     .tool-card {
       background: linear-gradient(145deg, rgba(18, 28, 42, 0.9), rgba(8, 16, 28, 0.95));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border-radius: 28px;
+      border-radius: 24px;
       border: 1px solid rgba(59, 130, 246, 0.3);
       overflow: hidden;
       transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
@@ -128,6 +260,10 @@
       display: flex;
       flex-direction: column;
       box-shadow: 0 12px 25px -12px rgba(0, 0, 0, 0.4);
+      height: 100%;
+      min-height: 210px;
+      width: 100%;
+      max-width: 100%;
     }
 
     .tool-card:active {
@@ -143,17 +279,16 @@
       }
     }
 
-    .card-icon {
-      font-size: 30px;
-      padding: 14px 18px 4px 18px;
-    }
-
     .card-content {
-      padding: 0 16px 12px;
+      padding: 16px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      width: 100%;
     }
 
     .card-title {
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 800;
       background: linear-gradient(120deg, #f0f9ff, #9ac6ff);
       -webkit-background-clip: text;
@@ -162,41 +297,85 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
       gap: 6px;
       margin-bottom: 4px;
+      min-height: 32px;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .card-title .title-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title .title-icon {
+      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .card-title .title-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 18px;
     }
 
     .card-badge {
       background: #1e2f4b;
-      font-size: 8px;
-      padding: 2px 8px;
+      font-size: 9px;
+      padding: 2px 10px;
       border-radius: 40px;
       font-weight: 600;
       color: #b9e0ff;
+      white-space: nowrap;
+      flex-shrink: 0;
+      letter-spacing: 0.3px;
     }
 
     .desc {
-      font-size: 11px;
+      font-size: 13px;
       color: #c5dcff;
       line-height: 1.4;
       margin: 4px 0 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 36px;
+      flex-shrink: 0;
     }
 
     .feature-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
-      margin: 6px 0 10px;
+      gap: 5px;
+      margin: 4px 0 10px;
+      min-height: 26px;
+      flex-shrink: 0;
     }
 
     .tag {
       background: rgba(59, 130, 246, 0.18);
       border-radius: 40px;
-      padding: 2px 8px;
-      font-size: 8px;
+      padding: 2px 9px;
+      font-size: 10px;
       font-weight: 500;
       border: 0.3px solid #3b82f660;
+      white-space: nowrap;
+    }
+
+    .tag i {
+      font-size: 9px;
+      margin-right: 3px;
     }
 
     .launch-button {
@@ -208,20 +387,29 @@
       padding: 8px 16px;
       border-radius: 60px;
       font-weight: 700;
-      font-size: 11px;
+      font-size: 13px;
       color: white;
       text-decoration: none;
       width: 100%;
       transition: all 0.2s;
       border: none;
       cursor: pointer;
-      margin-top: 2px;
       backdrop-filter: blur(4px);
+      flex-shrink: 0;
+      margin-top: auto;
+      letter-spacing: 0.2px;
+    }
+
+    .launch-button span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .launch-button i {
       font-size: 11px;
       transition: transform 0.2s;
+      flex-shrink: 0;
     }
 
     .launch-button:active {
@@ -231,8 +419,8 @@
 
     .footer-note {
       text-align: center;
-      margin-top: 20px;
-      padding: 12px;
+      margin-top: 12px;
+      padding: 10px;
       border-top: 1px solid rgba(59, 130, 246, 0.25);
       font-size: 9px;
       color: #7e9ed1;
@@ -240,58 +428,200 @@
       border-radius: 40px;
     }
 
+    /* ===== RESPONSIVE - MOBILE MARGIN IMPROVED ===== */
     @media (max-width: 640px) {
       body {
-        padding: 8px;
+        padding: 8px 14px;
+      }
+
+      .app-container {
+        padding: 0 2px;
+        max-width: 100%;
       }
 
       .hero-section {
-        padding: 10px 10px 8px;
-        margin-bottom: 14px;
-        border-radius: 22px;
+        padding: 14px 16px 12px;
+        margin-bottom: 10px;
+        border-radius: 20px;
+      }
+
+      .hero-brand .brand-icon {
+        font-size: 22px;
+      }
+
+      .hero-brand .brand-name {
+        font-size: clamp(18px, 5vw, 22px);
+      }
+
+      .hero-brand .brand-badge {
+        font-size: 7px;
+        padding: 2px 8px;
+      }
+
+      .hero-tagline {
+        font-size: 9px;
+        letter-spacing: 0.5px;
+      }
+
+      .hero-divider {
+        width: 60px;
+        margin: 4px auto 6px;
+      }
+
+      .hero-tools {
+        font-size: 10px;
+        max-width: 100%;
+        line-height: 1.5;
+      }
+
+      .hero-tools .separator {
+        margin: 0 2px;
+      }
+
+      .stats-row {
+        gap: 5px;
+        margin-top: 8px;
+      }
+
+      .stat-chip {
+        font-size: 8px;
+        padding: 3px 10px;
+      }
+
+      .stat-chip i {
+        font-size: 9px;
+        margin-right: 4px;
       }
 
       .tools-grid {
-        gap: 12px;
-        grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 8px 0 12px;
       }
 
-      .card-icon {
-        font-size: 26px;
-        padding: 12px 14px 2px 14px;
+      .card-content {
+        padding: 12px 12px 10px;
       }
 
       .card-title {
-        font-size: 15px;
+        font-size: 17px;
+        min-height: 28px;
+      }
+
+      .card-title .title-icon {
+        font-size: 18px;
+      }
+
+      .card-title .title-name {
+        font-size: 17px;
       }
 
       .desc {
-        font-size: 10.5px;
+        font-size: 12px;
+        min-height: 32px;
       }
 
       .launch-button {
-        padding: 8px 12px;
-        font-size: 10px;
+        padding: 9px 12px;
+        font-size: 12px;
       }
 
       .tag {
-        font-size: 7px;
-        padding: 2px 6px;
+        font-size: 9px;
+        padding: 2px 7px;
+      }
+
+      .footer-note {
+        margin-top: 10px;
+        padding: 8px;
+        font-size: 8px;
       }
     }
 
     @media (max-width: 480px) {
-      .stat-chip {
-        font-size: 8px;
-        padding: 2px 8px;
+      body {
+        padding: 6px 12px;
       }
 
-      .hero-section h1 {
+      .hero-brand .brand-icon {
         font-size: 18px;
       }
 
-      .card-icon {
-        font-size: 24px;
+      .hero-brand .brand-name {
+        font-size: 17px;
+      }
+
+      .hero-brand .brand-badge {
+        font-size: 6px;
+        padding: 1px 6px;
+      }
+
+      .hero-tools {
+        font-size: 9px;
+      }
+
+      .hero-section {
+        padding: 12px 14px 10px;
+        border-radius: 18px;
+      }
+
+      .card-title {
+        font-size: 16px;
+        min-height: 26px;
+      }
+
+      .card-title .title-icon {
+        font-size: 16px;
+      }
+
+      .card-title .title-name {
+        font-size: 16px;
+      }
+
+      .desc {
+        font-size: 11.5px;
+        min-height: 30px;
+      }
+
+      .tools-grid {
+        gap: 8px;
+      }
+
+      .tool-card {
+        min-height: 190px;
+        border-radius: 20px;
+      }
+
+      .card-content {
+        padding: 10px 10px 8px;
+      }
+
+      .stat-chip {
+        font-size: 7px;
+        padding: 2px 8px;
+      }
+    }
+
+    @media (min-width: 1101px) {
+      .tools-grid {
+        gap: 18px;
+      }
+
+      .card-content {
+        padding: 18px 18px 14px;
+      }
+
+      .card-title {
+        font-size: 19px;
+        min-height: 34px;
+      }
+
+      .card-title .title-name {
+        font-size: 19px;
+      }
+
+      .desc {
+        font-size: 13.5px;
+        min-height: 38px;
       }
     }
 
@@ -307,58 +637,72 @@
     .hero-section {
       will-change: transform;
     }
-
-    .glow-text {
-      color: #60a5fa;
-    }
-
-    /* Icon Maker special glow */
-    .tool-card[data-tool="icon_maker"] {
-      border-color: rgba(108, 140, 255, 0.5);
-      box-shadow: 0 0 30px rgba(108, 140, 255, 0.1);
-    }
-
-    .tool-card[data-tool="icon_maker"] .card-icon i {
-      color: #6c8cff;
-    }
-
-    .tool-card[data-tool="icon_maker"] .launch-button {
-      background: linear-gradient(95deg, #6c8cff, #8aa4ff);
-    }
-
-    /* All cards now use the exact same CSS */
   </style>
 </head>
 
 <body>
   <div class="app-container">
-    <!-- Hero - Removed OPTIMIZED FOR REDMI NOTE 15 5G badge -->
+    <!-- ===== HERO SECTION - PROFESSIONAL ===== -->
     <div class="hero-section">
-      <h1><i class="fas fa-palette"></i> MIUI Theme Studio<br><span style="font-size: 0.6em; display: block;">7‑IN‑1
-          CREATOR SUITE</span></h1>
-      <p>Drawable Studio · Icon Recolor · XML Merger · Color Replacer · Name Merger · Icon Maker · Folder Generator</p>
+      <div class="hero-brand">
+        <i class="fas fa-palette brand-icon"></i>
+        <span class="brand-name">MIUI Theme Studio</span>
+        <span class="brand-badge"><i class="fas fa-bolt"></i> v3.3</span>
+      </div>
+
+      <div class="hero-tagline">
+        <i class="fas fa-circle"></i>
+        Complete Theme Development Suite
+        <i class="fas fa-circle"></i>
+      </div>
+
+      <div class="hero-divider"></div>
+
+      <div class="hero-tools">
+        <span class="tool-name">Drawable Studio</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Icon Recolor</span>
+        <span class="separator">•</span>
+        <span class="tool-name">XML Merger</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Color Replacer</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Name Merger</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Icon Maker</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Folder Generator</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Theme Values Editor</span>
+      </div>
+
       <div class="stats-row">
-        <div class="stat-chip"><i class="fas fa-cubes"></i> 7 Pro Tools</div>
+        <div class="stat-chip"><i class="fas fa-cubes"></i> 8 Pro Tools</div>
         <div class="stat-chip"><i class="fas fa-mobile-alt"></i> 5G Ready</div>
         <div class="stat-chip"><i class="fas fa-cloud-upload-alt"></i> ZIP Support</div>
         <div class="stat-chip"><i class="fas fa-drafting-compass"></i> Vector→PNG</div>
       </div>
     </div>
 
-    <!-- 7 Tools Grid -->
+    <!-- ===== TOOLS GRID ===== -->
     <div class="tools-grid">
       <!-- 1. Drawable Studio Pro -->
       <div class="tool-card" data-tool="merger_drawable">
-        <div class="card-icon"><i class="fas fa-draw-polygon" style="color: #2dd4bf;"></i></div>
         <div class="card-content">
-          <div class="card-title">Drawable Pro <span class="card-badge">Vector→PNG</span></div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-draw-polygon title-icon" style="color: #2dd4bf;"></i>
+              <span class="title-name">Drawable Pro</span>
+            </span>
+            <span class="card-badge">Vector→PNG</span>
+          </div>
           <div class="desc">Upload XML/PNG/ZIP, resolve relative colors, batch convert vectors, generate fallback &
             extract BG/BTN.</div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-file-zipper"></i> ZIP extract</span>
-            <span class="tag"><i class="fas fa-sync-alt"></i> Resolve colors</span>
-            <span class="tag"><i class="fas fa-layer-group"></i> Fallback merge</span>
-            <span class="tag"><i class="fas fa-download"></i> Bulk ZIP</span>
+            <span class="tag"><i class="fas fa-file-zipper"></i> ZIP</span>
+            <span class="tag"><i class="fas fa-sync-alt"></i> Resolve</span>
+            <span class="tag"><i class="fas fa-layer-group"></i> Fallback</span>
+            <span class="tag"><i class="fas fa-download"></i> Bulk</span>
           </div>
           <button class="launch-button" data-url="merger_drawable.html"><span>Drawable Studio</span> <i
               class="fas fa-arrow-right"></i></button>
@@ -367,16 +711,21 @@
 
       <!-- 2. Icon Recolor Pro -->
       <div class="tool-card" data-tool="merger_icon">
-        <div class="card-icon"><i class="fas fa-icons" style="color: #facc15;"></i></div>
         <div class="card-content">
-          <div class="card-title">Icon Recolor Pro <span class="card-badge">Dual Color</span></div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-icons title-icon" style="color: #facc15;"></i>
+              <span class="title-name">Icon Recolor Pro</span>
+            </span>
+            <span class="card-badge">Dual Color</span>
+          </div>
           <div class="desc">Live preview, primary/secondary replacement, edge smoothing, blur, trace HD & ZIP batch.
           </div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-eye"></i> Live preview</span>
-            <span class="tag"><i class="fas fa-tachometer-alt"></i> Dual thresholds</span>
-            <span class="tag"><i class="fas fa-blur"></i> Blur/Smooth</span>
-            <span class="tag"><i class="fas fa-file-archive"></i> ZIP export</span>
+            <span class="tag"><i class="fas fa-eye"></i> Preview</span>
+            <span class="tag"><i class="fas fa-tachometer-alt"></i> Threshold</span>
+            <span class="tag"><i class="fas fa-blur"></i> Blur</span>
+            <span class="tag"><i class="fas fa-file-archive"></i> ZIP</span>
           </div>
           <button class="launch-button" data-url="merger_icon.html"><span>Launch Icon Recolor</span> <i
               class="fas fa-arrow-right"></i></button>
@@ -385,16 +734,21 @@
 
       <!-- 3. XML Merger Pro -->
       <div class="tool-card" data-tool="merger_color">
-        <div class="card-icon"><i class="fas fa-code-merge" style="color: #60a5fa;"></i></div>
         <div class="card-content">
-          <div class="card-title">XML Merger Pro <span class="card-badge">MIUI_Values</span></div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-code-merge title-icon" style="color: #60a5fa;"></i>
+              <span class="title-name">XML Merger Pro</span>
+            </span>
+            <span class="card-badge">MIUI_Values</span>
+          </div>
           <div class="desc">Merge master/target XML, resolve dynamic colors, extract non-system colors, BG/BTN
             classifier & auto format.</div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-link"></i> Relative resolve</span>
+            <span class="tag"><i class="fas fa-link"></i> Resolve</span>
             <span class="tag"><i class="fas fa-chart-simple"></i> Stats</span>
             <span class="tag"><i class="fas fa-filter"></i> Non-system</span>
-            <span class="tag"><i class="fas fa-download"></i> Clean DL</span>
+            <span class="tag"><i class="fas fa-download"></i> Clean</span>
           </div>
           <button class="launch-button" data-url="merger_xml.html"><span>Launch Merger</span> <i
               class="fas fa-arrow-right"></i></button>
@@ -403,16 +757,21 @@
 
       <!-- 4. Color Replacer -->
       <div class="tool-card" data-tool="merger_color_replacer">
-        <div class="card-icon"><i class="fas fa-fill-drip" style="color: #f97316;"></i></div>
         <div class="card-content">
-          <div class="card-title">Color Replacer <span class="card-badge">Hex Master</span></div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-fill-drip title-icon" style="color: #f97316;"></i>
+              <span class="title-name">Color Replacer</span>
+            </span>
+            <span class="card-badge">Hex Master</span>
+          </div>
           <div class="desc">Smart XML color editor: undo/redo, root tag changer, live search, batch replace &
             multi-format downloads.</div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-history"></i> Undo/Redo</span>
+            <span class="tag"><i class="fas fa-history"></i> Undo</span>
             <span class="tag"><i class="fas fa-sort-alpha-down"></i> Sort</span>
-            <span class="tag"><i class="fas fa-tags"></i> Replace selected</span>
-            <span class="tag"><i class="fas fa-magic"></i> Beautify</span>
+            <span class="tag"><i class="fas fa-tags"></i> Replace</span>
+            <span class="tag"><i class="fas fa-magic"></i> Format</span>
           </div>
           <button class="launch-button" data-url="merger_color.html"><span>Open Replacer</span> <i
               class="fas fa-arrow-right"></i></button>
@@ -421,16 +780,21 @@
 
       <!-- 5. Name Merger -->
       <div class="tool-card" data-tool="merger_image">
-        <div class="card-icon"><i class="fas fa-trademark" style="color: #a78bfa;"></i></div>
         <div class="card-content">
-          <div class="card-title">Name Merger <span class="card-badge">Drag & Merge</span></div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-trademark title-icon" style="color: #a78bfa;"></i>
+              <span class="title-name">Name Merger</span>
+            </span>
+            <span class="card-badge">Drag & Merge</span>
+          </div>
           <div class="desc">Directional name copier: copy from left, paste to right. ZIP extract, alphabetical scroll &
             instant search.</div>
           <div class="feature-tags">
             <span class="tag"><i class="fas fa-arrows-alt-h"></i> Left→Right</span>
-            <span class="tag"><i class="fas fa-folder-zip"></i> Archive extract</span>
-            <span class="tag"><i class="fas fa-sort-alpha-down"></i> A–Z scroll</span>
-            <span class="tag"><i class="fas fa-paste"></i> Smart paste</span>
+            <span class="tag"><i class="fas fa-folder-zip"></i> Extract</span>
+            <span class="tag"><i class="fas fa-sort-alpha-down"></i> A–Z</span>
+            <span class="tag"><i class="fas fa-paste"></i> Paste</span>
           </div>
           <button class="launch-button" data-url="merger_name.html"><span>Open Name Merger</span> <i
               class="fas fa-arrow-right"></i></button>
@@ -439,16 +803,21 @@
 
       <!-- 6. Icon Maker -->
       <div class="tool-card" data-tool="icon_maker">
-        <div class="card-icon"><i class="fas fa-wand-magic-sparkles" style="color: #6c8cff;"></i></div>
         <div class="card-content">
-          <div class="card-title">Icon Maker <span class="card-badge">BG + Icon</span></div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-wand-magic-sparkles title-icon" style="color: #6c8cff;"></i>
+              <span class="title-name">Icon Maker</span>
+            </span>
+            <span class="card-badge">BG + Icon</span>
+          </div>
           <div class="desc">Create custom icons with background + front overlay. Upload images/ZIP, adjust size &
             position, live preview.</div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-image"></i> BG Overlay</span>
-            <span class="tag"><i class="fas fa-arrows-alt"></i> Position adjust</span>
+            <span class="tag"><i class="fas fa-image"></i> Overlay</span>
+            <span class="tag"><i class="fas fa-arrows-alt"></i> Position</span>
             <span class="tag"><i class="fas fa-expand"></i> Resize</span>
-            <span class="tag"><i class="fas fa-file-archive"></i> Bulk ZIP</span>
+            <span class="tag"><i class="fas fa-file-archive"></i> Bulk</span>
           </div>
           <button class="launch-button" data-url="merger_launcher.html"><span>Open Icon Maker</span> <i
               class="fas fa-arrow-right"></i></button>
@@ -457,18 +826,45 @@
 
       <!-- 7. Folder Generator -->
       <div class="tool-card" data-tool="folder_maker">
-        <div class="card-icon"><i class="fas fa-folder-tree" style="color: #fbbf24;"></i></div>
         <div class="card-content">
-          <div class="card-title">Folder Generator <span class="card-badge">Multi‑Structure</span></div>
-          <div class="desc">Create multiple folder structures at once. Define package name, subfolders (drawable,
-            values‑color, backup…), and generate ZIP.</div>
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-folder-tree title-icon" style="color: #fbbf24;"></i>
+              <span class="title-name">Folder Generator</span>
+            </span>
+            <span class="card-badge">Multi‑Structure</span>
+          </div>
+          <div class="desc">Create multiple folder structures at once. Define package name, subfolders.</div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-cubes"></i> 1‑20 structures</span>
-            <span class="tag"><i class="fas fa-folder-open"></i> Custom subfolders</span>
-            <span class="tag"><i class="fas fa-file-archive"></i> Bulk ZIP</span>
-            <span class="tag"><i class="fas fa-copy"></i> Copy names</span>
+            <span class="tag"><i class="fas fa-cubes"></i> Structures</span>
+            <span class="tag"><i class="fas fa-folder-open"></i> Subfolders</span>
+            <span class="tag"><i class="fas fa-file-archive"></i> ZIP</span>
+            <span class="tag"><i class="fas fa-copy"></i> Copy</span>
           </div>
           <button class="launch-button" data-url="merger_folder.html"><span>Open Folder Generator</span> <i
+              class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 8. Theme Values Editor -->
+      <div class="tool-card" data-tool="theme_values_editor">
+        <div class="card-content">
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-palette title-icon" style="color: #22c55e;"></i>
+              <span class="title-name">Color Randomizer</span>
+            </span>
+            <span class="card-badge">XML Color Lab</span>
+          </div>
+          <div class="desc">Upload theme_values.xml or colors.xml, inspect every color, search by name/HEX, randomize
+            colors and download the edited XML.</div>
+          <div class="feature-tags">
+            <span class="tag"><i class="fas fa-file-code"></i> Parse</span>
+            <span class="tag"><i class="fas fa-magnifying-glass"></i> Search</span>
+            <span class="tag"><i class="fas fa-shuffle"></i> Randomize</span>
+            <span class="tag"><i class="fas fa-download"></i> Export</span>
+          </div>
+          <button class="launch-button" data-url="color_randomizer.html"><span>Open Values Editor</span> <i
               class="fas fa-arrow-right"></i></button>
         </div>
       </div>
@@ -477,7 +873,7 @@
     <div class="footer-note">
       <i class="fas fa-bolt"></i> Redmi Note 15 5G Optimized · Touch-first interface · 3D cards with smooth feedback<br>
       <span style="font-size: 8px;">💡 Tap any card or button to launch tool | All sub-pages included | MIUI Theme
-        Studio v3.2</span>
+        Studio v3.3</span>
     </div>
   </div>
 
@@ -529,7 +925,7 @@
       window.addEventListener('resize', setViewportOptimization);
       setViewportOptimization();
 
-      console.log("Redmi Note 15 5G | MIUI Theme Studio v3.2 — 7 tools including Folder Generator");
+      console.log("MIUI Theme Studio v3.3 — 8 tools including Theme Values Editor");
     })();
   </script>
 </body>
