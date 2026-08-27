@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>🎨 Color Recolor Randomizer</title>
+  <title>🎨 theme_values.xml Editor</title>
   <style>
     /* ========== রুট ভেরিয়েবল ========== */
     :root {
@@ -1483,7 +1483,7 @@
     </div>
   </div>
 
-  <!-- ========== জাভাস্ক্রিপ্ট ========== -->
+  <!-- ========== জাভাস্ক্রিপ্ট (সম্পূর্ণ ফিক্সড) ========== -->
   <script>
     const fileInput = document.getElementById('xmlFileInput');
     const previewContent = document.getElementById('previewContent');
@@ -1602,7 +1602,7 @@
       }
     });
 
-    // ★★★ কোর পার্সিং ★★★
+    // ★★★ ফিক্সড: কোর পার্সিং (ARGB সাপোর্ট সহ) ★★★
     function parseAndDisplayXML(xmlString) {
       try {
         const parser = new DOMParser();
@@ -1623,50 +1623,55 @@
         for (let i = 0; i < colors.length; i++) {
           const color = colors[i];
           const name = color.getAttribute('name') || `color_${i}`;
-          let rawHex = color.textContent || color.getAttribute('hex') || '#000000';
+          let rawHex = color.textContent || color.getAttribute('hex') || '#FF000000';
           rawHex = rawHex.trim();
 
           let displayHex = rawHex;
-          let cleanHex = '#000000';
+          let cleanHex = '#FF000000';
 
           if (rawHex.startsWith('#')) {
             const hexWithoutHash = rawHex.substring(1);
 
             if (hexWithoutHash.length === 8) {
-              cleanHex = '#' + hexWithoutHash.substring(2, 8);
-              displayHex = rawHex;
+              // ✅ ARGB: পুরোপুরি রাখো
+              cleanHex = '#' + hexWithoutHash;
+              displayHex = '#' + hexWithoutHash;
             } else if (hexWithoutHash.length === 6) {
-              cleanHex = rawHex;
-              displayHex = rawHex;
+              // ✅ RGB: এতে আলফা যোগ করো (FF)
+              cleanHex = '#FF' + hexWithoutHash;
+              displayHex = '#' + hexWithoutHash;
             } else if (hexWithoutHash.length === 3) {
+              // ✅ শর্টহ্যান্ড: #RGB -> #FFRRGGBB
               const r = hexWithoutHash[0] + hexWithoutHash[0];
               const g = hexWithoutHash[1] + hexWithoutHash[1];
               const b = hexWithoutHash[2] + hexWithoutHash[2];
-              cleanHex = '#' + r + g + b;
-              displayHex = cleanHex;
+              cleanHex = '#FF' + r + g + b;
+              displayHex = '#' + r + g + b;
             } else {
-              cleanHex = rawHex;
-              displayHex = rawHex;
+              cleanHex = '#FF000000';
             }
           } else if (rawHex.length === 8 && /^[0-9A-Fa-f]{8}$/.test(rawHex)) {
-            cleanHex = '#' + rawHex.substring(2, 8);
-            displayHex = '#' + rawHex;
-          } else if (rawHex.length === 6 && /^[0-9A-Fa-f]{6}$/.test(rawHex)) {
+            // ✅ 8 ডিজিট ARGB (হ্যাশ ছাড়া)
             cleanHex = '#' + rawHex;
             displayHex = '#' + rawHex;
+          } else if (rawHex.length === 6 && /^[0-9A-Fa-f]{6}$/.test(rawHex)) {
+            // ✅ 6 ডিজিট RGB (হ্যাশ ছাড়া) -> আলফা যোগ
+            cleanHex = '#FF' + rawHex;
+            displayHex = '#' + rawHex;
           } else if (rawHex.length === 3 && /^[0-9A-Fa-f]{3}$/.test(rawHex)) {
+            // ✅ 3 ডিজিট শর্টহ্যান্ড
             const r = rawHex[0] + rawHex[0];
             const g = rawHex[1] + rawHex[1];
             const b = rawHex[2] + rawHex[2];
-            cleanHex = '#' + r + g + b;
-            displayHex = cleanHex;
+            cleanHex = '#FF' + r + g + b;
+            displayHex = '#' + r + g + b;
           } else {
-            cleanHex = rawHex.startsWith('#') ? rawHex : '#' + rawHex;
-            displayHex = cleanHex;
+            cleanHex = '#FF000000';
           }
 
-          if (!/^#[0-9A-Fa-f]{6}$/.test(cleanHex)) {
-            cleanHex = '#000000';
+          // ✅ ভ্যালিডেশন: নিশ্চিত করো ARGB ফরম্যাটে আছে
+          if (!/^#[0-9A-Fa-f]{8}$/.test(cleanHex)) {
+            cleanHex = '#FF000000';
           }
 
           const usageContext = extractUsageContext(name);
@@ -1820,7 +1825,7 @@
       uniqueColorsInfo.style.display = 'flex';
     }
 
-    // ★★★ ইউনিক র‍্যান্ডম হেক্স জেনারেটর ★★★
+    // ★★★ ফিক্সড: ইউনিক র্যান্ডম হেক্স জেনারেটর (ARGB) ★★★
     function generateUniqueRandomHex(existingColors) {
       const letters = '0123456789ABCDEF';
       let color;
@@ -1828,7 +1833,8 @@
       const maxAttempts = 1000;
 
       do {
-        color = '#';
+        // ✅ আলফা চ্যানেল = FF (100% অস্বচ্ছ) + 6 ডিজিট RGB
+        color = '#FF';
         for (let i = 0; i < 6; i++) {
           color += letters[Math.floor(Math.random() * 16)];
         }
@@ -1838,7 +1844,7 @@
       return color;
     }
 
-    // ★★★ র‍্যান্ডমাইজ অল কালার ★★★
+    // ★★★ র্যান্ডমাইজ অল কালার ★★★
     function randomizeAllColors() {
       if (colorDataArray.length === 0) {
         showToast('⚠️ No Colors', 'Please upload an XML file first!', 'warning');
@@ -1886,7 +1892,7 @@
         'success', 4000);
     }
 
-    // ★★★ XML আপডেট ★★★
+    // ★★★ ফিক্সড: XML আপডেট (ARGB ফরম্যাটে) ★★★
     function updateXMLString() {
       try {
         const parser = new DOMParser();
@@ -1898,10 +1904,11 @@
           const colorData = colorDataArray[i];
 
           if (colorData.modified) {
-            const newFullHex = colorData.hex;
-            color.textContent = newFullHex;
+            // ✅ ARGB ফরম্যাটে সেট করো
+            color.textContent = colorData.hex;
+
             if (color.hasAttribute('hex')) {
-              color.setAttribute('hex', newFullHex);
+              color.setAttribute('hex', colorData.hex);
             }
           }
         }
@@ -1921,7 +1928,7 @@
       }
     }
 
-    // ★★★ রিসেট ★★★
+    // ★★★ ফিক্সড: রিসেট (ARGB ফরম্যাটে রিস্টোর) ★★★
     function resetAllColors() {
       if (modifiedColors.size === 0) {
         showToast('ℹ️ No Changes', 'No colors have been modified!', 'info');
@@ -1940,9 +1947,12 @@
       for (let i = 0; i < colors.length && i < originalColorDataArray.length; i++) {
         const color = colors[i];
         const original = originalColorDataArray[i];
-        color.textContent = original.fullHex;
+
+        // ✅ ARGB ফরম্যাটে রিস্টোর
+        color.textContent = original.hex;
+
         if (color.hasAttribute('hex')) {
-          color.setAttribute('hex', original.fullHex);
+          color.setAttribute('hex', original.hex);
         }
       }
 
