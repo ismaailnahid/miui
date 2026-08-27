@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>🎨 theme_values.xml Editor</title>
+  <style>
+    /* ========== রুট ভেরিয়েবল ========== */
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111927;
+      --bg-card: #0f172a;
+      --bg-hover: #1a2332;
+      --border-color: #1e293b;
+      --border-hover: #334155;
+      --text-primary: #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --blue: #3b82f6;
+      --blue-hover: #2563eb;
+      --green: #059669;
+      --green-hover: #047857;
+      --yellow: #f59e0b;
+      --red: #dc2626;
+      --radius: 16px;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --container-max: 1100px;
+      --header-height: 60px;
+    }
+
+    /* ========== রিসেট ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg-primary);
+      padding: clamp(12px, 3vw, 30px);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      font-family: var(--font);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ========== কন্টেইনার ========== */
+    .container {
+      max-width: var(--container-max);
+      width: 100%;
+      background: var(--bg-secondary);
+      border-radius: clamp(16px, 3vw, 24px);
+      padding: clamp(16px, 3vw, 35px);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========== হেডার ========== */
+    h1 {
+      color: var(--text-primary);
+      font-size: clamp(20px, 4vw, 28px);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 2vw, 12px);
+      flex-wrap: wrap;
+      word-break: break-word;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: clamp(12px, 1.5vw, 14px);
+      margin-bottom: clamp(16px, 3vw, 25px);
+      border-left: 3px solid var(--blue);
+      padding-left: clamp(12px, 2vw, 16px);
+      word-break: break-word;
+    }
+
+    /* ========== আপলোড এরিয়া ========== */
+    .upload-area {
+      background: var(--bg-card);
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius);
+      padding: clamp(20px, 4vw, 30px);
+      text-align: center;
+      margin-bottom: clamp(16px, 3vw, 25px);
+      transition: var(--transition);
+      cursor: pointer;
+      touch-action: manipulation;
+      position: relative;
+    }
+
+    .upload-area:hover,
+    .upload-area:active {
+      border-color: var(--blue);
+      background: #131d33;
+      transform: scale(1.01);
+    }
+
+    .upload-area.dragover {
+      border-color: var(--blue);
+      background: #131d33;
+      transform: scale(1.02);
+    }
+
+    .upload-area input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
+      display: inline-block;
+      background: var(--blue);
+      color: white;
+      padding: clamp(10px, 2vw, 12px) clamp(20px, 4vw, 35px);
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: clamp(13px, 1.5vw, 15px);
+      transition: var(--transition);
+      border: none;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .upload-label:hover,
+    .upload-label:active {
+      background: var(--blue-hover);
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .upload-area .hint {
+      color: var(--text-muted);
+      font-size: clamp(11px, 1.2vw, 13px);
+      margin-top: clamp(8px, 1.5vw, 10px);
+    }
+
+    /* ========== ফাইল ইনফো ========== */
+    .file-uploaded-info {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: clamp(14px, 2vw, 20px);
+      margin-bottom: clamp(16px, 3vw, 25px);
+      animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .file-detail {
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 1.5vw, 12px);
+      padding: clamp(4px, 0.8vw, 6px) 0;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    .file-detail:last-child {
+      border-bottom: none;
+    }
+
+    .file-detail .label {
+      color: var(--text-secondary);
+      font-size: clamp(11px, 1.2vw, 13px);
+      min-width: clamp(60px, 10vw, 80px);
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .file-detail .value {
+      color: var(--text-primary);
+      font-size: clamp(12px, 1.3vw, 14px);
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    .file-detail .value.path-value {
+      font-size: clamp(10px, 1vw, 13px);
+      color: var(--text-secondary);
+    }
+
+    .remove-file-btn {
+      background: var(--red);
+      color: white;
+      border: none;
+      padding: clamp(4px, 0.8vw, 6px) clamp(12px, 2vw, 18px);
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: clamp(11px, 1.2vw, 12px);
+      font-weight: 600;
+      transition: var(--transition);
+      touch-action: manipulation;
+      flex-shrink: 0;
+    }
+
+    .remove-file-btn:hover,
+    .remove-file-btn:active {
+      background: #b91c1c;
+      transform: scale(1.05);
+    }
+
+    /* ========== সার্চ বার ========== */
+    .search-bar {
+      display: none;
+      gap: clamp(8px, 1.5vw, 12px);
+      margin-bottom: clamp(12px, 2vw, 15px);
+      flex-wrap: wrap;
+    }
+
+    .search-bar input {
+      flex: 1;
+      min-width: 120px;
+      padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2vw, 16px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: clamp(13px, 1.4vw, 14px);
+      outline: none;
+      transition: var(--transition);
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .search-bar input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .search-bar input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-bar select {
+      padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2vw, 16px);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: clamp(13px, 1.4vw, 14px);
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition);
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      min-width: 110px;
+    }
+
+    .search-bar select:focus {
+      border-color: var(--blue);
+    }
+
+    /* ========== প্রিভিউ সেকশন ========== */
+    .preview-section {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: clamp(14px, 2vw, 20px);
+      border: 1px solid var(--border-color);
+      max-height: clamp(500px, 75vh, 750px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(10px, 1.5vw, 15px);
+      padding-bottom: clamp(10px, 1.5vw, 12px);
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: clamp(6px, 1vw, 10px);
+    }
+
+    .preview-header h3 {
+      color: var(--text-primary);
+      font-size: clamp(15px, 2vw, 18px);
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 1vw, 10px);
+    }
+
+    .stats-badge {
+      display: flex;
+      gap: clamp(8px, 1.5vw, 15px);
+      color: var(--text-secondary);
+      font-size: clamp(11px, 1.2vw, 13px);
+      flex-wrap: wrap;
+    }
+
+    .stats-badge span {
+      background: var(--border-color);
+      padding: clamp(2px, 0.5vw, 4px) clamp(10px, 1.5vw, 14px);
+      border-radius: 30px;
+      color: var(--text-primary);
+      font-size: clamp(11px, 1.2vw, 13px);
+    }
+
+    /* ========== ইউনিক কালার ইনফো ========== */
+    .unique-colors-info {
+      display: none;
+      background: #1a2332;
+      padding: clamp(6px, 1vw, 8px) clamp(10px, 1.5vw, 14px);
+      border-radius: 8px;
+      gap: clamp(6px, 1vw, 12px);
+      flex-wrap: wrap;
+      margin-bottom: clamp(8px, 1.5vw, 10px);
+      border: 1px solid var(--border-color);
+      align-items: center;
+      font-size: clamp(10px, 1.2vw, 11px);
+    }
+
+    .unique-colors-info .stat-item {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .unique-colors-info .stat-item strong {
+      color: var(--text-primary);
+    }
+
+    .unique-colors-info .color-dot {
+      display: inline-block;
+      width: clamp(8px, 1.2vw, 10px);
+      height: clamp(8px, 1.2vw, 10px);
+      border-radius: 50%;
+      border: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+
+    /* ========== লিস্ট কন্টেইনার ========== */
+    .list-container {
+      overflow-y: auto;
+      flex: 1;
+      max-height: clamp(280px, 50vh, 520px);
+      padding-right: clamp(4px, 0.8vw, 8px);
+      margin-bottom: clamp(10px, 1.5vw, 12px);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .list-container::-webkit-scrollbar {
+      width: clamp(4px, 0.6vw, 8px);
+    }
+
+    .list-container::-webkit-scrollbar-track {
+      background: var(--bg-card);
+      border-radius: 10px;
+    }
+
+    .list-container::-webkit-scrollbar-thumb {
+      background: var(--border-hover);
+      border-radius: 10px;
+    }
+
+    .list-container::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* ========== কালার লিস্ট ========== */
+    .color-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .color-list-item {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 2vw, 16px);
+      padding: clamp(6px, 1.2vw, 10px) clamp(8px, 1.5vw, 14px);
+      background: var(--bg-secondary);
+      border-radius: clamp(8px, 1.5vw, 12px);
+      margin-bottom: clamp(4px, 0.8vw, 6px);
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+      cursor: default;
+      touch-action: manipulation;
+    }
+
+    .color-list-item:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-hover);
+    }
+
+    .color-list-item:active {
+      transform: scale(0.99);
+    }
+
+    /* ========== কালার সার্কেল ========== */
+    .color-circle {
+      width: clamp(28px, 4vw, 38px);
+      height: clamp(28px, 4vw, 38px);
+      min-width: clamp(28px, 4vw, 38px);
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .color-list-item:hover .color-circle {
+      transform: scale(1.08);
+      border-color: var(--blue);
+      box-shadow: 0 4px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    /* ========== কালার ইনফো ========== */
+    .color-info {
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .color-name {
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: clamp(12px, 1.3vw, 13px);
+      display: flex;
+      align-items: center;
+      gap: clamp(4px, 0.8vw, 6px);
+      flex-wrap: wrap;
+      word-break: break-word;
+    }
+
+    .color-name .index-badge {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      font-size: clamp(8px, 0.9vw, 9px);
+      padding: 1px clamp(6px, 1vw, 8px);
+      border-radius: 30px;
+      font-weight: 400;
+      flex-shrink: 0;
+    }
+
+    .color-name .modified-badge {
+      background: var(--yellow);
+      color: var(--bg-primary);
+      font-size: clamp(7px, 0.8vw, 8px);
+      padding: 1px clamp(6px, 1vw, 8px);
+      border-radius: 30px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .color-values {
+      display: flex;
+      gap: clamp(4px, 1vw, 10px);
+      margin-top: 2px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .color-values span {
+      font-size: clamp(10px, 1.1vw, 11px);
+      font-family: 'Courier New', monospace;
+      color: var(--text-secondary);
+      word-break: break-all;
+    }
+
+    .color-values .hex-value {
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .color-values .argb-value {
+      color: #f472b6;
+      font-weight: 600;
+    }
+
+    /* ========== ইউজেজ ট্যাগ ========== */
+    .usage-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    .usage-tag {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      font-size: clamp(8px, 0.9vw, 9px);
+      padding: 1px clamp(6px, 1vw, 8px);
+      border-radius: 30px;
+      border: 1px solid #2d3a4e;
+      transition: var(--transition);
+      cursor: default;
+      max-width: clamp(100px, 15vw, 150px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .usage-tag:hover {
+      background: #2d3a4e;
+      color: var(--text-primary);
+      border-color: var(--blue);
+    }
+
+    /* ========== টগল ডিটেইলস বাটন ========== */
+    .toggle-details-btn {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: clamp(1px, 0.3vw, 2px) clamp(8px, 1.2vw, 12px);
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: clamp(8px, 0.9vw, 9px);
+      font-weight: 600;
+      transition: var(--transition);
+      touch-action: manipulation;
+      flex-shrink: 0;
+      min-height: 22px;
+      min-width: 22px;
+    }
+
+    .toggle-details-btn:hover,
+    .toggle-details-btn:active {
+      background: #6d28d9;
+      transform: scale(1.05);
+    }
+
+    /* ========== এম্পটি স্টেট ========== */
+    .empty-state {
+      text-align: center;
+      padding: clamp(30px, 8vw, 50px) clamp(16px, 3vw, 20px);
+      color: var(--text-muted);
+    }
+
+    .empty-state span {
+      font-size: clamp(40px, 10vw, 52px);
+      display: block;
+      margin-bottom: clamp(8px, 1.5vw, 12px);
+    }
+
+    .empty-state p {
+      font-size: clamp(14px, 1.8vw, 16px);
+    }
+
+    .empty-state .sub-text {
+      font-size: clamp(12px, 1.3vw, 13px);
+      margin-top: 4px;
+      color: #475569;
+    }
+
+    /* ========== এরর মেসেজ ========== */
+    .error-msg {
+      background: #1f0f0f;
+      color: #f87171;
+      padding: clamp(12px, 2vw, 15px);
+      border-radius: 10px;
+      border-left: 4px solid var(--red);
+      font-size: clamp(13px, 1.4vw, 14px);
+    }
+
+    /* ========== র ভিউ সেকশন ========== */
+    .xml-raw-container {
+      margin-top: clamp(10px, 1.5vw, 15px);
+      padding-top: clamp(10px, 1.5vw, 15px);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .xml-raw {
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      padding: clamp(12px, 2vw, 15px);
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: clamp(10px, 1.1vw, 11px);
+      overflow: auto;
+      max-height: clamp(150px, 30vh, 200px);
+      white-space: pre-wrap;
+      word-break: break-all;
+      border: 1px solid var(--border-color);
+      margin-top: 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ========== বাটন গ্রুপ ========== */
+    .btn-group {
+      display: flex;
+      gap: clamp(6px, 1.2vw, 10px);
+      flex-wrap: wrap;
+      margin-top: clamp(6px, 1vw, 10px);
+    }
+
+    .btn-group button {
+      flex: 1 1 auto;
+      min-width: clamp(100px, 20vw, 160px);
+      padding: clamp(8px, 1.5vw, 10px) clamp(14px, 2.5vw, 25px);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: clamp(12px, 1.3vw, 14px);
+      transition: var(--transition);
+      touch-action: manipulation;
+      text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn-group button:active {
+      transform: scale(0.96);
+    }
+
+    .randomize-btn {
+      background: var(--yellow);
+      color: var(--bg-primary);
+    }
+
+    .randomize-btn:hover:not(:disabled) {
+      background: #d97706;
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
+    }
+
+    .randomize-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .download-btn {
+      background: var(--green);
+      color: white;
+    }
+
+    .download-btn:hover {
+      background: var(--green-hover);
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+    }
+
+    .toggle-btn {
+      background: var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .toggle-btn:hover {
+      background: var(--border-hover);
+      color: var(--text-primary);
+    }
+
+    .btn-group .reset-btn {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-group .reset-btn:hover {
+      background: #b91c1c;
+      transform: scale(1.02);
+    }
+
+    /* ========== টোস্ট নোটিফিকেশন ========== */
+    .toast-container {
+      position: fixed;
+      top: clamp(16px, 3vw, 30px);
+      right: clamp(10px, 2vw, 30px);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.5vw, 12px);
+      max-width: min(420px, 90vw);
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #1a2332;
+      border: 1px solid var(--border-hover);
+      border-radius: clamp(12px, 2vw, 16px);
+      padding: clamp(12px, 2vw, 16px) clamp(14px, 2.5vw, 20px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      animation: toastSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.5vw, 14px);
+      pointer-events: auto;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: var(--transition);
+    }
+
+    .toast:hover {
+      transform: scale(1.02);
+      border-color: var(--blue);
+    }
+
+    .toast.hide {
+      animation: toastSlideOut 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes toastSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(60px) scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+    }
+
+    @keyframes toastSlideOut {
+      from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+      }
+
+      to {
+        opacity: 0;
+        transform: translateX(60px) scale(0.9);
+      }
+    }
+
+    .toast-icon {
+      font-size: clamp(22px, 4vw, 28px);
+      flex-shrink: 0;
+      width: clamp(36px, 5vw, 44px);
+      height: clamp(36px, 5vw, 44px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .toast-icon.success {
+      background: rgba(5, 150, 105, 0.2);
+    }
+
+    .toast-icon.error {
+      background: rgba(220, 38, 38, 0.2);
+    }
+
+    .toast-icon.info {
+      background: rgba(59, 130, 246, 0.2);
+    }
+
+    .toast-icon.warning {
+      background: rgba(245, 158, 11, 0.2);
+    }
+
+    .toast-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .toast-title {
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: clamp(13px, 1.4vw, 14px);
+      margin-bottom: 1px;
+    }
+
+    .toast-message {
+      color: var(--text-secondary);
+      font-size: clamp(12px, 1.2vw, 13px);
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .toast-message strong {
+      color: #60a5fa;
+      font-weight: 600;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: clamp(16px, 2.5vw, 18px);
+      cursor: pointer;
+      padding: clamp(2px, 0.5vw, 4px) clamp(4px, 1vw, 8px);
+      border-radius: 8px;
+      transition: var(--transition);
+      pointer-events: auto;
+      flex-shrink: 0;
+      touch-action: manipulation;
+      min-width: 30px;
+      min-height: 30px;
+    }
+
+    .toast-close:hover {
+      background: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .toast-progress {
+      width: 100%;
+      height: 3px;
+      background: var(--border-color);
+      border-radius: 4px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .toast-progress .toast-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      animation: progressShrink 3s linear forwards;
+    }
+
+    .toast-progress .toast-progress-fill.success {
+      background: var(--green);
+    }
+
+    .toast-progress .toast-progress-fill.error {
+      background: var(--red);
+    }
+
+    .toast-progress .toast-progress-fill.warning {
+      background: var(--yellow);
+    }
+
+    .toast-progress .toast-progress-fill.info {
+      background: var(--blue);
+    }
+
+    @keyframes progressShrink {
+      from {
+        width: 100%;
+      }
+
+      to {
+        width: 0%;
+      }
+    }
+
+    /* ================================================================ */
+    /* ========== 🖥️ DELL LATITUDE E5450 (1366x768) স্পেসিফিক ========== */
+    /* ================================================================ */
+    @media screen and (min-width: 1024px) and (max-width: 1366px) and (min-height: 700px) and (max-height: 800px) {
+      .container {
+        padding: 20px 24px;
+        max-width: 980px;
+      }
+
+      .preview-section {
+        max-height: 580px;
+      }
+
+      .list-container {
+        max-height: 380px;
+      }
+
+      .color-list-item {
+        padding: 6px 10px;
+        gap: 12px;
+      }
+
+      .color-circle {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+      }
+
+      .color-name {
+        font-size: 12px;
+      }
+
+      .color-values span {
+        font-size: 10px;
+      }
+
+      .btn-group button {
+        padding: 6px 14px;
+        font-size: 12px;
+        min-width: 80px;
+      }
+
+      .file-detail .value {
+        font-size: 12px;
+      }
+
+      .toast-container {
+        max-width: 360px;
+      }
+    }
+
+    /* ================================================================ */
+    /* ========== 📱 REDMI NOTE 15 5G (1080x2400) স্পেসিফিক ========== */
+    /* ================================================================ */
+    @media screen and (max-width: 480px) {
+      body {
+        padding: 10px 8px;
+      }
+
+      .container {
+        padding: 12px 10px;
+        border-radius: 14px;
+      }
+
+      h1 {
+        font-size: 18px;
+        gap: 6px;
+      }
+
+      .subtitle {
+        font-size: 11px;
+        padding-left: 10px;
+        margin-bottom: 12px;
+      }
+
+      .upload-area {
+        padding: 16px 12px;
+        border-radius: 12px;
+      }
+
+      .upload-label {
+        font-size: 13px;
+        padding: 10px 20px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .upload-area .hint {
+        font-size: 11px;
+      }
+
+      .file-uploaded-info {
+        padding: 12px;
+        border-radius: 12px;
+      }
+
+      .file-detail {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+        padding: 4px 0;
+      }
+
+      .file-detail .label {
+        font-size: 11px;
+        min-width: auto;
+      }
+
+      .file-detail .value {
+        font-size: 11px;
+        min-width: auto;
+        width: 100%;
+      }
+
+      .file-detail .value.path-value {
+        font-size: 10px;
+      }
+
+      .remove-file-btn {
+        width: 100%;
+        text-align: center;
+        padding: 8px;
+        margin-top: 4px;
+        font-size: 12px;
+      }
+
+      .search-bar {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .search-bar input,
+      .search-bar select {
+        width: 100%;
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+
+      .preview-section {
+        padding: 10px;
+        border-radius: 12px;
+        max-height: 75vh;
+      }
+
+      .preview-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .preview-header h3 {
+        font-size: 15px;
+      }
+
+      .stats-badge {
+        font-size: 11px;
+        gap: 6px;
+      }
+
+      .stats-badge span {
+        font-size: 11px;
+        padding: 2px 10px;
+      }
+
+      .unique-colors-info {
+        font-size: 10px;
+        padding: 6px 10px;
+        gap: 4px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .unique-colors-info .stat-item {
+        font-size: 10px;
+      }
+
+      .list-container {
+        max-height: 45vh;
+        padding-right: 4px;
+      }
+
+      .color-list-item {
+        padding: 8px 10px;
+        gap: 10px;
+        border-radius: 10px;
+        flex-wrap: wrap;
+      }
+
+      .color-circle {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+      }
+
+      .color-name {
+        font-size: 12px;
+      }
+
+      .color-name .index-badge {
+        font-size: 8px;
+        padding: 0 6px;
+      }
+
+      .color-values {
+        gap: 4px;
+      }
+
+      .color-values span {
+        font-size: 10px;
+      }
+
+      .usage-tag {
+        font-size: 8px;
+        padding: 0 6px;
+        max-width: 80px;
+      }
+
+      .toggle-details-btn {
+        font-size: 8px;
+        padding: 0 8px;
+        min-height: 20px;
+        min-width: 20px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .btn-group button {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: normal;
+        word-break: break-word;
+      }
+
+      .xml-raw {
+        font-size: 9px;
+        padding: 10px;
+        max-height: 120px;
+      }
+
+      .toast-container {
+        top: 10px;
+        right: 8px;
+        left: 8px;
+        max-width: 100%;
+        width: auto;
+      }
+
+      .toast {
+        padding: 12px 14px;
+        border-radius: 12px;
+        gap: 10px;
+      }
+
+      .toast-icon {
+        font-size: 22px;
+        width: 36px;
+        height: 36px;
+      }
+
+      .toast-title {
+        font-size: 13px;
+      }
+
+      .toast-message {
+        font-size: 12px;
+      }
+
+      .toast-close {
+        font-size: 16px;
+        min-width: 28px;
+        min-height: 28px;
+      }
+    }
+
+    /* ========== মিড-রেঞ্জ মোবাইল (481px - 768px) ========== */
+    @media screen and (min-width: 481px) and (max-width: 768px) {
+      body {
+        padding: 14px 12px;
+      }
+
+      .container {
+        padding: 16px 14px;
+      }
+
+      .btn-group {
+        flex-wrap: wrap;
+      }
+
+      .btn-group button {
+        flex: 1 1 calc(50% - 6px);
+        min-width: 0;
+        font-size: 12px;
+        padding: 8px 12px;
+      }
+
+      .color-list-item {
+        padding: 8px 12px;
+      }
+
+      .color-circle {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+      }
+    }
+
+    /* ========== ট্যাবলেট (769px - 1024px) ========== */
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      .container {
+        padding: 24px 28px;
+        max-width: 920px;
+      }
+
+      .btn-group button {
+        flex: 1 1 auto;
+        min-width: 120px;
+      }
+    }
+
+    /* ========== ল্যান্ডস্কেপ মোবাইল ========== */
+    @media screen and (max-height: 500px) and (orientation: landscape) {
+      .container {
+        padding: 10px 14px;
+      }
+
+      .upload-area {
+        padding: 10px 12px;
+        margin-bottom: 10px;
+      }
+
+      .preview-section {
+        max-height: 65vh;
+      }
+
+      .list-container {
+        max-height: 30vh;
+      }
+
+      .color-list-item {
+        padding: 4px 8px;
+        gap: 8px;
+      }
+
+      .color-circle {
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+      }
+
+      .color-name {
+        font-size: 11px;
+      }
+
+      .color-values span {
+        font-size: 9px;
+      }
+
+      .btn-group button {
+        padding: 6px 10px;
+        font-size: 11px;
+        min-width: 60px;
+      }
+
+      .preview-header h3 {
+        font-size: 14px;
+      }
+
+      .stats-badge span {
+        font-size: 10px;
+        padding: 1px 8px;
+      }
+
+      .toast-container {
+        top: 8px;
+        right: 8px;
+        max-width: 300px;
+      }
+
+      .toast {
+        padding: 8px 12px;
+        gap: 8px;
+      }
+
+      .toast-icon {
+        font-size: 18px;
+        width: 28px;
+        height: 28px;
+      }
+
+      .toast-title {
+        font-size: 12px;
+      }
+
+      .toast-message {
+        font-size: 11px;
+      }
+    }
+
+    /* ========== হাই-ডিপিআই স্ক্রিন ========== */
+    @media screen and (-webkit-min-device-pixel-ratio: 2),
+    screen and (min-resolution: 192dpi) {
+      .color-circle {
+        border-width: 1.5px;
+      }
+    }
+
+    /* ========== প্রিন্ট স্টাইল ========== */
+    @media print {
+
+      .upload-area,
+      .btn-group,
+      .search-bar,
+      .remove-file-btn {
+        display: none !important;
+      }
+
+      .container {
+        box-shadow: none !important;
+        border: 1px solid #333;
+      }
+
+      .preview-section {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      .list-container {
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      .color-list-item {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+    }
+
+    /* ========== ডার্ক মোড প্রেফারেন্স ========== */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-primary: #f1f5f9;
+        --bg-secondary: #ffffff;
+        --bg-card: #f8fafc;
+        --bg-hover: #e2e8f0;
+        --border-color: #cbd5e1;
+        --border-hover: #94a3b8;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #64748b;
+        --shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+      }
+
+      .toast {
+        background: #ffffff;
+        border-color: #e2e8f0;
+      }
+
+      .toast-title {
+        color: #0f172a;
+      }
+
+      .toast-message {
+        color: #475569;
+      }
+
+      .unique-colors-info {
+        background: #e2e8f0;
+      }
+
+      .xml-raw {
+        background: #f1f5f9;
+        color: #334155;
+      }
+    }
+
+    /* ========== ইউটিলিটি ক্লাস ========== */
+    .hidden {
+      display: none !important;
+    }
+
+    .flex-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .text-ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .gap-1 {
+      gap: 4px;
+    }
+
+    .gap-2 {
+      gap: 8px;
+    }
+
+    .gap-3 {
+      gap: 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========== টোস্ট কন্টেইনার ========== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ========== মেইন কন্টেইনার ========== -->
+  <div class="container">
+
+    <!-- হেডার -->
+    <h1>🎨 theme_values.xml Editor</h1>
+    <div class="subtitle">Android XML Upload · Preview · Randomize Unique Colors · Download</div>
+
+    <!-- আপলোড এরিয়া -->
+    <div class="upload-area" id="uploadArea">
+      <input type="file" id="xmlFileInput" accept=".xml">
+      <label for="xmlFileInput" class="upload-label">📁 Select XML File</label>
+      <div class="hint">Supports theme_values.xml or colors.xml</div>
+    </div>
+
+    <!-- ফাইল ইনফো -->
+    <div class="file-uploaded-info" id="fileUploadedInfo">
+      <div class="file-detail">
+        <span class="label">📄 File Name</span>
+        <span class="value" id="fileNameText">-</span>
+        <button class="remove-file-btn" onclick="removeFile()">✕ Remove</button>
+      </div>
+      <div class="file-detail">
+        <span class="label">📂 File Path</span>
+        <span class="value path-value" id="filePathDisplay">-</span>
+      </div>
+      <div class="file-detail">
+        <span class="label">📦 File Size</span>
+        <span class="value" id="fileSizeDisplay">-</span>
+      </div>
+      <div class="file-detail">
+        <span class="label">🎨 Total Colors</span>
+        <span class="value" id="totalColorCount">-</span>
+      </div>
+    </div>
+
+    <!-- প্রিভিউ সেকশন -->
+    <div class="preview-section">
+
+      <!-- হেডার -->
+      <div class="preview-header">
+        <h3>📋 Color List</h3>
+        <div class="stats-badge">
+          <span id="totalCount">0</span>
+        </div>
+      </div>
+
+      <!-- সার্চ বার -->
+      <div class="search-bar" id="searchBar">
+        <input type="text" id="searchInput" placeholder="🔍 Search by name or hex..." oninput="filterColors()">
+        <select id="filterSelect" onchange="filterColors()">
+          <option value="all">All</option>
+          <option value="name">By Name</option>
+          <option value="hex">By Hex</option>
+        </select>
+      </div>
+
+      <!-- ইউনিক কালার ইনফো -->
+      <div id="uniqueColorsInfo" class="unique-colors-info"></div>
+
+      <!-- লিস্ট কন্টেইনার -->
+      <div class="list-container" id="listContainer">
+        <div id="previewContent">
+          <div class="empty-state">
+            <span>📂</span>
+            <p>Upload an XML file</p>
+            <p class="sub-text">theme_values.xml or colors.xml</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- বাটন গ্রুপ -->
+      <div class="btn-group">
+        <button class="randomize-btn" id="randomizeBtn" onclick="randomizeAllColors()" disabled>
+          🎲 Randomize All
+        </button>
+        <button class="download-btn" onclick="downloadXML()">💾 Download XML</button>
+        <button class="toggle-btn" onclick="toggleRawXML()">📄 View Raw</button>
+        <button class="toggle-btn reset-btn" onclick="resetAllColors()">↩️ Reset</button>
+      </div>
+
+      <!-- র ভিউ -->
+      <div class="xml-raw-container" id="rawContainer" style="display:none;">
+        <div id="rawXMLContainer" style="display:none; margin-top:8px;">
+          <div class="xml-raw" id="rawXMLContent"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== জাভাস্ক্রিপ্ট ========== -->
+  <script>
+    const fileInput = document.getElementById('xmlFileInput');
+    const previewContent = document.getElementById('previewContent');
+    const totalCount = document.getElementById('totalCount');
+    const totalColorCount = document.getElementById('totalColorCount');
+    const rawContainer = document.getElementById('rawContainer');
+    const rawXMLContent = document.getElementById('rawXMLContent');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileUploadedInfo = document.getElementById('fileUploadedInfo');
+    const fileNameText = document.getElementById('fileNameText');
+    const filePathDisplay = document.getElementById('filePathDisplay');
+    const fileSizeDisplay = document.getElementById('fileSizeDisplay');
+    const searchBar = document.getElementById('searchBar');
+    const uniqueColorsInfo = document.getElementById('uniqueColorsInfo');
+    const randomizeBtn = document.getElementById('randomizeBtn');
+
+    let colorDataArray = [];
+    let originalColorDataArray = [];
+    let currentXmlString = '';
+    let filteredData = [];
+    let modifiedColors = new Set();
+
+    // ★★★ টোস্ট সিস্টেম ★★★
+    function showToast(title, message, type = 'info', duration = 3500) {
+      const container = document.getElementById('toastContainer');
+
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+            <div class="toast-icon ${type}">${icons[type] || 'ℹ️'}</div>
+            <div class="toast-content">
+                <div class="toast-title">${title}</div>
+                <div class="toast-message">${message}</div>
+                <div class="toast-progress">
+                    <div class="toast-progress-fill ${type}"></div>
+                </div>
+            </div>
+            <button class="toast-close" onclick="this.closest('.toast').classList.add('hide'); setTimeout(() => this.closest('.toast').remove(), 300);">✕</button>
+        `;
+
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.classList.add('hide');
+          setTimeout(() => {
+            if (toast.parentNode) toast.remove();
+          }, 300);
+        }
+      }, duration);
+    }
+
+    // ★★★ ফাইল হ্যান্ডলিং ★★★
+    fileInput.addEventListener('change', function (e) {
+      const file = this.files[0];
+      if (!file) return;
+
+      if (!file.name.endsWith('.xml')) {
+        showToast('Invalid File', 'Only .xml files are supported!', 'error');
+        return;
+      }
+
+      uploadArea.style.display = 'none';
+      fileUploadedInfo.style.display = 'block';
+      fileNameText.textContent = file.name;
+
+      const sizeInKB = (file.size / 1024).toFixed(2);
+      const sizeDisplay = file.size > 1024 * 1024 ?
+        `${(file.size / (1024 * 1024)).toFixed(2)} MB` :
+        `${sizeInKB} KB`;
+      fileSizeDisplay.textContent = sizeDisplay;
+
+      filePathDisplay.textContent = `C:\\Users\\${getUsername()}\\Documents\\${file.name}`;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        currentXmlString = e.target.result;
+        parseAndDisplayXML(currentXmlString);
+        randomizeBtn.disabled = false;
+        showToast('✅ File Loaded', `Successfully loaded <strong>${file.name}</strong> (${sizeDisplay})`, 'success');
+      };
+      reader.onerror = function () {
+        showToast('❌ Error', 'Failed to read the file!', 'error');
+      };
+      reader.readAsText(file);
+    });
+
+    function getUsername() { return 'User'; }
+
+    // ★★★ ড্র্যাগ-এন্ড-ড্রপ ★★★
+    uploadArea.addEventListener('dragover', function (e) {
+      e.preventDefault();
+      this.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', function (e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', function (e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+        showToast('📁 Dropped', `File dropped: ${files[0].name}`, 'info', 2000);
+      }
+    });
+
+    // ★★★ কোর পার্সিং ★★★
+    function parseAndDisplayXML(xmlString) {
+      try {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+        const parserError = xmlDoc.querySelector('parsererror');
+        if (parserError) {
+          previewContent.innerHTML = `<div class="error-msg">❌ ${parserError.textContent}</div>`;
+          showToast('❌ Parse Error', parserError.textContent, 'error');
+          return;
+        }
+
+        const colors = xmlDoc.getElementsByTagName('color');
+        colorDataArray = [];
+        originalColorDataArray = [];
+        modifiedColors.clear();
+
+        for (let i = 0; i < colors.length; i++) {
+          const color = colors[i];
+          const name = color.getAttribute('name') || `color_${i}`;
+          let rawHex = color.textContent || color.getAttribute('hex') || '#000000';
+          rawHex = rawHex.trim();
+
+          let displayHex = rawHex;
+          let cleanHex = '#000000';
+
+          if (rawHex.startsWith('#')) {
+            const hexWithoutHash = rawHex.substring(1);
+
+            if (hexWithoutHash.length === 8) {
+              cleanHex = '#' + hexWithoutHash.substring(2, 8);
+              displayHex = rawHex;
+            } else if (hexWithoutHash.length === 6) {
+              cleanHex = rawHex;
+              displayHex = rawHex;
+            } else if (hexWithoutHash.length === 3) {
+              const r = hexWithoutHash[0] + hexWithoutHash[0];
+              const g = hexWithoutHash[1] + hexWithoutHash[1];
+              const b = hexWithoutHash[2] + hexWithoutHash[2];
+              cleanHex = '#' + r + g + b;
+              displayHex = cleanHex;
+            } else {
+              cleanHex = rawHex;
+              displayHex = rawHex;
+            }
+          } else if (rawHex.length === 8 && /^[0-9A-Fa-f]{8}$/.test(rawHex)) {
+            cleanHex = '#' + rawHex.substring(2, 8);
+            displayHex = '#' + rawHex;
+          } else if (rawHex.length === 6 && /^[0-9A-Fa-f]{6}$/.test(rawHex)) {
+            cleanHex = '#' + rawHex;
+            displayHex = '#' + rawHex;
+          } else if (rawHex.length === 3 && /^[0-9A-Fa-f]{3}$/.test(rawHex)) {
+            const r = rawHex[0] + rawHex[0];
+            const g = rawHex[1] + rawHex[1];
+            const b = rawHex[2] + rawHex[2];
+            cleanHex = '#' + r + g + b;
+            displayHex = cleanHex;
+          } else {
+            cleanHex = rawHex.startsWith('#') ? rawHex : '#' + rawHex;
+            displayHex = cleanHex;
+          }
+
+          if (!/^#[0-9A-Fa-f]{6}$/.test(cleanHex)) {
+            cleanHex = '#000000';
+          }
+
+          const usageContext = extractUsageContext(name);
+
+          const colorObj = {
+            index: i,
+            name: name,
+            hex: cleanHex,
+            originalHex: displayHex,
+            fullHex: rawHex,
+            usage: usageContext,
+            modified: false,
+            originalFullHex: rawHex
+          };
+
+          colorDataArray.push(colorObj);
+          originalColorDataArray.push(JSON.parse(JSON.stringify(colorObj)));
+        }
+
+        if (colorDataArray.length === 0) {
+          previewContent.innerHTML =
+            `<div class="empty-state"><span>⚠️</span><p>No &lt;color&gt; tags found</p></div>`;
+          totalCount.textContent = '0';
+          totalColorCount.textContent = '0';
+          searchBar.style.display = 'none';
+          uniqueColorsInfo.style.display = 'none';
+          randomizeBtn.disabled = true;
+          showToast('⚠️ No Colors', 'No &lt;color&gt; tags found in the XML!', 'warning');
+          return;
+        }
+
+        totalCount.textContent = `${colorDataArray.length}`;
+        totalColorCount.textContent = `${colorDataArray.length}`;
+        searchBar.style.display = 'flex';
+        filteredData = [...colorDataArray];
+
+        showUniqueColorsSummary();
+        renderColorList(filteredData);
+
+        rawContainer.style.display = 'block';
+        rawXMLContent.textContent = xmlString;
+
+        showToast('📊 Parsed Successfully', `Found <strong>${colorDataArray.length}</strong> color definitions`,
+          'info', 2500);
+
+      } catch (err) {
+        previewContent.innerHTML = `<div class="error-msg">❌ ${err.message}</div>`;
+        showToast('❌ Error', err.message, 'error');
+      }
+    }
+
+    // ★★★ ইউজেজ কনটেক্সট ★★★
+    function extractUsageContext(name) {
+      const contexts = [];
+      const uiComponents = [
+        { keyword: 'background', label: 'Background' }, { keyword: 'bg', label: 'Background' },
+        { keyword: 'foreground', label: 'Foreground' }, { keyword: 'fg', label: 'Foreground' },
+        { keyword: 'text', label: 'Text' }, { keyword: 'title', label: 'Title' },
+        { keyword: 'subtitle', label: 'Subtitle' }, { keyword: 'summary', label: 'Summary' },
+        { keyword: 'icon', label: 'Icon' }, { keyword: 'button', label: 'Button' },
+        { keyword: 'btn', label: 'Button' }, { keyword: 'seekbar', label: 'SeekBar' },
+        { keyword: 'slider', label: 'Slider' }, { keyword: 'progress', label: 'Progress' },
+        { keyword: 'dialog', label: 'Dialog' }, { keyword: 'popup', label: 'Popup' },
+        { keyword: 'menu', label: 'Menu' }, { keyword: 'toolbar', label: 'Toolbar' },
+        { keyword: 'card', label: 'Card' }, { keyword: 'panel', label: 'Panel' },
+        { keyword: 'header', label: 'Header' }, { keyword: 'divider', label: 'Divider' },
+        { keyword: 'volume', label: 'Volume' }, { keyword: 'dnd', label: 'DND' },
+        { keyword: 'qs', label: 'Quick Settings' }, { keyword: 'toggle', label: 'Toggle' },
+        { keyword: 'switch', label: 'Switch' }, { keyword: 'theme', label: 'Theme' },
+        { keyword: 'accent', label: 'Accent' }, { keyword: 'primary', label: 'Primary' },
+        { keyword: 'secondary', label: 'Secondary' }, { keyword: 'error', label: 'Error' },
+        { keyword: 'warning', label: 'Warning' }, { keyword: 'success', label: 'Success' },
+        { keyword: 'disabled', label: 'Disabled' }, { keyword: 'selected', label: 'Selected' },
+        { keyword: 'pressed', label: 'Pressed' }, { keyword: 'dark', label: 'Dark Mode' },
+        { keyword: 'light', label: 'Light Mode' }, { keyword: 'miui', label: 'MIUI' },
+        { keyword: 'miplay', label: 'MiPlay' }, { keyword: 'material', label: 'Material' },
+      ];
+
+      const lowerName = name.toLowerCase();
+
+      uiComponents.forEach(comp => {
+        if (lowerName.includes(comp.keyword.toLowerCase())) {
+          if (!contexts.includes(comp.label)) {
+            contexts.push(comp.label);
+          }
+        }
+      });
+
+      if (contexts.length === 0) {
+        const parts = name.split('_');
+        const meaningfulParts = parts.filter(p => p.length > 2);
+        if (meaningfulParts.length > 0) {
+          const lastPart = meaningfulParts[meaningfulParts.length - 1];
+          const capitalized = lastPart.charAt(0).toUpperCase() + lastPart.slice(1);
+          contexts.push(capitalized);
+        } else {
+          contexts.push('UI Element');
+        }
+      }
+
+      return contexts.slice(0, 5);
+    }
+
+    // ★★★ ইউনিক কালার সামারি ★★★
+    function showUniqueColorsSummary() {
+      const uniqueHexMap = new Map();
+
+      colorDataArray.forEach(color => {
+        const hex = color.hex;
+        if (!uniqueHexMap.has(hex)) {
+          uniqueHexMap.set(hex, {
+            hex: hex,
+            count: 1,
+            names: [color.name]
+          });
+        } else {
+          const existing = uniqueHexMap.get(hex);
+          existing.count += 1;
+          if (!existing.names.includes(color.name)) {
+            existing.names.push(color.name);
+          }
+        }
+      });
+
+      const uniqueColors = Array.from(uniqueHexMap.values());
+
+      let html = `<div class="stat-item">🎨 <strong>${uniqueColors.length}</strong> Unique Colors</div>`;
+      html += `<div class="stat-item">📝 <strong>${colorDataArray.length}</strong> Total References</div>`;
+      if (modifiedColors.size > 0) {
+        html += `<div class="stat-item">✏️ <strong style="color:#fbbf24;">${modifiedColors.size}</strong> Modified</div>`;
+      }
+      html += `<div style="display:flex; flex-wrap:wrap; gap:4px; align-items:center;">`;
+
+      const sorted = uniqueColors.sort((a, b) => b.count - a.count);
+      const topColors = sorted.slice(0, 8);
+
+      topColors.forEach(item => {
+        html += `<span class="stat-item" style="display:inline-flex; align-items:center; gap:3px; background:#0f172a; padding:1px 8px; border-radius:20px; border:1px solid #1e293b;">
+                <span class="color-dot" style="background:${item.hex};"></span>
+                <span style="font-size:10px; color:#94a3b8;">${item.hex} <span style="color:#64748b; font-size:8px;">(${item.count}x)</span></span>
+            </span>`;
+      });
+
+      if (uniqueColors.length > 8) {
+        html += `<span class="stat-item" style="color:#64748b; font-size:10px;">+${uniqueColors.length - 8} more</span>`;
+      }
+
+      html += `</div>`;
+
+      uniqueColorsInfo.innerHTML = html;
+      uniqueColorsInfo.style.display = 'flex';
+    }
+
+    // ★★★ ইউনিক র‍্যান্ডম হেক্স জেনারেটর ★★★
+    function generateUniqueRandomHex(existingColors) {
+      const letters = '0123456789ABCDEF';
+      let color;
+      let attempts = 0;
+      const maxAttempts = 1000;
+
+      do {
+        color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        attempts++;
+      } while (existingColors.has(color) && attempts < maxAttempts);
+
+      return color;
+    }
+
+    // ★★★ র‍্যান্ডমাইজ অল কালার ★★★
+    function randomizeAllColors() {
+      if (colorDataArray.length === 0) {
+        showToast('⚠️ No Colors', 'Please upload an XML file first!', 'warning');
+        return;
+      }
+
+      const totalColors = colorDataArray.length;
+      const totalPossibleColors = 16 * 16 * 16 * 16 * 16 * 16;
+
+      if (totalColors > totalPossibleColors) {
+        showToast('⚠️ Too Many Colors', `You have ${totalColors} colors, only ${totalPossibleColors} unique possible!`,
+          'error');
+        return;
+      }
+
+      showToast('🎲 Randomizing', `Generating ${totalColors} unique colors...`, 'info', 2000);
+
+      randomizeBtn.disabled = true;
+      randomizeBtn.textContent = '🔄 Generating...';
+
+      const usedColors = new Set();
+      const newColors = [];
+
+      for (let i = 0; i < totalColors; i++) {
+        const newHex = generateUniqueRandomHex(usedColors);
+        usedColors.add(newHex);
+        newColors.push(newHex);
+      }
+
+      colorDataArray.forEach((color, index) => {
+        color.hex = newColors[index];
+        color.originalHex = newColors[index];
+        color.modified = true;
+        modifiedColors.add(index);
+      });
+
+      updateXMLString();
+      showUniqueColorsSummary();
+      renderColorList(filteredData);
+
+      randomizeBtn.disabled = false;
+      randomizeBtn.textContent = '🎲 Randomize All';
+
+      showToast('✅ Success!', `Randomized all <strong>${totalColors}</strong> colors with <strong>${usedColors.size}</strong> unique colors!`,
+        'success', 4000);
+    }
+
+    // ★★★ XML আপডেট ★★★
+    function updateXMLString() {
+      try {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(currentXmlString, "text/xml");
+        const colors = xmlDoc.getElementsByTagName('color');
+
+        for (let i = 0; i < colors.length && i < colorDataArray.length; i++) {
+          const color = colors[i];
+          const colorData = colorDataArray[i];
+
+          if (colorData.modified) {
+            const newFullHex = colorData.hex;
+            color.textContent = newFullHex;
+            if (color.hasAttribute('hex')) {
+              color.setAttribute('hex', newFullHex);
+            }
+          }
+        }
+
+        const serializer = new XMLSerializer();
+        let newXml = serializer.serializeToString(xmlDoc);
+        if (!newXml.startsWith('<?xml')) {
+          newXml = '<?xml version="1.0" encoding="utf-8"?>\n' + newXml;
+        }
+
+        currentXmlString = newXml;
+        rawXMLContent.textContent = currentXmlString;
+
+      } catch (err) {
+        showToast('❌ Error', 'Failed to update XML!', 'error');
+        console.error('Error updating XML:', err);
+      }
+    }
+
+    // ★★★ রিসেট ★★★
+    function resetAllColors() {
+      if (modifiedColors.size === 0) {
+        showToast('ℹ️ No Changes', 'No colors have been modified!', 'info');
+        return;
+      }
+
+      showToast('↩️ Resetting', `Resetting ${modifiedColors.size} colors...`, 'info', 2000);
+
+      colorDataArray = JSON.parse(JSON.stringify(originalColorDataArray));
+      modifiedColors.clear();
+
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(currentXmlString, "text/xml");
+      const colors = xmlDoc.getElementsByTagName('color');
+
+      for (let i = 0; i < colors.length && i < originalColorDataArray.length; i++) {
+        const color = colors[i];
+        const original = originalColorDataArray[i];
+        color.textContent = original.fullHex;
+        if (color.hasAttribute('hex')) {
+          color.setAttribute('hex', original.fullHex);
+        }
+      }
+
+      const serializer = new XMLSerializer();
+      let newXml = serializer.serializeToString(xmlDoc);
+      if (!newXml.startsWith('<?xml')) {
+        newXml = '<?xml version="1.0" encoding="utf-8"?>\n' + newXml;
+      }
+      currentXmlString = newXml;
+      rawXMLContent.textContent = currentXmlString;
+
+      showUniqueColorsSummary();
+      renderColorList(filteredData);
+
+      showToast('✅ Reset Complete', 'All colors have been restored to original values!', 'success', 3000);
+    }
+
+    // ★★★ রেন্ডার কালার লিস্ট ★★★
+    function renderColorList(data) {
+      if (!data || data.length === 0) {
+        previewContent.innerHTML = `
+                <div class="empty-state">
+                    <span>🔍</span>
+                    <p>No results found</p>
+                </div>
+            `;
+        return;
+      }
+
+      let html = '<ul class="color-list">';
+      data.forEach((color, idx) => {
+        const globalIndex = colorDataArray.indexOf(color);
+        const bgColor = color.hex;
+        const isModified = modifiedColors.has(globalIndex);
+        const isARGB = color.originalHex.length === 9 && color.originalHex.startsWith('#');
+
+        let usageHtml = '';
+        if (color.usage && color.usage.length > 0) {
+          usageHtml = `<div class="usage-tags">`;
+          color.usage.forEach(tag => {
+            usageHtml += `<span class="usage-tag">${tag}</span>`;
+          });
+          usageHtml += `</div>`;
+        }
+
+        html += `
+                <li class="color-list-item" id="item-${globalIndex}">
+                    <div class="color-circle" style="background: ${bgColor};"></div>
+                    <div class="color-info">
+                        <div class="color-name">
+                            ${color.name}
+                            <span class="index-badge">#${color.index + 1}</span>
+                            ${isModified ? `<span class="modified-badge">✏️</span>` : ''}
+                            <button class="toggle-details-btn" onclick="showToast('ℹ️ Color Info', '<strong>${color.name}</strong><br>Hex: ${color.hex}<br>Usage: ${color.usage.join(', ')}', 'info', 4000)">ℹ️</button>
+                        </div>
+                        <div class="color-values">
+                            <span class="hex-value">${color.hex}</span>
+                            ${isARGB ? `<span class="argb-value">(ARGB: ${color.originalHex})</span>` : ''}
+                        </div>
+                        ${usageHtml}
+                    </div>
+                </li>
+            `;
+      });
+      html += '</ul>';
+      previewContent.innerHTML = html;
+    }
+
+    // ★★★ ফিল্টার ★★★
+    function filterColors() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const filterType = document.getElementById('filterSelect').value;
+
+      if (!searchTerm) {
+        filteredData = [...colorDataArray];
+      } else {
+        filteredData = colorDataArray.filter(color => {
+          if (filterType === 'name') {
+            return color.name.toLowerCase().includes(searchTerm);
+          } else if (filterType === 'hex') {
+            return color.hex.toLowerCase().includes(searchTerm);
+          } else {
+            return color.name.toLowerCase().includes(searchTerm) ||
+              color.hex.toLowerCase().includes(searchTerm) ||
+              color.usage.some(tag => tag.toLowerCase().includes(searchTerm));
+          }
+        });
+      }
+
+      totalCount.textContent = `${filteredData.length} / ${colorDataArray.length}`;
+      renderColorList(filteredData);
+
+      if (filteredData.length === 0 && searchTerm) {
+        showToast('🔍 No Results', `No colors found matching "${searchTerm}"`, 'warning', 2500);
+      }
+    }
+
+    // ★★★ ডাউনলোড XML ★★★
+    function downloadXML() {
+      updateXMLString();
+      const blob = new Blob([currentXmlString], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'theme_values.xml';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      const modifiedCount = modifiedColors.size;
+      if (modifiedCount > 0) {
+        showToast('💾 Downloaded', `XML downloaded with <strong>${modifiedCount}</strong> modified colors!`, 'success',
+          3000);
+      } else {
+        showToast('💾 Downloaded', 'XML downloaded successfully!', 'success', 2500);
+      }
+    }
+
+    // ★★★ টগল র ভিউ ★★★
+    function toggleRawXML() {
+      const container = document.getElementById('rawXMLContainer');
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        showToast('📄 Raw XML', 'Showing raw XML content', 'info', 2000);
+      } else {
+        container.style.display = 'none';
+      }
+    }
+
+    // ★★★ ফাইল রিমুভ ★★★
+    function removeFile() {
+      fileInput.value = '';
+      currentXmlString = '';
+      colorDataArray = [];
+      originalColorDataArray = [];
+      filteredData = [];
+      modifiedColors.clear();
+      uploadArea.style.display = 'block';
+      fileUploadedInfo.style.display = 'none';
+      searchBar.style.display = 'none';
+      uniqueColorsInfo.style.display = 'none';
+      randomizeBtn.disabled = true;
+      previewContent.innerHTML = `
+            <div class="empty-state">
+                <span>📂</span>
+                <p>Upload an XML file</p>
+                <p class="sub-text">theme_values.xml or colors.xml</p>
+            </div>
+        `;
+      totalCount.textContent = '0';
+      totalColorCount.textContent = '0';
+      rawContainer.style.display = 'none';
+
+      showToast('🗑️ Removed', 'File has been removed', 'info', 2000);
+    }
+  </script>
+
+</body>
+
+</html>
