@@ -1,0 +1,4 @@
+npm install -g nitron
+nitron init
+npm install -g --allow-scripts=sharp
+    

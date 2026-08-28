@@ -46,6 +46,11 @@
       --success-bg: #d4edda;
       --warning-bg: #fff3cd;
       --danger-bg: #f8d7da;
+      --force-stop-bg: #dc3545;
+      --force-stop-hover: #c82333;
+      --scrollbar-track: #f5f7fb;
+      --scrollbar-thumb: #e2e8f0;
+      --scrollbar-thumb-hover: #64748b;
     }
 
     [data-theme="dark"] {
@@ -82,6 +87,11 @@
       --success-bg: #1a3a1a;
       --warning-bg: #3a3a1a;
       --danger-bg: #3a1a1a;
+      --force-stop-bg: #dc3545;
+      --force-stop-hover: #c82333;
+      --scrollbar-track: #1a1a1a;
+      --scrollbar-thumb: #333333;
+      --scrollbar-thumb-hover: #555555;
     }
 
     * {
@@ -103,6 +113,97 @@
       max-width: 1400px;
       margin: 0 auto;
       width: 100%;
+    }
+
+    /* ===== BLUR OVERLAY FOR PROCESSING ===== */
+    .processing-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .processing-overlay.active {
+      display: flex;
+    }
+
+    .processing-overlay .force-stop-big {
+      background: var(--force-stop-bg);
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      border-radius: 60px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(220, 53, 69, 0.4);
+      z-index: 10000;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .processing-overlay .force-stop-big:hover {
+      background: var(--force-stop-hover);
+      transform: scale(1.05);
+    }
+
+    .processing-overlay .force-stop-big .material-icons {
+      font-size: 32px;
+    }
+
+    .processing-overlay .progress-text {
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 500;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      z-index: 10000;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 12px 24px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+    }
+
+    .processing-overlay .progress-bar-container {
+      width: 320px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      z-index: 10000;
+    }
+
+    .processing-overlay .progress-bar-fill {
+      height: 100%;
+      background: #f97316;
+      border-radius: 10px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.03);
+      }
     }
 
     .theme-toggle-wrapper {
@@ -397,44 +498,6 @@
       }
     }
 
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 3000;
-      backdrop-filter: blur(4px);
-    }
-
-    .loading-content {
-      background: var(--bg-card);
-      padding: 30px 40px;
-      border-radius: 24px;
-      text-align: center;
-      min-width: 280px;
-    }
-
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid var(--border-medium);
-      border-top-color: #f97316;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
     .stats-row {
       display: flex;
       flex-wrap: wrap;
@@ -453,29 +516,10 @@
       color: var(--text-primary);
     }
 
-    .filter-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .filter-chip {
-      background: var(--filter-chip-bg);
-      padding: 5px 14px;
-      border-radius: 32px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
-      color: var(--text-primary);
-    }
-
-    .filter-chip.active {
-      background: #f97316;
+    .stat-chip.processing {
+      background: var(--force-stop-bg);
       color: white;
+      animation: pulse 1s ease-in-out infinite;
     }
 
     .toggle-group-horizontal {
@@ -558,10 +602,7 @@
       position: relative;
     }
 
-    .asset-card.selected {
-      border: 2px solid #f97316;
-      background: var(--asset-selected-bg);
-    }
+
 
     .asset-card.convertible {
       border-color: #22c55e;
@@ -722,9 +763,22 @@
       padding: 10px 20px;
       border-radius: 48px;
       font-size: 0.8rem;
-      z-index: 2000;
+      z-index: 10001;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       max-width: 90%;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     @media (max-width: 640px) {
@@ -839,11 +893,51 @@
       border-top: 1px solid var(--border-light);
       background: var(--bg-card);
     }
+
+
+    /* ===== SCROLLBAR STYLING ===== */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--scrollbar-track);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar-thumb);
+      border-radius: 10px;
+      transition: background 0.3s ease;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-thumb-hover);
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    }
   </style>
+
 </head>
 
 <body>
   <div class="app-container">
+    <!-- ===== PROCESSING OVERLAY ===== -->
+    <div class="processing-overlay" id="processingOverlay">
+      <button class="force-stop-big" id="forceStopBigBtn">
+        <span class="material-icons">stop_circle</span>
+        ⛔ FORCE STOP
+      </button>
+      <div class="progress-text" id="progressText">Processing files...</div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+      </div>
+    </div>
+
     <div class="theme-toggle-wrapper">
       <div class="theme-toggle-btn" id="themeToggleBtn">
         <span class="material-icons" id="themeIcon">light_mode</span>
@@ -864,18 +958,6 @@
         <span class="material-icons toggle-icon">expand_more</span>
       </div>
       <div id="drawableContent" class="card-content">
-        <div
-          style="padding: 16px 20px; background:var(--status-bg); border-bottom:1px solid var(--border-light); display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
-          <button class="material-btn material-btn-outline" id="colorUploadBtn"><span
-              class="material-icons">color_lens</span> Upload XML</button>
-          <button class="material-btn" id="clearColorMapBtn"><span class="material-icons">delete</span> Remove</button>
-          <button class="material-btn material-btn-primary" id="resolveRelativeColorsBtn"><span
-              class="material-icons">link</span> Resolve </button>
-          <div id="colorStatusDisplay"
-            style="font-size:0.7rem; background:var(--bg-card); border-radius:40px; padding:6px 14px; color:var(--text-primary);">
-            ⚠️ No colors.xml</div>
-        </div>
-
         <div id="uploadZoneWrapper">
           <div class="upload-zone" id="uploadArea">
             <div class="upload-icon material-icons">cloud_upload</div>
@@ -904,10 +986,7 @@
               <span class="material-icons">image</span> PNG
               <span id="pngToggleSwitch" class="toggle-switch active"></span>
             </div>
-            <div class="toggle-chip" id="selectAllChip">
-              <span class="material-icons">select_all</span> Select All
-              <input type="checkbox" id="globalSelectCb" style="width:18px;height:18px; margin-left:6px;">
-            </div>
+
           </div>
 
           <div class="btn-group">
@@ -915,21 +994,15 @@
                 class="material-icons">add</span> Add Files</button>
             <button class="material-btn material-btn-outline" id="extractColorsBtn"><span
                 class="material-icons">format_paint</span> Extract Colors</button>
-            <button class="material-btn material-btn-outline" id="downloadSelectedBtn"><span
-                class="material-icons">checklist</span> Selected</button>
+
             <button class="material-btn material-btn-outline" id="downloadZipBtn"><span
                 class="material-icons">folder_zip</span> ZIP</button>
 
             <!-- Advanced Convert Buttons -->
-            <button class="material-btn material-btn-purple" id="convertAllXmlsBtn">
-              <span class="material-icons">auto_awesome</span> Convert All XML
-            </button>
             <button class="material-btn material-btn-indigo" id="convertAllDrawablesBtn">
               <span class="material-icons">transform</span> Smart Convert All
             </button>
-            <button class="material-btn material-btn-success" id="convertSelectedBtn">
-              <span class="material-icons">check_circle</span> Convert Selected
-            </button>
+
 
             <button class="material-btn material-btn-teal" id="mergeToThemeFallbackBtn"><span
                 class="material-icons">merge_type</span> fallback Merge</button>
@@ -942,7 +1015,6 @@
           </div>
 
           <div class="stats-row" id="statsRow"></div>
-          <div class="filter-row" id="filterRow"></div>
 
           <!-- Extracted Colors Panel -->
           <div id="extractedColorsPanel" style="display: none;">
@@ -1019,63 +1091,103 @@
 
     // ==================== GLOBAL STATE ====================
     let currentFiles = [];
-    let selectedIds = new Set();
     let colorMap = new Map();
-    let currentFilter = 'all';
     let toggleXml = true,
       togglePng = true;
     let extractedColors = new Map();
     let objectURLs = [];
     let conversionCache = new Map();
+    let isAutoDownloadEnabled = true;
 
-    function revokeAllObjectURLs() {
-      objectURLs.forEach(url => { if (url) URL.revokeObjectURL(url); });
-      objectURLs = [];
-      conversionCache.clear();
+    // ==================== FORCE STOP CONTROL ====================
+    let isProcessing = false;
+    let forceStopRequested = false;
+    let currentProcessType = '';
+    let currentTotal = 0;
+    let currentProcessed = 0;
+
+    function requestForceStop() {
+      forceStopRequested = true;
+      showToast('⛔ Force stop requested... Stopping process...');
     }
 
-    // ==================== LOADING ====================
-    function showLoading(message = 'Processing files...', current = null, total = null) {
-      let overlay = document.getElementById('loadingOverlay');
-      if (overlay) overlay.remove();
-      overlay = document.createElement('div');
-      overlay.className = 'loading-overlay';
-      overlay.id = 'loadingOverlay';
-      let progressHtml = '';
-      if (current !== null && total !== null) {
-        let percent = total > 0 ? (current / total) * 100 : 0;
-        progressHtml =
-          `<div style="margin-top:12px;font-size:0.9rem;font-weight:600;color:#f97316;">${current}/${total} files</div>
-                       <div style="width:220px;height:5px;background:var(--border-medium);border-radius:10px;margin-top:10px;overflow:hidden;">
-                           <div style="width:${percent}%;height:100%;background:#f97316;border-radius:10px;transition:width 0.3s;"></div>
-                       </div>`;
-      }
-      overlay.innerHTML = `<div class="loading-content"><div class="spinner"></div>
-        <div style="font-weight:500;margin-top:8px;">${message}</div>${progressHtml}
-        <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:12px;">Please wait...</div></div>`;
-      document.body.appendChild(overlay);
-    }
-
-    function hideLoading() {
-      let overlay = document.getElementById('loadingOverlay');
-      if (overlay) overlay.remove();
-    }
-
-    function updateLoadingProgress(current, total, message = 'Processing files...') {
-      let overlay = document.getElementById('loadingOverlay');
-      if (!overlay) return;
-      let progressDiv = overlay.querySelector('.loading-content');
-      if (progressDiv) {
-        let percent = total > 0 ? (current / total) * 100 : 0;
-        progressDiv.innerHTML = `<div class="spinner"></div>
-            <div style="font-weight:500;margin-top:8px;">${message}</div>
-            <div style="margin-top:12px;font-size:0.9rem;font-weight:600;color:#f97316;">${current}/${total} files</div>
-            <div style="width:220px;height:5px;background:var(--border-medium);border-radius:10px;margin-top:10px;overflow:hidden;">
-                <div style="width:${percent}%;height:100%;background:#f97316;border-radius:10px;transition:width 0.3s;"></div>
-            </div>
-            <div style="font-size:0.7rem;color:var(--text-secondary);margin-top:12px;">Please wait...</div>`;
+    function checkForceStop() {
+      if (forceStopRequested) {
+        forceStopRequested = false;
+        isProcessing = false;
+        hideProcessingOverlay();
+        showToast('⛔ Process stopped by user');
+        throw new Error('FORCE_STOP');
       }
     }
+
+    function resetForceStop() {
+      forceStopRequested = false;
+      isProcessing = false;
+    }
+
+    // ==================== PROCESSING OVERLAY ====================
+    function showProcessingOverlay(message = 'Processing...', current = 0, total = 0) {
+      const overlay = document.getElementById('processingOverlay');
+      const text = document.getElementById('progressText');
+      const fill = document.getElementById('progressBarFill');
+
+      overlay.classList.add('active');
+      text.textContent = message;
+
+      if (total > 0) {
+        const percent = Math.min((current / total) * 100, 100);
+        fill.style.width = percent + '%';
+      } else {
+        fill.style.width = '0%';
+      }
+
+      // Update stat chip
+      const statChip = document.querySelector('.stat-chip.processing');
+      if (statChip) {
+        statChip.textContent = '⏳ Processing...';
+      }
+    }
+
+    function updateProcessingProgress(message, current, total) {
+      const overlay = document.getElementById('processingOverlay');
+      const text = document.getElementById('progressText');
+      const fill = document.getElementById('progressBarFill');
+
+      if (!overlay.classList.contains('active')) return;
+
+      text.textContent = message;
+
+      if (total > 0) {
+        const percent = Math.min((current / total) * 100, 100);
+        fill.style.width = percent + '%';
+      }
+
+      currentProcessed = current;
+      currentTotal = total;
+    }
+
+    function hideProcessingOverlay() {
+      const overlay = document.getElementById('processingOverlay');
+      overlay.classList.remove('active');
+
+      const statChip = document.querySelector('.stat-chip.processing');
+      if (statChip) {
+        statChip.textContent = '✅ Idle';
+        statChip.classList.remove('processing');
+      }
+    }
+
+    // Force Stop Big Button
+    document.getElementById('forceStopBigBtn').onclick = function () {
+      if (isProcessing) {
+        requestForceStop();
+        this.innerHTML = '<span class="material-icons">stop_circle</span> ⏳ Stopping...';
+        setTimeout(() => {
+          this.innerHTML = '<span class="material-icons">stop_circle</span> ⛔ FORCE STOP';
+        }, 2000);
+      }
+    };
 
     // ==================== TOAST ====================
     function showToast(msg) {
@@ -1100,11 +1212,32 @@
     }
 
     // ==================== COLOR FUNCTIONS ====================
-    function updateColorStatusText() {
-      const total = colorMap.size;
-      const relative = [...colorMap.values()].filter(c => c.isRelative).length;
-      document.getElementById('colorStatusDisplay').innerHTML = total ? `✅ ${total} colors (${relative} relative)` :
-        '⚠️ No colors.xml';
+    // Store colors.xml data without UI
+    async function parseColorsXml(content) {
+      colorMap.clear();
+      const regex = /<color\s+name="([^"]+)"\s*>([^<]+)<\/color>/g;
+      let match;
+      let temp = [];
+      while ((match = regex.exec(content)) !== null) {
+        temp.push({ name: match[1], raw: match[2].trim() });
+      }
+      for (let { name, raw } of temp) {
+        if (raw.startsWith('@android:color/')) {
+          let parent = raw.replace('@android:color/', '');
+          colorMap.set(name, { value: null, isRelative: true, isAndroidRelative: true, parent, originalRaw: raw });
+        } else if (raw.startsWith('@color/')) {
+          let parent = raw.replace('@color/', '');
+          colorMap.set(name, { value: null, isRelative: true, isAndroidRelative: false, parent, originalRaw: raw });
+        } else {
+          colorMap.set(name, { value: raw, isRelative: false, isAndroidRelative: false, parent: null, originalRaw: raw });
+        }
+      }
+      resolveRelativeColors(colorMap);
+      updateExtractedColorsWithResolvedValues();
+
+      if (extractedColors.size > 0 && isAutoDownloadEnabled) {
+        await autoMergeAndDownload();
+      }
     }
 
     function resolveRelativeColors(map) {
@@ -1146,30 +1279,6 @@
         }
       }
       return resolved;
-    }
-
-    async function parseColorsXml(content) {
-      colorMap.clear();
-      const regex = /<color\s+name="([^"]+)"\s*>([^<]+)<\/color>/g;
-      let match;
-      let temp = [];
-      while ((match = regex.exec(content)) !== null) {
-        temp.push({ name: match[1], raw: match[2].trim() });
-      }
-      for (let { name, raw } of temp) {
-        if (raw.startsWith('@android:color/')) {
-          let parent = raw.replace('@android:color/', '');
-          colorMap.set(name, { value: null, isRelative: true, isAndroidRelative: true, parent, originalRaw: raw });
-        } else if (raw.startsWith('@color/')) {
-          let parent = raw.replace('@color/', '');
-          colorMap.set(name, { value: null, isRelative: true, isAndroidRelative: false, parent, originalRaw: raw });
-        } else {
-          colorMap.set(name, { value: raw, isRelative: false, isAndroidRelative: false, parent: null, originalRaw: raw });
-        }
-      }
-      resolveRelativeColors(colorMap);
-      updateColorStatusText();
-      updateExtractedColorsWithResolvedValues();
     }
 
     function getExactColorValue(colorName) {
@@ -1444,8 +1553,13 @@
 
     // ==================== UNIVERSAL CONVERTER ====================
     async function universalDrawableToPng(content, type, viewportWidth = 24, viewportHeight = 24) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         try {
+          if (forceStopRequested) {
+            reject(new Error('FORCE_STOP'));
+            return;
+          }
+
           let processed = content;
           const colorRefs = [...content.matchAll(/@color\/([a-zA-Z0-9_]+)/g)];
           for (let match of colorRefs) {
@@ -1486,6 +1600,11 @@
           objectURLs.push(url);
 
           img.onload = () => {
+            if (forceStopRequested) {
+              URL.revokeObjectURL(url);
+              reject(new Error('FORCE_STOP'));
+              return;
+            }
             let canvas = document.createElement('canvas');
             let scale = 3;
             canvas.width = viewportWidth * scale;
@@ -1538,17 +1657,6 @@
         hasLayerList: /<layer-list/.test(content),
         hasRipple: /<ripple/.test(content)
       };
-    }
-
-    function isValidVectorDrawable(xmlContent) {
-      try {
-        const hasVectorTag = /<vector\s/.test(xmlContent);
-        const hasPathData = /android:pathData="[^"]+"/.test(xmlContent);
-        const hasGroupOrPath = /<(path|group)\s/.test(xmlContent);
-        return hasVectorTag && (hasPathData || hasGroupOrPath);
-      } catch (e) {
-        return false;
-      }
     }
 
     function getViewportInfo(content) {
@@ -1620,6 +1728,9 @@
             conversionStatus = 'none';
           }
         } catch (e) {
+          if (e.message === 'FORCE_STOP') {
+            throw e;
+          }
           console.error('Error processing XML:', e);
           isValidIcon = false;
           conversionStatus = 'none';
@@ -1644,40 +1755,181 @@
       };
     }
 
-    // ==================== FILE HANDLING ====================
+    // ==================== AUTO EXTRACT & DOWNLOAD FUNCTIONS ====================
+
+    function extractColorsFromFiles() {
+      extractedColors.clear();
+
+      for (let file of currentFiles) {
+        if (file.colors && file.colors.length > 0) {
+          for (let colorName of file.colors) {
+            if (!extractedColors.has(colorName)) {
+              const resolvedValue = getExactColorValue(colorName);
+              extractedColors.set(colorName, {
+                value: resolvedValue || null,
+                original: colorName
+              });
+            }
+          }
+        }
+      }
+
+      renderExtractedColorsPanel();
+      return extractedColors;
+    }
+
+    function autoDownloadExtractedColors() {
+      if (extractedColors.size === 0) {
+        showToast('⚠️ No colors found to extract');
+        return false;
+      }
+
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+
+      for (let [name, data] of extractedColors) {
+        let val = data.value || '#FF5722';
+        xml += `    <color name="${name}">${val}</color>\n`;
+      }
+
+      xml += '</resources>';
+
+      const blob = new Blob([xml], { type: 'text/xml' });
+      saveAs(blob, `extracted_colors_${Date.now()}.xml`);
+      showToast(`✅ Extracted ${extractedColors.size} colors downloaded!`);
+      return true;
+    }
+
+    async function autoMergeAndDownload() {
+      if (extractedColors.size === 0) {
+        showToast('⚠️ No extracted colors to merge!');
+        return false;
+      }
+
+      if (colorMap.size === 0) {
+        showToast('⚠️ Please upload colors.xml first!');
+        return false;
+      }
+
+      const mergedMap = new Map(colorMap);
+      for (let [name, data] of extractedColors) {
+        if (!mergedMap.has(name)) {
+          const resolvedValue = data.value || '#FF5722';
+          mergedMap.set(name, {
+            value: resolvedValue,
+            isRelative: false,
+            isAndroidRelative: false,
+            parent: null,
+            originalRaw: resolvedValue
+          });
+        }
+      }
+
+      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+
+      for (let [name, data] of extractedColors) {
+        const colorValue = data.value || '#FF5722';
+        xml += `    <color name="${name}">${colorValue}</color>\n`;
+      }
+
+      for (let [name, data] of colorMap) {
+        if (!extractedColors.has(name)) {
+          const colorValue = data.value || data.originalRaw || '#FF5722';
+          xml += `    <color name="${name}">${colorValue}</color>\n`;
+        }
+      }
+
+      xml += '</resources>';
+
+      const blob = new Blob([xml], { type: 'text/xml' });
+      saveAs(blob, `merged_colors_${Date.now()}.xml`);
+      showToast(`✅ Merged! ${extractedColors.size} extracted + ${colorMap.size} existing colors`);
+      return true;
+    }
+
+    // ==================== FILE HANDLING WITH AUTO EXTRACT & FORCE STOP ====================
+
     async function handleFiles(files) {
-      let totalFiles = files.length;
-      showLoading(`Processing ${totalFiles} files...`, 0, totalFiles);
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
+
+      isProcessing = true;
+      forceStopRequested = false;
+      currentProcessType = 'upload';
+      currentTotal = files.length;
+      currentProcessed = 0;
+
+      showProcessingOverlay(`Processing ${files.length} files...`, 0, files.length);
       let newFiles = [];
-      let processedCount = 0;
       let convertibleCount = 0;
 
-      for (let file of files) {
-        processedCount++;
-        updateLoadingProgress(processedCount, totalFiles, `Processing: ${file.name}`);
-        let processed = await processFile(file);
-        newFiles.push(processed);
-        if (processed.convertible) convertibleCount++;
-      }
+      try {
+        for (let i = 0; i < files.length; i++) {
+          checkForceStop();
+          currentProcessed = i + 1;
+          updateProcessingProgress(`Processing: ${files[i].name}`, currentProcessed, files.length);
+          let processed = await processFile(files[i]);
+          newFiles.push(processed);
+          if (processed.convertible) convertibleCount++;
+        }
 
-      currentFiles.push(...newFiles);
-      if (currentFiles.length > 0) {
-        document.getElementById('uploadZoneWrapper').style.display = 'none';
-        document.getElementById('mainControls').style.display = 'block';
+        currentFiles.push(...newFiles);
+
+        if (currentFiles.length > 0 && isAutoDownloadEnabled) {
+          checkForceStop();
+          updateProcessingProgress('Extracting colors...', currentProcessed, files.length);
+          extractColorsFromFiles();
+          checkForceStop();
+
+          if (colorMap.size > 0) {
+            await autoMergeAndDownload();
+          } else {
+            autoDownloadExtractedColors();
+          }
+        }
+
+        if (currentFiles.length > 0) {
+          document.getElementById('uploadZoneWrapper').style.display = 'none';
+          document.getElementById('mainControls').style.display = 'block';
+        }
+        hideProcessingOverlay();
+        renderExtractedColorsPanel();
+        updateUIAndRender();
+        showToast(`✅ ${newFiles.length} files uploaded (${convertibleCount} convertible)`);
+      } catch (e) {
+        if (e.message === 'FORCE_STOP') {
+          hideProcessingOverlay();
+          showToast('⛔ Process stopped by user');
+        } else {
+          console.error('Error:', e);
+          hideProcessingOverlay();
+          showToast('❌ Error processing files');
+        }
+      } finally {
+        isProcessing = false;
+        forceStopRequested = false;
+        resetForceStop();
       }
-      hideLoading();
-      renderExtractedColorsPanel();
-      updateUIAndRender();
-      showToast(`✅ ${newFiles.length} files uploaded (${convertibleCount} convertible)`);
     }
 
     async function handleZipUpload(zipFile) {
-      showLoading('Extracting ZIP file...');
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
+
+      isProcessing = true;
+      forceStopRequested = false;
+      currentProcessType = 'zip';
+
+      showProcessingOverlay('Extracting ZIP file...', 0, 0);
       try {
         let zip = await JSZip.loadAsync(zipFile);
         let xmlFiles = [],
           pngFiles = [];
         for (let [filename, fileData] of Object.entries(zip.files)) {
+          checkForceStop();
           if (fileData.dir) continue;
           let name = filename.split('/').pop();
           if (name.endsWith('.xml') || name.endsWith('.png') || name.endsWith('.9.png')) {
@@ -1692,159 +1944,155 @@
         }
         let allFiles = [...xmlFiles, ...pngFiles];
         if (allFiles.length === 0) {
-          hideLoading();
+          hideProcessingOverlay();
           showToast('⚠️ No drawable files found in the ZIP file');
+          isProcessing = false;
           return;
         }
+
         let totalFiles = allFiles.length;
-        showLoading(`Processing ${totalFiles} files from ZIP...`, 0, totalFiles);
+        currentTotal = totalFiles;
+        currentProcessed = 0;
+        showProcessingOverlay(`Processing ${totalFiles} files from ZIP...`, 0, totalFiles);
         let newFiles = [];
-        let processedCount = 0;
         let convertibleCount = 0;
-        for (let file of allFiles) {
-          processedCount++;
-          updateLoadingProgress(processedCount, totalFiles, `Processing: ${file.name}`);
-          let processed = await processFile(file);
+
+        for (let i = 0; i < allFiles.length; i++) {
+          checkForceStop();
+          currentProcessed = i + 1;
+          updateProcessingProgress(`Processing: ${allFiles[i].name}`, currentProcessed, totalFiles);
+          let processed = await processFile(allFiles[i]);
           newFiles.push(processed);
           if (processed.convertible) convertibleCount++;
         }
+
         currentFiles.push(...newFiles);
+
+        if (currentFiles.length > 0 && isAutoDownloadEnabled) {
+          checkForceStop();
+          updateProcessingProgress('Extracting colors...', currentProcessed, totalFiles);
+          extractColorsFromFiles();
+          checkForceStop();
+
+          if (colorMap.size > 0) {
+            await autoMergeAndDownload();
+          } else {
+            autoDownloadExtractedColors();
+          }
+        }
+
         if (currentFiles.length > 0) {
           document.getElementById('uploadZoneWrapper').style.display = 'none';
           document.getElementById('mainControls').style.display = 'block';
         }
-        hideLoading();
+        hideProcessingOverlay();
         renderExtractedColorsPanel();
         updateUIAndRender();
         showToast(`✅ ZIP from ${newFiles.length} files extracted (${convertibleCount} convertible)`);
-      } catch (error) {
-        hideLoading();
-        showToast('❌ Error extracting ZIP file');
-        console.error(error);
+      } catch (e) {
+        if (e.message === 'FORCE_STOP') {
+          hideProcessingOverlay();
+          showToast('⛔ Process stopped by user');
+        } else {
+          hideProcessingOverlay();
+          showToast('❌ Error extracting ZIP file');
+          console.error(e);
+        }
+      } finally {
+        isProcessing = false;
+        forceStopRequested = false;
+        resetForceStop();
       }
     }
 
-    // ==================== CONVERSION FUNCTIONS ====================
+    // ==================== CONVERSION FUNCTIONS WITH FORCE STOP ====================
 
     async function convertAllDrawables() {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
+
       const convertibleFiles = currentFiles.filter(f => f.convertible === true || f.type === 'png' || f.type === 'nine');
       if (convertibleFiles.length === 0) {
         showToast('⚠️ No convertible drawables found!');
         return;
       }
 
-      let totalFiles = convertibleFiles.length;
-      showLoading(`Converting ${totalFiles} drawables...`, 0, totalFiles);
+      isProcessing = true;
+      forceStopRequested = false;
+      currentProcessType = 'convert_all';
+      currentTotal = convertibleFiles.length;
+      currentProcessed = 0;
+
+      showProcessingOverlay(`Converting ${convertibleFiles.length} drawables...`, 0, convertibleFiles.length);
       let zip = new JSZip();
       let convertedCount = 0;
-      let processedCount = 0;
 
-      for (let file of convertibleFiles) {
-        processedCount++;
-        updateLoadingProgress(processedCount, totalFiles, `Converting: ${file.name}`);
+      try {
+        for (let i = 0; i < convertibleFiles.length; i++) {
+          let file = convertibleFiles[i];
+          checkForceStop();
+          currentProcessed = i + 1;
+          updateProcessingProgress(`Converting: ${file.name}`, currentProcessed, convertibleFiles.length);
 
-        if (file.type === 'png' || file.type === 'nine') {
-          let blob = await file.file.arrayBuffer();
-          zip.file(file.name, blob);
-          convertedCount++;
-          continue;
-        }
-
-        let viewport = file.viewportInfo || { width: 24, height: 24 };
-        let pngData = await universalDrawableToPng(file.content, file.drawableType, viewport.width, viewport.height);
-
-        if (pngData) {
-          let blob = await (await fetch(pngData)).blob();
-          let outputName;
-          if (file.name.includes('.9.') || file.originalExtension === '9.png') {
-            outputName = file.name.replace(/\.xml$/i, '.9.png');
-          } else {
-            outputName = file.name.replace(/\.xml$/i, '.png');
+          if (file.type === 'png' || file.type === 'nine') {
+            let blob = await file.file.arrayBuffer();
+            zip.file(file.name, blob);
+            convertedCount++;
+            continue;
           }
-          zip.file(outputName, blob);
-          convertedCount++;
-        }
-      }
 
-      if (convertedCount > 0) {
-        let zipBlob = await zip.generateAsync({ type: 'blob' });
-        saveAs(zipBlob, `all_drawables_converted.zip`);
-        showToast(`✅ ${convertedCount} drawables converted!`);
-      } else {
-        showToast('❌ No files could be converted');
+          let viewport = file.viewportInfo || { width: 24, height: 24 };
+          let pngData = await universalDrawableToPng(file.content, file.drawableType, viewport.width, viewport.height);
+
+          if (pngData) {
+            let blob = await (await fetch(pngData)).blob();
+            let outputName;
+            if (file.name.includes('.9.') || file.originalExtension === '9.png') {
+              outputName = file.name.replace(/\.xml$/i, '.9.png');
+            } else {
+              outputName = file.name.replace(/\.xml$/i, '.png');
+            }
+            zip.file(outputName, blob);
+            convertedCount++;
+          }
+        }
+
+        if (convertedCount > 0) {
+          let zipBlob = await zip.generateAsync({ type: 'blob' });
+          saveAs(zipBlob, `all_drawables_converted.zip`);
+          showToast(`✅ ${convertedCount} drawables converted!`);
+        } else {
+          showToast('❌ No files could be converted');
+        }
+      } catch (e) {
+        if (e.message === 'FORCE_STOP') {
+          hideProcessingOverlay();
+          showToast('⛔ Conversion stopped by user');
+        } else {
+          console.error('Error:', e);
+          hideProcessingOverlay();
+          showToast('❌ Error during conversion');
+        }
+      } finally {
+        hideProcessingOverlay();
+        isProcessing = false;
+        forceStopRequested = false;
+        resetForceStop();
       }
-      hideLoading();
     }
 
-    async function convertSelectedDrawables() {
-      let selected = currentFiles.filter(f => selectedIds.has(f.id) && (f.convertible || f.type === 'png' || f.type ===
-        'nine'));
-      if (!selected.length) {
-        showToast('⚠️ Please select convertible files!');
-        return;
-      }
 
-      let totalFiles = selected.length;
-      showLoading(`Converting ${totalFiles} selected drawables...`, 0, totalFiles);
-      let zip = new JSZip();
-      let convertedCount = 0;
-      let processedCount = 0;
-
-      for (let file of selected) {
-        processedCount++;
-        updateLoadingProgress(processedCount, totalFiles, `Converting: ${file.name}`);
-
-        if (file.type === 'png' || file.type === 'nine') {
-          let blob = await file.file.arrayBuffer();
-          zip.file(file.name, blob);
-          convertedCount++;
-          continue;
-        }
-
-        let viewport = file.viewportInfo || { width: 24, height: 24 };
-        let pngData = await universalDrawableToPng(file.content, file.drawableType, viewport.width, viewport.height);
-
-        if (pngData) {
-          let blob = await (await fetch(pngData)).blob();
-          let outputName;
-          if (file.name.includes('.9.') || file.originalExtension === '9.png') {
-            outputName = file.name.replace(/\.xml$/i, '.9.png');
-          } else {
-            outputName = file.name.replace(/\.xml$/i, '.png');
-          }
-          zip.file(outputName, blob);
-          convertedCount++;
-        }
-      }
-
-      if (convertedCount > 0) {
-        let zipBlob = await zip.generateAsync({ type: 'blob' });
-        saveAs(zipBlob, `selected_drawables_converted.zip`);
-        showToast(`✅ ${convertedCount} selected drawables converted!`);
-      } else {
-        showToast('❌ No selected files could be converted');
-      }
-      hideLoading();
-    }
 
     // ==================== UI RENDER FUNCTIONS ====================
-    function toggleSelect(id, checked) {
-      if (checked) {
-        selectedIds.add(id);
-      } else {
-        selectedIds.delete(id);
-      }
-      updateUIAndRender();
-    }
+
 
     function updateUIAndRender() {
       let xmlC = currentFiles.filter(f => f.type === 'xml').length;
-      let validXmlC = currentFiles.filter(f => f.type === 'xml' && f.isValidIcon).length;
       let pngC = currentFiles.filter(f => f.type === 'png').length;
       let nineC = currentFiles.filter(f => f.type === 'nine').length;
-      let selCount = selectedIds.size;
       let colorSet = new Set();
-      let bgButtonCount = currentFiles.filter(f => f.type === 'xml' && isBgOrButtonDrawable(f)).length;
       let convertibleCount = currentFiles.filter(f => f.convertible).length;
 
       currentFiles.forEach(f => { f.colors?.forEach(c => colorSet.add(c)); });
@@ -1855,65 +2103,28 @@
         <div class="stat-chip">🖼️ PNG: ${pngC}</div>
         <div class="stat-chip">🔟 9.png: ${nineC}</div>
         <div class="stat-chip">🔄 Convertible: ${convertibleCount}</div>
-        <div class="stat-chip">✅ Selected: ${selCount}</div>
         <div class="stat-chip">🎨 Colors: ${colorSet.size}</div>
-        <div class="stat-chip">🎯 BG/BTN: ${bgButtonCount}</div>
-        <div class="stat-chip">📦 Extracted: ${extractedColors.size}</div>`;
-
-      let filters = ['all', 'convertible_only', 'hasColor', 'hasDimen', 'hasAnimation', 'hasStroke', 'hasGradient',
-        'bg_button_only'
-      ];
-      let filterNames = {
-        all: 'All', convertible_only: '🔄 Convertible', hasColor: '🎨 Color', hasDimen: '📏 Dimension',
-        hasAnimation: '🔄 Animation', hasStroke: '✒️ Stroke', hasGradient: '🌈 Gradient',
-        bg_button_only: '🎯 BG/BTN Only'
-      };
-
-      document.getElementById('filterRow').innerHTML = filters.map(f =>
-        `<div class="filter-chip ${currentFilter === f ? 'active' : ''}" data-filter="${f}">${filterNames[f]}</div>`
-      ).join('');
-
-      document.querySelectorAll('.filter-chip').forEach(el => {
-        el.addEventListener('click', (e) => {
-          currentFilter = el.dataset.filter;
-          document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-          el.classList.add('active');
-          applyFilterAndRender();
-        });
-      });
+        <div class="stat-chip">📦 Extracted: ${extractedColors.size}</div>
+        <div class="stat-chip ${isProcessing ? 'processing' : ''}">${isProcessing ? '⏳ Processing...' : '✅ Idle'}</div>`;
 
       renderExtractedColorsPanel();
-      applyFilterAndRender();
+      renderGrid();
     }
 
-    function applyFilterAndRender() {
+    function renderGrid() {
       let filtered = currentFiles.filter(f => {
         if (f.type === 'xml' && !toggleXml) return false;
         if ((f.type === 'png' || f.type === 'nine') && !togglePng) return false;
-        if (currentFilter === 'convertible_only') {
-          return f.convertible === true || f.type === 'png' || f.type === 'nine';
-        }
-        if (currentFilter === 'bg_button_only') {
-          if (f.type !== 'xml') return false;
-          return isBgOrButtonDrawable(f);
-        }
-        if (currentFilter !== 'all' && currentFilter !== 'convertible_only' && currentFilter !== 'bg_button_only' && f
-          .type !== 'xml') return false;
-        if (currentFilter !== 'all' && currentFilter !== 'convertible_only' && currentFilter !== 'bg_button_only' && !f
-          .features[currentFilter]) return false;
         return true;
       });
-      renderGrid(filtered);
-    }
 
-    function renderGrid(files) {
-      if (!files.length) {
+      if (!filtered.length) {
         document.getElementById('drawableGrid').innerHTML =
-          '<div class="empty-state">🔍 No files found or filters disabled</div>';
+          '<div class="empty-state">🔍 No files found</div>';
         return;
       }
 
-      document.getElementById('drawableGrid').innerHTML = files.map(file => {
+      document.getElementById('drawableGrid').innerHTML = filtered.map(file => {
         let colorTagsHtml = '';
         if (file.colors && file.colors.length) {
           colorTagsHtml = `<div class="color-refs">${file.colors.map(cn => {
@@ -1948,12 +2159,10 @@
         const displayName = file.name.length > 45 ? file.name.substring(0, 42) + '...' : file.name;
 
         let cardClass = 'asset-card';
-        if (selectedIds.has(file.id)) cardClass += ' selected';
         if (file.convertible) cardClass += ' convertible';
         else if (file.type === 'xml' && !file.convertible) cardClass += ' partial';
 
         return `<div class="${cardClass}" data-id="${file.id}">
-          <input type="checkbox" class="checkbox-select" ${selectedIds.has(file.id) ? 'checked' : ''} onchange="toggleSelect('${file.id}', this.checked)">
           ${badge}
           ${typeBadge}
           ${viewportBadge}
@@ -1987,98 +2196,94 @@
     };
 
     window.convertSingleUniversal = async function (id) {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
+
       let f = currentFiles.find(f => f.id == id);
       if (f && f.convertible && f.type === 'xml') {
-        showToast('🔄 Converting...');
-        let viewport = f.viewportInfo || { width: 24, height: 24 };
-        let pngData = await universalDrawableToPng(f.content, f.drawableType, viewport.width, viewport.height);
-        if (pngData) {
-          let a = document.createElement('a');
-          let outputName;
-          if (f.originalExtension === '9.png' || f.name.includes('.9.')) {
-            outputName = f.name.replace(/\.xml$/i, '.9.png');
+        isProcessing = true;
+        forceStopRequested = false;
+        showProcessingOverlay('Converting...', 0, 1);
+        try {
+          let viewport = f.viewportInfo || { width: 24, height: 24 };
+          updateProcessingProgress(`Converting: ${f.name}`, 1, 1);
+          let pngData = await universalDrawableToPng(f.content, f.drawableType, viewport.width, viewport.height);
+          checkForceStop();
+          if (pngData) {
+            let a = document.createElement('a');
+            let outputName;
+            if (f.originalExtension === '9.png' || f.name.includes('.9.')) {
+              outputName = f.name.replace(/\.xml$/i, '.9.png');
+            } else {
+              outputName = f.name.replace(/\.xml$/i, '.png');
+            }
+            a.download = outputName;
+            a.href = pngData;
+            a.click();
+            showToast(`✅ ${outputName} created from ${f.drawableType}`);
+          } else showToast('❌ Conversion failed');
+        } catch (e) {
+          if (e.message === 'FORCE_STOP') {
+            showToast('⛔ Conversion stopped by user');
           } else {
-            outputName = f.name.replace(/\.xml$/i, '.png');
+            showToast('❌ Conversion error');
           }
-          a.download = outputName;
-          a.href = pngData;
-          a.click();
-          showToast(`✅ ${outputName} created from ${f.drawableType}`);
-        } else showToast('❌ Conversion failed');
+        } finally {
+          hideProcessingOverlay();
+          isProcessing = false;
+          forceStopRequested = false;
+        }
       } else showToast('⚠️ This file is not convertible');
     };
 
     // ==================== OTHER FUNCTIONS ====================
-    function isBgOrButtonDrawable(file) {
-      let nameLower = file.name.toLowerCase();
-      if (nameLower.includes('bg') || nameLower.includes('background') ||
-        nameLower.includes('btn') || nameLower.includes('button') ||
-        nameLower.includes('card') || nameLower.includes('panel')) return true;
-      return false;
-    }
-
     function downloadExtractedColors() {
-      let usedColors = new Map();
-      for (let file of currentFiles) {
-        if (file.colors) file.colors.forEach(cn => {
-          if (colorMap.has(cn)) usedColors.set(cn, colorMap.get(cn));
-          else usedColors.set(cn, { value: null, isRelative: false, originalRaw: '#A855F7' });
-        });
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
       }
-      for (let [name, data] of extractedColors) {
-        if (!usedColors.has(name)) {
-          usedColors.set(name, { value: data.value || null, isRelative: false, originalRaw: data.value || '#A855F7' });
-        }
+      extractColorsFromFiles();
+      if (extractedColors.size === 0) {
+        showToast('No colors found');
+        return;
       }
-      if (usedColors.size === 0) { showToast('No colors found'); return; }
-      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
-
-      for (let [name, data] of extractedColors) {
-        let val = data.value || '#A855F7';
-        xml += `    <color name="${name}">${val}</color>\n`;
-      }
-      for (let [name, data] of usedColors) {
-        if (!extractedColors.has(name)) {
-          let val = data.value || (data.isRelative ? `@color/${data.parent}` : (data.originalRaw || '#A855F7'));
-          xml += `    <color name="${name}">${val}</color>\n`;
-        }
-      }
-      xml += '</resources>';
-      saveAs(new Blob([xml], { type: 'text/xml' }), 'theme_values.xml');
-      showToast('✅ theme_values.xml downloaded');
+      autoDownloadExtractedColors();
     }
 
-    async function downloadSelectedFiles() {
-      let selected = currentFiles.filter(f => selectedIds.has(f.id));
-      if (!selected.length) { showToast('Please select files'); return; }
-      selected.forEach(f => saveAs(f.file, f.name));
-      showToast(`✅ ${selected.length} file(s) downloaded`);
-    }
+
 
     async function downloadZip() {
-      let selected = currentFiles.filter(f => selectedIds.has(f.id));
-      if (!selected.length) { showToast('Please select files'); return; }
-      showLoading('Creating ZIP...');
+      if (currentFiles.length === 0) { showToast('⚠️ No files to zip!'); return; }
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
+      showProcessingOverlay('Creating ZIP...', 0, 0);
       let zip = new JSZip();
-      for (let f of selected) {
+      for (let f of currentFiles) {
         let content = await f.file.arrayBuffer();
         zip.file(f.name, content);
       }
       let blob = await zip.generateAsync({ type: 'blob' });
       saveAs(blob, 'drawables.zip');
-      hideLoading();
-      showToast('📦 ZIP ready');
+      hideProcessingOverlay();
+      showToast(`📦 ZIP ready with ${currentFiles.length} files`);
     }
 
     function clearAll() {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop first.');
+        return;
+      }
       if (confirm('Delete all files?')) {
         revokeAllObjectURLs();
         currentFiles = [];
-        selectedIds.clear();
         extractedColors.clear();
         document.getElementById('uploadZoneWrapper').style.display = 'block';
         document.getElementById('mainControls').style.display = 'none';
-        renderGrid([]);
+        renderGrid();
         renderExtractedColorsPanel();
         showToast('🗑️ All cleared');
       }
@@ -2122,40 +2327,19 @@
     }
 
     async function mergeColorsWithXml() {
-      if (extractedColors.size === 0) { showToast('⚠️ No extracted colors to merge!'); return; }
-      if (colorMap.size === 0) { showToast('⚠️ Please upload colors.xml first!'); return; }
-
-      const mergedMap = new Map(colorMap);
-      for (let [name, data] of extractedColors) {
-        if (!mergedMap.has(name)) {
-          const resolvedValue = data.value || '#FF5722';
-          mergedMap.set(name, {
-            value: resolvedValue, isRelative: false, isAndroidRelative: false, parent: null,
-            originalRaw: resolvedValue
-          });
-        }
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
       }
-
-      let xml = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
-      let extractedAdded = 0;
-      for (let [name, data] of extractedColors) {
-        const colorValue = data.value || '#FF5722';
-        xml += `    <color name="${name}">${colorValue}</color>\n`;
-        extractedAdded++;
+      if (extractedColors.size === 0) {
+        showToast('⚠️ No extracted colors to merge!');
+        return;
       }
-      let otherAdded = 0;
-      for (let [name, data] of colorMap) {
-        if (!extractedColors.has(name)) {
-          const colorValue = data.value || data.originalRaw || '#FF5722';
-          xml += `    <color name="${name}">${colorValue}</color>\n`;
-          otherAdded++;
-        }
+      if (colorMap.size === 0) {
+        showToast('⚠️ Please upload colors.xml first!');
+        return;
       }
-      xml += '</resources>';
-
-      const blob = new Blob([xml], { type: 'text/xml' });
-      saveAs(blob, 'theme_values.xml');
-      showToast(`✅ Merged! ${extractedAdded} extracted + ${otherAdded} other colors`);
+      await autoMergeAndDownload();
     }
 
     function clearExtractedColors() {
@@ -2165,9 +2349,13 @@
     }
 
     async function mergeToThemeFallback() {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
       const validFiles = currentFiles.filter(f => f.type === 'xml');
       if (validFiles.length === 0) { showToast('⚠️ No XML drawable files found!'); return; }
-      showLoading(`${validFiles.length} valid drawable files processing...`);
+      showProcessingOverlay(`${validFiles.length} valid drawable files processing...`, 0, 0);
       let themeXml = '<?xml version=\'1.0\' encoding=\'utf-8\' standalone=\'yes\' ?>\n';
       themeXml += '<MIUI_Theme_Values>\n';
       for (let file of validFiles) {
@@ -2186,14 +2374,18 @@
       themeXml += '</MIUI_Theme_Values>';
       let blob = new Blob([themeXml], { type: 'text/xml' });
       saveAs(blob, `theme_fallback.xml`);
-      hideLoading();
+      hideProcessingOverlay();
       showToast(`✅ ${validFiles.length} valid drawable files processed!`);
     }
 
     async function extractBgButtonDrawables() {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
       const bgButtonFiles = currentFiles.filter(f => f.type === 'xml' && isBgOrButtonDrawable(f));
       if (bgButtonFiles.length === 0) { showToast('⚠️ No background or button drawables found!'); return; }
-      showLoading(`${bgButtonFiles.length} valid BG/button drawables processing...`);
+      showProcessingOverlay(`${bgButtonFiles.length} valid BG/button drawables processing...`, 0, 0);
       let formatterXml = '<?xml version=\'1.0\' encoding=\'utf-8\' standalone=\'yes\' ?>\n';
       formatterXml += '<MIUI_Theme_Values>\n';
       let backgrounds = bgButtonFiles.filter(f =>
@@ -2218,14 +2410,18 @@
       formatterXml += '</MIUI_Theme_Values>';
       let blob = new Blob([formatterXml], { type: 'text/xml' });
       saveAs(blob, `theme_fallback.xml`);
-      hideLoading();
+      hideProcessingOverlay();
       showToast(`✅ ${bgButtonFiles.length} valid BG/button drawables formatted!`);
     }
 
     async function downloadThemeWithImages() {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
       const validFiles = currentFiles.filter(f => f.type === 'xml' && f.convertible);
       if (validFiles.length === 0) { showToast('⚠️ No convertible drawables found!'); return; }
-      showLoading(`Theme file + ${validFiles.length} image files processing...`);
+      showProcessingOverlay(`Theme file + ${validFiles.length} image files processing...`, 0, 0);
       let mainZip = new JSZip();
       let themeXml = '<?xml version=\'1.0\' encoding=\'utf-8\' standalone=\'yes\' ?>\n';
       themeXml += '<MIUI_Theme_Values>\n';
@@ -2257,13 +2453,28 @@
       }
       let finalZipBlob = await mainZip.generateAsync({ type: 'blob' });
       saveAs(finalZipBlob, `theme_with_images.zip`);
-      hideLoading();
+      hideProcessingOverlay();
       showToast(`✅ ${convertedCount} images + theme file compressed!`);
+    }
+
+    function isBgOrButtonDrawable(file) {
+      let nameLower = file.name.toLowerCase();
+      if (nameLower.includes('bg') || nameLower.includes('background') ||
+        nameLower.includes('btn') || nameLower.includes('button') ||
+        nameLower.includes('card') || nameLower.includes('panel')) return true;
+      return false;
+    }
+
+    function revokeAllObjectURLs() {
+      objectURLs.forEach(url => { if (url) URL.revokeObjectURL(url); });
+      objectURLs = [];
+      conversionCache.clear();
     }
 
     // ==================== EVENT LISTENERS ====================
     document.getElementById('themeToggleBtn').onclick = toggleTheme;
-    document.getElementById('colorUploadBtn').onclick = () => document.getElementById('hiddenColorFileInput').click();
+
+    // Hidden color file input (still needed for merge functionality)
     document.getElementById('hiddenColorFileInput').onchange = async (e) => {
       if (e.target.files[0]) {
         let content = await e.target.files[0].text();
@@ -2271,61 +2482,49 @@
         showToast(`✅ ${e.target.files[0].name} loaded`);
       }
     };
-    document.getElementById('clearColorMapBtn').onclick = () => {
-      colorMap.clear();
-      updateColorStatusText();
-      showToast('Color map cleared');
+
+    // Color merge button - opens file picker
+    document.getElementById('mergeColorsBtn').onclick = function () {
+      if (isProcessing) {
+        showToast('⚠️ A process is already running! Use Force Stop to cancel.');
+        return;
+      }
+      if (extractedColors.size === 0) {
+        showToast('⚠️ No extracted colors to merge!');
+        return;
+      }
+      document.getElementById('hiddenColorFileInput').click();
     };
-    document.getElementById('resolveRelativeColorsBtn').onclick = () => {
-      if (colorMap.size) {
-        resolveRelativeColors(colorMap);
-        updateUIAndRender();
-        showToast('✅ Relative colors resolved');
-      } else showToast('⚠️ Please upload colors.xml first');
-    };
+
+    // Other buttons
     document.getElementById('extractColorsBtn').onclick = downloadExtractedColors;
-    document.getElementById('downloadSelectedBtn').onclick = downloadSelectedFiles;
     document.getElementById('downloadZipBtn').onclick = downloadZip;
-    document.getElementById('convertAllXmlsBtn').onclick = convertAllDrawables;
     document.getElementById('convertAllDrawablesBtn').onclick = convertAllDrawables;
-    document.getElementById('convertSelectedBtn').onclick = convertSelectedDrawables;
     document.getElementById('mergeToThemeFallbackBtn').onclick = mergeToThemeFallback;
     document.getElementById('extractBgButtonDrawablesBtn').onclick = extractBgButtonDrawables;
     document.getElementById('downloadThemeWithImagesBtn').onclick = downloadThemeWithImages;
     document.getElementById('clearAllBtn').onclick = clearAll;
     document.getElementById('addMoreFilesBtn').onclick = () => document.getElementById('fileInput').click();
-    document.getElementById('mergeColorsBtn').onclick = mergeColorsWithXml;
     document.getElementById('clearExtractedBtn').onclick = clearExtractedColors;
 
+    // Toggles
     const xmlToggleSwitch = document.getElementById('xmlToggleSwitch');
     const pngToggleSwitch = document.getElementById('pngToggleSwitch');
     xmlToggleSwitch.onclick = (e) => {
       e.stopPropagation();
       toggleXml = !toggleXml;
       xmlToggleSwitch.classList.toggle('active', toggleXml);
-      applyFilterAndRender();
+      renderGrid();
     };
     pngToggleSwitch.onclick = (e) => {
       e.stopPropagation();
       togglePng = !togglePng;
       pngToggleSwitch.classList.toggle('active', togglePng);
-      applyFilterAndRender();
+      renderGrid();
     };
 
-    document.getElementById('globalSelectCb').onchange = function (e) {
-      let visible = currentFiles.filter(f => {
-        if (f.type === 'xml' && !toggleXml) return false;
-        if ((f.type === 'png' || f.type === 'nine') && !togglePng) return false;
-        return true;
-      });
-      if (e.target.checked) {
-        visible.forEach(f => selectedIds.add(f.id));
-      } else {
-        visible.forEach(f => selectedIds.delete(f.id));
-      }
-      updateUIAndRender();
-    };
 
+    // Upload handlers
     const uploadArea = document.getElementById('uploadArea');
     const fileInputEl = document.getElementById('fileInput');
     const zipInputEl = document.getElementById('zipInput');
@@ -2370,10 +2569,13 @@
       header.classList.toggle('collapsed');
     };
 
-    // Make toggleSelect available globally
-    window.toggleSelect = toggleSelect;
 
     console.log('🚀 Drawable Studio Pro loaded successfully!');
+    console.log('💡 Auto-extract & download is enabled!');
+    console.log('   - Upload drawables → auto extract colors → download');
+    console.log('   - If colors.xml exists → merge & download');
+    console.log('   - If no colors.xml → only extracted colors download');
+    console.log('⛔ Force Stop overlay appears during processing!');
   </script>
 </body>
 
