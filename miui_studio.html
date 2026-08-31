@@ -4,11 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Drawable Studio Pro</title>
+  <title>MIUI Studio Pro</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
     rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
@@ -623,8 +624,12 @@
     }
 
     .preview-img {
+      width: auto;
+      height: auto;
       max-width: 100%;
-      max-height: 100px;
+      max-height: 145px;
+      min-width: 72px;
+      min-height: 72px;
       object-fit: contain;
       display: block;
     }
@@ -922,11 +927,85 @@
     }
 
     #drawableGrid {
+      display: grid;
+    }
+
+    /* Preview show/hide control */
+    .preview-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      margin: 12px 0 8px;
+    }
+
+    .preview-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid var(--border-light);
+      border-radius: 999px;
+      background: var(--asset-card-bg);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all .2s ease;
+    }
+
+    .preview-toggle:hover {
+      transform: translateY(-1px);
+    }
+
+    .preview-toggle-switch {
+      width: 34px;
+      height: 19px;
+      border-radius: 999px;
+      background: #94a3b8;
+      position: relative;
+      transition: background .2s ease;
+      flex: 0 0 auto;
+    }
+
+    .preview-toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 15px;
+      height: 15px;
+      left: 2px;
+      top: 2px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform .2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+    }
+
+    .preview-toggle.active .preview-toggle-switch {
+      background: #22c55e;
+    }
+
+    .preview-toggle.active .preview-toggle-switch::after {
+      transform: translateX(15px);
+    }
+
+    /* Hide/show the complete drawable card section. */
+    body.preview-hidden #drawableGrid {
       display: none !important;
     }
 
     #extractedColorsPanel .extracted-body {
-      display: none !important;
+      display: block;
+    }
+
+    .material-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.35);
+    }
+
+    .material-btn:disabled:hover {
+      transform: none;
     }
 
     /* Click any percentage value and type it manually. */
@@ -979,7 +1058,7 @@
         <div class="header-left">
           <span class="material-icons">draw</span>
           <div>
-            <h2>Drawable Studio Pro</h2>
+            <h2>MIUI Studio Pro</h2>
             <p>Auto-detect all drawable types | Vector | Shape | Layer | Selector | 9-patch</p>
           </div>
         </div>
@@ -990,7 +1069,7 @@
           <div class="upload-zone" id="uploadArea">
             <div class="upload-icon material-icons">cloud_upload</div>
             <div class="upload-title">Upload Any Drawable</div>
-            <div class="upload-sub">Vector XML | Shape | Layer | Selector | PNG | 9.png | ZIP</div>
+            <div class="upload-sub">Vector XML | Shape | Layer | Selector | PNG | 9.png | ZIP | Advanced Folder</div>
             <div class="dual-upload">
               <div class="upload-option" id="uploadFilesBtn">
                 <span class="material-icons">insert_drive_file</span> Select Files
@@ -1001,11 +1080,16 @@
               <div class="upload-option" id="uploadColorsBtn">
                 <span class="material-icons">palette</span> colors.xml
               </div>
+              <div class="upload-option" id="uploadAdvancedFolderBtn"
+                title="Recursively find drawable.zip and colors.xml">
+                <span class="material-icons">account_tree</span> Advanced Folder
+              </div>
             </div>
             <input type="file" id="fileInput" multiple accept=".xml,.png,.9.png" style="display:none">
             <input type="file" id="zipInput" accept=".zip" style="display:none">
             <input type="file" id="colorsFileInput" multiple accept=".xml" style="display:none">
             <input type="file" id="colorsFolderInput" webkitdirectory directory multiple style="display:none">
+            <input type="file" id="advancedFolderInput" webkitdirectory directory multiple style="display:none">
           </div>
         </div>
 
@@ -1029,16 +1113,16 @@
                 class="material-icons">format_paint</span> Extract Colors</button>
             <button class="material-btn material-btn-green" id="mergeColorsBtn"><span
                 class="material-icons">merge_type</span> Merge Colors</button>
-            <button class="material-btn material-btn-outline" id="resolveMergedBtn" style="display:none"><span
+            <button class="material-btn material-btn-outline" id="resolveMergedBtn" disabled><span
                 class="material-icons">auto_fix_high</span> Merged Resolve</button>
-            <button class="material-btn material-btn-purple" id="randomizeResolvedBtn" style="display:none"><span
+            <button class="material-btn material-btn-purple" id="randomizeResolvedBtn" disabled><span
                 class="material-icons">casino</span> Randomize Resolve</button>
-            <button class="material-btn material-btn-outline" id="downloadResolvedBtn" style="display:none"><span
-                class="material-icons">download</span> Download Resolved</button>
-            <button class="material-btn material-btn-outline" id="downloadMergedBtn" style="display:none"><span
-                class="material-icons">download</span> Download Merged</button>
-            <button class="material-btn material-btn-outline" id="downloadExtractedBtn" style="display:none"><span
+            <button class="material-btn material-btn-outline" id="downloadExtractedBtn" disabled><span
                 class="material-icons">download</span> Download Extracted</button>
+            <button class="material-btn material-btn-outline" id="downloadMergedBtn" disabled><span
+                class="material-icons">download</span> Download Merged</button>
+            <button class="material-btn material-btn-outline" id="downloadResolvedBtn" disabled><span
+                class="material-icons">download</span> Download Resolved</button>
             <button class="material-btn material-btn-indigo" id="convertAllDrawablesBtn"><span
                 class="material-icons">transform</span> Smart Convert</button>
             <button class="material-btn material-btn-outline" id="clearAllBtn"><span
@@ -1068,6 +1152,13 @@
             </div>
           </div>
 
+          <div class="preview-toolbar">
+            <button type="button" class="preview-toggle" id="previewToggleBtn" aria-pressed="false"
+              aria-label="Show drawable cards" title="Show drawable cards">
+              <span class="material-icons" style="font-size:16px;">visibility_off</span>
+              <span class="preview-toggle-switch" aria-hidden="true"></span>
+            </button>
+          </div>
           <div class="drawable-grid" id="drawableGrid"></div>
         </div>
       </div>
@@ -1126,6 +1217,8 @@
     let currentFiles = [];
     let pendingFiles = [];
     let pendingZipFile = null;
+    // Advanced Folder chooser can discover multiple drawable.zip files recursively.
+    let pendingDrawableZipFiles = [];
     let pendingColorFiles = [];
     let colorSourceCount = 0;
     let colorSourceEntries = [];
@@ -1336,6 +1429,8 @@
         }
       }
       updateStats();
+      const downloadExtractedBtn = document.getElementById('downloadExtractedBtn');
+      if (downloadExtractedBtn) downloadExtractedBtn.disabled = extractedColors.size === 0;
       return extractedColors;
     }
 
@@ -1376,8 +1471,10 @@
         }
       }
       mergedXmlContent = buildColorXml(mergedColors);
-      document.getElementById('downloadMergedBtn').style.display = 'inline-flex';
-      document.getElementById('resolveMergedBtn').style.display = 'inline-flex';
+      document.getElementById('downloadMergedBtn').disabled = false;
+      document.getElementById('resolveMergedBtn').disabled = false;
+      document.getElementById('randomizeResolvedBtn').disabled = true;
+      document.getElementById('downloadResolvedBtn').disabled = true;
       updateStats();
       showToast(`✅ Merge complete: ${mergedColors.size} colors`);
       return true;
@@ -1401,8 +1498,8 @@
         resolvedColors.set(name, value || raw || '#888888');
       }
       resolvedXmlContent = buildColorXml(resolvedColors);
-      document.getElementById('downloadResolvedBtn').style.display = 'inline-flex';
-      document.getElementById('randomizeResolvedBtn').style.display = 'inline-flex';
+      document.getElementById('downloadResolvedBtn').disabled = false;
+      document.getElementById('randomizeResolvedBtn').disabled = false;
       updateStats(unresolved);
       showToast(`✅ Resolved ${resolvedColors.size - unresolved}/${resolvedColors.size} colors`);
       return true;
@@ -2013,6 +2110,56 @@
       showToast(`📦 ${file.name} staged — press Process`);
     }
 
+    async function stageAdvancedFolder(files) {
+      /*
+       * Advanced Folder mode:
+       * - ONLY files whose basename is exactly drawable.zip are accepted as drawable ZIPs.
+       * - EVERY colors.xml is accepted, including files inside nested/sub folders.
+       * - webkitRelativePath is preserved for clear source labels and duplicate handling.
+       */
+      const drawableZips = files.filter(f =>
+        (f.name || '').toLowerCase() === 'drawable.zip'
+      );
+
+      const colors = files.filter(f =>
+        (f.name || '').toLowerCase() === 'colors.xml'
+      );
+
+      let addedZips = 0;
+      for (const zip of drawableZips) {
+        const key = `${zip.webkitRelativePath || zip.name}|${zip.size}|${zip.lastModified}`;
+        const exists = pendingDrawableZipFiles.some(x =>
+          `${x.webkitRelativePath || x.name}|${x.size}|${x.lastModified}` === key
+        );
+        if (!exists) {
+          pendingDrawableZipFiles.push(zip);
+          addedZips++;
+        }
+      }
+
+      let addedColors = 0;
+      for (const f of colors) {
+        const key = `${f.webkitRelativePath || f.name}|${f.size}|${f.lastModified}`;
+        const exists = pendingColorFiles.some(x =>
+          `${x.webkitRelativePath || x.name}|${x.size}|${x.lastModified}` === key
+        );
+        if (!exists) {
+          pendingColorFiles.push(f);
+          f.__content = await f.text();
+          addedColors++;
+        }
+      }
+
+      document.getElementById('mainControls').style.display = 'block';
+      updateStats();
+
+      const ignored = Math.max(0, files.length - drawableZips.length - colors.length);
+      showToast(
+        `🌳 Advanced Folder: ${addedZips} drawable.zip + ${addedColors} colors.xml found` +
+        (ignored ? ` • ${ignored} other file(s) ignored` : '')
+      );
+    }
+
     async function stageColorFiles(files) {
       const onlyColors = files.filter(f => f.name.toLowerCase() === 'colors.xml');
       for (const f of onlyColors) {
@@ -2028,7 +2175,7 @@
 
     async function processStaged() {
       if (isProcessing) return showToast('⚠️ A process is already running');
-      if (!pendingFiles.length && !pendingZipFile && !pendingColorFiles.length) {
+      if (!pendingFiles.length && !pendingZipFile && !pendingDrawableZipFiles.length && !pendingColorFiles.length) {
         return showToast('⚠️ Nothing selected to process');
       }
       isProcessing = true;
@@ -2039,16 +2186,39 @@
         }
 
         let filesToProcess = [...pendingFiles];
-        if (pendingZipFile) {
-          showProcessingOverlay('Extracting ZIP...', 0, 0);
-          const zip = await JSZip.loadAsync(pendingZipFile);
-          for (const [filename, fileData] of Object.entries(zip.files)) {
+
+        const zipSources = [];
+        if (pendingZipFile) zipSources.push(pendingZipFile);
+        if (pendingDrawableZipFiles.length) zipSources.push(...pendingDrawableZipFiles);
+
+        if (zipSources.length) {
+          showProcessingOverlay(
+            `Extracting ${zipSources.length} ZIP${zipSources.length > 1 ? 's' : ''}...`,
+            0,
+            zipSources.length
+          );
+
+          for (let zi = 0; zi < zipSources.length; zi++) {
             checkForceStop();
-            if (fileData.dir) continue;
-            const name = filename.split('/').pop();
-            if (/\.(xml|png|9\.png)$/i.test(name)) {
-              const blob = await fileData.async('blob');
-              filesToProcess.push(new File([blob], name, { type: blob.type }));
+            const sourceZip = zipSources[zi];
+            updateProcessingProgress(
+              `Extracting: ${sourceZip.webkitRelativePath || sourceZip.name}`,
+              zi + 1,
+              zipSources.length
+            );
+
+            const zip = await JSZip.loadAsync(sourceZip);
+            for (const [filename, fileData] of Object.entries(zip.files)) {
+              checkForceStop();
+              if (fileData.dir) continue;
+
+              const name = filename.split('/').pop();
+              if (/\.(xml|png|9\.png)$/i.test(name)) {
+                const blob = await fileData.async('blob');
+                filesToProcess.push(
+                  new File([blob], name, { type: blob.type })
+                );
+              }
             }
           }
         }
@@ -2066,6 +2236,7 @@
 
         pendingFiles = [];
         pendingZipFile = null;
+        pendingDrawableZipFiles = [];
 
         // Process complete: hide the uploader so all controls move to the top.
         hideUploader();
@@ -2103,20 +2274,39 @@
             const blob = file.file; zip.file(file.name, await blob.arrayBuffer());
             convertedOutputs.push({ name: file.name, blob }); convertedCount++; continue;
           }
-          const viewport = file.viewportInfo || { width: 24, height: 24 };
-          const pngData = await universalDrawableToPng(file.content, file.drawableType, viewport.width, viewport.height);
+
+          // processFile() already rendered the XML drawable once and stores the
+          // resulting PNG as `file.preview`. Reuse it here instead of rendering
+          // the same drawable a second time. This removes the biggest duplicate
+          // workload from Smart Convert.
+          let pngData = file.preview || null;
+
+          // Fallback only when the cached preview is unavailable.
+          if (!pngData) {
+            const viewport = file.viewportInfo || { width: 24, height: 24 };
+            pngData = await universalDrawableToPng(
+              file.content, file.drawableType, viewport.width, viewport.height
+            );
+          }
+
           if (pngData) {
             const blob = await (await fetch(pngData)).blob();
             const outputName = (file.name.includes('.9.') || file.originalExtension === '9.png')
               ? file.name.replace(/\.xml$/i, '.9.png') : file.name.replace(/\.xml$/i, '.png');
-            zip.file(outputName, blob); convertedOutputs.push({ name: outputName, blob }); convertedCount++;
+            zip.file(outputName, blob);
+            convertedOutputs.push({ name: outputName, blob });
+            convertedCount++;
           }
         }
         if (convertedCount > 0) {
           smartConvertedZipBlob = await zip.generateAsync({ type: 'blob' });
           smartConvertedFiles = convertedOutputs;
           const smartDownloadBtn = document.getElementById('ir_downloadSmartConvertedBtn');
-          if (smartDownloadBtn) smartDownloadBtn.style.display = 'inline-flex';
+          if (smartDownloadBtn) {
+            smartDownloadBtn.style.display = 'inline-flex';
+            smartDownloadBtn.disabled = false;
+            smartDownloadBtn.title = 'Download converted ZIP';
+          }
           const recolorSection = document.getElementById('iconRecolorSection');
           if (recolorSection) recolorSection.style.display = 'block';
           if (window.openIconRecolorWithConvertedFiles) await window.openIconRecolorWithConvertedFiles(convertedOutputs);
@@ -2161,6 +2351,7 @@
         <div class="stat-chip">🔄 Convertible: ${convertibleCount}</div>
         <div class="stat-chip">🔗 References: ${colorSet.size}</div>
         <div class="stat-chip">📚 XML Sources: ${pendingColorFiles.length || colorSourceEntries.length}</div>
+        ${pendingDrawableZipFiles.length ? `<div class="stat-chip">🌳 Advanced ZIP: ${pendingDrawableZipFiles.length}</div>` : ''}
         <div class="stat-chip">🎨 Loaded: ${colorMap.size}</div>
         <div class="stat-chip">📦 Extracted: ${extractedColors.size}</div>
         <div class="stat-chip">🔀 Merged: ${mergedColors.size}</div>
@@ -2180,7 +2371,7 @@
       const list = document.getElementById('extractedColorsList');
       if (list) list.innerHTML = '';
       const de = document.getElementById('downloadExtractedBtn');
-      if (de) de.style.display = extractedColors.size ? 'inline-flex' : 'none';
+      if (de) de.disabled = extractedColors.size === 0;
     }
 
     function renderGrid() {
@@ -2249,10 +2440,7 @@
               ${file.features?.hasGradient ? '<span class="feat-tag">🌈 Gradient</span>' : ''}
             </div>
             ${colorTagsHtml}
-            <div class="action-buttons">
-              ${file.convertible && file.type === 'xml' ? `<button class="mini-btn mini-btn-success" onclick="convertSingleUniversal('${file.id}')"><span class="material-icons" style="font-size:14px">image</span> Convert</button>` : ''}
-              <button class="mini-btn" onclick="downloadSingleFile('${file.id}')"><span class="material-icons" style="font-size:14px">download</span> Download</button>
-            </div>
+
           </div>
         </div>`;
       }).join('');
@@ -2332,13 +2520,13 @@
       if (isProcessing) return showToast('⚠️ Use Force Stop first');
       if (confirm('Delete all staged and processed data?')) {
         revokeAllObjectURLs();
-        currentFiles = []; pendingFiles = []; pendingZipFile = null; pendingColorFiles = [];
+        currentFiles = []; pendingFiles = []; pendingZipFile = null; pendingDrawableZipFiles = []; pendingColorFiles = [];
         colorMap.clear(); extractedColors.clear(); mergedColors.clear(); resolvedColors.clear();
         colorSourceEntries = []; mergedXmlContent = ''; resolvedXmlContent = '';
         showUploader();
         document.getElementById('mainControls').style.display = 'none';
         ['downloadExtractedBtn', 'downloadMergedBtn', 'resolveMergedBtn', 'randomizeResolvedBtn', 'downloadResolvedBtn'].forEach(id => {
-          const el = document.getElementById(id); if (el) el.style.display = 'none';
+          const el = document.getElementById(id); if (el) el.disabled = true;
         });
         updateStats();
         renderGrid();
@@ -2374,6 +2562,7 @@
     const smartDownloadBtn = document.getElementById('ir_downloadSmartConvertedBtn');
     if (smartDownloadBtn) {
       smartDownloadBtn.style.display = 'none';
+      smartDownloadBtn.disabled = true;
       smartDownloadBtn.onclick = () => {
         if (!smartConvertedZipBlob) return showToast('⚠️ Run Smart Convert All first');
         saveAs(smartConvertedZipBlob, 'all_drawables_converted.zip');
@@ -2389,11 +2578,42 @@
     xmlToggleSwitch.onclick = (e) => { e.stopPropagation(); toggleXml = !toggleXml; xmlToggleSwitch.classList.toggle('active', toggleXml); renderGrid(); };
     pngToggleSwitch.onclick = (e) => { e.stopPropagation(); togglePng = !togglePng; pngToggleSwitch.classList.toggle('active', togglePng); renderGrid(); };
 
+    // Drawable card-section visibility toggle.
+    const previewToggleBtn = document.getElementById('previewToggleBtn');
+    if (previewToggleBtn) {
+      const syncPreviewToggle = () => {
+        const hidden = document.body.classList.contains('preview-hidden');
+        const visible = !hidden;
+        previewToggleBtn.classList.toggle('active', visible);
+        previewToggleBtn.setAttribute('aria-pressed', String(visible));
+        previewToggleBtn.setAttribute('aria-label', visible ? 'Hide drawable cards' : 'Show drawable cards');
+        previewToggleBtn.title = visible ? 'Hide drawable cards' : 'Show drawable cards';
+        const icon = previewToggleBtn.querySelector('.material-icons');
+        if (icon) icon.textContent = visible ? 'visibility' : 'visibility_off';
+      };
+
+      document.body.classList.add('preview-hidden');
+      syncPreviewToggle();
+
+      previewToggleBtn.onclick = (e) => {
+        e.stopPropagation();
+        const hidden = document.body.classList.toggle('preview-hidden');
+        const visible = !hidden;
+        previewToggleBtn.classList.toggle('active', visible);
+        previewToggleBtn.setAttribute('aria-pressed', String(visible));
+        previewToggleBtn.setAttribute('aria-label', visible ? 'Hide drawable cards' : 'Show drawable cards');
+        previewToggleBtn.title = visible ? 'Hide drawable cards' : 'Show drawable cards';
+        const icon = previewToggleBtn.querySelector('.material-icons');
+        if (icon) icon.textContent = visible ? 'visibility' : 'visibility_off';
+      };
+    }
+
     const uploadArea = document.getElementById('uploadArea');
     const fileInputEl = document.getElementById('fileInput');
     const zipInputEl = document.getElementById('zipInput');
     const colorsFileInput = document.getElementById('colorsFileInput');
     const colorsFolderInput = document.getElementById('colorsFolderInput');
+    const advancedFolderInput = document.getElementById('advancedFolderInput');
 
     document.getElementById('uploadFilesBtn').onclick = e => { e.stopPropagation(); fileInputEl.click(); };
     document.getElementById('uploadZipBtn').onclick = e => { e.stopPropagation(); zipInputEl.click(); };
@@ -2402,11 +2622,19 @@
       const chooseFolder = confirm('OK = Select values/values-night folder\\nCancel = Select one or multiple colors.xml files');
       (chooseFolder ? colorsFolderInput : colorsFileInput).click();
     };
+    document.getElementById('uploadAdvancedFolderBtn').onclick = e => {
+      e.stopPropagation();
+      advancedFolderInput.click();
+    };
 
     fileInputEl.onchange = e => { if (e.target.files.length) stageFiles(Array.from(e.target.files)); fileInputEl.value = ''; };
     zipInputEl.onchange = e => { if (e.target.files[0]) stageZipFile(e.target.files[0]); zipInputEl.value = ''; };
     colorsFileInput.onchange = async e => { if (e.target.files.length) await stageColorFiles(Array.from(e.target.files)); colorsFileInput.value = ''; };
     colorsFolderInput.onchange = async e => { if (e.target.files.length) await stageColorFiles(Array.from(e.target.files)); colorsFolderInput.value = ''; };
+    advancedFolderInput.onchange = async e => {
+      if (e.target.files.length) await stageAdvancedFolder(Array.from(e.target.files));
+      advancedFolderInput.value = '';
+    };
 
     uploadArea.ondragover = e => { e.preventDefault(); uploadArea.classList.add('dragover'); };
     uploadArea.ondragleave = () => uploadArea.classList.remove('dragover');
@@ -2658,6 +2886,7 @@
         cursor: pointer;
         color: white;
         font-size: 14px;
+        line-height: 1;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -3688,12 +3917,6 @@
             <button id="ir_downloadSmartConvertedBtn" class="action-btn action-success" disabled><i
                 class="fas fa-download"></i> DOWNLOAD CONVERTED ZIP</button>
             <button class="action-btn action-primary" id="ir_applyAllBtn"><i class="fas fa-play"></i> APPLY ALL</button>
-            <button class="action-btn action-select" id="ir_selectAllBtn"><i class="fas fa-check-double"></i> SELECT
-              ALL</button>
-            <button class="action-btn action-deselect" id="ir_deselectAllBtn"><i class="fas fa-times-circle"></i>
-              SELECT NONE</button>
-            <button class="action-btn action-invert" id="ir_invertSelectBtn"><i class="fas fa-exchange-alt"></i>
-              INVERT</button>
             <button class="action-btn action-danger" id="ir_clearAllBtn"><i class="fas fa-trash"></i> CLEAR</button>
             <button class="action-btn action-success" id="ir_zipSelectedBtn"><i class="fas fa-file-archive"></i>
               COMPRESS</button>
@@ -3813,9 +4036,6 @@
         applyAllBtn: getEl('applyAllBtn'),
         clearAllBtn: getEl('clearAllBtn'),
         zipSelectedBtn: getEl('zipSelectedBtn'),
-        selectAllBtn: getEl('selectAllBtn'),
-        deselectAllBtn: getEl('deselectAllBtn'),
-        invertSelectBtn: getEl('invertSelectBtn'),
         previewImg: getEl('previewImg'),
         previewFilename: getEl('previewFilename'),
         totalCountSpan: getEl('totalCount'),
@@ -4258,7 +4478,7 @@
       let batchConvertedCount = 0;
       let conversionToastShown = false;
 
-      async function addItemWithoutProcessing(blob, name, showUploadProgress = true, currentFileNum = null, totalFiles = null) {
+      async function addItemWithoutProcessing(blob, name, showUploadProgress = true, currentFileNum = null, totalFiles = null, renderNow = true, autoPreview = true) {
         let id = nextId++;
         let finalBlob = blob;
         let finalName = name;
@@ -4294,8 +4514,8 @@
           processedURL: null,
           selected: true
         });
-        renderGrid();
-        if (iconItems.length === 1 && !currentPreviewItem) setCurrentPreviewItem(iconItems[0]);
+        if (renderNow) renderGrid();
+        if (autoPreview && iconItems.length === 1 && !currentPreviewItem) setCurrentPreviewItem(iconItems[0]);
         updateCounters();
         if (dom.uploadZone) dom.uploadZone.classList.add('hidden');
       }
@@ -4450,27 +4670,6 @@
           playSuccessSound();
         }
       }
-
-      const selectAll = debounce(() => {
-        iconItems.forEach(i => i.selected = true);
-        renderGrid();
-        updateCounters();
-        toast(`✅ Selected ${iconItems.length} images`, true);
-      }, 250);
-
-      const deselectAll = debounce(() => {
-        iconItems.forEach(i => i.selected = false);
-        renderGrid();
-        updateCounters();
-        toast(`❌ Deselected all`, true);
-      }, 250);
-
-      const invertSelection = debounce(() => {
-        iconItems.forEach(i => i.selected = !i.selected);
-        renderGrid();
-        updateCounters();
-        toast(`🔄 Inverted (${iconItems.filter(i => i.selected).length} selected)`, true);
-      }, 250);
 
       const applyToAllItems = debounce(async () => {
         if (isApplyingAll) { toast("Process in progress, please wait...", false); return; }
@@ -4715,9 +4914,6 @@
         if (dom.resetZoomBtn) dom.resetZoomBtn.onclick = debounce(resetZoom, 100);
       }
       dom.clearAllBtn.onclick = debounce(clearAll, 300);
-      dom.selectAllBtn.onclick = selectAll;
-      dom.deselectAllBtn.onclick = deselectAll;
-      dom.invertSelectBtn.onclick = invertSelection;
       dom.toggleDualBtn.onclick = toggleDualColor;
       dom.applyAllBtn.onclick = applyToAllItems;
       dom.zipSelectedBtn.onclick = zipSelected;
@@ -4765,11 +4961,29 @@
             const item = convertedFiles[i];
             const blob = item.blob || item.file;
             if (!blob) continue;
-            await addItemWithoutProcessing(blob, item.name || `converted_${i + 1}.png`, false);
+            // Batch-add without rebuilding the whole Icon Recolor DOM for
+            // every file and without triggering a preview render mid-batch.
+            await addItemWithoutProcessing(
+              blob,
+              item.name || `converted_${i + 1}.png`,
+              false,
+              null,
+              null,
+              false,
+              false
+            );
             updateProgress(i + 1, convertedFiles.length, item.name || `converted_${i + 1}.png`);
           }
           renderGrid(); updateCounters();
-          if (iconItems.length && !currentPreviewItem) await setCurrentPreviewItem(iconItems[0]);
+          if (iconItems.length && !currentPreviewItem) {
+            // Show the already-converted PNG immediately. Do not run the
+            // pixel-by-pixel recolor preview again just to open the section.
+            currentPreviewItem = iconItems[0];
+            if (previewProcessedBlob) URL.revokeObjectURL(previewProcessedBlob);
+            previewProcessedBlob = null;
+            dom.previewImg.src = URL.createObjectURL(iconItems[0].originalBlob);
+            dom.previewFilename.innerText = shortName(iconItems[0].name) + " (preview)";
+          }
           toast(`✨ ${iconItems.length} converted image(s) loaded into Icon Recolor`, true);
           playSuccessSound();
           const sec = document.getElementById('iconRecolorSection');
