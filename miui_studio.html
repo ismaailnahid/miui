@@ -2559,16 +2559,7 @@
     const downloadZipBtn = document.getElementById('downloadZipBtn');
     if (downloadZipBtn) downloadZipBtn.onclick = downloadZip;
     document.getElementById('convertAllDrawablesBtn').onclick = convertAllDrawables;
-    const smartDownloadBtn = document.getElementById('ir_downloadSmartConvertedBtn');
-    if (smartDownloadBtn) {
-      smartDownloadBtn.style.display = 'none';
-      smartDownloadBtn.disabled = true;
-      smartDownloadBtn.onclick = () => {
-        if (!smartConvertedZipBlob) return showToast('⚠️ Run Smart Convert All first');
-        saveAs(smartConvertedZipBlob, 'all_drawables_converted.zip');
-        showToast('✅ Smart Convert ZIP downloaded');
-      };
-    }
+
     document.getElementById('clearAllBtn').onclick = clearAll;
     document.getElementById('addMoreFilesBtn').onclick = () => document.getElementById('fileInput').click();
     document.getElementById('clearExtractedBtn').onclick = () => { extractedColors.clear(); updateStats(); showToast('🗑️ Extracted colors cleared'); };
@@ -3914,8 +3905,6 @@
             <input type="file" id="ir_standaloneZipInput" accept=".zip,application/zip" style="display:none">
           </div>
           <div class="action-bar">
-            <button id="ir_downloadSmartConvertedBtn" class="action-btn action-success" disabled><i
-                class="fas fa-download"></i> DOWNLOAD CONVERTED ZIP</button>
             <button class="action-btn action-primary" id="ir_applyAllBtn"><i class="fas fa-play"></i> APPLY ALL</button>
             <button class="action-btn action-danger" id="ir_clearAllBtn"><i class="fas fa-trash"></i> CLEAR</button>
             <button class="action-btn action-success" id="ir_zipSelectedBtn"><i class="fas fa-file-archive"></i>
@@ -4725,7 +4714,8 @@
           zip.file(finalName, finalBlob);
         }
         let zipBlob = await zip.generateAsync({ type: "blob" });
-        saveAs(zipBlob, `icons_processed_${Date.now()}.zip`);
+        const recolorSerial = `recolor_serial_${Date.now()}`;
+        saveAs(zipBlob, `${recolorSerial}.zip`);
         toast(`✅ ZIP ready! ${selected.length} files.`, true);
         playSuccessSound();
         dom.zipSelectedBtn.disabled = false;
