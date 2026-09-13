@@ -1,306 +1,398 @@
+Here's the fully updated `README.md` reflecting all **11 tools** currently in the dashboard.
+
+```markdown
 # MIUI Theme Studio
 
-## Redmi Note 15 5G Optimized Theme Development Suite
+## 🎨 Complete Theme Development Suite — v3.5
 
-MIUI Theme Studio is a professional, browser-based toolkit designed specifically for MIUI theme developers working with Redmi Note 15 5G and other Xiaomi devices. This complete suite provides **six powerful tools** to streamline your theme creation workflow.
+**MIUI Theme Studio** is a professional, browser-based toolkit designed specifically for MIUI theme developers working with Xiaomi/Redmi devices. This complete suite provides **11 powerful tools** to streamline your theme creation workflow — all running 100% offline in your browser.
 
 ## 🚀 Live Demo
 
-Access the full toolkit at: [MIUI Theme Studio](#)
+Access the full toolkit by opening `index.html` in any modern browser.
 
 ## 📱 Device Optimization
 
-This toolkit is specifically optimized for:
+Specifically optimized for:
 
-- **Redmi Note 15 5G** (FHD+ display, 120Hz touch response)
+- **Redmi Note 15 5G** (FHD+, 120Hz touch)
+- **Dell Latitude E5450** (1366×768) and other laptops
 - All Xiaomi MIUI devices running Android 12+
-- Desktop browsers (Chrome, Firefox, Edge)
+- Desktop browsers (Chrome, Firefox, Edge, Safari)
 
 ## 🛠️ Tools Overview
 
-### 1. Drawable Studio Pro
+### 1. MIUI Studio Pro — `miui_studio.html`
 
-Professional vector drawable processor for MIUI themes.
+All-in-one drawable + color processor with Smart Convert and Icon Recolor integration.
 
 **Features:**
 
-- Upload XML/PNG/ZIP drawable files
-- Batch convert vector XML to PNG/9.png format
-- Extract and resolve relative colors
-- Generate `theme_fallback.xml` automatically
-- Extract background and button drawables
-- ZIP batch processing with preview
+- Upload XML/PNG/ZIP drawables with auto-type detection
+- **Smart Convert All** — batch vector → PNG/9.png with cached preview reuse
+- Extract colors from drawables automatically
+- Merge with `colors.xml` + auto-download
+- `theme_fallback.xml` generator
+- **Built-in Icon Recolor engine** — Smart Convert output auto-loads here
+- Dark/Light mode toggle
+- Force Stop button for long operations
 
 ---
 
-### 2. IconForge Pro
+### 2. Color Picker Pro — `color_picker.html`
 
-Dual-color icon replacement studio with live preview.
+Advanced XML resource editor with quick color tools.
 
 **Features:**
 
-- Real-time icon preview with zoom controls
-- Primary/secondary color replacement with thresholds
-- Edge smoothing and blur effects
-- Trace HD mode for crisp results
-- Batch processing with ZIP export
-- Preset color palettes
+- Edit Colors, Strings, Booleans, Integers, Dimensions
+- Quick Color mode (single-tap color picker)
+- **Replace Mode** — apply one target color to many items
+- Live search with debounce filtering
+- Go-to-serial navigation
+- Undo/Redo history (50 steps)
+- Add new resources (color/string/bool/int/dimen)
+- Download edited XML with timestamp comment
 
 ---
 
-### 3. XML Merger Pro
+### 3. Icon Recolor Pro — `merger_icon.html`
 
-Intelligent XML color and dimension merger.
+Dual-color icon replacement studio with live preview and effects.
 
 **Features:**
 
-- Merge master/target XML files
-- Resolve dynamic colors (Material 3 + Android)
+- **Live preview** with zoom controls (0.5× – 10×)
+- **Dual Color mode** — primary + secondary dominant colors
+- Adjustable thresholds for both colors
+- **Edge Smoothing**, **Blur**, and **Edge Detect** effects
+- WebP auto-conversion (edit as PNG, save back as WebP)
+- Select All / Deselect / Invert selection
+- Progress bar for Apply All + Compress ZIP
+- 12 preset colors + custom picker
+
+---
+
+### 4. XML Merger Pro — `merger_xml.html`
+
+Intelligent XML color/dimension merger with Material 3 resolution.
+
+**Features:**
+
+- Merge Master + Target XML (MIUI_Theme_Values format)
+- **Smart Target Merge** — new colors up, existing colors from master down
+- Resolve dynamic colors (Material 3, Android system, MIUI)
 - Extract non-system colors only
 - BG/BTN color classifier
+- Multiple XML batch merge
+- Color analysis with unique color summary
+- Export BG / Export Text / Non-System quick actions
 - Auto-format to MIUI_Theme_Values structure
-- Color resolution visualization
 
 ---
 
-### 4. Color Replacer Tool
+### 5. Drawable Studio Pro — `merger_drawable.html`
 
-Advanced XML color editor with hex replacement.
+Professional vector drawable → PNG converter.
 
 **Features:**
 
-- Undo/Redo support for safe editing
-- Root tag changer
-- Live color search with filtering
-- Batch replace selected or all colors
-- Sort colors alphabetically
-- Serial navigation for large files
-- Multiple format downloads
-- Extract non-system colors
+- Auto-detect: Vector, Shape, Layer-List, Selector, Ripple, Inset, Clip, Scale, Rotate, Translate
+- Batch convert to PNG/9.png with SVG rendering
+- Extract @color/@android:color references
+- Resolve relative colors from `colors.xml`
+- **Advanced Folder** — recursively finds `drawable.zip` + `colors.xml`
+- Auto-extract & auto-download workflow
+- Fallback XML generator + Fallback Images ZIP
 
 ---
 
-### 5. Name Merger Tool
+### 6. Icon Maker Pro — `merger_launcher.html`
 
-Drag-and-drop filename management tool.
-
-**Features:**
-
-- Directional name copying (Left → Right mode)
-- ZIP archive extraction support
-- Alphabetical scroll navigation
-- Instant search filtering
-- Smart paste functionality
-- Sort by name or date
-
----
-
-### 6. Launcher Icon ✨ **NEW**
-
-Professional icon creation tool with background overlay.
+Create custom launcher icons with background + overlay.
 
 **Features:**
 
 - **Background + Icon overlay** system
-- Upload single/multiple images or ZIP archives
-- **Live preview** with real-time updates
-- **Position controls** (move, center)
-- **Size adjustment** with presets (64-256px)
-- **Batch processing** - all icons with same settings
-- **Original filename preservation** on download
-- **Single download** or **ZIP export**
-- **Transparent background support**
-- **Smart file chooser** - handles images and ZIPs
+- Upload images or ZIP archives
+- **Live preview** canvas (160×160)
+- Move/center/position controls (X/Y offsets)
+- Size presets (64, 72, 80, 96, 128, 192, 256)
+- Custom width/height inputs
+- Apply settings, then download **single PNG** or **ZIP batch**
+- Original filename preservation
+- Auto-saves state to localStorage
 
-**Workflow:**
-```
-Upload Background → Upload Front Icons → Select Icon → Adjust Position/Size → Apply → Download Single/ZIP
-```
+---
+
+### 7. Color Replacer Pro — `merger_color.html`
+
+Smart XML hex color editor with 8-digit ARGB support.
+
+**Features:**
+
+- Import XML → format & resolve colors automatically
+- **Replace Selected** or **Replace All** with target hex
+- Delete selected / Delete all colors
+- Sort colors alphabetically
+- Undo / Redo / Restore original
+- **Convert all to 8-digit ARGB** (`#RRGGBBAA`)
+- FAB navigation: Top / Bottom / Go-to-serial
+- 12 preset colors + custom color picker
+- Download resolved `theme_values_resolved.xml`
+
+---
+
+### 8. Color Randomizer Pro — `color_randomizer.html`
+
+Randomize every color in XML with guaranteed unique values.
+
+**Features:**
+
+- Upload `theme_values.xml` or `colors.xml`
+- ARGB-safe parsing (6-digit, 8-digit, 3-digit, shorthand)
+- Search by name or hex value
+- **Unique random generation** — no duplicates (up to 16.7M colors)
+- Usage context detection (background, text, icon, etc.)
+- Per-color copy buttons (exact + resolved)
+- View raw XML inline
+- Reset to originals
+- Toast notification system
+
+---
+
+### 9. Item Merger Pro — `merger_name.html`
+
+Directional filename merger with drag-and-drop.
+
+**Features:**
+
+- **Left → Right directional mode** (toggle)
+- Tap LEFT filename = copy, tap RIGHT filename = paste name (image unchanged)
+- Upload images or ZIP/CBZ archives
+- Alphabetical scroll bar (A–Z, 0–9, #)
+- Instant search filtering
+- Sort by name / date (asc/desc)
+- Per-item copy/paste buttons
+- Download pane as ZIP
+
+---
+
+### 10. Folder Generator Pro — `merger_folder.html`
+
+Create multiple folder structures at once with ZIP export.
+
+**Features:**
+
+- Define package name + subfolders (one per line)
+- **Stepper control** — 1 to 20 structures
+- Each structure named `package-name-1`, `package-name-2`, etc.
+- Preset: `drawable`, `values-color`, `values-night`, `merge-color`, `backup-color`
+- Color-coded folder tags (backup, theme, drawable)
+- Copy structure as text
+- Download all as single ZIP
+- Responsive dark UI
+
+---
+
+### 11. Color Palette — `color_pallate.html`
+
+Tap-to-copy color palette with 3 copy formats.
+
+**Features:**
+
+- 16 ready colors (editable array)
+- **Two toggles → three modes:**
+  - ✅ ARGB ON → `#FF1686D0` (8-digit)
+  - ✅ Hex ON → `#1686D0` (with #)
+  - ⬜ Hex OFF → `1686D0` (without #)
+- Live preview of what will be copied
+- Tap any swatch → instant copy to clipboard
+- Checkmark animation + toast confirmation
+- Haptic vibration on mobile
+- Works offline · fallback clipboard for `file://`
 
 ---
 
 ## 📦 Installation
 
-No installation required! This is a pure HTML/CSS/JavaScript toolkit that runs entirely in your browser.
+No installation required! Pure HTML/CSS/JavaScript — runs entirely in the browser.
 
 ### Local Setup
 
-1. Clone this repository:
+1. Clone or download this repository
+2. Open `index.html` in your browser
+3. All tools accessible from the main dashboard
 
-```bash
-git clone https://github.com/yourusername/miui-theme-studio.git
+### File Structure
 ```
 
-2. Open `index.html` in your browser
+miui-theme-studio/
+├── index.html # Main dashboard (11 tools)
+├── miui_studio.html # 1. MIUI Studio Pro
+├── color_picker.html # 2. Color Picker Pro
+├── merger_icon.html # 3. Icon Recolor Pro
+├── merger_xml.html # 4. XML Merger Pro
+├── merger_drawable.html # 5. Drawable Studio Pro
+├── merger_launcher.html # 6. Icon Maker Pro
+├── merger_color.html # 7. Color Replacer Pro
+├── color_randomizer.html # 8. Color Randomizer Pro
+├── merger_name.html # 9. Item Merger Pro
+├── merger_folder.html # 10. Folder Generator Pro
+├── color_pallate.html # 11. Color Palette
+└── README.md # Documentation
 
-3. All tools are accessible from the main dashboard
+```
 
 ## 🎯 Usage Guide
 
 ### Getting Started
+1. Open `index.html`
+2. Tap any tool card to launch it
+3. Upload your theme assets (XML, PNG, ZIP)
+4. Process, edit, and download
 
-1. Launch `index.html` on your Redmi Note 15 5G or desktop
-2. Click any tool card to access its functionality
-3. Upload your theme assets (XML, PNG, or ZIP files)
-4. Process, edit, and download your themed resources
+### Common Workflows
 
-### Tool-Specific Workflows
-
-#### Drawable Studio Pro Workflow
-```
-Upload XML/PNG → Resolve Colors → Convert Vector → Generate Fallback → Download ZIP
-```
-
-#### IconForge Pro Workflow
-```
-Upload Icons → Select Color Mode → Adjust Thresholds → Apply Effects → Preview → Export ZIP
-```
-
-#### XML Merger Workflow
-```
-Load Master XML → Load Target XML → Click Merge → Download Merged File
-```
-
-#### Color Replacer Workflow
-```
-Load XML → Show Colors → Select Target Colors → Choose New Hex → Replace → Download
-```
-
-#### Name Merger Workflow
-```
-Upload Images → Toggle Directional Mode → Tap Left Filename → Tap Right Filename → Download
-```
-
-#### Icon Maker Pro Workflow ✨
-```
-Upload Background → Upload Front Icons (Image/ZIP) → Select Icon → Adjust Position & Size → Apply → Download (Single/ZIP)
-```
+| Task | Tool | Workflow |
+|------|------|----------|
+| Vector → PNG | Drawable Studio | Upload → Smart Convert All → ZIP |
+| Icon recolor | Icon Recolor | Upload → Set colors → Apply All → ZIP |
+| Merge XMLs | XML Merger | Master + Target → Merge → Download |
+| Edit XML | Color Picker | Upload → Tap item → Edit → Download |
+| Random colors | Color Randomizer | Upload → Randomize All → Download |
+| Find & replace | Color Replacer | Import → Replace Selected → Download |
+| Match filenames | Item Merger | Enable directional → Tap pairs |
+| Make folders | Folder Generator | Set package → Stepper → ZIP |
+| Make icons | Icon Maker | BG + Overlay → Position → ZIP |
+| Copy hex codes | Color Palette | Tap swatch → auto-copy |
 
 ## 🎨 Color Resolution Support
 
-The toolkit supports resolution of:
-
-- Android dynamic colors (`@android:color/*`)
-- Material 3 dynamic colors (`m3_ref_palette_dynamic_*`)
-- MIUI specific colors (`miuix_color_*`)
-- Relative color references (`@color/*`)
-- Direct hex values
+- ✅ Android dynamic colors (`@android:color/*`)
+- ✅ Material 3 (`m3_ref_palette_dynamic_*`)
+- ✅ MIUI specific (`miuix_color_*`)
+- ✅ Relative references (`@color/*`)
+- ✅ Direct hex (3, 6, or 8 digit)
 
 ## 📁 File Format Support
 
-| Format   | Upload | Export |
-| -------- | ------ | ------ |
-| XML      | ✓      | ✓      |
-| PNG      | ✓      | ✓      |
-| 9.png    | ✓      | ✓      |
-| ZIP      | ✓      | ✓      |
-| JPG/JPEG | ✓      | -      |
-| WEBP     | ✓      | -      |
-| BMP      | ✓      | -      |
-| GIF      | ✓      | -      |
-| ICO      | ✓      | -      |
-| AVIF     | ✓      | -      |
+| Format | Upload | Export |
+|--------|:------:|:------:|
+| XML | ✓ | ✓ |
+| PNG | ✓ | ✓ |
+| 9.png | ✓ | ✓ |
+| ZIP | ✓ | ✓ |
+| JPG / JPEG | ✓ | – |
+| WEBP | ✓ | ✓ (round-trip) |
+| BMP | ✓ | – |
+| CBZ | ✓ | – |
 
-## 💡 Keyboard Shortcuts
+## ⌨️ Keyboard Shortcuts
 
-| Shortcut       | Action                     |
-| -------------- | -------------------------- |
-| `Ctrl + Z`     | Undo (Color Replacer)      |
-| `Ctrl + Y`     | Redo (Color Replacer)      |
-| `Ctrl + M`     | Merge (XML Merger)         |
-| `Ctrl + S`     | Download (XML Merger)      |
-| `Ctrl + R`     | Reset (XML Merger)         |
-| `Ctrl + Enter` | Apply (Icon Maker)         |
-| `Ctrl + S`     | Download Single (Icon Maker) |
-| `Ctrl + Shift + S` | Download ZIP (Icon Maker) |
-| `Escape`       | Blur focus (Icon Maker)    |
+| Shortcut | Action | Tool |
+|----------|--------|------|
+| `Ctrl + Z` | Undo | Color Picker, Color Replacer |
+| `Ctrl + Y` | Redo | Color Picker, Color Replacer |
+| `Ctrl + M` | Merge | XML Merger |
+| `Ctrl + S` | Download | XML Merger |
+| `Ctrl + R` | Reset | XML Merger |
+| `Alt + T` | Scroll to Top | Color Replacer |
+| `Alt + B` | Scroll to Bottom | Color Replacer |
+| `Alt + G` | Go to Serial | Color Replacer |
+| `Enter` | Submit / Go | Various modals |
 
 ## 🔧 System Requirements
 
-- **Browser:** Modern browser with JavaScript enabled
-- **RAM:** 2GB minimum (4GB recommended for large ZIP files)
-- **Storage:** Local storage for file processing
-- **Internet:** Required only for CDN assets (Font Awesome, Google Fonts, JSZip, FileSaver)
+- **Browser:** Modern Chromium/Firefox/Safari with JS enabled
+- **RAM:** 2 GB minimum (4 GB for large ZIPs)
+- **Storage:** Local only (no uploads)
+- **Internet:** Only for CDN assets on first load (Font Awesome, JSZip, FileSaver)
 
-## 📂 Project Structure
+## 🌟 Key Features
 
-```
-miui-theme-studio/
-├── index.html              # Main dashboard
-├── icon_maker.html         # Icon Maker Pro ✨ NEW
-├── merger_color.html       # Color Replacer Tool
-├── merger_drawable.html    # Drawable Studio Pro
-├── merger_icon.html        # IconForge Pro
-├── merger_name.html        # Name Merger Tool
-├── merger_xml.html         # XML Merger Pro
-└── README.md               # Documentation
-```
+- ✅ **Zero dependencies** after first CDN load
+- ✅ **Touch-optimized** for Redmi Note 15 5G
+- ✅ **Dark-themed UI** across all tools
+- ✅ **Batch processing** with progress bars
+- ✅ **Force Stop** button for long operations
+- ✅ **ZIP support** for upload & download
+- ✅ **Live preview** with zoom
+- ✅ **Undo/Redo** in editors
+- ✅ **MIUI_Theme_Values** native format
+- ✅ **100% private** — no server uploads
 
-## 🌟 Key Features Summary
+## 🆕 What's New in v3.5
 
-- ✅ **Zero dependencies** - Works offline after initial load
-- ✅ **Touch-optimized** - Perfect for Redmi Note 15 5G
-- ✅ **Material Design** - Modern, dark-themed UI
-- ✅ **Batch processing** - Handle multiple files at once
-- ✅ **ZIP support** - Upload and extract archives
-- ✅ **Live preview** - Real-time visual feedback
-- ✅ **Undo/Redo** - Safe editing workflow
-- ✅ **Color resolution** - Automatic relative color resolution
-- ✅ **MIUI format** - Native `MIUI_Theme_Values` support
-- ✅ **Icon creation** - Background + overlay system ✨
-
-## 🆕 What's New in v3.1
-
-- ✅ **Icon Maker Pro** - New tool for creating custom icons
-- ✅ **Smart file chooser** - Handles images and ZIPs in both upload sections
-- ✅ **Preview grid** - Shows all icons with background preview
-- ✅ **Original filename preservation** - Downloads keep original names
-- ✅ **Transparent background support** - Perfect for launcher icons
+- ✅ **Color Palette** tool added (tap-to-copy, 3 formats)
+- ✅ **11 Pro Tools** in unified dashboard
+- ✅ **Smart Convert caching** — no duplicate rendering
+- ✅ **Force Stop** overlay in MIUI Studio & Drawable Studio
+- ✅ Responsive layouts for Dell Latitude E5450 + Redmi Note 15 5G
+- ✅ Safe-area insets for modern notched phones
 
 ## 🐛 Known Issues
 
-- ZIP files with password protection are not supported
-- Very large XML files (>10MB) may cause performance issues
-- RAR format requires conversion to ZIP for full support
+- Password-protected ZIPs not supported
+- XML >10 MB may lag on low-RAM devices
+- RAR requires conversion to ZIP
+- WebP editing auto-converts (round-trips back on save)
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Commit changes (`git commit -m 'Add feature'`)
+4. Push (`git push origin feature/my-feature`)
 5. Open a Pull Request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License — see `LICENSE` for details.
 
 ## 🙏 Acknowledgments
 
-- Font Awesome for icons
-- Google Fonts for Inter typeface
-- JSZip for ZIP file handling
-- FileSaver.js for download functionality
+- [Font Awesome](https://fontawesome.com/) — Icons
+- [Google Fonts](https://fonts.google.com/) — Inter typeface
+- [JSZip](https://stuk.github.io/jszip/) — ZIP handling
+- [FileSaver.js](https://github.com/eligrey/FileSaver.js/) — Downloads
 
-## 📞 Support
+---
 
-For issues or feature requests, please open an issue on GitHub or contact the maintainer.
+## 📊 Quick Reference
+
+| # | Tool | Purpose | File |
+|---|------|---------|------|
+| 1 | **MIUI Studio Pro** | All-in-one processor | `miui_studio.html` |
+| 2 | **Color Picker Pro** | XML resource editor | `color_picker.html` |
+| 3 | **Icon Recolor Pro** | Dual-color icons | `merger_icon.html` |
+| 4 | **XML Merger Pro** | Merge + resolve XML | `merger_xml.html` |
+| 5 | **Drawable Studio Pro** | Vector → PNG | `merger_drawable.html` |
+| 6 | **Icon Maker Pro** | BG + overlay icons | `merger_launcher.html` |
+| 7 | **Color Replacer Pro** | Hex find & replace | `merger_color.html` |
+| 8 | **Color Randomizer Pro** | Unique random colors | `color_randomizer.html` |
+| 9 | **Item Merger Pro** | Directional file copy | `merger_name.html` |
+| 10 | **Folder Generator Pro** | Multi-structure creator | `merger_folder.html` |
+| 11 | **Color Palette** | Tap-to-copy hex/ARGB | `color_pallate.html` |
 
 ---
 
 **Made with ❤️ for MIUI Theme Developers | Optimized for Redmi Note 15 5G**
+```
 
----
+### ✅ Summary of Changes
 
-## 📊 **Quick Reference Table**
+| Section                 | What Changed                                                                            |
+| ----------------------- | --------------------------------------------------------------------------------------- |
+| **Header**              | Updated to v3.5, "11 tools"                                                             |
+| **Device Optimization** | Added Dell Latitude E5450                                                               |
+| **Tools Overview**      | All 11 tools documented (was 6)                                                         |
+| **File names**          | Corrected to match actual filenames (`color_picker.html`, `merger_launcher.html`, etc.) |
+| **File Structure**      | Complete tree with all 12 HTML files                                                    |
+| **Workflows**           | Added common workflow table for all 11 tools                                            |
+| **Keyboard Shortcuts**  | Added missing shortcuts from Color Replacer                                             |
+| **File Format Support** | Confirmed WEBP round-trip support                                                       |
+| **What's New**          | New v3.5 changelog                                                                      |
+| **Quick Reference**     | Complete 11-tool table with exact filenames                                             |
 
-| Tool | Purpose | Key Feature |
-|------|---------|-------------|
-| **Drawable Studio** | Vector → PNG conversion | Batch processing |
-| **IconForge** | Color replacement | Dual-color editing |
-| **XML Merger** | Color/dimension merge | Dynamic color resolution |
-| **Color Replacer** | XML color editing | Undo/Redo support |
-| **Name Merger** | Filename management | Drag & drop |
-| **Launcher Icon** ✨ | Icon creation | BG + overlay system |
+All filenames in the README now exactly match the tools present in your `index.html`, so every `data-url` link will resolve correctly.
