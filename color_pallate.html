@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+#E68585<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f14">
   <title>Color Palette — Tap to Copy</title>
   <style>
     * {
@@ -13,14 +15,24 @@
       -webkit-tap-highlight-color: transparent;
     }
 
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       background: radial-gradient(1200px 600px at 50% -10%, #16202b 0%, #0b0f14 60%, #07090c 100%);
       font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       color: #e6edf3;
       display: flex;
       justify-content: center;
       padding: 32px 18px 60px;
+      padding-left: max(18px, env(safe-area-inset-left));
+      padding-right: max(18px, env(safe-area-inset-right));
+      padding-bottom: max(60px, env(safe-area-inset-bottom));
+      overflow-x: hidden;
     }
 
     .wrap {
@@ -28,6 +40,9 @@
       max-width: 900px;
     }
 
+    /* ============================================================
+       HEADER
+       ============================================================ */
     header {
       text-align: center;
       margin-bottom: 22px;
@@ -37,6 +52,7 @@
       font-size: clamp(20px, 4vw, 28px);
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
 
     h1 span {
@@ -48,11 +64,15 @@
 
     .hint {
       margin-top: 8px;
-      font-size: 13.5px;
+      font-size: clamp(12px, 2vw, 13.5px);
       color: #8b98a5;
+      line-height: 1.5;
+      padding: 0 8px;
     }
 
-    /* ---------- Toggles ---------- */
+    /* ============================================================
+       TOGGLES
+       ============================================================ */
     .controls {
       display: flex;
       flex-wrap: wrap;
@@ -168,7 +188,9 @@
       color: #8b98a5;
     }
 
-    /* ---------- Preview ---------- */
+    /* ============================================================
+       PREVIEW
+       ============================================================ */
     .preview {
       display: flex;
       align-items: center;
@@ -176,13 +198,13 @@
       gap: 10px;
       flex-wrap: wrap;
       margin: 0 auto 26px;
-      font-size: 13.5px;
+      font-size: clamp(12px, 2vw, 13.5px);
       color: #8b98a5;
     }
 
     .preview code {
       font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 15px;
+      font-size: clamp(13.5px, 2.4vw, 15px);
       font-weight: 700;
       letter-spacing: 0.06em;
       color: #e6edf3;
@@ -213,7 +235,9 @@
       }
     }
 
-    /* ---------- Palette Grid ---------- */
+    /* ============================================================
+       PALETTE GRID
+       ============================================================ */
     .palette {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
@@ -237,6 +261,8 @@
       transition: transform 0.18s cubic-bezier(.2, .8, .3, 1),
         box-shadow 0.18s ease,
         border-color 0.18s ease;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .swatch:hover {
@@ -263,7 +289,12 @@
       border-radius: 999px;
       background: rgba(0, 0, 0, 0.14);
       backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       transition: transform 0.2s ease, opacity 0.2s ease;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .swatch.light .hex {
@@ -299,11 +330,14 @@
       border-color: rgba(255, 255, 255, 0.55);
     }
 
-    /* ---------- Toast ---------- */
+    /* ============================================================
+       TOAST
+       ============================================================ */
     .toast {
       position: fixed;
       left: 50%;
       bottom: 28px;
+      bottom: calc(28px + env(safe-area-inset-bottom));
       transform: translate(-50%, 24px);
       display: flex;
       align-items: center;
@@ -321,6 +355,7 @@
       transition: opacity 0.22s ease, transform 0.28s cubic-bezier(.2, .9, .3, 1);
       z-index: 99;
       white-space: nowrap;
+      max-width: calc(100vw - 40px);
     }
 
     .toast.show {
@@ -336,26 +371,224 @@
       flex-shrink: 0;
     }
 
-    @media (max-width: 520px) {
+    /* ============================================================
+       RESPONSIVE — DELL LATITUDE E5450 (1366×768 laptop)
+       ============================================================ */
+    @media (min-width: 1024px) and (max-height: 800px) {
+
+      /* Compact layout for 768px tall laptop screens */
+      body {
+        padding: 18px 18px 30px;
+      }
+
+      header {
+        margin-bottom: 14px;
+      }
+
       .controls {
-        flex-direction: column;
-        align-items: stretch;
+        margin-bottom: 12px;
       }
 
       .toggle-row {
-        justify-content: space-between;
+        padding: 10px 16px;
+        font-size: 13.5px;
       }
-    }
 
-    @media (max-width: 420px) {
+      .preview {
+        margin-bottom: 18px;
+      }
+
       .palette {
-        grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
         gap: 11px;
       }
 
       .hex {
-        font-size: 11px;
+        font-size: 11.5px;
+        padding: 3px 8px;
+      }
+    }
+
+    /* Larger desktop / Full HD laptop */
+    @media (min-width: 1100px) and (min-height: 801px) {
+      .palette {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 16px;
+      }
+
+      .hex {
+        font-size: 13px;
+      }
+    }
+
+    /* ============================================================
+       RESPONSIVE — REDMI NOTE 15 5G (~360–430px CSS width)
+       ============================================================ */
+    @media (max-width: 640px) {
+      body {
+        padding: 22px 16px 50px;
+        padding-bottom: max(50px, env(safe-area-inset-bottom));
+      }
+
+      header {
+        margin-bottom: 18px;
+      }
+
+      .hint {
+        padding: 0 4px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .toggle-row {
+        justify-content: space-between;
+        padding: 11px 16px;
+        font-size: 13.5px;
+      }
+    }
+
+    @media (max-width: 430px) {
+      body {
+        padding: 20px 14px 46px;
+        padding-bottom: max(46px, env(safe-area-inset-bottom));
+      }
+
+      header {
+        margin-bottom: 16px;
+      }
+
+      .palette {
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        gap: 10px;
+      }
+
+      .swatch {
+        border-radius: 14px;
+        padding: 8px 6px;
+      }
+
+      .hex {
+        font-size: 10.5px;
         padding: 3px 7px;
+        letter-spacing: 0.04em;
+      }
+
+      .tick {
+        font-size: 28px;
+      }
+
+      .preview {
+        margin-bottom: 20px;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      body {
+        padding: 18px 12px 42px;
+        padding-bottom: max(42px, env(safe-area-inset-bottom));
+      }
+
+      .palette {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 9px;
+      }
+
+      .swatch {
+        border-radius: 12px;
+        padding: 7px 5px;
+      }
+
+      .hex {
+        font-size: 10px;
+        padding: 3px 6px;
+      }
+
+      .switch {
+        width: 46px;
+        height: 26px;
+      }
+
+      .switch::after {
+        width: 18px;
+        height: 18px;
+        top: 3px;
+        left: 3px;
+      }
+
+      input:checked+.switch::after {
+        transform: translateX(20px);
+      }
+
+      .toggle-row {
+        font-size: 13px;
+        padding: 10px 14px;
+        gap: 10px;
+      }
+    }
+
+    /* Landscape phones (Redmi Note 15 5G rotated) */
+    @media (max-height: 480px) and (orientation: landscape) {
+      body {
+        padding: 12px 20px 20px;
+      }
+
+      header {
+        margin-bottom: 10px;
+      }
+
+      h1 {
+        font-size: 18px;
+      }
+
+      .hint {
+        display: none;
+      }
+
+      .controls {
+        margin-bottom: 10px;
+      }
+
+      .preview {
+        margin-bottom: 14px;
+      }
+
+      .palette {
+        grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+        gap: 9px;
+      }
+
+      .hex {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+    }
+
+    /* Touch device boost — bigger tap targets */
+    @media (hover: none) and (pointer: coarse) {
+      .swatch {
+        min-height: 80px;
+      }
+
+      .launch-button {
+        min-height: 44px;
+      }
+    }
+
+    /* Reduce motion preference */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
       }
     }
   </style>
@@ -427,7 +660,6 @@
     const labelOn = document.getElementById('labelOn');
     const labelOff = document.getElementById('labelOff');
     const hexToggleRow = document.getElementById('hexToggleRow');
-    const argbToggleRow = document.getElementById('argbToggleRow');
 
     /* ============================================================
        Two toggles — three modes
@@ -436,22 +668,19 @@
        ✅ ARGB OFF, with #     → #000000     (6-digit with #)
        ⬜ ARGB OFF, without #  → 000000      (6-digit only)
        ============================================================ */
-    let withHash = true;    // state of toggle 1
-    let argbMode = false;   // state of toggle 2
+    let withHash = true;
+    let argbMode = false;
     let previewColor = yourDefaultColorPalette[0];
 
     /* ---------------- Format Helpers ---------------- */
-
-    // 6-digit hex → 8-digit ARGB (#AARRGGBB)
-    // All palette colors are opaque, so alpha = FF
     function hexToArgb(hex) {
       const h = hex.replace('#', '').toUpperCase();
       const full = h.length === 3 ? h.split('').map(c => c + c).join('') : h;
-      return '#FF' + full;               // → #FF000000
+      return '#FF' + full;
     }
 
     function applyFormat(hex) {
-      if (argbMode) return hexToArgb(hex);      // ARGB takes priority
+      if (argbMode) return hexToArgb(hex);
       return withHash ? hex : hex.replace(/^#/, '');
     }
 
@@ -460,18 +689,14 @@
       previewCode.classList.toggle('argb-on', argbMode);
       if (!animate) return;
       previewCode.classList.remove('flash');
-      void previewCode.offsetWidth;   // reflow → restart animation
+      void previewCode.offsetWidth;
       previewCode.classList.add('flash');
     }
 
     function updateToggleUI() {
-      // Swap hex toggle label
       labelOn.style.display = withHash ? 'inline' : 'none';
       labelOff.style.display = withHash ? 'none' : 'inline';
-
-      // Dim the hex toggle while ARGB is active
       hexToggleRow.classList.toggle('dimmed', argbMode);
-
       renderPreview();
     }
 
@@ -556,22 +781,20 @@
         btn.title = `Tap to copy ${hex}`;
 
         btn.innerHTML = `
-      <span class="tick" aria-hidden="true">✓</span>
-      <span class="hex">${hex}</span>
-    `;
+          <span class="tick" aria-hidden="true">✓</span>
+          <span class="hex">${hex}</span>
+        `;
 
         btn.addEventListener('click', async () => {
-          const value = applyFormat(hex);          // format based on toggles
+          const value = applyFormat(hex);
           const ok = await copyText(value);
 
           if (navigator.vibrate) navigator.vibrate(12);
 
-          // Checkmark animation on the swatch
           btn.classList.add('copied');
           clearTimeout(btn._t);
           btn._t = setTimeout(() => btn.classList.remove('copied'), 900);
 
-          // Update preview to this color
           previewColor = hex;
           renderPreview();
 
@@ -586,8 +809,8 @@
 
     /* ---------------- Init ---------------- */
     buildPalette(yourDefaultColorPalette);
-    updateToggleUI();        // set label + preview
-    renderPreview(false);    // no animation on first render
+    updateToggleUI();
+    renderPreview(false);
   </script>
 </body>
 
