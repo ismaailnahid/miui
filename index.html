@@ -54,7 +54,7 @@
       padding: 0 4px;
     }
 
-    /* ===== HERO SECTION - PROFESSIONAL ===== */
+    /* ===== HERO SECTION ===== */
     .hero-section {
       text-align: center;
       margin-bottom: 10px;
@@ -417,6 +417,7 @@
       background: linear-gradient(95deg, #3b82f6, #6d28d9);
     }
 
+    /* ===== FOOTER ===== */
     .footer-note {
       text-align: center;
       margin-top: 12px;
@@ -428,7 +429,7 @@
       border-radius: 40px;
     }
 
-    /* ===== RESPONSIVE - MOBILE MARGIN IMPROVED ===== */
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 640px) {
       body {
         padding: 8px 14px;
@@ -642,7 +643,7 @@
 
 <body>
   <div class="app-container">
-    <!-- ===== HERO SECTION - PROFESSIONAL ===== -->
+    <!-- ===== HERO SECTION ===== -->
     <div class="hero-section">
       <div class="hero-brand">
         <i class="fas fa-palette brand-icon"></i>
@@ -659,25 +660,25 @@
       <div class="hero-divider"></div>
 
       <div class="hero-tools">
-        <span class="tool-name">Drawable Studio</span>
-        <span class="separator">•</span>
-        <span class="tool-name">Icon Recolor</span>
-        <span class="separator">•</span>
-        <span class="tool-name">XML Merger</span>
-        <span class="separator">•</span>
-        <span class="tool-name">Color Replacer</span>
-        <span class="separator">•</span>
-        <span class="tool-name">Name Merger</span>
-        <span class="separator">•</span>
-        <span class="tool-name">Icon Maker</span>
-        <span class="separator">•</span>
-        <span class="tool-name">Folder Generator</span>
+        <span class="tool-name">MIUI Studio Pro</span>
         <span class="separator">•</span>
         <span class="tool-name">Color Picker Pro</span>
         <span class="separator">•</span>
-        <span class="tool-name">MIUI Studio</span>
+        <span class="tool-name">Icon Recolor Pro</span>
         <span class="separator">•</span>
-        <span class="tool-name">Color Randomizer</span>
+        <span class="tool-name">XML Merger Pro</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Drawable Studio Pro</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Icon Maker Pro</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Color Replacer Pro</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Color Randomizer Pro</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Item Merger Pro</span>
+        <span class="separator">•</span>
+        <span class="tool-name">Folder Generator Pro</span>
       </div>
 
       <div class="stats-row">
@@ -690,30 +691,50 @@
 
     <!-- ===== TOOLS GRID ===== -->
     <div class="tools-grid">
-      <!-- 1. Drawable Studio Pro -->
-      <div class="tool-card" data-tool="merger_drawable">
+
+      <!-- 1. MIUI Studio Pro -->
+      <div class="tool-card" data-tool="miui_studio">
         <div class="card-content">
           <div class="card-title">
             <span class="title-text">
-              <i class="fas fa-draw-polygon title-icon" style="color: #2dd4bf;"></i>
-              <span class="title-name">Drawable Pro</span>
+              <i class="fas fa-palette title-icon" style="color: #f97316;"></i>
+              <span class="title-name">MIUI Studio Pro</span>
             </span>
-            <span class="card-badge">Vector→PNG</span>
+            <span class="card-badge">All-in-One</span>
           </div>
-          <div class="desc">Upload XML/PNG/ZIP, resolve relative colors, batch convert vectors, generate fallback &
-            extract BG/BTN.</div>
+          <div class="desc">Process drawables and colors in one place: extract, merge, resolve, randomize and download.</div>
           <div class="feature-tags">
             <span class="tag"><i class="fas fa-file-zipper"></i> ZIP</span>
-            <span class="tag"><i class="fas fa-sync-alt"></i> Resolve</span>
-            <span class="tag"><i class="fas fa-layer-group"></i> Fallback</span>
-            <span class="tag"><i class="fas fa-download"></i> Bulk</span>
+            <span class="tag"><i class="fas fa-layer-group"></i> Drawable</span>
+            <span class="tag"><i class="fas fa-palette"></i> Colors</span>
+            <span class="tag"><i class="fas fa-download"></i> Export</span>
           </div>
-          <button class="launch-button" data-url="merger_drawable.html"><span>Drawable Studio</span> <i
-              class="fas fa-arrow-right"></i></button>
+          <button class="launch-button" data-url="miui_studio.html"><span>Open MIUI Studio</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
-      <!-- 2. Icon Recolor Pro -->
+      <!-- 2. Color Picker Pro -->
+      <div class="tool-card" data-tool="color_picker">
+        <div class="card-content">
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-eye-dropper title-icon" style="color: #ec4899;"></i>
+              <span class="title-name">Color Picker Pro</span>
+            </span>
+            <span class="card-badge">XML Editor</span>
+          </div>
+          <div class="desc">Upload XML, edit colors/strings/dimens. Quick color picker, replace mode, search, go-to serial, undo/redo & download.</div>
+          <div class="feature-tags">
+            <span class="tag"><i class="fas fa-palette"></i> Edit</span>
+            <span class="tag"><i class="fas fa-magnifying-glass"></i> Search</span>
+            <span class="tag"><i class="fas fa-rotate"></i> Replace</span>
+            <span class="tag"><i class="fas fa-clock-rotate-left"></i> Undo</span>
+          </div>
+          <button class="launch-button" data-url="color_picker.html"><span>Open Color Picker</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 3. Icon Recolor Pro -->
       <div class="tool-card" data-tool="merger_icon">
         <div class="card-content">
           <div class="card-title">
@@ -723,20 +744,18 @@
             </span>
             <span class="card-badge">Dual Color</span>
           </div>
-          <div class="desc">Live preview, primary/secondary replacement, edge smoothing, blur, trace HD & ZIP batch.
-          </div>
+          <div class="desc">Live preview, primary/secondary replacement, edge smoothing, blur, trace HD & ZIP batch.</div>
           <div class="feature-tags">
             <span class="tag"><i class="fas fa-eye"></i> Preview</span>
             <span class="tag"><i class="fas fa-tachometer-alt"></i> Threshold</span>
             <span class="tag"><i class="fas fa-blur"></i> Blur</span>
             <span class="tag"><i class="fas fa-file-archive"></i> ZIP</span>
           </div>
-          <button class="launch-button" data-url="merger_icon.html"><span>Launch Icon Recolor</span> <i
-              class="fas fa-arrow-right"></i></button>
+          <button class="launch-button" data-url="merger_icon.html"><span>Launch Icon Recolor</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
-      <!-- 3. XML Merger Pro -->
+      <!-- 4. XML Merger Pro -->
       <div class="tool-card" data-tool="merger_color">
         <div class="card-content">
           <div class="card-title">
@@ -746,95 +765,129 @@
             </span>
             <span class="card-badge">MIUI_Values</span>
           </div>
-          <div class="desc">Merge master/target XML, resolve dynamic colors, extract non-system colors, BG/BTN
-            classifier & auto format.</div>
+          <div class="desc">Merge master/target XML, resolve dynamic colors, extract non-system colors, BG/BTN classifier & auto format.</div>
           <div class="feature-tags">
             <span class="tag"><i class="fas fa-link"></i> Resolve</span>
             <span class="tag"><i class="fas fa-chart-simple"></i> Stats</span>
             <span class="tag"><i class="fas fa-filter"></i> Non-system</span>
             <span class="tag"><i class="fas fa-download"></i> Clean</span>
           </div>
-          <button class="launch-button" data-url="merger_xml.html"><span>Launch Merger</span> <i
-              class="fas fa-arrow-right"></i></button>
+          <button class="launch-button" data-url="merger_xml.html"><span>Launch Merger</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
-      <!-- 4. Color Replacer -->
-      <div class="tool-card" data-tool="merger_color_replacer">
+      <!-- 5. Drawable Studio Pro -->
+      <div class="tool-card" data-tool="merger_drawable">
         <div class="card-content">
           <div class="card-title">
             <span class="title-text">
-              <i class="fas fa-fill-drip title-icon" style="color: #f97316;"></i>
-              <span class="title-name">Color Replacer</span>
+              <i class="fas fa-draw-polygon title-icon" style="color: #2dd4bf;"></i>
+              <span class="title-name">Drawable Studio Pro</span>
             </span>
-            <span class="card-badge">Hex Master</span>
+            <span class="card-badge">Vector→PNG</span>
           </div>
-          <div class="desc">Smart XML color editor: undo/redo, root tag changer, live search, batch replace &
-            multi-format downloads.</div>
+          <div class="desc">Upload XML/PNG/ZIP, resolve relative colors, batch convert vectors, generate fallback & extract BG/BTN.</div>
           <div class="feature-tags">
-            <span class="tag"><i class="fas fa-history"></i> Undo</span>
-            <span class="tag"><i class="fas fa-sort-alpha-down"></i> Sort</span>
-            <span class="tag"><i class="fas fa-tags"></i> Replace</span>
-            <span class="tag"><i class="fas fa-magic"></i> Format</span>
+            <span class="tag"><i class="fas fa-file-zipper"></i> ZIP</span>
+            <span class="tag"><i class="fas fa-sync-alt"></i> Resolve</span>
+            <span class="tag"><i class="fas fa-layer-group"></i> Fallback</span>
+            <span class="tag"><i class="fas fa-download"></i> Bulk</span>
           </div>
-          <button class="launch-button" data-url="merger_color.html"><span>Open Replacer</span> <i
-              class="fas fa-arrow-right"></i></button>
+          <button class="launch-button" data-url="merger_drawable.html"><span>Drawable Studio</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
-      <!-- 5. Name Merger -->
-      <div class="tool-card" data-tool="merger_image">
-        <div class="card-content">
-          <div class="card-title">
-            <span class="title-text">
-              <i class="fas fa-trademark title-icon" style="color: #a78bfa;"></i>
-              <span class="title-name">Name Merger</span>
-            </span>
-            <span class="card-badge">Drag & Merge</span>
-          </div>
-          <div class="desc">Directional name copier: copy from left, paste to right. ZIP extract, alphabetical scroll &
-            instant search.</div>
-          <div class="feature-tags">
-            <span class="tag"><i class="fas fa-arrows-alt-h"></i> Left→Right</span>
-            <span class="tag"><i class="fas fa-folder-zip"></i> Extract</span>
-            <span class="tag"><i class="fas fa-sort-alpha-down"></i> A–Z</span>
-            <span class="tag"><i class="fas fa-paste"></i> Paste</span>
-          </div>
-          <button class="launch-button" data-url="merger_name.html"><span>Open Name Merger</span> <i
-              class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-
-      <!-- 6. Icon Maker -->
+      <!-- 6. Icon Maker Pro -->
       <div class="tool-card" data-tool="icon_maker">
         <div class="card-content">
           <div class="card-title">
             <span class="title-text">
               <i class="fas fa-wand-magic-sparkles title-icon" style="color: #6c8cff;"></i>
-              <span class="title-name">Icon Maker</span>
+              <span class="title-name">Icon Maker Pro</span>
             </span>
             <span class="card-badge">BG + Icon</span>
           </div>
-          <div class="desc">Create custom icons with background + front overlay. Upload images/ZIP, adjust size &
-            position, live preview.</div>
+          <div class="desc">Create custom icons with background + front overlay. Upload images/ZIP, adjust size & position, live preview.</div>
           <div class="feature-tags">
             <span class="tag"><i class="fas fa-image"></i> Overlay</span>
             <span class="tag"><i class="fas fa-arrows-alt"></i> Position</span>
             <span class="tag"><i class="fas fa-expand"></i> Resize</span>
             <span class="tag"><i class="fas fa-file-archive"></i> Bulk</span>
           </div>
-          <button class="launch-button" data-url="merger_launcher.html"><span>Open Icon Maker</span> <i
-              class="fas fa-arrow-right"></i></button>
+          <button class="launch-button" data-url="merger_launcher.html"><span>Open Icon Maker</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
-      <!-- 7. Folder Generator -->
+      <!-- 7. Color Replacer Pro -->
+      <div class="tool-card" data-tool="merger_color_replacer">
+        <div class="card-content">
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-fill-drip title-icon" style="color: #f97316;"></i>
+              <span class="title-name">Color Replacer Pro</span>
+            </span>
+            <span class="card-badge">Hex Master</span>
+          </div>
+          <div class="desc">Smart XML color editor: undo/redo, root tag changer, live search, batch replace & multi-format downloads.</div>
+          <div class="feature-tags">
+            <span class="tag"><i class="fas fa-history"></i> Undo</span>
+            <span class="tag"><i class="fas fa-sort-alpha-down"></i> Sort</span>
+            <span class="tag"><i class="fas fa-tags"></i> Replace</span>
+            <span class="tag"><i class="fas fa-magic"></i> Format</span>
+          </div>
+          <button class="launch-button" data-url="merger_color.html"><span>Open Replacer</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 8. Color Randomizer Pro -->
+      <div class="tool-card" data-tool="theme_values_editor">
+        <div class="card-content">
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-palette title-icon" style="color: #22c55e;"></i>
+              <span class="title-name">Color Randomizer Pro</span>
+            </span>
+            <span class="card-badge">XML Color Lab</span>
+          </div>
+          <div class="desc">Upload theme_values.xml or colors.xml, inspect every color, search by name/HEX, randomize colors and download the edited XML.</div>
+          <div class="feature-tags">
+            <span class="tag"><i class="fas fa-file-code"></i> Parse</span>
+            <span class="tag"><i class="fas fa-magnifying-glass"></i> Search</span>
+            <span class="tag"><i class="fas fa-shuffle"></i> Randomize</span>
+            <span class="tag"><i class="fas fa-download"></i> Export</span>
+          </div>
+          <button class="launch-button" data-url="color_randomizer.html"><span>Open Values Editor</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 9. Item Merger Pro (formerly Name Merger) -->
+      <div class="tool-card" data-tool="merger_image">
+        <div class="card-content">
+          <div class="card-title">
+            <span class="title-text">
+              <i class="fas fa-trademark title-icon" style="color: #a78bfa;"></i>
+              <span class="title-name">Item Merger Pro</span>
+            </span>
+            <span class="card-badge">Drag & Merge</span>
+          </div>
+          <div class="desc">Directional item copier: copy from left, paste to right. ZIP extract, alphabetical scroll & instant search.</div>
+          <div class="feature-tags">
+            <span class="tag"><i class="fas fa-arrows-alt-h"></i> Left→Right</span>
+            <span class="tag"><i class="fas fa-folder-zip"></i> Extract</span>
+            <span class="tag"><i class="fas fa-sort-alpha-down"></i> A–Z</span>
+            <span class="tag"><i class="fas fa-paste"></i> Paste</span>
+          </div>
+          <button class="launch-button" data-url="merger_name.html"><span>Open Item Merger</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <!-- 10. Folder Generator Pro -->
       <div class="tool-card" data-tool="folder_maker">
         <div class="card-content">
           <div class="card-title">
             <span class="title-text">
               <i class="fas fa-folder-tree title-icon" style="color: #fbbf24;"></i>
-              <span class="title-name">Folder Generator</span>
+              <span class="title-name">Folder Generator Pro</span>
             </span>
             <span class="card-badge">Multi‑Structure</span>
           </div>
@@ -845,85 +898,16 @@
             <span class="tag"><i class="fas fa-file-archive"></i> ZIP</span>
             <span class="tag"><i class="fas fa-copy"></i> Copy</span>
           </div>
-          <button class="launch-button" data-url="merger_folder.html"><span>Open Folder Generator</span> <i
-              class="fas fa-arrow-right"></i></button>
+          <button class="launch-button" data-url="merger_folder.html"><span>Open Folder Generator</span> <i class="fas fa-arrow-right"></i></button>
         </div>
       </div>
 
-      <!-- 8. Color Picker Pro -->
-      <div class="tool-card" data-tool="color_picker">
-        <div class="card-content">
-          <div class="card-title">
-            <span class="title-text">
-              <i class="fas fa-eye-dropper title-icon" style="color: #ec4899;"></i>
-              <span class="title-name">Color Picker Pro</span>
-            </span>
-            <span class="card-badge">XML Editor</span>
-          </div>
-          <div class="desc">Upload XML, edit colors/strings/dimens. Quick color picker, replace mode, search, go-to
-            serial, undo/redo & download.</div>
-          <div class="feature-tags">
-            <span class="tag"><i class="fas fa-palette"></i> Edit</span>
-            <span class="tag"><i class="fas fa-magnifying-glass"></i> Search</span>
-            <span class="tag"><i class="fas fa-rotate"></i> Replace</span>
-            <span class="tag"><i class="fas fa-clock-rotate-left"></i> Undo</span>
-          </div>
-          <button class="launch-button" data-url="color_picker.html"><span>Open Color Picker</span> <i
-              class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-
-      <!-- 9. MIUI Studio Pro -->
-      <div class="tool-card" data-tool="miui_studio">
-        <div class="card-content">
-          <div class="card-title">
-            <span class="title-text">
-              <i class="fas fa-palette title-icon" style="color: #f97316;"></i>
-              <span class="title-name">MIUI Studio Pro</span>
-            </span>
-            <span class="card-badge">All-in-One</span>
-          </div>
-          <div class="desc">Process drawables and colors in one place: extract, merge, resolve, randomize and download.
-          </div>
-          <div class="feature-tags">
-            <span class="tag"><i class="fas fa-file-zipper"></i> ZIP</span>
-            <span class="tag"><i class="fas fa-layer-group"></i> Drawable</span>
-            <span class="tag"><i class="fas fa-palette"></i> Colors</span>
-            <span class="tag"><i class="fas fa-download"></i> Export</span>
-          </div>
-          <button class="launch-button" data-url="miui_studio.html"><span>Open MIUI Studio</span> <i
-              class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
-
-      <!-- 10. Color Randomizer -->
-      <div class="tool-card" data-tool="theme_values_editor">
-        <div class="card-content">
-          <div class="card-title">
-            <span class="title-text">
-              <i class="fas fa-palette title-icon" style="color: #22c55e;"></i>
-              <span class="title-name">Color Randomizer</span>
-            </span>
-            <span class="card-badge">XML Color Lab</span>
-          </div>
-          <div class="desc">Upload theme_values.xml or colors.xml, inspect every color, search by name/HEX, randomize
-            colors and download the edited XML.</div>
-          <div class="feature-tags">
-            <span class="tag"><i class="fas fa-file-code"></i> Parse</span>
-            <span class="tag"><i class="fas fa-magnifying-glass"></i> Search</span>
-            <span class="tag"><i class="fas fa-shuffle"></i> Randomize</span>
-            <span class="tag"><i class="fas fa-download"></i> Export</span>
-          </div>
-          <button class="launch-button" data-url="color_randomizer.html"><span>Open Values Editor</span> <i
-              class="fas fa-arrow-right"></i></button>
-        </div>
-      </div>
     </div>
 
+    <!-- ===== FOOTER ===== -->
     <div class="footer-note">
       <i class="fas fa-bolt"></i> Redmi Note 15 5G Optimized · Touch-first interface · 3D cards with smooth feedback<br>
-      <span style="font-size: 8px;">💡 Tap any card or button to launch tool | All sub-pages included | MIUI Theme
-        Studio v3.4</span>
+      <span style="font-size: 8px;">💡 Tap any card or button to launch tool | All sub-pages included | MIUI Theme Studio v3.4</span>
     </div>
   </div>
 
@@ -975,7 +959,7 @@
       window.addEventListener('resize', setViewportOptimization);
       setViewportOptimization();
 
-      console.log("MIUI Theme Studio v3.4 — 10 tools including Color Picker Pro & Color Randomizer");
+      console.log("MIUI Theme Studio v3.4 — 10 Pro Tools in smart order");
     })();
   </script>
 </body>
