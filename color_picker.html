@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0d0d0d">
+  <title>XML Editor Pro</title>
+  <style>
+    :root {
+      --bg-color: #0d0d0d;
+      --card-bg: #1a1a1a;
+      --text-main: #ffffff;
+      --text-sub: #888888;
+      --btn-bg: #2c2c2c;
+      --border-color: #333;
+      --accent: #1686D0;
+
+      --item-height: 52px;
+      --item-gap: 5px;
+      --visible-items: 10;
+    }
+
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      overscroll-behavior: none;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      margin: 0;
+      padding: 10px 15px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      min-height: 100vh;
+      padding-bottom: 10px;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0 0 3px 0;
+    }
+
+    .subtitle {
+      color: var(--text-sub);
+      font-size: 12px;
+      margin: 0 0 15px 0;
+    }
+
+    /* ============================================
+       UPLOAD SECTION
+    ============================================ */
+    .upload-section {
+      background: linear-gradient(180deg, #1a1a1a 0%, #151515 100%);
+      padding: 26px 20px;
+      border-radius: 16px;
+      margin: auto 0;
+      text-align: center;
+      border: 1px solid #2a2a2a;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.7;
+    }
+
+    .upload-icon {
+      font-size: 52px;
+      margin-bottom: 14px;
+      display: block;
+      line-height: 1;
+      filter: drop-shadow(0 4px 12px rgba(22, 134, 208, 0.4));
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+
+    @keyframes floatIcon {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    .upload-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 8px 0;
+      letter-spacing: 0.2px;
+    }
+
+    .upload-desc {
+      font-size: 12.5px;
+      color: #9a9a9a;
+      line-height: 1.55;
+      margin: 0 0 18px 0;
+      padding: 0 4px;
+    }
+
+    .upload-desc strong {
+      color: #c8c8c8;
+      font-weight: 600;
+    }
+
+    .upload-features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+      text-align: left;
+      background: #101010;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .upload-feature {
+      display: flex;
+      align-items: center;
+      font-size: 11.5px;
+      color: #c5c5c5;
+      line-height: 1.4;
+    }
+
+    .upload-feature .f-icon {
+      font-size: 14px;
+      margin-right: 9px;
+      flex-shrink: 0;
+      width: 18px;
+      text-align: center;
+    }
+
+    .upload-file-label {
+      display: block;
+      color: #9a9a9a;
+      font-size: 10.5px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      color: #888;
+      width: 100%;
+      font-size: 12px;
+      padding: 10px;
+      background: #252525;
+      border-radius: 10px;
+      border: 1px dashed #3a3a3a;
+      cursor: pointer;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    input[type="file"]:hover {
+      border-color: var(--accent);
+      background: #2a2a2a;
+    }
+
+    input[type="file"]::file-selector-button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      margin-right: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: background-color 0.2s;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background-color: #126ba8;
+    }
+
+    .upload-supported {
+      margin-top: 14px;
+      font-size: 10.5px;
+      color: #666;
+      letter-spacing: 0.3px;
+      line-height: 1.5;
+    }
+
+    .upload-supported span {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ============================================
+       DASHBOARD — single line
+    ============================================ */
+    .stats-panel {
+      display: none;
+      background: var(--card-bg);
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #222;
+      flex-shrink: 0;
+    }
+
+    .stats-line {
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.6;
+      text-align: center;
+      word-break: break-word;
+      letter-spacing: 0.2px;
+    }
+
+    .stats-line .stat-item {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .stats-line .stat-item .stat-icon {
+      font-size: 13px;
+      margin-right: 3px;
+    }
+
+    .stats-line .stat-item .stat-label {
+      color: var(--text-sub);
+      font-size: 12px;
+      margin-right: 4px;
+    }
+
+    .stats-line .stat-item .stat-count {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .stats-line .separator {
+      color: #444;
+      margin: 0 8px;
+      font-weight: 700;
+    }
+
+    .toggle-bar {
+      display: none;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      min-width: 65px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      padding: 8px 4px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .toggle-btn:active {
+      transform: scale(0.97);
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .toggle-btn .arrow {
+      font-size: 9px;
+      transition: transform 0.25s;
+    }
+
+    .toggle-btn.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    .toggle-btn.quick-on {
+      background: #00a86b;
+      border-color: #00a86b;
+      color: white;
+    }
+
+    .toggle-btn .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #555;
+      transition: background-color 0.25s;
+    }
+
+    .toggle-btn.quick-on .status-dot {
+      background: #00ff62;
+    }
+
+    .toggle-btn.replace-on {
+      background: #00a86b;
+      border-color: #00a86b;
+      color: white;
+    }
+
+    .toggle-btn.replace-on .status-dot {
+      background: #00ff62;
+    }
+
+    .collapsible {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+      opacity: 0;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .collapsible.open {
+      max-height: 200px;
+      opacity: 1;
+      margin-bottom: 10px;
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 10px 36px 10px 36px;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-input-wrap .search-icon {
+      position: absolute;
+      left: 11px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .search-input-wrap .clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 5px;
+      display: none;
+      user-select: none;
+    }
+
+    .search-input-wrap.has-text .clear-btn {
+      display: block;
+    }
+
+    .goto-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #222;
+    }
+
+    .goto-bar label {
+      font-size: 12px;
+      color: var(--text-sub);
+      white-space: nowrap;
+    }
+
+    .goto-bar input {
+      flex: 1;
+      background: #252525;
+      border: 1px solid #333;
+      color: white;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      text-align: center;
+      max-width: 80px;
+    }
+
+    .goto-bar button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: none;
+    }
+
+    .color-item.highlight {
+      animation: highlightPulse 1.5s ease-out;
+    }
+
+    @keyframes highlightPulse {
+      0% {
+        background: #2a4a6a;
+        border-color: var(--accent);
+      }
+
+      100% {
+        background: #151515;
+        border-color: #222;
+      }
+    }
+
+    @keyframes replaceFlash {
+      0% {
+        background: rgba(0, 168, 107, 0.45);
+        border-color: #00a86b;
+      }
+
+      100% {
+        background: #151515;
+        border-color: #222;
+      }
+    }
+
+    .color-item.replace-flash {
+      animation: replaceFlash 0.6s ease-out;
+    }
+
+    .history-bar {
+      display: none;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
+    .history-bar button {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-sub);
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      flex: none;
+    }
+
+    .history-bar button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* ============================================
+       TARGET COLOR BAR (Replace Mode)
+    ============================================ */
+    .target-color-bar {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(180deg, #1a1a1a 0%, #151515 100%);
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+      animation: slideDown 0.25s ease-out;
+    }
+
+    .target-color-bar.active {
+      display: flex;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .target-color-bar .tc-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .target-color-bar .tc-preview {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 2px solid #444;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      background: #222;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .target-color-bar .tc-preview:hover {
+      border-color: var(--accent);
+    }
+
+    .target-color-bar .tc-value {
+      flex: 1;
+      font-size: 12px;
+      color: #ccc;
+      font-family: 'Courier New', monospace;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    .target-color-bar .tc-change-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: none;
+      white-space: nowrap;
+    }
+
+    .target-color-bar .tc-change-btn:active {
+      background: #126ba8;
+    }
+
+    .replace-btn {
+      display: none;
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      margin-left: 6px;
+      background: #00a86b;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .replace-btn:active {
+      background: #008a56;
+      transform: scale(0.92);
+    }
+
+    body.replace-mode .color-item[data-type="color"] .replace-btn {
+      display: flex;
+    }
+
+    /* ============================================
+       TARGET COLOR PICKER MODAL
+    ============================================ */
+    .target-picker-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 150;
+    }
+
+    .target-picker-overlay.active {
+      display: flex;
+    }
+
+    .target-picker {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .target-picker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .target-picker-header h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .target-picker-header .close-x {
+      font-size: 24px;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 0 8px;
+      user-select: none;
+    }
+
+    .target-picker-preview {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #252525;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .target-picker-preview .tp-swatch {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      border: 2px solid #444;
+      flex-shrink: 0;
+    }
+
+    .target-picker-preview .tp-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .target-picker-preview .tp-info label {
+      display: block;
+      font-size: 10px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .target-picker-preview .tp-info input {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 15px;
+      font-family: 'Courier New', monospace;
+      width: 100%;
+      outline: none;
+    }
+
+    .target-picker-title {
+      font-size: 12px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .target-picker .swatches {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      justify-items: center;
+      margin-bottom: 16px;
+    }
+
+    .target-picker .swatch {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .target-picker .swatch:active {
+      border-color: white;
+      transform: scale(0.92);
+    }
+
+    .target-picker .swatch.selected {
+      border-color: white;
+      box-shadow: 0 0 0 3px rgba(22, 134, 208, 0.5);
+    }
+
+    .target-picker-confirm {
+      width: 100%;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .target-picker-confirm:active {
+      background: #126ba8;
+    }
+
+    .scroll-wrapper {
+      position: relative;
+      display: none;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .color-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--item-gap);
+      height: calc((var(--item-height) * var(--visible-items)) + (var(--item-gap) * (var(--visible-items) - 1)));
+      max-height: 100%;
+      overflow-y: auto;
+      padding-right: 15px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      contain: layout paint;
+    }
+
+    .color-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .color-item[data-type="color"] .color-type {
+      display: none;
+    }
+
+    .custom-scrollbar {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 100%;
+      background: #1f1f1f;
+      border-radius: 4px;
+      z-index: 5;
+    }
+
+    .scroll-thumb {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--accent);
+      border-radius: 4px;
+      cursor: grab;
+      touch-action: none;
+      will-change: top, height;
+    }
+
+    .color-item {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 7px;
+      background: #151515;
+      border: 1px solid #222;
+      position: relative;
+      contain: layout style;
+      height: var(--item-height);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .color-item:active {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .color-item.hidden-by-filter {
+      display: none;
+    }
+
+    .color-item.animate-in {
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .serial-badge {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      background: #2a2a2a;
+      border: 1px solid #3a3a3a;
+      border-radius: 5%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-right: 7px;
+    }
+
+    body.hide-serials .serial-badge {
+      display: none;
+    }
+
+    .color-preview {
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      margin-right: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 13px;
+      color: white;
+      background: #222;
+    }
+
+    .color-info {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      width: 100%;
+      min-width: 0;
+      justify-content: center;
+    }
+
+    .color-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      word-break: break-word;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.2;
+    }
+
+    .color-hex {
+      font-size: 10px;
+      color: #ccc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 1px;
+      line-height: 1.1;
+    }
+
+    .color-type {
+      font-size: 8px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-top: 1px;
+      line-height: 1;
+    }
+
+    .nav-arrows {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 8px;
+      flex-shrink: 0;
+    }
+
+    .nav-arrows button {
+      background: var(--btn-bg);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      flex: 1;
+      font-weight: 600;
+    }
+
+    .nav-arrows button:active {
+      background: var(--accent);
+    }
+
+    .action-bar {
+      display: none;
+      justify-content: space-between;
+      margin-top: 10px;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    button {
+      background-color: var(--btn-bg);
+      color: white;
+      border: none;
+      padding: 12px 15px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      -webkit-appearance: none;
+    }
+
+    button:active {
+      background-color: #444;
+    }
+
+    button.primary {
+      background-color: var(--accent);
+    }
+
+    button.primary:active {
+      background-color: #126ba8;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: flex-end;
+      z-index: 100;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 500px;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-body {
+      position: relative;
+    }
+
+    .large-preview {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: white;
+      background: #222;
+    }
+
+    .dropper-btn {
+      position: absolute;
+      right: 10px;
+      top: 20px;
+      font-size: 24px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 50%;
+      user-select: none;
+      display: none;
+    }
+
+    .dropper-btn.active {
+      display: block;
+    }
+
+    .input-group {
+      background: #252525;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #333;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 5px;
+    }
+
+    .input-group input,
+    .input-group select {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+    }
+
+    .input-group select option {
+      background: #252525;
+      color: white;
+    }
+
+    .color-palette {
+      display: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
+      z-index: 10;
+      border: 1px solid #444;
+    }
+
+    .color-palette.active {
+      display: block;
+    }
+
+    .palette-title {
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      justify-items: center;
+    }
+
+    .swatch {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .swatch:active {
+      border-color: white;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .add-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .add-menu {
+      background: #1f1f1f;
+      width: 90%;
+      max-width: 350px;
+      border-radius: 16px;
+      padding: 15px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      border: 1px solid #333;
+    }
+
+    .add-menu-item {
+      padding: 18px 25px;
+      font-size: 17px;
+      color: #eee;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .add-menu-item:active {
+      background: #2c2c2c;
+    }
+
+    .add-menu-item span.icon {
+      margin-right: 15px;
+      font-size: 20px;
+      width: 25px;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #222;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 14px;
+      border: 1px solid #444;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 999;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+      pointer-events: none;
+      will-change: opacity, transform;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--text-sub);
+      font-size: 14px;
+    }
+
+    .empty-state.show {
+      display: block;
+    }
+
+    .empty-state .icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    @media (max-height: 720px) {
+      :root {
+        --item-height: 46px;
+        --item-gap: 4px;
+      }
+
+      .upload-section {
+        padding: 18px 16px;
+      }
+
+      .upload-icon {
+        font-size: 42px;
+        margin-bottom: 10px;
+      }
+
+      .upload-title {
+        font-size: 17px;
+        margin-bottom: 6px;
+      }
+
+      .upload-desc {
+        font-size: 11.5px;
+        margin-bottom: 14px;
+        line-height: 1.5;
+      }
+
+      .upload-features {
+        padding: 10px 12px;
+        gap: 6px;
+        margin-bottom: 14px;
+      }
+
+      .upload-feature {
+        font-size: 10.5px;
+      }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --item-height: 42px;
+        --item-gap: 3px;
+      }
+
+      .color-preview {
+        width: 30px;
+        height: 30px;
+        font-size: 11px;
+      }
+
+      .serial-badge {
+        width: 18px;
+        height: 18px;
+        font-size: 8px;
+      }
+
+      .upload-icon {
+        font-size: 36px;
+      }
+
+      .upload-desc {
+        display: none;
+      }
+
+      .upload-features {
+        padding: 8px 10px;
+        gap: 5px;
+      }
+
+      .upload-feature {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body class="hide-serials">
+
+  <div class="container">
+    <h1 id="mainTitle">XML Editor Pro</h1>
+    <p class="subtitle" id="mainSubtitle">Upload your XML to start editing.</p>
+
+    <!-- ============================================
+         UPLOAD SECTION
+    ============================================ -->
+    <div class="upload-section" id="uploadSection">
+      <span class="upload-icon">📁</span>
+
+      <h2 class="upload-title">Upload Your XML File</h2>
+
+      <p class="upload-desc">
+        Drop your Android <strong>colors.xml</strong>, <strong>strings.xml</strong>, or any resource file here to start
+        editing.
+        Everything happens locally on your device — your files never leave your phone.
+      </p>
+
+      <div class="upload-features">
+        <div class="upload-feature">
+          <span class="f-icon">🎨</span>
+          <span>Edit Colors, Strings, Booleans, Integers &amp; Dimensions</span>
+        </div>
+        <div class="upload-feature">
+          <span class="f-icon">🔍</span>
+          <span>Search, filter and jump to any resource instantly</span>
+        </div>
+        <div class="upload-feature">
+          <span class="f-icon">🎯</span>
+          <span>Quick Color picker for fast color changes</span>
+        </div>
+        <div class="upload-feature">
+          <span class="f-icon">🔄</span>
+          <span>Replace Mode — apply one color to many items instantly</span>
+        </div>
+        <div class="upload-feature">
+          <span class="f-icon">↩</span>
+          <span>Undo / Redo support with full history</span>
+        </div>
+        <div class="upload-feature">
+          <span class="f-icon">⬇</span>
+          <span>Download edited XML in one tap</span>
+        </div>
+        <div class="upload-feature">
+          <span class="f-icon">🔒</span>
+          <span>Works offline · No upload · 100% private</span>
+        </div>
+      </div>
+
+      <label class="upload-file-label" for="xmlFileInput">Choose a file</label>
+      <input type="file" id="xmlFileInput" accept="*/*">
+
+      <div class="upload-supported">
+        Supports: <span>colors.xml</span> · <span>strings.xml</span> · <span>dimens.xml</span> · Any resource file
+      </div>
+    </div>
+
+    <!-- DASHBOARD — single line -->
+    <div class="stats-panel" id="statsPanel">
+      <div class="stats-line" id="statsLine"></div>
+    </div>
+
+    <div class="toggle-bar" id="toggleBar">
+      <button class="toggle-btn" id="filterToggleBtn" onclick="toggleFilter()">
+        🔍 Filter <span class="arrow">▼</span>
+      </button>
+      <button class="toggle-btn" id="gotoToggleBtn" onclick="toggleGoto()">
+        🔢 Go To <span class="arrow">▼</span>
+      </button>
+      <button class="toggle-btn" id="serialToggleBtn" onclick="toggleSerial()">
+        #️⃣ Serial
+      </button>
+      <button class="toggle-btn" id="quickColorBtn" onclick="toggleQuickColor()">
+        <span class="status-dot"></span> Quick 🎨
+      </button>
+      <button class="toggle-btn" id="replaceToggleBtn" onclick="toggleReplaceMode()">
+        <span class="status-dot"></span> Replace 🔄
+      </button>
+    </div>
+
+    <div class="collapsible" id="filterSection">
+      <div class="search-bar">
+        <div class="search-input-wrap" id="searchWrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search by name, value or type...">
+          <span class="clear-btn" onclick="clearSearch()">✕</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="collapsible" id="gotoSection">
+      <div class="goto-bar">
+        <label>🔢 Go to:</label>
+        <input type="number" id="gotoInput" min="1" placeholder="#">
+        <button onclick="goToSerial()">Go</button>
+      </div>
+    </div>
+
+    <!-- TARGET COLOR BAR (Replace Mode) -->
+    <div class="target-color-bar" id="targetColorBar">
+      <span class="tc-label">Target</span>
+      <div class="tc-preview" id="targetPreview" onclick="openTargetPicker()">🎨</div>
+      <span class="tc-value" id="targetValue">No color selected</span>
+      <button class="tc-change-btn" onclick="openTargetPicker()">Change</button>
+    </div>
+
+    <div class="history-bar" id="historyBar">
+      <button id="undoBtn" onclick="undo()" disabled>↩ Undo</button>
+      <button id="redoBtn" onclick="redo()" disabled>↪ Redo</button>
+    </div>
+
+    <div class="scroll-wrapper" id="scrollWrapper">
+      <div class="color-list" id="colorList"></div>
+      <div class="custom-scrollbar" id="customScrollbar">
+        <div class="scroll-thumb" id="scrollThumb"></div>
+      </div>
+    </div>
+
+    <div class="empty-state" id="emptyState">
+      <div class="icon">🔍</div>
+      <div>No matches found</div>
+    </div>
+
+    <div class="nav-arrows" id="navArrows" style="display:none;">
+      <button onclick="scrollToTop()">▲ Top</button>
+      <button onclick="scrollToBottom()">▼ Bottom</button>
+    </div>
+
+    <div class="action-bar" id="actionBar">
+      <button onclick="downloadXML()" class="primary">Download</button>
+      <button onclick="saveChanges()">Save</button>
+      <button onclick="openAddMenu()" style="background:#4CAF50; flex:0.7;">➕ Add</button>
+    </div>
+  </div>
+
+  <div class="add-menu-overlay" id="addMenuOverlay" onclick="closeAddMenu(event)">
+    <div class="add-menu" onclick="event.stopPropagation()">
+      <div class="add-menu-item" onclick="openAddForm('color')">
+        <span class="icon">🎨</span> Add Color
+      </div>
+      <div class="add-menu-item" onclick="openAddForm('string')">
+        <span class="icon">🔤</span> Add String
+      </div>
+      <div class="add-menu-item" onclick="openAddForm('boolean')">
+        <span class="icon">☑️</span> Add Boolean
+      </div>
+      <div class="add-menu-item" onclick="openAddForm('integer')">
+        <span class="icon">🔢</span> Add Integer
+      </div>
+      <div class="add-menu-item" onclick="openAddForm('dimen')">
+        <span class="icon">📐</span> Add Dimension
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="editModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">Edit Resource</h2>
+      </div>
+
+      <div class="modal-body">
+        <div class="large-preview" id="modalPreview"></div>
+        <div class="dropper-btn" id="dropperBtn" onclick="togglePalette()">💧</div>
+
+        <div class="input-group">
+          <label>Name</label>
+          <input type="text" id="editName" placeholder="resource_name">
+        </div>
+
+        <div class="input-group" id="valueGroup">
+          <label id="valueLabel">Value</label>
+          <input type="text" id="editValue" placeholder="Enter value">
+        </div>
+
+        <div class="input-group" id="boolGroup" style="display:none;">
+          <label>Value</label>
+          <select id="editBoolValue">
+            <option value="true">true</option>
+            <option value="false">false</option>
+          </select>
+        </div>
+
+        <div class="color-palette" id="colorPalette">
+          <div class="palette-title">Choose color</div>
+          <div class="swatches" id="swatchContainer"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button onclick="closeModal()">Cancel</button>
+        <button class="primary" onclick="applyChanges()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TARGET COLOR PICKER MODAL -->
+  <div class="target-picker-overlay" id="targetPickerOverlay" onclick="closeTargetPicker(event)">
+    <div class="target-picker" onclick="event.stopPropagation()">
+      <div class="target-picker-header">
+        <h2>🎯 Target Color</h2>
+        <span class="close-x" onclick="closeTargetPicker()">✕</span>
+      </div>
+
+      <div class="target-picker-preview">
+        <div class="tp-swatch" id="tpSwatch" style="background:#1686D0;"></div>
+        <div class="tp-info">
+          <label>Selected Color</label>
+          <input type="text" id="tpHexInput" value="#1686D0" maxlength="9" placeholder="#RRGGBB">
+        </div>
+      </div>
+
+      <div class="target-picker-title">Quick Palette</div>
+      <div class="swatches" id="targetSwatchContainer"></div>
+
+      <button class="target-picker-confirm" onclick="confirmTargetColor()">
+        ✔ Set This Color
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ============================
+       CONFIGURATION
+    ============================ */
+    const defaultColors = [
+      '#000000', '#FFC107', '#0A2E39', '#1686D0',
+      '#FFFFFF', '#FF6B00', '#134E4A', '#0F766E',
+      '#E1A3C7', '#FF2E2E', '#7B2CBF', '#00FF62',
+      '#FF9999', '#0000FF', '#FF1493', '#888888'
+    ];
+
+    const TYPE_CONFIG = {
+      'color': { tag: 'color', icon: '🎨', bg: '#222', label: 'Color' },
+      'string': { tag: 'string', icon: 'Ab', bg: '#2a2a2a', label: 'String' },
+      'boolean': { tag: 'bool', icon: '✓', bg: '#2a2a2a', label: 'Boolean' },
+      'integer': { tag: 'integer', icon: '123', bg: '#2a2a2a', label: 'Integer' },
+      'dimen': { tag: 'dimen', icon: 'dp', bg: '#2a2a2a', label: 'Dimension' }
+    };
+
+    /* Download file name */
+    const DOWNLOAD_FILENAME = 'theme_values.xml';
+
+    let allItems = [];
+    let currentEditingItem = null;
+    let currentHexColor = '';
+    let currentAddType = null;
+    let searchTerm = '';
+    let quickColorMode = false;
+    let serialVisible = false;
+    let statsDirty = false;
+    let filterDirty = false;
+
+    let history = [];
+    let historyIndex = -1;
+
+    let replaceModeOn = false;
+    let targetColor = null;
+    let pendingTargetColor = null;
+
+    /* ============================
+       TOAST
+    ============================ */
+    const toastEl = document.getElementById('toast');
+    let toastTimer = null;
+    function showToast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1500);
+    }
+
+    /* ============================
+       TOGGLES
+    ============================ */
+    function toggleFilter() {
+      const btn = document.getElementById('filterToggleBtn');
+      const section = document.getElementById('filterSection');
+      btn.classList.toggle('active');
+      section.classList.toggle('open');
+      if (!section.classList.contains('open')) {
+        document.getElementById('searchInput').blur();
+      } else {
+        setTimeout(() => document.getElementById('searchInput').focus(), 320);
+      }
+    }
+
+    function toggleGoto() {
+      const btn = document.getElementById('gotoToggleBtn');
+      const section = document.getElementById('gotoSection');
+      btn.classList.toggle('active');
+      section.classList.toggle('open');
+      if (section.classList.contains('open')) {
+        setTimeout(() => document.getElementById('gotoInput').focus(), 320);
+      }
+    }
+
+    function toggleQuickColor() {
+      const btn = document.getElementById('quickColorBtn');
+      quickColorMode = !quickColorMode;
+      btn.classList.toggle('quick-on', quickColorMode);
+      showToast(quickColorMode
+        ? "⚡ Quick Color: ON"
+        : "Quick Color: OFF");
+    }
+
+    function toggleSerial() {
+      serialVisible = !serialVisible;
+      const btn = document.getElementById('serialToggleBtn');
+
+      if (serialVisible) {
+        document.body.classList.remove('hide-serials');
+        btn.classList.add('active');
+        showToast("✔ Serial: ON");
+      } else {
+        document.body.classList.add('hide-serials');
+        btn.classList.remove('active');
+        showToast("Serial: OFF");
+      }
+    }
+
+    /* ============================================
+       REPLACE MODE
+    ============================================ */
+    function toggleReplaceMode() {
+      replaceModeOn = !replaceModeOn;
+
+      const btn = document.getElementById('replaceToggleBtn');
+      const bar = document.getElementById('targetColorBar');
+
+      if (replaceModeOn) {
+        btn.classList.add('replace-on');
+        document.body.classList.add('replace-mode');
+        bar.classList.add('active');
+
+        if (!targetColor) {
+          showToast("🎯 Select a Target Color first");
+          setTimeout(() => openTargetPicker(), 250);
+        } else {
+          updateTargetBar(targetColor);
+          showToast("🔄 Replace Mode: ON");
+        }
+      } else {
+        btn.classList.remove('replace-on');
+        document.body.classList.remove('replace-mode');
+        bar.classList.remove('active');
+        closeTargetPicker();
+        showToast("Replace Mode: OFF");
+      }
+    }
+
+    function openTargetPicker() {
+      if (!replaceModeOn) {
+        showToast("⚠️ Enable Replace Mode first");
+        return;
+      }
+
+      const overlay = document.getElementById('targetPickerOverlay');
+      overlay.classList.add('active');
+
+      const initial = targetColor || '#1686D0';
+      pendingTargetColor = initial;
+      updateTargetPickerPreview(initial);
+
+      if (!document.getElementById('targetSwatchContainer').dataset.built) {
+        renderTargetSwatches();
+      }
+
+      highlightSelectedSwatch(initial);
+    }
+
+    function closeTargetPicker(e) {
+      if (e && e.target && e.target.id === 'targetPickerOverlay') {
+        document.getElementById('targetPickerOverlay').classList.remove('active');
+        return;
+      }
+      if (!e) {
+        document.getElementById('targetPickerOverlay').classList.remove('active');
+      }
+    }
+
+    function renderTargetSwatches() {
+      const container = document.getElementById('targetSwatchContainer');
+      const frag = document.createDocumentFragment();
+
+      defaultColors.forEach(color => {
+        const sw = document.createElement('div');
+        sw.className = 'swatch';
+        sw.style.backgroundColor = color;
+        sw.dataset.color = color;
+        sw.addEventListener('click', onTargetSwatchClick);
+        frag.appendChild(sw);
+      });
+
+      container.appendChild(frag);
+      container.dataset.built = '1';
+    }
+
+    function onTargetSwatchClick(e) {
+      e.stopPropagation();
+      const color = e.currentTarget.dataset.color;
+      pendingTargetColor = color;
+      updateTargetPickerPreview(color);
+      highlightSelectedSwatch(color);
+    }
+
+    function updateTargetPickerPreview(color) {
+      const swatch = document.getElementById('tpSwatch');
+      const input = document.getElementById('tpHexInput');
+      if (swatch) swatch.style.background = color;
+      if (input) input.value = color;
+      pendingTargetColor = color;
+    }
+
+    function highlightSelectedSwatch(color) {
+      document.querySelectorAll('#targetSwatchContainer .swatch').forEach(sw => {
+        if (sw.dataset.color.toLowerCase() === String(color).toLowerCase()) {
+          sw.classList.add('selected');
+        } else {
+          sw.classList.remove('selected');
+        }
+      });
+    }
+
+    document.addEventListener('input', function (e) {
+      if (e.target && e.target.id === 'tpHexInput') {
+        let val = e.target.value.trim();
+        if (!val.startsWith('#')) val = '#' + val;
+        if (/^#[0-9A-Fa-f]{6}$/.test(val) || /^#[0-9A-Fa-f]{8}$/.test(val)) {
+          pendingTargetColor = val;
+          document.getElementById('tpSwatch').style.background = val;
+          highlightSelectedSwatch(val);
+        }
+      }
+    });
+
+    function confirmTargetColor() {
+      const val = document.getElementById('tpHexInput').value.trim();
+
+      if (!/^#[0-9A-Fa-f]{6}$/.test(val) && !/^#[0-9A-Fa-f]{8}$/.test(val)) {
+        showToast("⚠️ Enter a valid hex color (e.g. #1686D0)");
+        return;
+      }
+
+      targetColor = val;
+      updateTargetBar(val);
+      closeTargetPicker();
+      showToast(`✔ Target: ${val}`);
+    }
+
+    function updateTargetBar(color) {
+      const preview = document.getElementById('targetPreview');
+      const valueEl = document.getElementById('targetValue');
+
+      preview.style.background = color;
+      preview.textContent = '';
+      valueEl.textContent = color;
+    }
+
+    /* ============================================
+       REPLACE ACTION — silent (no toast)
+    ============================================ */
+    function replaceItemColor(item) {
+      if (!replaceModeOn) return;
+
+      if (!targetColor) {
+        showToast("⚠️ Select a Target Color first");
+        openTargetPicker();
+        return;
+      }
+
+      const type = item.getAttribute('data-type');
+      if (type !== 'color') return;
+
+      const oldValue = item.getAttribute('data-value');
+      const name = item.getAttribute('data-name');
+
+      if (oldValue === targetColor) return;
+
+      updateListItem(item, name, targetColor, 'color');
+
+      pushHistory({
+        type: 'edit',
+        item: item,
+        oldValue: { name: name, value: oldValue, type: 'color' },
+        newValue: { name: name, value: targetColor, type: 'color' }
+      });
+
+      if (searchTerm) applyFilter();
+
+      item.classList.remove('replace-flash');
+      void item.offsetWidth;
+      item.classList.add('replace-flash');
+      setTimeout(() => item.classList.remove('replace-flash'), 700);
+    }
+
+    /* ============================
+       ADD RESOURCE MENU
+    ============================ */
+    function openAddMenu() {
+      document.getElementById('addMenuOverlay').style.display = 'flex';
+    }
+
+    function closeAddMenu(e) {
+      if (e.target.id === 'addMenuOverlay') {
+        document.getElementById('addMenuOverlay').style.display = 'none';
+      }
+    }
+
+    function openAddForm(type) {
+      document.getElementById('addMenuOverlay').style.display = 'none';
+      currentAddType = type;
+      currentEditingItem = null;
+
+      const config = TYPE_CONFIG[type];
+      document.getElementById('modalTitle').textContent = 'Add ' + config.label;
+      document.getElementById('editName').value = '';
+      document.getElementById('editValue').value = '';
+
+      const preview = document.getElementById('modalPreview');
+      preview.style.background = config.bg;
+      preview.textContent = config.icon;
+
+      const boolGroup = document.getElementById('boolGroup');
+      const valueGroup = document.getElementById('valueGroup');
+
+      if (type === 'boolean') {
+        boolGroup.style.display = 'block';
+        valueGroup.style.display = 'none';
+        document.getElementById('editBoolValue').value = 'true';
+        document.getElementById('dropperBtn').classList.remove('active');
+      } else {
+        boolGroup.style.display = 'none';
+        valueGroup.style.display = 'block';
+
+        if (type === 'color') {
+          currentHexColor = '#1686D0';
+          document.getElementById('editValue').value = '#1686D0';
+          preview.style.background = '#1686D0';
+          preview.textContent = '';
+          document.getElementById('dropperBtn').classList.add('active');
+        } else {
+          document.getElementById('dropperBtn').classList.remove('active');
+        }
+      }
+
+      const modal = document.getElementById('editModal');
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+    }
+
+    /* ============================
+       EDIT MODAL
+    ============================ */
+    function openEditModal(element) {
+      const type = element.getAttribute('data-type') || 'color';
+
+      if (quickColorMode && type === 'color') {
+        openQuickColorPicker(element);
+        return;
+      }
+
+      currentEditingItem = element;
+      currentAddType = null;
+
+      const name = element.getAttribute('data-name');
+      const value = element.getAttribute('data-value');
+      const config = TYPE_CONFIG[type];
+
+      document.getElementById('modalTitle').textContent = 'Edit ' + config.label;
+      document.getElementById('editName').value = name;
+
+      const preview = document.getElementById('modalPreview');
+      const boolGroup = document.getElementById('boolGroup');
+      const valueGroup = document.getElementById('valueGroup');
+
+      if (type === 'color') {
+        preview.style.background = value;
+        preview.textContent = '';
+        document.getElementById('editValue').value = value;
+        currentHexColor = value;
+        document.getElementById('dropperBtn').classList.add('active');
+        boolGroup.style.display = 'none';
+        valueGroup.style.display = 'block';
+      } else if (type === 'boolean') {
+        preview.style.background = config.bg;
+        preview.textContent = config.icon;
+        boolGroup.style.display = 'block';
+        valueGroup.style.display = 'none';
+        document.getElementById('editBoolValue').value = value;
+        document.getElementById('dropperBtn').classList.remove('active');
+      } else {
+        preview.style.background = config.bg;
+        preview.textContent = config.icon;
+        document.getElementById('editValue').value = value;
+        boolGroup.style.display = 'none';
+        valueGroup.style.display = 'block';
+        document.getElementById('dropperBtn').classList.remove('active');
+      }
+
+      const modal = document.getElementById('editModal');
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+    }
+
+    /* ============================================
+       QUICK COLOR PICKER
+    ============================================ */
+    function openQuickColorPicker(element) {
+      currentEditingItem = element;
+      currentAddType = null;
+
+      const value = element.getAttribute('data-value');
+
+      document.getElementById('modalTitle').textContent = '🎨 Quick Color';
+      document.getElementById('editName').value = element.getAttribute('data-name');
+
+      const preview = document.getElementById('modalPreview');
+      preview.style.background = value;
+      preview.textContent = '';
+      document.getElementById('editValue').value = value;
+      currentHexColor = value;
+      document.getElementById('dropperBtn').classList.remove('active');
+      document.getElementById('boolGroup').style.display = 'none';
+      document.getElementById('valueGroup').style.display = 'block';
+
+      const modal = document.getElementById('editModal');
+      modal.style.display = 'flex';
+      modal.classList.add('active');
+      document.getElementById('colorPalette').classList.add('active');
+      renderSwatches();
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('editModal');
+      modal.classList.remove('active');
+      document.getElementById('colorPalette').classList.remove('active');
+      modal.style.display = 'none';
+    }
+
+    function togglePalette() {
+      const palette = document.getElementById('colorPalette');
+      palette.classList.toggle('active');
+      if (palette.classList.contains('active')) renderSwatches();
+    }
+
+    let swatchBuilt = false;
+    function renderSwatches() {
+      if (swatchBuilt) return;
+      const container = document.getElementById('swatchContainer');
+      const frag = document.createDocumentFragment();
+      defaultColors.forEach(color => {
+        const swatch = document.createElement('div');
+        swatch.className = 'swatch';
+        swatch.style.backgroundColor = color;
+        swatch.dataset.color = color;
+        swatch.addEventListener('click', onSwatchClick);
+        frag.appendChild(swatch);
+      });
+      container.appendChild(frag);
+      swatchBuilt = true;
+    }
+
+    function onSwatchClick(e) {
+      e.stopPropagation();
+      const color = e.currentTarget.dataset.color;
+      currentHexColor = color;
+      document.getElementById('editValue').value = color;
+      document.getElementById('modalPreview').style.background = color;
+      document.getElementById('modalPreview').textContent = '';
+      document.getElementById('colorPalette').classList.remove('active');
+      applyChanges(false, true);
+    }
+
+    /* ============================
+       APPLY CHANGES
+    ============================ */
+    function applyChanges(autoSave = false, fromSwatch = false) {
+      const nameInput = document.getElementById('editName').value.trim();
+      if (!nameInput) {
+        if (!autoSave && !fromSwatch) alert("Please enter a name!");
+        return;
+      }
+
+      let type = currentAddType;
+      if (!type && currentEditingItem) {
+        type = currentEditingItem.getAttribute('data-type') || 'color';
+      }
+
+      const config = TYPE_CONFIG[type];
+
+      let value;
+      if (type === 'boolean') {
+        value = document.getElementById('editBoolValue').value;
+      } else {
+        value = document.getElementById('editValue').value.trim();
+        if (!value) {
+          if (!autoSave && !fromSwatch) alert("Please enter a value!");
+          return;
+        }
+      }
+
+      if (!currentEditingItem) {
+        const item = createListItem(nameInput, value, type, true);
+        document.getElementById('colorList').appendChild(item);
+        allItems.push(item);
+
+        pushHistory({
+          type: 'add',
+          item: item,
+          value: { name: nameInput, value: value, type: type }
+        });
+
+        if (!autoSave && !fromSwatch) showToast("✔ " + config.label + " added");
+        renumberItems();
+        updateStats();
+        if (searchTerm) applyFilter();
+        updateScrollbar();
+
+        if (fromSwatch) closeModal();
+        return;
+      }
+
+      const oldName = currentEditingItem.getAttribute('data-name');
+      const oldValue = currentEditingItem.getAttribute('data-value');
+      const oldType = currentEditingItem.getAttribute('data-type') || 'color';
+
+      updateListItem(currentEditingItem, nameInput, value, type);
+
+      if (oldName !== nameInput || oldValue !== value || oldType !== type) {
+        pushHistory({
+          type: 'edit',
+          item: currentEditingItem,
+          oldValue: { name: oldName, value: oldValue, type: oldType },
+          newValue: { name: nameInput, value: value, type: type }
+        });
+      }
+
+      if (searchTerm) applyFilter();
+
+      if (fromSwatch || !autoSave) closeModal();
+    }
+
+    /* ============================
+       CREATE LIST ITEM
+    ============================ */
+    function createListItem(name, value, type, animate = false) {
+      const config = TYPE_CONFIG[type] || TYPE_CONFIG['color'];
+
+      const item = document.createElement('div');
+      item.className = 'color-item' + (animate ? ' animate-in' : '');
+      item.setAttribute('data-name', name);
+      item.setAttribute('data-value', value);
+      item.setAttribute('data-type', type);
+
+      let previewStyle = '';
+      let previewContent = '';
+      if (type === 'color') {
+        previewStyle = `background-color: ${value};`;
+      } else {
+        previewStyle = `background-color: ${config.bg};`;
+        previewContent = config.icon;
+      }
+
+      item.innerHTML = `
+            <div class="serial-badge"></div>
+            <div class="color-preview" style="${previewStyle}">${previewContent}</div>
+            <div class="color-info">
+                <span class="color-name">${escapeHtml(name)}</span>
+                <span class="color-hex">${escapeHtml(value)}</span>
+                <span class="color-type">${config.label}</span>
+            </div>
+        `;
+
+      if (type === 'color') {
+        const replaceBtn = document.createElement('button');
+        replaceBtn.className = 'replace-btn';
+        replaceBtn.innerHTML = '🔄';
+        replaceBtn.title = 'Replace with target color';
+        replaceBtn.type = 'button';
+        item.appendChild(replaceBtn);
+      }
+
+      return item;
+    }
+
+    function updateListItem(item, name, value, type) {
+      const config = TYPE_CONFIG[type] || TYPE_CONFIG['color'];
+
+      item.setAttribute('data-name', name);
+      item.setAttribute('data-value', value);
+      item.setAttribute('data-type', type);
+
+      const preview = item.querySelector('.color-preview');
+      const nameEl = item.querySelector('.color-name');
+      const valueEl = item.querySelector('.color-hex');
+      const typeEl = item.querySelector('.color-type');
+
+      if (type === 'color') {
+        preview.style.background = value;
+        preview.textContent = '';
+      } else {
+        preview.style.background = config.bg;
+        preview.textContent = config.icon;
+      }
+
+      nameEl.textContent = name;
+      valueEl.textContent = value;
+      typeEl.textContent = config.label;
+
+      statsDirty = true;
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renumberItems() {
+      for (let i = 0; i < allItems.length; i++) {
+        const badge = allItems[i].querySelector('.serial-badge');
+        if (badge) badge.textContent = i + 1;
+      }
+    }
+
+    /* ============================================
+       DASHBOARD — single line
+    ============================================ */
+    function updateStats() {
+      const counts = { color: 0, string: 0, boolean: 0, integer: 0, dimen: 0 };
+      for (let i = 0; i < allItems.length; i++) {
+        const type = allItems[i].getAttribute('data-type') || 'color';
+        if (counts[type] !== undefined) counts[type]++;
+      }
+
+      const meta = [
+        { type: 'color', icon: '🎨', label: 'Color' },
+        { type: 'string', icon: '🔤', label: 'String' },
+        { type: 'boolean', icon: '☑️', label: 'Bool' },
+        { type: 'integer', icon: '🔢', label: 'Int' },
+        { type: 'dimen', icon: '📐', label: 'Dimen' }
+      ];
+
+      const parts = [];
+      meta.forEach(m => {
+        if (counts[m.type] > 0) {
+          parts.push(
+            `<span class="stat-item">` +
+            `<span class="stat-icon">${m.icon}</span>` +
+            `<span class="stat-label">${m.label}:</span>` +
+            `<span class="stat-count">${counts[m.type]}</span>` +
+            `</span>`
+          );
+        }
+      });
+
+      const lineEl = document.getElementById('statsLine');
+      const panelEl = document.getElementById('statsPanel');
+
+      if (parts.length === 0) {
+        panelEl.style.display = 'none';
+        lineEl.innerHTML = '';
+      } else {
+        lineEl.innerHTML = parts.join('<span class="separator">·</span>');
+        panelEl.style.display = 'block';
+      }
+
+      statsDirty = false;
+    }
+
+    /* ============================
+       SEARCH & FILTER
+    ============================ */
+    let searchDebounceTimer = null;
+    document.getElementById('searchInput').addEventListener('input', function (e) {
+      const val = e.target.value.toLowerCase().trim();
+      const wrap = document.getElementById('searchWrap');
+      if (val) wrap.classList.add('has-text');
+      else wrap.classList.remove('has-text');
+
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        searchTerm = val;
+        applyFilter();
+      }, 150);
+    });
+
+    function clearSearch() {
+      document.getElementById('searchInput').value = '';
+      searchTerm = '';
+      document.getElementById('searchWrap').classList.remove('has-text');
+      applyFilter();
+    }
+
+    function applyFilter() {
+      let visibleCount = 0;
+      const term = searchTerm;
+
+      for (let i = 0; i < allItems.length; i++) {
+        const item = allItems[i];
+        if (!term) {
+          if (item.classList.contains('hidden-by-filter')) {
+            item.classList.remove('hidden-by-filter');
+          }
+          visibleCount++;
+          continue;
+        }
+
+        const name = (item.getAttribute('data-name') || '').toLowerCase();
+        const value = (item.getAttribute('data-value') || '').toLowerCase();
+        const type = (item.getAttribute('data-type') || '').toLowerCase();
+        const typeLabel = (TYPE_CONFIG[type] ? TYPE_CONFIG[type].label : '').toLowerCase();
+
+        const matches =
+          name.indexOf(term) !== -1 ||
+          value.indexOf(term) !== -1 ||
+          type.indexOf(term) !== -1 ||
+          typeLabel.indexOf(term) !== -1;
+
+        if (matches) {
+          item.classList.remove('hidden-by-filter');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden-by-filter');
+        }
+      }
+
+      const emptyState = document.getElementById('emptyState');
+      if (visibleCount === 0 && term) emptyState.classList.add('show');
+      else emptyState.classList.remove('show');
+
+      updateScrollbar();
+    }
+
+    /* ============================
+       GO TO SERIAL
+    ============================ */
+    function goToSerial() {
+      const input = document.getElementById('gotoInput');
+      const serial = parseInt(input.value, 10);
+
+      if (!serial || serial < 1) {
+        showToast("⚠️ Enter a valid serial number");
+        return;
+      }
+
+      if (serial > allItems.length) {
+        showToast(`⚠️ Maximum: ${allItems.length}`);
+        return;
+      }
+
+      if (searchTerm) clearSearch();
+
+      const targetItem = allItems[serial - 1];
+      if (!targetItem) return;
+
+      targetItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      document.querySelectorAll('.color-item.highlight').forEach(el => el.classList.remove('highlight'));
+      void targetItem.offsetWidth;
+      targetItem.classList.add('highlight');
+
+      setTimeout(() => targetItem.classList.remove('highlight'), 1600);
+      input.value = '';
+      showToast(`✔ #${serial}`);
+    }
+
+    document.getElementById('gotoInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        goToSerial();
+      }
+    });
+
+    /* ============================
+       UNDO / REDO
+    ============================ */
+    function pushHistory(action) {
+      if (historyIndex < history.length - 1) {
+        history = history.slice(0, historyIndex + 1);
+      }
+      history.push(action);
+      historyIndex++;
+      if (history.length > 50) {
+        history.shift();
+        historyIndex--;
+      }
+      updateHistoryButtons();
+    }
+
+    function updateHistoryButtons() {
+      document.getElementById('undoBtn').disabled = (historyIndex < 0);
+      document.getElementById('redoBtn').disabled = (historyIndex >= history.length - 1);
+    }
+
+    function undo() {
+      if (historyIndex < 0) return;
+      const action = history[historyIndex];
+
+      if (action.type === 'edit') {
+        updateListItem(action.item, action.oldValue.name, action.oldValue.value, action.oldValue.type);
+      } else if (action.type === 'add') {
+        action.item.remove();
+        const idx = allItems.indexOf(action.item);
+        if (idx !== -1) allItems.splice(idx, 1);
+        renumberItems();
+        updateStats();
+      }
+
+      historyIndex--;
+      updateHistoryButtons();
+      if (searchTerm) applyFilter();
+      updateScrollbar();
+      showToast("↩ Undo");
+    }
+
+    function redo() {
+      if (historyIndex >= history.length - 1) return;
+      historyIndex++;
+      const action = history[historyIndex];
+
+      if (action.type === 'edit') {
+        updateListItem(action.item, action.newValue.name, action.newValue.value, action.newValue.type);
+      } else if (action.type === 'add') {
+        document.getElementById('colorList').appendChild(action.item);
+        allItems.push(action.item);
+        renumberItems();
+        updateStats();
+      }
+
+      updateHistoryButtons();
+      if (searchTerm) applyFilter();
+      updateScrollbar();
+      showToast("↪ Redo");
+    }
+
+    /* ============================
+       XML UPLOAD
+    ============================ */
+    document.getElementById('xmlFileInput').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (!file.name.toLowerCase().endsWith('.xml')) {
+        alert("Please select a valid .xml file.");
+        event.target.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try { parseXML(e.target.result); }
+        catch (err) { alert("Failed to read the file."); console.error(err); }
+      };
+      reader.onerror = () => alert("Could not read the file.");
+      reader.readAsText(file, 'UTF-8');
+    });
+
+    function parseXML(xmlString) {
+      xmlString = xmlString.trim();
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+      if (xmlDoc.querySelector("parsererror")) {
+        alert("Failed to parse the XML.");
+        return;
+      }
+
+      const listContainer = document.getElementById('colorList');
+      listContainer.innerHTML = '';
+      allItems = [];
+      history = []; historyIndex = -1; updateHistoryButtons();
+      searchTerm = '';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('searchWrap').classList.remove('has-text');
+
+      const resourceTypes = [
+        { tag: 'color', type: 'color' },
+        { tag: 'string', type: 'string' },
+        { tag: 'bool', type: 'boolean' },
+        { tag: 'integer', type: 'integer' },
+        { tag: 'dimen', type: 'dimen' }
+      ];
+
+      const frag = document.createDocumentFragment();
+      let totalFound = 0;
+
+      resourceTypes.forEach(rt => {
+        const nodes = xmlDoc.getElementsByTagName(rt.tag);
+        for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i];
+          if (node.children.length > 0) continue;
+
+          const name = node.getAttribute('name');
+          const value = node.textContent.trim();
+          if (!name || !value) continue;
+
+          const item = createListItem(name, value, rt.type, totalFound < 50);
+          frag.appendChild(item);
+          allItems.push(item);
+          totalFound++;
+        }
+      });
+
+      if (totalFound === 0) {
+        alert("No resources were found in the XML file.");
+        return;
+      }
+
+      listContainer.appendChild(frag);
+
+      document.getElementById('uploadSection').style.display = 'none';
+      document.getElementById('mainTitle').style.display = 'none';
+      document.getElementById('mainSubtitle').style.display = 'none';
+
+      renumberItems();
+      updateStats();
+
+      document.getElementById('toggleBar').style.display = 'flex';
+      document.getElementById('scrollWrapper').style.display = 'block';
+      document.getElementById('navArrows').style.display = 'flex';
+      document.getElementById('historyBar').style.display = 'flex';
+      document.getElementById('actionBar').style.display = 'flex';
+
+      requestAnimationFrame(() => {
+        setupScrollbar();
+        updateScrollbar();
+      });
+    }
+
+    /* ============================
+       EVENT DELEGATION
+    ============================ */
+    document.getElementById('colorList').addEventListener('click', function (e) {
+      const replaceBtn = e.target.closest('.replace-btn');
+      if (replaceBtn) {
+        e.stopPropagation();
+        e.preventDefault();
+        const item = replaceBtn.closest('.color-item');
+        if (item) replaceItemColor(item);
+        return;
+      }
+    }, true);
+
+    document.getElementById('colorList').addEventListener('click', function (e) {
+      const item = e.target.closest('.color-item');
+      if (item) {
+        openEditModal(item);
+      }
+    });
+
+    /* ============================
+       CUSTOM DRAGGABLE SCROLLBAR
+    ============================ */
+    let isDragging = false;
+    let dragStartY = 0;
+    let dragStartScrollTop = 0;
+
+    function setupScrollbar() {
+      const thumb = document.getElementById('scrollThumb');
+      if (!thumb || thumb.dataset.bound) return;
+      thumb.dataset.bound = '1';
+
+      thumb.addEventListener('mousedown', startDrag);
+      thumb.addEventListener('touchstart', startDrag, { passive: false });
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('touchmove', onDrag, { passive: false });
+      document.addEventListener('mouseup', endDrag);
+      document.addEventListener('touchend', endDrag);
+    }
+
+    function startDrag(e) {
+      isDragging = true;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      dragStartY = clientY;
+      dragStartScrollTop = document.getElementById('colorList').scrollTop;
+      e.preventDefault();
+    }
+
+    function onDrag(e) {
+      if (!isDragging) return;
+      const list = document.getElementById('colorList');
+      const track = document.getElementById('customScrollbar');
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const trackHeight = track.clientHeight;
+      const listScrollHeight = list.scrollHeight;
+      const listClientHeight = list.clientHeight;
+
+      if (listScrollHeight <= listClientHeight) return;
+
+      const deltaY = clientY - dragStartY;
+      const scrollRatio = listScrollHeight / trackHeight;
+      let newScrollTop = dragStartScrollTop + (deltaY * scrollRatio);
+
+      newScrollTop = Math.max(0, Math.min(newScrollTop, listScrollHeight - listClientHeight));
+      list.scrollTop = newScrollTop;
+      scheduleScrollbarUpdate();
+      e.preventDefault();
+    }
+
+    function endDrag() { isDragging = false; }
+
+    let scrollbarRafPending = false;
+    function scheduleScrollbarUpdate() {
+      if (scrollbarRafPending) return;
+      scrollbarRafPending = true;
+      requestAnimationFrame(() => {
+        updateScrollbar();
+        scrollbarRafPending = false;
+      });
+    }
+
+    function updateScrollbar() {
+      const list = document.getElementById('colorList');
+      const thumb = document.getElementById('scrollThumb');
+      const track = document.getElementById('customScrollbar');
+      if (!list || !thumb || !track) return;
+
+      const scrollHeight = list.scrollHeight;
+      const clientHeight = list.clientHeight;
+
+      if (scrollHeight <= clientHeight) {
+        track.style.opacity = '0.3';
+        thumb.style.height = '100%';
+        thumb.style.top = '0';
+        return;
+      }
+
+      track.style.opacity = '1';
+      const thumbHeightRatio = clientHeight / scrollHeight;
+      const thumbHeight = Math.max(track.clientHeight * thumbHeightRatio, 30);
+      const maxScrollTop = scrollHeight - clientHeight;
+      const scrollRatio = list.scrollTop / maxScrollTop;
+      const maxThumbTop = track.clientHeight - thumbHeight;
+      const thumbTop = scrollRatio * maxThumbTop;
+
+      thumb.style.height = thumbHeight + 'px';
+      thumb.style.top = thumbTop + 'px';
+    }
+
+    document.getElementById('colorList').addEventListener('scroll', scheduleScrollbarUpdate, { passive: true });
+    window.addEventListener('resize', scheduleScrollbarUpdate);
+
+    /* ============================
+       TOP / BOTTOM
+    ============================ */
+    function scrollToTop() {
+      document.getElementById('colorList').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function scrollToBottom() {
+      const list = document.getElementById('colorList');
+      list.scrollTo({ top: list.scrollHeight, behavior: 'smooth' });
+    }
+
+    /* ============================
+       SAVE / DOWNLOAD
+    ============================ */
+    function saveChanges() {
+      showToast("✔ Saved!");
+    }
+
+    /* 🎯 12-hour format: YYYY-MM-DD hh:mm:ss AM/PM */
+    function getFormattedTimestamp() {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+
+      let hours = now.getHours();
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+
+      const yyyy = now.getFullYear();
+      const mm = pad(now.getMonth() + 1);
+      const dd = pad(now.getDate());
+      const hh = pad(hours);
+      const mi = pad(now.getMinutes());
+      const ss = pad(now.getSeconds());
+
+      return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss} ${ampm}`;
+    }
+
+    function downloadXML() {
+      if (allItems.length === 0) {
+        alert("Nothing to download!");
+        return;
+      }
+
+      const grouped = { color: [], string: [], bool: [], integer: [], dimen: [] };
+
+      for (let i = 0; i < allItems.length; i++) {
+        const item = allItems[i];
+        const name = item.getAttribute('data-name');
+        const value = item.getAttribute('data-value');
+        const type = item.getAttribute('data-type') || 'color';
+        const config = TYPE_CONFIG[type];
+        if (!config) continue;
+
+        const safeName = String(name).replace(/"/g, '&quot;');
+        const safeValue = String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+
+        grouped[config.tag].push(`    <${config.tag} name="${safeName}">${safeValue}</${config.tag}>`);
+      }
+
+      /* 🎯 Timestamp comment — root tag-এর পরে */
+      const timestamp = getFormattedTimestamp();
+
+      let xmlString = `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n`;
+      xmlString += `    <!-- Generated: ${timestamp} -->\n`;
+      ['color', 'string', 'bool', 'integer', 'dimen'].forEach(tag => {
+        if (grouped[tag].length > 0) {
+          xmlString += grouped[tag].join('\n') + '\n';
+        }
+      });
+      xmlString += `</resources>`;
+
+      const blob = new Blob([xmlString], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = DOWNLOAD_FILENAME;
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+
+      showToast("⬇ " + DOWNLOAD_FILENAME + " downloaded");
+    }
+
+    /* ============================
+       KEYBOARD SHORTCUTS
+    ============================ */
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'Z'))) { e.preventDefault(); redo(); }
+    });
+
+  </script>
+
+</body>
+
+</html>
