@@ -1283,6 +1283,23 @@
           <div class="top"><span>Notch depth</span><span class="val" id="notchVal">22</span></div>
           <input type="range" id="notch" min="6" max="45" value="22">
         </div>
+
+        <!-- ⭐ NEW: Volume divider controls -->
+        <div id="volDividerWrap" style="display:none;">
+          <div class="field" style="margin-bottom:8px;">
+            <span class="lbl">Volume divider</span>
+            <label class="switch"><input type="checkbox" id="volDividerOn"><span class="slider-t"></span></label>
+          </div>
+          <div class="range-row" id="volDividerRow">
+            <div class="top"><span>Divider position</span><span class="val" id="volDividerPosVal">45%</span></div>
+            <input type="range" id="volDividerPos" min="20" max="70" value="45">
+          </div>
+          <div class="range-row" id="volDividerOpacityRow">
+            <div class="top"><span>Divider opacity</span><span class="val" id="volDividerOpacityVal">18%</span></div>
+            <input type="range" id="volDividerOpacity" min="5" max="60" value="18">
+          </div>
+        </div>
+
         <button class="btn" id="resetGuidesBtn" style="width:100%;margin-top:8px;">↺ Auto Guides Reset</button>
       </section>
 
@@ -1366,7 +1383,7 @@
 
       <section class="group">
         <h3>MTZ Theme Bundle</h3>
-        <div class="info">MIUI theme er jonno <b>40 ta common 9.png</b> ek click e.</div>
+        <div class="info">MIUI theme er jonno <b>50+ common 9.png</b> ek click e.</div>
         <div class="mtz-head">
           <button class="btn" id="mtzAll">Select All</button>
           <button class="btn" id="mtzNone">Clear</button>
@@ -1661,7 +1678,6 @@
           const r = Math.min(o.radius, Math.min(w, h) / 2);
           const straightStart = Math.ceil(r);
           const straightEnd = Math.floor(h - 1 - r);
-          // ⭐ FIX: when radius = h/2, straight region collapses → use center pixel
           const leftGuide = straightStart <= straightEnd
             ? { start: straightStart, end: straightEnd }
             : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
@@ -1690,7 +1706,6 @@
           const r = Math.min(o.radius, Math.min(w, h) / 2);
           const straightStart = Math.ceil(r);
           const straightEnd = Math.floor(h - 1 - r);
-          // ⭐ FIX: same pill-collapse fallback
           const rightGuide = straightStart <= straightEnd
             ? { start: straightStart, end: straightEnd }
             : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
@@ -1703,6 +1718,102 @@
         }
       },
       /* ============ END DUAL SIM SHAPES ============ */
+
+      /* ============ VOLUME SLIDER SHAPES (Volume category) ============ */
+      volTrack: {
+        name: 'Volume Track', cat: 'Volume', params: ['radius'],
+        draw(c, w, h, o) {
+          const rTop = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          c.beginPath();
+          c.moveTo(rTop, 0);
+          c.lineTo(w - rTop, 0);
+          c.arcTo(w, 0, w, rTop, rTop);
+          c.lineTo(w, h - rBot);
+          c.arcTo(w, h, w - rBot, h, rBot);
+          c.lineTo(rBot, h);
+          c.arcTo(0, h, 0, h - rBot, rBot);
+          c.lineTo(0, rTop);
+          c.arcTo(0, 0, rTop, 0, rTop);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const rTop = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const r = Math.max(rTop, rBot);
+          const topEdge = Math.ceil(r) + 1;
+          const botEdge = Math.floor(h - 1 - r) - 1;
+          const leftGuide = topEdge <= botEdge
+            ? { start: topEdge, end: botEdge }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: Math.ceil(rTop), end: Math.floor(w - 1 - rTop) },
+            left: leftGuide,
+            bottom: { start: Math.ceil(rBot), end: Math.floor(w - 1 - rBot) },
+            right: leftGuide
+          };
+        }
+      },
+      volTrackFlatTop: {
+        name: 'Vol FlatTop', cat: 'Volume', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          c.beginPath();
+          c.moveTo(0, 0);
+          c.lineTo(w, 0);
+          c.lineTo(w, h - r);
+          c.arcTo(w, h, w - r, h, r);
+          c.lineTo(r, h);
+          c.arcTo(0, h, 0, h - r, r);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const bot = Math.floor(h - 1 - r) - 1;
+          const leftGuide = 1 <= bot ? { start: 1, end: bot } : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: 0, end: w - 1 },
+            left: leftGuide,
+            bottom: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
+            right: leftGuide
+          };
+        }
+      },
+      volTrackPillTop: {
+        name: 'Vol PillTop', cat: 'Volume', params: ['radius'],
+        draw(c, w, h, o) {
+          const rTop = Math.min(o.radius * 2, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          c.beginPath();
+          c.moveTo(rTop, 0);
+          c.lineTo(w - rTop, 0);
+          c.arcTo(w, 0, w, rTop, rTop);
+          c.lineTo(w, h - rBot);
+          c.arcTo(w, h, w - rBot, h, rBot);
+          c.lineTo(rBot, h);
+          c.arcTo(0, h, 0, h - rBot, rBot);
+          c.lineTo(0, rTop);
+          c.arcTo(0, 0, rTop, 0, rTop);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const rTop = Math.min(o.radius * 2, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const topEdge = Math.ceil(rTop) + 1;
+          const botEdge = Math.floor(h - 1 - rBot) - 1;
+          const leftGuide = topEdge <= botEdge
+            ? { start: topEdge, end: botEdge }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: Math.ceil(rTop), end: Math.floor(w - 1 - rTop) },
+            left: leftGuide,
+            bottom: { start: Math.ceil(rBot), end: Math.floor(w - 1 - rBot) },
+            right: leftGuide
+          };
+        }
+      },
+      /* ============ END VOLUME SHAPES ============ */
+
       diamond: {
         name: 'Diamond', cat: 'Polygon', params: [], pngOnly: true,
         draw(c, w, h) { c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(w, h / 2); c.lineTo(w / 2, h); c.lineTo(0, h / 2); c.closePath(); },
@@ -1915,11 +2026,15 @@
       shadowOn: false, shadowColor: '#0a2e39', shadowOpacity: 35,
       shadowWidth: 6, shadowMode: 'both',
       topGuide: null, leftGuide: null, bottomGuide: null, rightGuide: null,
-      pngMode: false
+      pngMode: false,
+      /* ⭐ NEW: Volume divider */
+      volDividerOn: false,
+      volDividerPos: 45,
+      volDividerOpacity: 18
     };
 
     const CONFIG_STORAGE_KEY = 'mtz-9-patch-maker-config-v1';
-    const CONFIG_VERSION = 6;
+    const CONFIG_VERSION = 7;
     let configPersistenceReady = false;
     let configSaveTimer = null;
 
@@ -1940,12 +2055,13 @@
 
       const numeric = {
         radius: [0, 60], tail: [4, 40], notch: [6, 45], borderWidth: [0, 10],
-        shadowOpacity: [5, 100], shadowWidth: [0, 20]
+        shadowOpacity: [5, 100], shadowWidth: [0, 20],
+        volDividerPos: [20, 70], volDividerOpacity: [5, 60]
       };
       Object.entries(numeric).forEach(([key, [min, max]]) => {
         if (Number.isFinite(savedState[key])) state[key] = clamp(savedState[key], min, max);
       });
-      ['gradOn', 'borderOn', 'shadowOn', 'pngMode'].forEach(key => {
+      ['gradOn', 'borderOn', 'shadowOn', 'pngMode', 'volDividerOn'].forEach(key => {
         if (typeof savedState[key] === 'boolean') state[key] = savedState[key];
       });
       ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
@@ -1973,7 +2089,10 @@
     }
 
     function syncControlsFromState(savedConfig) {
-      ['gradOn', 'borderOn', 'shadowOn', 'pngMode'].forEach(key => { $(key).checked = state[key]; });
+      ['gradOn', 'borderOn', 'shadowOn', 'pngMode', 'volDividerOn'].forEach(key => {
+        const el = $(key);
+        if (el) el.checked = state[key];
+      });
       $('shadowMode').value = state.shadowMode;
       $('pngModeNote').style.display = state.pngMode ? '' : 'none';
 
@@ -1981,11 +2100,15 @@
         ['radius', 'radiusVal', value => value], ['tail', 'tailVal', value => value],
         ['notch', 'notchVal', value => value], ['borderWidth', 'borderWidthVal', value => value],
         ['shadowOpacity', 'shadowOpacityVal', value => `${value}%`],
-        ['shadowWidth', 'shadowWidthVal', value => `${value} px`]
+        ['shadowWidth', 'shadowWidthVal', value => `${value} px`],
+        ['volDividerPos', 'volDividerPosVal', value => `${value}%`],
+        ['volDividerOpacity', 'volDividerOpacityVal', value => `${value}%`]
       ];
       ranges.forEach(([key, valueId, format]) => {
-        $(key).value = state[key];
-        $(valueId).textContent = format(state[key]);
+        const el = $(key);
+        const labelEl = $(valueId);
+        if (el) el.value = state[key];
+        if (labelEl) labelEl.textContent = format(state[key]);
       });
 
       ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
@@ -2056,7 +2179,7 @@
        ============================================================ */
     function drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, borderWidth, kind, scale = 1, pixelRatio = 1) {
       if (!state.shadowOn || (state.shadowMode !== 'both' && state.shadowMode !== kind)) return;
-      if (shape.noShadow) return;  /* radio shapes → skip shadow */
+      if (shape.noShadow) return;
       const bw = Math.max(1, borderWidth);
 
       const ring = document.createElement('canvas');
@@ -2144,6 +2267,20 @@
           c.fillStyle = state.bgColor;
         }
         c.fill();
+
+        /* ⭐ NEW: Volume divider line */
+        if (state.volDividerOn && shapeKey.startsWith('vol') && !state.pngMode) {
+          const divY = Math.round(ch * state.volDividerPos / 100);
+          const safeY = clamp(divY, 1, ch - 2);
+          c.save();
+          c.globalCompositeOperation = 'source-atop';
+          const alpha = state.volDividerOpacity / 100;
+          c.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+          c.fillRect(0, safeY, cw, 1);
+          c.fillStyle = `rgba(255, 255, 255, ${alpha * 0.35})`;
+          c.fillRect(0, safeY + 1, cw, 1);
+          c.restore();
+        }
       }
       drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, b, 'inner');
     }
@@ -2547,7 +2684,7 @@
        ============================================================ */
     const SHAPE_GROUPS = [
       { listId: 'shapeList', categories: ['Basic', 'Toggle'] },
-      { listId: 'otherShapeList', categories: ['Polygon', 'Chat', 'Caller', 'Special'] }
+      { listId: 'otherShapeList', categories: ['Polygon', 'Chat', 'Caller', 'Volume', 'Special'] }
     ];
 
     function drawThumb(canvas, shapeKey) {
@@ -2562,11 +2699,14 @@
       const sw = w - pad * 2, sh = h - pad * 2;
       const scale = sw / 96;
 
-      /* ⭐ FIX: caller shapes → pill-like thumbnail radius */
       const isCallerShape = shapeKey === 'simCallerLeft' || shapeKey === 'simCallerRight';
+      const isVolumeShape = shapeKey === 'volTrack' || shapeKey === 'volTrackFlatTop' || shapeKey === 'volTrackPillTop';
+
       const thumbRadius = isCallerShape
         ? Math.min(sw, sh) / 2
-        : state.radius * scale + 4;
+        : isVolumeShape
+          ? Math.min(sw, sh) * 0.32
+          : state.radius * scale + 4;
 
       const opts = {
         radius: thumbRadius,
@@ -2596,6 +2736,15 @@
         c.lineWidth = Math.min(2, state.borderWidth);
         shape.draw(c, sw, sh, opts);
         c.stroke();
+      }
+      /* ⭐ Volume divider hint in thumbnail */
+      if (isVolumeShape && state.volDividerOn && !state.pngMode) {
+        const divY = pad + Math.round(sh * state.volDividerPos / 100);
+        c.save();
+        c.globalCompositeOperation = 'source-atop';
+        c.fillStyle = `rgba(0,0,0,${state.volDividerOpacity / 100})`;
+        c.fillRect(pad, divY, sw, 1);
+        c.restore();
       }
       drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'inner', scale, pixelRatio);
       c.restore();
@@ -2631,11 +2780,17 @@
       });
     }
 
-    /* ⭐ FIX: pngMode toggle without double-refresh */
     function togglePngMode(on, skipRefresh = false) {
       state.pngMode = on;
       $('pngModeNote').style.display = on ? '' : 'none';
       if (!skipRefresh) refresh();
+    }
+
+    function updateVolDividerVisibility() {
+      const wrap = $('volDividerWrap');
+      if (!wrap) return;
+      const isVol = state.shape.startsWith('vol');
+      wrap.style.display = isVol ? '' : 'none';
     }
 
     function selectShape(key, options = {}) {
@@ -2651,17 +2806,19 @@
       $('notchRow').style.display = params.includes('notch') ? '' : 'none';
       $('shapeName').textContent = shape.name;
 
+      updateVolDividerVisibility();
+
       if (enforcePngMode) {
         if (shape.pngOnly && !state.pngMode) {
           $('pngMode').checked = true;
-          togglePngMode(true, true);  /* ⭐ skip refresh here */
+          togglePngMode(true, true);
         } else if (!shape.pngOnly && state.pngMode) {
           $('pngMode').checked = false;
-          togglePngMode(false, true);  /* ⭐ skip refresh here */
+          togglePngMode(false, true);
         }
       }
       if (autoGuides) applyAutoGuides();
-      refresh();  /* single refresh at end */
+      refresh();
     }
 
     $('pngMode').addEventListener('change', e => togglePngMode(e.target.checked));
@@ -2680,14 +2837,12 @@
       { name: 'btn_default_small_normal', w: 72, h: 40, shape: 'pill' },
       { name: 'btn_default_small_pressed', w: 72, h: 40, shape: 'pill', darken: 0.20 },
       { name: 'btn_default_small_disabled', w: 72, h: 40, shape: 'pill', alpha: 0.5 },
-      /* Radio button entries */
       { name: 'btn_radio_off', w: 48, h: 48, shape: 'radioUnchecked' },
       { name: 'btn_radio_on', w: 48, h: 48, shape: 'radioChecked' },
       { name: 'radio_off_holo', w: 48, h: 48, shape: 'radioUnchecked' },
       { name: 'radio_on_holo', w: 48, h: 48, shape: 'radioChecked' },
       { name: 'radio_off', w: 48, h: 48, shape: 'radioUnchecked' },
       { name: 'radio_on', w: 48, h: 48, shape: 'radioChecked' },
-      /* Dual SIM caller entries */
       { name: 'contact_call_button_left', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
       { name: 'contact_call_button_right', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
       { name: 'caller_sim1_bg', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
@@ -2698,6 +2853,23 @@
       { name: 'call_sim2_normal', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
       { name: 'call_sim1_pressed', w: 192, h: 96, shape: 'simCallerLeft', radius: 48, darken: 0.15 },
       { name: 'call_sim2_pressed', w: 192, h: 96, shape: 'simCallerRight', radius: 48, darken: 0.15 },
+
+      /* ⭐ NEW: Volume panel sliders (vertical) */
+      { name: 'volumepanel_slider_light', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_ring', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_volume', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_alarm', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_brightness', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_voice', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_media', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_expand', w: 72, h: 320, shape: 'volTrackPillTop', radius: 30 },
+
+      /* ⭐ NEW: Horizontal volume bars (compact) */
+      { name: 'volumepanel_h_speaker', w: 96, h: 160, shape: 'volTrackFlatTop', radius: 20 },
+      { name: 'volumepanel_h_bell', w: 96, h: 200, shape: 'volTrackFlatTop', radius: 20 },
+      { name: 'volumepanel_h_alarm', w: 96, h: 260, shape: 'volTrackPillTop', radius: 22 },
+      { name: 'volumepanel_h_brightness', w: 96, h: 280, shape: 'volTrackPillTop', radius: 22 },
+
       /* Common UI */
       { name: 'notification_bg', w: 128, h: 128, shape: 'rounded', radius: 16 },
       { name: 'notification_bg_low', w: 128, h: 128, shape: 'rounded', radius: 16 },
@@ -2792,6 +2964,20 @@
           dc.fillStyle = bg1;
         }
         dc.fill();
+
+        /* ⭐ Volume divider for MTZ bundle */
+        if (state.volDividerOn && fileDef.shape.startsWith('vol')) {
+          const divY = Math.round(ch * state.volDividerPos / 100);
+          const safeY = clamp(divY, 1, ch - 2);
+          dc.save();
+          dc.globalCompositeOperation = 'source-atop';
+          const alpha = state.volDividerOpacity / 100;
+          dc.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+          dc.fillRect(0, safeY, cw, 1);
+          dc.fillStyle = `rgba(255, 255, 255, ${alpha * 0.35})`;
+          dc.fillRect(0, safeY + 1, cw, 1);
+          dc.restore();
+        }
       }
       drawStrokeShadow(dc, cw, ch, shape, outerOpts, innerOpts, b, 'inner');
       dc.globalAlpha = 1;
@@ -2987,6 +3173,15 @@
     bindRange('notch', 'notchVal', 'notch', v => v, applyAutoGuides);
     bindRange('borderWidth', 'borderWidthVal', 'borderWidth', v => v, applyAutoGuides);
 
+    /* ⭐ NEW: Volume divider bindings */
+    $('volDividerOn').addEventListener('change', e => {
+      state.volDividerOn = e.target.checked;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
+    bindRange('volDividerPos', 'volDividerPosVal', 'volDividerPos', v => `${v}%`);
+    bindRange('volDividerOpacity', 'volDividerOpacityVal', 'volDividerOpacity', v => `${v}%`);
+
     $('shadowOn').addEventListener('change', e => {
       state.shadowOn = e.target.checked;
       scheduleRefresh({ skipValidation: true });
@@ -3123,6 +3318,7 @@
       const migrateSize = migrateOldDefaults && savedConfig.state?.contentW === 96 && savedConfig.state?.contentH === 96;
       selectShape(state.shape, { autoGuides: !savedConfig || migrateSize, enforcePngMode: !savedConfig });
       syncControlsFromState(savedConfig);
+      updateVolDividerVisibility();
       fitCanvasDisplay();
       refresh();
       configPersistenceReady = true;
