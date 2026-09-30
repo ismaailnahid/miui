@@ -1591,7 +1591,7 @@
       },
       /* ============ RADIO BUTTON SHAPES (Toggle category) ============ */
       radioUnchecked: {
-        name: 'Radio ○', cat: 'Toggle', params: [], noBorder: true,
+        name: 'Radio ○', cat: 'Toggle', params: [], noBorder: true, noShadow: true,
         draw(c, w, h) {
           const cx = w / 2, cy = h / 2;
           const outerR = Math.min(w, h) / 2 - 0.5;
@@ -1615,7 +1615,7 @@
         }
       },
       radioChecked: {
-        name: 'Radio ●', cat: 'Toggle', params: [], noBorder: true,
+        name: 'Radio ●', cat: 'Toggle', params: [], noBorder: true, noShadow: true,
         draw(c, w, h) {
           const cx = w / 2, cy = h / 2;
           const outerR = Math.min(w, h) / 2 - 0.5;
@@ -1659,9 +1659,15 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) / 2);
+          const straightStart = Math.ceil(r);
+          const straightEnd = Math.floor(h - 1 - r);
+          // ⭐ FIX: when radius = h/2, straight region collapses → use center pixel
+          const leftGuide = straightStart <= straightEnd
+            ? { start: straightStart, end: straightEnd }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
             top: { start: Math.ceil(r), end: w - 1 },
-            left: { start: Math.ceil(r), end: Math.floor(h - 1 - r) },
+            left: leftGuide,
             bottom: { start: Math.ceil(r), end: w - 1 },
             right: { start: 0, end: h - 1 }
           };
@@ -1682,11 +1688,17 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) / 2);
+          const straightStart = Math.ceil(r);
+          const straightEnd = Math.floor(h - 1 - r);
+          // ⭐ FIX: same pill-collapse fallback
+          const rightGuide = straightStart <= straightEnd
+            ? { start: straightStart, end: straightEnd }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
             top: { start: 0, end: Math.floor(w - 1 - r) },
             left: { start: 0, end: h - 1 },
             bottom: { start: 0, end: Math.floor(w - 1 - r) },
-            right: { start: Math.ceil(r), end: Math.floor(h - 1 - r) }
+            right: rightGuide
           };
         }
       },
@@ -1907,7 +1919,7 @@
     };
 
     const CONFIG_STORAGE_KEY = 'mtz-9-patch-maker-config-v1';
-    const CONFIG_VERSION = 5;
+    const CONFIG_VERSION = 6;
     let configPersistenceReady = false;
     let configSaveTimer = null;
 
@@ -2044,6 +2056,7 @@
        ============================================================ */
     function drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, borderWidth, kind, scale = 1, pixelRatio = 1) {
       if (!state.shadowOn || (state.shadowMode !== 'both' && state.shadowMode !== kind)) return;
+      if (shape.noShadow) return;  /* radio shapes → skip shadow */
       const bw = Math.max(1, borderWidth);
 
       const ring = document.createElement('canvas');
@@ -2548,8 +2561,15 @@
       const pad = 8;
       const sw = w - pad * 2, sh = h - pad * 2;
       const scale = sw / 96;
+
+      /* ⭐ FIX: caller shapes → pill-like thumbnail radius */
+      const isCallerShape = shapeKey === 'simCallerLeft' || shapeKey === 'simCallerRight';
+      const thumbRadius = isCallerShape
+        ? Math.min(sw, sh) / 2
+        : state.radius * scale + 4;
+
       const opts = {
-        radius: state.radius * scale + 4,
+        radius: thumbRadius,
         tail: Math.max(6, state.tail * scale),
         notch: Math.max(8, state.notch * scale),
         borderWidth: 0
@@ -2611,6 +2631,13 @@
       });
     }
 
+    /* ⭐ FIX: pngMode toggle without double-refresh */
+    function togglePngMode(on, skipRefresh = false) {
+      state.pngMode = on;
+      $('pngModeNote').style.display = on ? '' : 'none';
+      if (!skipRefresh) refresh();
+    }
+
     function selectShape(key, options = {}) {
       const { autoGuides = true, enforcePngMode = true } = options;
       state.shape = key;
@@ -2627,21 +2654,16 @@
       if (enforcePngMode) {
         if (shape.pngOnly && !state.pngMode) {
           $('pngMode').checked = true;
-          togglePngMode(true);
+          togglePngMode(true, true);  /* ⭐ skip refresh here */
         } else if (!shape.pngOnly && state.pngMode) {
           $('pngMode').checked = false;
-          togglePngMode(false);
+          togglePngMode(false, true);  /* ⭐ skip refresh here */
         }
       }
       if (autoGuides) applyAutoGuides();
-      refresh();
+      refresh();  /* single refresh at end */
     }
 
-    function togglePngMode(on) {
-      state.pngMode = on;
-      $('pngModeNote').style.display = on ? '' : 'none';
-      refresh();
-    }
     $('pngMode').addEventListener('change', e => togglePngMode(e.target.checked));
 
     /* ============================================================
