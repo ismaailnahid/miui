@@ -68,11 +68,22 @@
       top: 0;
       overflow-y: auto;
       overscroll-behavior: contain;
-      background: linear-gradient(180deg, rgba(20, 30, 51, .95), rgba(15, 23, 42, .95));
+      background: linear-gradient(180deg, rgba(20, 30, 51, .98), rgba(15, 23, 42, .98));
       border-right: 1px solid var(--border);
       padding: 18px 14px calc(40px + var(--safe-bottom));
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      contain: layout style;
+    }
+
+    @media (min-width: 901px) {
+      .sidebar {
+        background: linear-gradient(180deg, rgba(20, 30, 51, .95), rgba(15, 23, 42, .95));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
     }
 
     .sidebar::-webkit-scrollbar {
@@ -542,7 +553,7 @@
       cursor: pointer;
       padding: 0;
       overflow: hidden;
-      transition: .15s;
+      transition: border-color .15s, box-shadow .15s, background .15s, transform .15s;
       display: grid;
       place-items: center;
       min-width: 0;
@@ -667,6 +678,9 @@
       border-radius: 10px;
       padding: 8px;
       margin-bottom: 10px;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      contain: layout style;
     }
 
     .mtz-list::-webkit-scrollbar {
@@ -784,6 +798,7 @@
       padding: 18px;
       box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .04);
       max-width: 100%;
+      contain: layout paint;
     }
 
     .checker {
@@ -840,6 +855,7 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px;
+      contain: layout paint;
     }
 
     .preview-box h3 {
@@ -939,12 +955,23 @@
         flex: none;
         height: auto;
         position: static;
+        top: auto;
         border-right: none;
         border-top: 1px solid var(--border);
         padding: 16px 12px calc(32px + var(--safe-bottom));
+        overflow-y: visible;
+        overscroll-behavior: auto;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
+        contain: none;
         order: 2;
+      }
+
+      .mtz-list {
+        max-height: none;
+        overflow: visible;
+        overscroll-behavior: auto;
+        contain: none;
       }
 
       .stage {
@@ -1101,10 +1128,6 @@
         min-height: 36px;
       }
 
-      .mtz-list {
-        max-height: 180px;
-      }
-
       .zoom-box canvas {
         width: 140px;
         height: 140px;
@@ -1188,6 +1211,10 @@
 
       .btn:hover {
         transform: none;
+      }
+
+      .shape-btn {
+        transition: border-color .1s, background .1s, box-shadow .1s;
       }
     }
 
@@ -1339,7 +1366,7 @@
 
       <section class="group">
         <h3>MTZ Theme Bundle</h3>
-        <div class="info">MIUI theme er jonno <b>24 ta common 9.png</b> ek click e.</div>
+        <div class="info">MIUI theme er jonno <b>40 ta common 9.png</b> ek click e.</div>
         <div class="mtz-head">
           <button class="btn" id="mtzAll">Select All</button>
           <button class="btn" id="mtzNone">Clear</button>
@@ -1446,8 +1473,7 @@
     }
 
     /* ============================================================
-       SHAPES — guides() returns {top:{X}, left:{Y}, bottom:{X}, right:{Y}}
-       All guides corrected for perfect .9.png output
+       SHAPES
        ============================================================ */
     const SHAPES = {
       rounded: {
@@ -1469,7 +1495,6 @@
         guides: (w, h) => {
           const r = Math.floor(Math.min(w, h) / 2);
           const topS = r, topE = w - 1 - r;
-          // Vertical: only the exact middle vertical line is straight (since entire edge is curved)
           const midY = Math.floor(h / 2);
           const leftS = midY, leftE = midY;
           return {
@@ -1483,11 +1508,9 @@
       sharp: {
         name: 'Sharp', cat: 'Basic', params: [],
         draw(c, w, h) { c.beginPath(); c.rect(0, 0, w, h); c.closePath(); },
-        // CORRECT: guides exclude border thickness so border doesn't stretch
         guides: (w, h, o) => {
           const b = o.borderWidth || 0;
           const lo = Math.max(0, b);
-          const hi = Math.max(lo, 1);
           return {
             top: { start: lo, end: w - 1 - lo },
             left: { start: lo, end: h - 1 - lo },
@@ -1566,6 +1589,108 @@
           };
         }
       },
+      /* ============ RADIO BUTTON SHAPES (Toggle category) ============ */
+      radioUnchecked: {
+        name: 'Radio ○', cat: 'Toggle', params: [], noBorder: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2;
+          const outerR = Math.min(w, h) / 2 - 0.5;
+          const strokeW = Math.max(2, Math.round(Math.min(w, h) * 0.08));
+          const innerR = Math.max(1, outerR - strokeW);
+          c.beginPath();
+          c.arc(cx, cy, outerR, 0, Math.PI * 2);
+          c.moveTo(cx + innerR, cy);
+          c.arc(cx, cy, innerR, 0, Math.PI * 2, true);
+          c.closePath();
+        },
+        guides: (w, h) => {
+          const cx = Math.floor(w / 2);
+          const cy = Math.floor(h / 2);
+          return {
+            top: { start: cx, end: cx },
+            left: { start: cy, end: cy },
+            bottom: { start: cx, end: cx },
+            right: { start: cy, end: cy }
+          };
+        }
+      },
+      radioChecked: {
+        name: 'Radio ●', cat: 'Toggle', params: [], noBorder: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2;
+          const outerR = Math.min(w, h) / 2 - 0.5;
+          const strokeW = Math.max(2, Math.round(Math.min(w, h) * 0.08));
+          const innerR = Math.max(1, outerR - strokeW);
+          const dotR = Math.max(1, innerR * 0.55);
+          c.beginPath();
+          c.arc(cx, cy, outerR, 0, Math.PI * 2);
+          c.moveTo(cx + innerR, cy);
+          c.arc(cx, cy, innerR, 0, Math.PI * 2, true);
+          c.closePath();
+          c.moveTo(cx + dotR, cy);
+          c.arc(cx, cy, dotR, 0, Math.PI * 2);
+          c.closePath();
+        },
+        guides: (w, h) => {
+          const cx = Math.floor(w / 2);
+          const cy = Math.floor(h / 2);
+          return {
+            top: { start: cx, end: cx },
+            left: { start: cy, end: cy },
+            bottom: { start: cx, end: cx },
+            right: { start: cy, end: cy }
+          };
+        }
+      },
+      /* ============ DUAL SIM CALLER SHAPES (Caller category) ============ */
+      simCallerLeft: {
+        name: 'SIM Left', cat: 'Caller', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          c.beginPath();
+          c.moveTo(r, 0);
+          c.lineTo(w, 0);
+          c.lineTo(w, h);
+          c.lineTo(r, h);
+          c.arcTo(0, h, 0, h - r, r);
+          c.lineTo(0, r);
+          c.arcTo(0, 0, r, 0, r);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          return {
+            top: { start: Math.ceil(r), end: w - 1 },
+            left: { start: Math.ceil(r), end: Math.floor(h - 1 - r) },
+            bottom: { start: Math.ceil(r), end: w - 1 },
+            right: { start: 0, end: h - 1 }
+          };
+        }
+      },
+      simCallerRight: {
+        name: 'SIM Right', cat: 'Caller', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          c.beginPath();
+          c.moveTo(0, 0);
+          c.lineTo(w - r, 0);
+          c.arcTo(w, 0, w, r, r);
+          c.lineTo(w, h - r);
+          c.arcTo(w, h, w - r, h, r);
+          c.lineTo(0, h);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          return {
+            top: { start: 0, end: Math.floor(w - 1 - r) },
+            left: { start: 0, end: h - 1 },
+            bottom: { start: 0, end: Math.floor(w - 1 - r) },
+            right: { start: Math.ceil(r), end: Math.floor(h - 1 - r) }
+          };
+        }
+      },
+      /* ============ END DUAL SIM SHAPES ============ */
       diamond: {
         name: 'Diamond', cat: 'Polygon', params: [], pngOnly: true,
         draw(c, w, h) { c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(w, h / 2); c.lineTo(w / 2, h); c.lineTo(0, h / 2); c.closePath(); },
@@ -1622,7 +1747,6 @@
         },
         guides: (w, h) => ({ top: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, left: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) }, bottom: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, right: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) } })
       },
-      // FIXED CHAT BUBBLES — tail stays inside canvas
       chatRightBottom: {
         name: 'Chat →', cat: 'Chat', params: ['radius', 'tail'],
         draw(c, w, h, o) {
@@ -1634,7 +1758,6 @@
           c.lineTo(w - r, 0);
           c.arcTo(w, 0, w, r, r);
           c.lineTo(w, bubbleH - r * 0.4);
-          // Tail tip inside canvas at bottom-right corner
           c.lineTo(w - 0.5, h - 0.5);
           c.lineTo(w - t * 1.3, bubbleH);
           c.lineTo(r, bubbleH);
@@ -1667,7 +1790,6 @@
           c.lineTo(w, bubbleH - r);
           c.arcTo(w, bubbleH, w - r, bubbleH, r);
           c.lineTo(t * 1.3, bubbleH);
-          // Tail tip inside canvas at bottom-left corner
           c.lineTo(0.5, h - 0.5);
           c.lineTo(0, bubbleH - r * 0.4);
           c.lineTo(0, r);
@@ -1722,7 +1844,6 @@
           c.lineTo(w, h * 0.55); c.quadraticCurveTo(w, h * 0.85, w / 2, h);
           c.quadraticCurveTo(0, h * 0.85, 0, h * 0.55); c.closePath();
         },
-        // FIXED: top edge fully straight {0, w-1}, left edge straight to h*0.55
         guides: (w, h) => ({
           top: { start: 0, end: w - 1 },
           left: { start: 0, end: Math.floor(h * 0.5) },
@@ -1733,7 +1854,6 @@
       bookmark: {
         name: 'Bookmark', cat: 'Special', params: [], pngOnly: true,
         draw(c, w, h) { c.beginPath(); c.moveTo(0, 0); c.lineTo(w, 0); c.lineTo(w, h); c.lineTo(w / 2, h - h * 0.18); c.lineTo(0, h); c.closePath(); },
-        // FIXED: top edge and left edge fully straight
         guides: (w, h) => ({
           top: { start: 0, end: w - 1 },
           left: { start: 0, end: Math.floor(h * 0.75) },
@@ -1758,7 +1878,6 @@
           const n = w * 0.08; c.beginPath(); c.moveTo(n, 0); c.lineTo(w - n, 0); c.lineTo(w, h / 2);
           c.lineTo(w - n, h); c.lineTo(n, h); c.lineTo(0, h / 2); c.closePath();
         },
-        // FIXED: top/bottom edges go n to w-1-n; left/right edges are single points at h/2
         guides: (w, h) => {
           const n = w * 0.08;
           return {
@@ -1788,7 +1907,7 @@
     };
 
     const CONFIG_STORAGE_KEY = 'mtz-9-patch-maker-config-v1';
-    const CONFIG_VERSION = 3;
+    const CONFIG_VERSION = 5;
     let configPersistenceReady = false;
     let configSaveTimer = null;
 
@@ -1897,16 +2016,34 @@
     }
 
     const editor = $('editor');
-    const ectx = editor.getContext('2d', { alpha: true, willReadFrequently: true });
+    const ectx = editor.getContext('2d', { alpha: true });
     ectx.imageSmoothingEnabled = false;
+
+    const validationCanvas = document.createElement('canvas');
+    const valCtx = validationCanvas.getContext('2d', { willReadFrequently: true });
+
     const designCanvas = document.createElement('canvas');
+    let designCanvasDirty = true;
+
+    function markDesignCanvasDirty() { designCanvasDirty = true; }
+
+    function ensureDesignCanvas() {
+      const cw = state.contentW, ch = state.contentH;
+      if (designCanvas.width !== cw || designCanvas.height !== ch) {
+        designCanvas.width = cw; designCanvas.height = ch;
+        designCanvasDirty = true;
+      }
+      if (designCanvasDirty) {
+        drawDesign(designCanvas.getContext('2d'), cw, ch);
+        designCanvasDirty = false;
+      }
+    }
 
     /* ============================================================
-       SHADOW RENDERING — FIXED to work without border
+       SHADOW RENDERING
        ============================================================ */
     function drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, borderWidth, kind, scale = 1, pixelRatio = 1) {
       if (!state.shadowOn || (state.shadowMode !== 'both' && state.shadowMode !== kind)) return;
-      // FIX: use min 1px effective border so shadow works even when border is off
       const bw = Math.max(1, borderWidth);
 
       const ring = document.createElement('canvas');
@@ -1953,10 +2090,14 @@
       c.clearRect(0, 0, cw, ch);
       c.imageSmoothingEnabled = false;
 
-      const shape = SHAPES[overrideShape || state.shape];
+      const shapeKey = overrideShape || state.shape;
+      const shape = SHAPES[shapeKey];
       if (!shape) return;
 
-      const b = state.borderOn ? Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4)) : 0;
+      const ignoresBorder = !!shape.noBorder;
+      const b = (!ignoresBorder && state.borderOn)
+        ? Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4))
+        : 0;
 
       const outerOpts = { radius: state.radius, tail: state.tail, notch: state.notch, borderWidth: b };
       const innerOpts = {
@@ -2002,10 +2143,7 @@
         editor.width = totalW; editor.height = totalH;
         fitCanvasDisplay();
       }
-      if (designCanvas.width !== cw || designCanvas.height !== ch) {
-        designCanvas.width = cw; designCanvas.height = ch;
-      }
-      drawDesign(designCanvas.getContext('2d'), cw, ch);
+      ensureDesignCanvas();
 
       ectx.clearRect(0, 0, totalW, totalH);
       ectx.imageSmoothingEnabled = false;
@@ -2076,7 +2214,7 @@
     }
 
     /* ============================================================
-       STRETCH — topGuide = X axis, leftGuide = Y axis
+       STRETCH
        ============================================================ */
     function drawStretched(c, img, cw, ch, topGuide, leftGuide, tx, ty, tw, th) {
       let xS = 0, xE = cw - 1;
@@ -2111,10 +2249,7 @@
     function renderPreview(canvasEl, targetW, targetH) {
       const c = canvasEl.getContext('2d');
       const cw = state.contentW, ch = state.contentH;
-      if (designCanvas.width !== cw || designCanvas.height !== ch) {
-        designCanvas.width = cw; designCanvas.height = ch;
-      }
-      drawDesign(designCanvas.getContext('2d'), cw, ch);
+      ensureDesignCanvas();
       c.clearRect(0, 0, canvasEl.width, canvasEl.height);
       c.imageSmoothingEnabled = false;
       c.fillStyle = 'rgba(255,255,255,0.02)';
@@ -2140,7 +2275,7 @@
       const totalW = cw + 2, totalH = ch + 2;
       const out = document.createElement('canvas');
       out.width = totalW; out.height = totalH;
-      const c = out.getContext('2d', { alpha: true, willReadFrequently: true });
+      const c = out.getContext('2d', { alpha: true });
       c.imageSmoothingEnabled = false;
 
       const d = document.createElement('canvas');
@@ -2160,8 +2295,12 @@
       const cw = state.contentW, ch = state.contentH;
       const totalW = cw + 2, totalH = ch + 2;
       const out = buildFull9PatchCanvas();
-      const c = out.getContext('2d', { willReadFrequently: true });
-      const imgData = c.getImageData(0, 0, totalW, totalH);
+
+      validationCanvas.width = totalW;
+      validationCanvas.height = totalH;
+      valCtx.clearRect(0, 0, totalW, totalH);
+      valCtx.drawImage(out, 0, 0);
+      const imgData = valCtx.getImageData(0, 0, totalW, totalH);
       const data = imgData.data;
 
       function px(x, y) {
@@ -2207,7 +2346,6 @@
       return report;
     }
 
-    // NEW: render validation to UI
     function renderValidationUI() {
       const container = $('validationReport');
       if (!container) return;
@@ -2233,11 +2371,7 @@
       zCtx.imageSmoothingEnabled = false;
       let source;
       if (state.pngMode) {
-        const cw = state.contentW, ch = state.contentH;
-        if (designCanvas.width !== cw || designCanvas.height !== ch) {
-          designCanvas.width = cw; designCanvas.height = ch;
-        }
-        drawDesign(designCanvas.getContext('2d'), cw, ch);
+        ensureDesignCanvas();
         source = designCanvas;
       } else {
         source = buildFull9PatchCanvas();
@@ -2255,6 +2389,54 @@
       zCtx.strokeStyle = '#1686d0';
       zCtx.lineWidth = 3;
       zCtx.strokeRect(1.5, 1.5, magnification - 3, magnification - 3);
+    }
+
+    /* ============================================================
+       PERFORMANCE: RAF-BASED REFRESH
+       ============================================================ */
+    let rafPending = false;
+    let thumbRafPending = false;
+    let validationTimer = null;
+
+    function scheduleRefresh(opts = {}) {
+      markDesignCanvasDirty();
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        renderEditor();
+        renderAllPreviews();
+        renderZoom();
+        fitCanvasDisplay();
+        if (!opts.skipValidation) scheduleValidation();
+        scheduleConfigSave();
+      });
+    }
+
+    function scheduleThumbRefresh() {
+      if (thumbRafPending) return;
+      thumbRafPending = true;
+      requestAnimationFrame(() => {
+        thumbRafPending = false;
+        refreshThumbs();
+      });
+    }
+
+    function scheduleValidation() {
+      clearTimeout(validationTimer);
+      validationTimer = setTimeout(() => {
+        renderValidationUI();
+      }, 350);
+    }
+
+    function refresh() {
+      markDesignCanvasDirty();
+      renderEditor();
+      renderAllPreviews();
+      renderZoom();
+      fitCanvasDisplay();
+      scheduleValidation();
+      scheduleConfigSave();
     }
 
     /* ============================================================
@@ -2289,18 +2471,10 @@
       if (!hit) return;
       const max = (hit.edge === 'top' || hit.edge === 'bottom') ? state.contentW : state.contentH;
       const c = clamp(hit.coord, 0, max - 1);
-      // Don't reset if tapping the same edge — allow extend by drag
-      const existing = state[EDGE_KEY[hit.edge]];
-      if (existing && c >= existing.start && c <= existing.end) {
-        // Tapping inside existing guide: start from center for extension
-        state[EDGE_KEY[hit.edge]] = { start: c, end: c };
-        drawing = { edge: hit.edge, startCoord: c, key: EDGE_KEY[hit.edge] };
-      } else {
-        state[EDGE_KEY[hit.edge]] = { start: c, end: c };
-        drawing = { edge: hit.edge, startCoord: c, key: EDGE_KEY[hit.edge] };
-      }
+      state[EDGE_KEY[hit.edge]] = { start: c, end: c };
+      drawing = { edge: hit.edge, startCoord: c, key: EDGE_KEY[hit.edge] };
       editor.setPointerCapture(e.pointerId);
-      refresh();
+      scheduleRefresh({ skipValidation: true });
     });
 
     editor.addEventListener('pointermove', e => {
@@ -2318,10 +2492,14 @@
         start: Math.min(drawing.startCoord, coord),
         end: Math.max(drawing.startCoord, coord)
       };
-      refresh();
+      scheduleRefresh({ skipValidation: true });
     });
 
-    ['pointerup', 'pointercancel'].forEach(ev => editor.addEventListener(ev, () => { drawing = null; }));
+    ['pointerup', 'pointercancel'].forEach(ev => editor.addEventListener(ev, () => {
+      if (!drawing) return;
+      drawing = null;
+      scheduleRefresh();
+    }));
 
     /* ============================================================
        GUIDE NORMALIZATION
@@ -2337,7 +2515,7 @@
     function applyAutoGuides() {
       const shape = SHAPES[state.shape];
       if (!shape || !shape.guides) return;
-      const borderW = state.borderOn ? state.borderWidth : 0;
+      const borderW = (!shape.noBorder && state.borderOn) ? state.borderWidth : 0;
       const opts = {
         radius: state.radius,
         tail: state.tail,
@@ -2351,16 +2529,12 @@
       state.rightGuide = normalizeGuide(g.right, state.contentH);
     }
 
-    function resetGuides() {
-      state.topGuide = state.leftGuide = state.bottomGuide = state.rightGuide = null;
-    }
-
     /* ============================================================
        SHAPE PICKER UI
        ============================================================ */
     const SHAPE_GROUPS = [
-      { listId: 'shapeList', categories: ['Basic'] },
-      { listId: 'otherShapeList', categories: ['Polygon', 'Chat', 'Special'] }
+      { listId: 'shapeList', categories: ['Basic', 'Toggle'] },
+      { listId: 'otherShapeList', categories: ['Polygon', 'Chat', 'Caller', 'Special'] }
     ];
 
     function drawThumb(canvas, shapeKey) {
@@ -2380,7 +2554,8 @@
         notch: Math.max(8, state.notch * scale),
         borderWidth: 0
       };
-      const thumbBorderWidth = state.borderOn ? Math.min(2, state.borderWidth) : 0;
+      const ignoresBorder = !!shape.noBorder;
+      const thumbBorderWidth = (!ignoresBorder && state.borderOn) ? Math.min(2, state.borderWidth) : 0;
       const innerOpts = {
         radius: Math.max(0, opts.radius - thumbBorderWidth),
         tail: Math.max(3, opts.tail - thumbBorderWidth),
@@ -2396,7 +2571,7 @@
       drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'outer', scale, pixelRatio);
       shape.draw(c, sw, sh, opts);
       c.fill();
-      if (state.borderOn && state.borderWidth > 0) {
+      if (thumbBorderWidth > 0) {
         c.strokeStyle = state.borderColor;
         c.lineWidth = Math.min(2, state.borderWidth);
         shape.draw(c, sw, sh, opts);
@@ -2469,15 +2644,6 @@
     }
     $('pngMode').addEventListener('change', e => togglePngMode(e.target.checked));
 
-    function refresh() {
-      renderEditor();
-      renderAllPreviews();
-      renderZoom();
-      renderValidationUI();
-      fitCanvasDisplay();
-      scheduleConfigSave();
-    }
-
     /* ============================================================
        MTZ BUNDLE
        ============================================================ */
@@ -2492,6 +2658,25 @@
       { name: 'btn_default_small_normal', w: 72, h: 40, shape: 'pill' },
       { name: 'btn_default_small_pressed', w: 72, h: 40, shape: 'pill', darken: 0.20 },
       { name: 'btn_default_small_disabled', w: 72, h: 40, shape: 'pill', alpha: 0.5 },
+      /* Radio button entries */
+      { name: 'btn_radio_off', w: 48, h: 48, shape: 'radioUnchecked' },
+      { name: 'btn_radio_on', w: 48, h: 48, shape: 'radioChecked' },
+      { name: 'radio_off_holo', w: 48, h: 48, shape: 'radioUnchecked' },
+      { name: 'radio_on_holo', w: 48, h: 48, shape: 'radioChecked' },
+      { name: 'radio_off', w: 48, h: 48, shape: 'radioUnchecked' },
+      { name: 'radio_on', w: 48, h: 48, shape: 'radioChecked' },
+      /* Dual SIM caller entries */
+      { name: 'contact_call_button_left', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'contact_call_button_right', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'caller_sim1_bg', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'caller_sim2_bg', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'sim1_caller_panel', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'sim2_caller_panel', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'call_sim1_normal', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'call_sim2_normal', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'call_sim1_pressed', w: 192, h: 96, shape: 'simCallerLeft', radius: 48, darken: 0.15 },
+      { name: 'call_sim2_pressed', w: 192, h: 96, shape: 'simCallerRight', radius: 48, darken: 0.15 },
+      /* Common UI */
       { name: 'notification_bg', w: 128, h: 128, shape: 'rounded', radius: 16 },
       { name: 'notification_bg_low', w: 128, h: 128, shape: 'rounded', radius: 16 },
       { name: 'toast_frame', w: 128, h: 96, shape: 'rounded', radius: 16 },
@@ -2542,13 +2727,13 @@
       const shape = SHAPES[fileDef.shape] || SHAPES.rounded;
       const radius = fileDef.radius != null ? fileDef.radius : state.radius;
       const outerOpts = { radius, tail: state.tail, notch: state.notch, borderWidth: 0 };
+      const ignoresBorder = !!shape.noBorder;
 
       let bg1 = state.bgColor;
       let bg2 = state.gradOn ? state.bgColor2 : state.bgColor;
       if (fileDef.darken) { bg1 = darkenColor(bg1, fileDef.darken); bg2 = darkenColor(bg2, fileDef.darken); }
 
-      // FIX: pressed state keeps border, but darkens it
-      const borderOn = state.borderOn;
+      const borderOn = !ignoresBorder && state.borderOn;
       let borderColor = state.borderColor;
       if (fileDef.darken) borderColor = darkenColor(borderColor, fileDef.darken);
 
@@ -2591,7 +2776,6 @@
 
       c.drawImage(d, 1, 1);
 
-      // Guides (with border-aware opts)
       const g = shape.guides ? shape.guides(cw, ch, { radius, tail: state.tail, notch: state.notch, borderWidth: b }) : null;
       c.fillStyle = '#000000';
       if (g) {
@@ -2660,7 +2844,8 @@
           colorEl.value = v.toLowerCase();
           colorEl.style.backgroundColor = v;
           popover.querySelector('input[type=color]').value = v.toLowerCase();
-          refresh(); refreshThumbs();
+          scheduleRefresh({ skipValidation: true });
+          scheduleThumbRefresh();
         }
       });
     }
@@ -2676,7 +2861,8 @@
       popover.querySelector('input[type=color]').value = normalized;
       popover.hidden = true;
       trigger.setAttribute('aria-expanded', 'false');
-      refresh(); refreshThumbs();
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
     }
 
     ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
@@ -2708,18 +2894,15 @@
       customInput.type = 'color';
       customInput.value = state[key];
       customInput.setAttribute('aria-label', 'Choose a custom color');
-      // FIX: Keep popover open during drag; only close on change end for palette clicks
       customInput.addEventListener('input', () => {
         const color = customInput.value.toLowerCase();
         state[key] = color;
         trigger.value = color;
         trigger.style.backgroundColor = color;
         $(`${key}Hex`).value = color;
-        // Don't close popover here — let user continue dragging
-        refresh();
-        // Skip thumbs refresh during drag for perf, refresh after
+        scheduleRefresh({ skipValidation: true });
         clearTimeout(customInput._t);
-        customInput._t = setTimeout(refreshThumbs, 150);
+        customInput._t = setTimeout(scheduleThumbRefresh, 150);
       });
       custom.appendChild(customInput);
       popover.append(title, palette, custom);
@@ -2753,46 +2936,60 @@
       });
     }
 
-    $('gradOn').addEventListener('change', e => { state.gradOn = e.target.checked; refresh(); refreshThumbs(); });
+    $('gradOn').addEventListener('change', e => {
+      state.gradOn = e.target.checked;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
     $('borderOn').addEventListener('change', e => {
       state.borderOn = e.target.checked;
-      applyAutoGuides();  // border thickness affects sharp guide
-      refresh(); refreshThumbs();
+      applyAutoGuides();
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
     });
 
-    $('radius').addEventListener('input', e => {
-      state.radius = +e.target.value; $('radiusVal').textContent = state.radius;
-      applyAutoGuides(); refresh(); refreshThumbs();
-    });
-    $('tail').addEventListener('input', e => {
-      state.tail = +e.target.value; $('tailVal').textContent = state.tail;
-      applyAutoGuides(); refresh(); refreshThumbs();
-    });
-    $('notch').addEventListener('input', e => {
-      state.notch = +e.target.value; $('notchVal').textContent = state.notch;
-      applyAutoGuides(); refresh(); refreshThumbs();
-    });
-    $('borderWidth').addEventListener('input', e => {
-      state.borderWidth = +e.target.value; $('borderWidthVal').textContent = state.borderWidth;
-      applyAutoGuides();  // sharp guide needs updated border width
-      refresh(); refreshThumbs();
-    });
+    function bindRange(id, valId, key, format = v => v, onChange = null) {
+      const el = $(id);
+      el.addEventListener('input', e => {
+        state[key] = +e.target.value;
+        $(valId).textContent = format(state[key]);
+        if (onChange) onChange();
+        scheduleRefresh({ skipValidation: true });
+        scheduleThumbRefresh();
+      });
+      el.addEventListener('change', () => scheduleRefresh());
+    }
+
+    bindRange('radius', 'radiusVal', 'radius', v => v, applyAutoGuides);
+    bindRange('tail', 'tailVal', 'tail', v => v, applyAutoGuides);
+    bindRange('notch', 'notchVal', 'notch', v => v, applyAutoGuides);
+    bindRange('borderWidth', 'borderWidthVal', 'borderWidth', v => v, applyAutoGuides);
 
     $('shadowOn').addEventListener('change', e => {
-      state.shadowOn = e.target.checked; refresh(); refreshThumbs();
+      state.shadowOn = e.target.checked;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
     });
     $('shadowMode').addEventListener('change', e => {
-      state.shadowMode = e.target.value; refresh(); refreshThumbs();
+      state.shadowMode = e.target.value;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
     });
     $('shadowOpacity').addEventListener('input', e => {
       state.shadowOpacity = +e.target.value;
       $('shadowOpacityVal').textContent = `${state.shadowOpacity}%`;
-      if (state.shadowOn) { refresh(); refreshThumbs(); }
+      if (state.shadowOn) {
+        scheduleRefresh({ skipValidation: true });
+        scheduleThumbRefresh();
+      }
     });
     $('shadowWidth').addEventListener('input', e => {
       state.shadowWidth = +e.target.value;
       $('shadowWidthVal').textContent = `${state.shadowWidth} px`;
-      if (state.shadowOn) { refresh(); refreshThumbs(); }
+      if (state.shadowOn) {
+        scheduleRefresh({ skipValidation: true });
+        scheduleThumbRefresh();
+      }
     });
 
     $('resetGuidesBtn').addEventListener('click', () => {
@@ -2815,7 +3012,9 @@
       [...$('sizePresets').children].forEach(b => b.classList.toggle('active', b === btn));
       const s = +btn.dataset.size;
       state.contentW = s; state.contentH = s;
-      applyAutoGuides(); refresh(); refreshThumbs();
+      applyAutoGuides();
+      refresh();
+      scheduleThumbRefresh();
     });
 
     /* ============================================================
