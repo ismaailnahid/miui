@@ -58,7 +58,6 @@
       min-height: 100dvh;
     }
 
-    /* SIDEBAR */
     .sidebar {
       width: var(--sidebar-w);
       flex: 0 0 var(--sidebar-w);
@@ -168,6 +167,11 @@
 
     .group.collapsed> :not(h3) {
       display: none;
+    }
+
+    /* FAB থেকে hide করলে পুরো section (heading + content) গায়েব */
+    .sidebar>.group.hidden {
+      display: none !important;
     }
 
     .section-toggle {
@@ -744,7 +748,6 @@
       font-size: 11px;
     }
 
-    /* STAGE */
     .stage {
       flex: 1;
       display: flex;
@@ -934,7 +937,6 @@
       background: #dc2626;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 1280px) {
       :root {
         --sidebar-w: 340px;
@@ -1225,6 +1227,258 @@
       }
     }
 
+    /* ============================================================
+       FAB (Floating Action Button) + Section Panel
+       ============================================================ */
+    .fab {
+      position: fixed;
+      right: 20px;
+      bottom: calc(20px + var(--safe-bottom));
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 10px 30px -8px rgba(124, 58, 237, .7), 0 4px 12px rgba(0, 0, 0, .45);
+      z-index: 8000;
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, box-shadow .18s ease;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0;
+    }
+
+    .fab:hover {
+      transform: scale(1.07);
+      box-shadow: 0 14px 34px -8px rgba(124, 58, 237, .9), 0 6px 16px rgba(0, 0, 0, .5);
+    }
+
+    .fab:active {
+      transform: scale(.94);
+    }
+
+    .fab.active {
+      background: linear-gradient(135deg, #22d3ee, #7c3aed);
+    }
+
+    .fab svg {
+      width: 24px;
+      height: 24px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform .2s;
+    }
+
+    .fab.active svg {
+      transform: rotate(90deg);
+    }
+
+    .fab-panel {
+      position: fixed;
+      right: 20px;
+      bottom: calc(84px + var(--safe-bottom));
+      width: min(320px, calc(100vw - 40px));
+      max-height: min(72vh, 560px);
+      background: linear-gradient(180deg, rgba(20, 30, 51, .98), rgba(15, 23, 42, .99));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 22px 55px -12px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .04);
+      z-index: 7999;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: bottom right;
+      animation: fabIn .2s cubic-bezier(.2, .9, .3, 1.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .fab-panel[hidden] {
+      display: none;
+    }
+
+    @keyframes fabIn {
+      from {
+        opacity: 0;
+        transform: scale(.9) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .fab-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      flex: 0 0 auto;
+    }
+
+    .fab-panel-head .fab-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      transition: .15s;
+    }
+
+    .fab-panel-head .fab-close:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: #111c30;
+    }
+
+    .fab-panel-hint {
+      padding: 8px 14px 4px;
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 0 0 auto;
+    }
+
+    .fab-panel-actions {
+      display: flex;
+      gap: 6px;
+      padding: 6px 10px 10px;
+      border-bottom: 1px solid var(--border);
+      flex: 0 0 auto;
+    }
+
+    .fab-panel-actions .btn {
+      flex: 1;
+      padding: 7px 8px;
+      font-size: 11px;
+      min-height: 34px;
+    }
+
+    .fab-panel-list {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 6px;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .fab-panel-list::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .fab-panel-list::-webkit-scrollbar-thumb {
+      background: #26324a;
+      border-radius: 9px;
+    }
+
+    .fab-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #cbd7e8;
+      transition: background .12s;
+      user-select: none;
+      -webkit-user-select: none;
+      min-height: 42px;
+      touch-action: manipulation;
+    }
+
+    .fab-item:hover,
+    .fab-item:focus-visible {
+      background: #111c30;
+      outline: none;
+    }
+
+    .fab-item:focus-visible {
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .fab-item .fab-label {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .fab-item .fab-count {
+      font-size: 9.5px;
+      color: var(--muted);
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      flex: 0 0 auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fab-item .switch {
+      pointer-events: none;
+      flex: 0 0 38px;
+    }
+
+    /* FAB overlap প্রতিরোধে sidebar-এ extra bottom padding */
+    @media (max-width: 900px) {
+      .sidebar {
+        padding-bottom: calc(96px + var(--safe-bottom));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .fab {
+        right: 14px;
+        bottom: calc(14px + var(--safe-bottom));
+        width: 50px;
+        height: 50px;
+      }
+
+      .fab svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .fab-panel {
+        right: 14px;
+        bottom: calc(74px + var(--safe-bottom));
+        width: calc(100vw - 28px);
+        max-height: 65vh;
+      }
+
+      .sidebar {
+        padding-bottom: calc(110px + var(--safe-bottom));
+      }
+
+      .fab-item {
+        padding: 11px 12px;
+        min-height: 46px;
+      }
+    }
+
     @media (min-width: 1600px) {
 
       .stage-head,
@@ -1284,7 +1538,6 @@
           <input type="range" id="notch" min="6" max="45" value="22">
         </div>
 
-        <!-- ⭐ NEW: Volume divider controls -->
         <div id="volDividerWrap" style="display:none;">
           <div class="field" style="margin-bottom:8px;">
             <span class="lbl">Volume divider</span>
@@ -1434,6 +1687,28 @@
     </main>
   </div>
 
+  <!-- FAB + Section Panel -->
+  <button class="fab" id="sectionFab" type="button" aria-label="Open section panel" aria-expanded="false"
+    aria-controls="sectionFabPanel">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </svg>
+  </button>
+
+  <div class="fab-panel" id="sectionFabPanel" hidden role="dialog" aria-label="Section visibility">
+    <div class="fab-panel-head">
+      <span>Sections</span>
+      <button type="button" class="fab-close" id="fabClose" aria-label="Close panel">✕</button>
+    </div>
+    <div class="fab-panel-actions">
+      <button type="button" class="btn" id="fabShowAll">Show all</button>
+      <button type="button" class="btn" id="fabHideAll">Hide all</button>
+    </div>
+    <div class="fab-panel-list" id="fabSectionList"></div>
+  </div>
+
   <div class="toast" id="toast">Done!</div>
 
   <script>
@@ -1442,10 +1717,15 @@
        ============================================================ */
     const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
     const $ = id => document.getElementById(id);
-    const yourDefaultColorPalette = ["#1686D0", "#006378", "#00FF62", "#061D2E", "#0A2E39", "#041C30", "#FFC300", "#FF7E29", "#FF5CA1", "#E68585", "#7646FF", "#000000"];
-    const toast = $('toast');
 
+    const DEFAULT_COLOR_PALETTE = [
+      "#1686d0", "#006378", "#00ff62", "#061d2e", "#0a2e39", "#041c30",
+      "#ffc300", "#ff7e29", "#ff5ca1", "#e68585", "#7646ff", "#000000"
+    ];
+
+    const toast = $('toast');
     function showToast(msg, bad) {
+      if (!toast) return;
       toast.textContent = msg;
       toast.classList.toggle('bad', !!bad);
       toast.classList.add('show');
@@ -1478,6 +1758,7 @@
           group.classList.toggle('collapsed', expanded);
           button.setAttribute('aria-expanded', String(!expanded));
           button.setAttribute('aria-label', `${expanded ? 'Show' : 'Hide'} ${heading.textContent.trim()}`);
+          button.title = !expanded ? 'Show section' : 'Hide section';
           scheduleConfigSave();
         });
         heading.appendChild(button);
@@ -1498,27 +1779,34 @@
         draw(c, w, h, o) { roundRectPath(c, 0, 0, w, h, Math.min(o.radius, Math.min(w, h) / 2)); },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) / 2);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sY = Math.min(safeR, Math.floor(h / 2));
           return {
-            top: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            left: { start: Math.ceil(r), end: Math.floor(h - 1 - r) },
-            bottom: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            right: { start: Math.ceil(r), end: Math.floor(h - 1 - r) }
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
           };
         }
       },
       pill: {
         name: 'Pill', cat: 'Basic', params: [],
         draw(c, w, h) { roundRectPath(c, 0, 0, w, h, Math.min(w, h) / 2); },
-        guides: (w, h) => {
+        guides: (w, h, o) => {
+          const b = (o.borderWidth || 0);
           const r = Math.floor(Math.min(w, h) / 2);
-          const topS = r, topE = w - 1 - r;
           const midY = Math.floor(h / 2);
-          const leftS = midY, leftE = midY;
+          const topS = Math.min(r + b, Math.floor(w / 2) - 1);
+          const topE = Math.max(topS, w - 1 - topS);
+          const lS = Math.min(midY, h - 1);
+          const lE = Math.max(lS, midY);
           return {
             top: topE >= topS ? { start: topS, end: topE } : { start: Math.floor(w / 2), end: Math.floor(w / 2) },
-            left: { start: leftS, end: leftE },
+            left: { start: lS, end: lE },
             bottom: topE >= topS ? { start: topS, end: topE } : { start: Math.floor(w / 2), end: Math.floor(w / 2) },
-            right: { start: leftS, end: leftE }
+            right: { start: lS, end: lE }
           };
         }
       },
@@ -1526,13 +1814,15 @@
         name: 'Sharp', cat: 'Basic', params: [],
         draw(c, w, h) { c.beginPath(); c.rect(0, 0, w, h); c.closePath(); },
         guides: (w, h, o) => {
-          const b = o.borderWidth || 0;
-          const lo = Math.max(0, b);
+          const b = (o.borderWidth || 0);
+          const lo = Math.max(1, b + 1);
+          const sX = Math.min(lo, Math.max(0, Math.floor(w / 2) - 1));
+          const sY = Math.min(lo, Math.max(0, Math.floor(h / 2) - 1));
           return {
-            top: { start: lo, end: w - 1 - lo },
-            left: { start: lo, end: h - 1 - lo },
-            bottom: { start: lo, end: w - 1 - lo },
-            right: { start: lo, end: h - 1 - lo }
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
           };
         }
       },
@@ -1541,11 +1831,15 @@
         draw(c, w, h, o) { roundRectPath(c, 0, 0, w, h, Math.min(o.radius * 0.5, Math.min(w, h) / 2)); },
         guides: (w, h, o) => {
           const r = Math.min(o.radius * 0.5, Math.min(w, h) / 2);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sY = Math.min(safeR, Math.floor(h / 2));
           return {
-            top: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            left: { start: Math.ceil(r), end: Math.floor(h - 1 - r) },
-            bottom: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            right: { start: Math.ceil(r), end: Math.floor(h - 1 - r) }
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
           };
         }
       },
@@ -1581,11 +1875,16 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sTop = Math.min(safeR, Math.floor(h / 2));
+          const loB = Math.max(0, b);
           return {
-            top: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            left: { start: Math.ceil(r), end: h - 1 },
-            bottom: { start: 0, end: w - 1 },
-            right: { start: Math.ceil(r), end: h - 1 }
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sTop, end: Math.max(sTop, h - 1 - loB) },
+            bottom: { start: loB, end: Math.max(loB, w - 1 - loB) },
+            right: { start: sTop, end: Math.max(sTop, h - 1 - loB) }
           };
         }
       },
@@ -1598,15 +1897,19 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sBot = Math.min(safeR, Math.floor(h / 2));
+          const loT = Math.max(0, b);
           return {
-            top: { start: 0, end: w - 1 },
-            left: { start: 0, end: Math.floor(h - 1 - r) },
-            bottom: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            right: { start: 0, end: Math.floor(h - 1 - r) }
+            top: { start: loT, end: Math.max(loT, w - 1 - loT) },
+            left: { start: loT, end: Math.max(loT, h - 1 - sBot) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: loT, end: Math.max(loT, h - 1 - sBot) }
           };
         }
       },
-      /* ============ RADIO BUTTON SHAPES (Toggle category) ============ */
       radioUnchecked: {
         name: 'Radio ○', cat: 'Toggle', params: [], noBorder: true, noShadow: true,
         draw(c, w, h) {
@@ -1659,7 +1962,6 @@
           };
         }
       },
-      /* ============ DUAL SIM CALLER SHAPES (Caller category) ============ */
       simCallerLeft: {
         name: 'SIM Left', cat: 'Caller', params: ['radius'],
         draw(c, w, h, o) {
@@ -1676,16 +1978,17 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) / 2);
-          const straightStart = Math.ceil(r);
-          const straightEnd = Math.floor(h - 1 - r);
+          const b = (o.borderWidth || 0);
+          const straightStart = Math.ceil(r + b + 1);
+          const straightEnd = Math.floor(h - 1 - r - b - 1);
           const leftGuide = straightStart <= straightEnd
             ? { start: straightStart, end: straightEnd }
             : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
-            top: { start: Math.ceil(r), end: w - 1 },
+            top: { start: Math.ceil(r + b + 1), end: Math.max(0, w - 1 - b) },
             left: leftGuide,
-            bottom: { start: Math.ceil(r), end: w - 1 },
-            right: { start: 0, end: h - 1 }
+            bottom: { start: Math.ceil(r + b + 1), end: Math.max(0, w - 1 - b) },
+            right: { start: b, end: Math.max(b, h - 1 - b) }
           };
         }
       },
@@ -1704,22 +2007,20 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) / 2);
-          const straightStart = Math.ceil(r);
-          const straightEnd = Math.floor(h - 1 - r);
+          const b = (o.borderWidth || 0);
+          const straightStart = Math.ceil(r + b + 1);
+          const straightEnd = Math.floor(h - 1 - r - b - 1);
           const rightGuide = straightStart <= straightEnd
             ? { start: straightStart, end: straightEnd }
             : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
-            top: { start: 0, end: Math.floor(w - 1 - r) },
-            left: { start: 0, end: h - 1 },
-            bottom: { start: 0, end: Math.floor(w - 1 - r) },
+            top: { start: b, end: Math.max(b, Math.floor(w - 1 - r - b - 1)) },
+            left: { start: b, end: Math.max(b, h - 1 - b) },
+            bottom: { start: b, end: Math.max(b, Math.floor(w - 1 - r - b - 1)) },
             right: rightGuide
           };
         }
       },
-      /* ============ END DUAL SIM SHAPES ============ */
-
-      /* ============ VOLUME SLIDER SHAPES (Volume category) ============ */
       volTrack: {
         name: 'Volume Track', cat: 'Volume', params: ['radius'],
         draw(c, w, h, o) {
@@ -1740,16 +2041,16 @@
         guides: (w, h, o) => {
           const rTop = Math.min(o.radius, Math.min(w, h) * 0.5);
           const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
-          const r = Math.max(rTop, rBot);
-          const topEdge = Math.ceil(r) + 1;
-          const botEdge = Math.floor(h - 1 - r) - 1;
+          const b = (o.borderWidth || 0);
+          const topEdge = Math.ceil(rTop + b + 1);
+          const botEdge = Math.floor(h - 1 - rBot - b - 1);
           const leftGuide = topEdge <= botEdge
             ? { start: topEdge, end: botEdge }
             : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
-            top: { start: Math.ceil(rTop), end: Math.floor(w - 1 - rTop) },
+            top: { start: Math.ceil(rTop + b + 1), end: Math.max(0, Math.floor(w - 1 - rTop - b - 1)) },
             left: leftGuide,
-            bottom: { start: Math.ceil(rBot), end: Math.floor(w - 1 - rBot) },
+            bottom: { start: Math.ceil(rBot + b + 1), end: Math.max(0, Math.floor(w - 1 - rBot - b - 1)) },
             right: leftGuide
           };
         }
@@ -1769,12 +2070,16 @@
         },
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) * 0.5);
-          const bot = Math.floor(h - 1 - r) - 1;
-          const leftGuide = 1 <= bot ? { start: 1, end: bot } : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          const b = (o.borderWidth || 0);
+          const loTop = Math.max(0, b);
+          const botLimit = Math.floor(h - 1 - r - b - 1);
+          const leftGuide = (loTop + 1) <= botLimit
+            ? { start: loTop, end: botLimit }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
-            top: { start: 0, end: w - 1 },
+            top: { start: loTop, end: Math.max(loTop, w - 1 - loTop) },
             left: leftGuide,
-            bottom: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
+            bottom: { start: Math.ceil(r + b + 1), end: Math.max(0, Math.floor(w - 1 - r - b - 1)) },
             right: leftGuide
           };
         }
@@ -1799,21 +2104,20 @@
         guides: (w, h, o) => {
           const rTop = Math.min(o.radius * 2, Math.min(w, h) * 0.5);
           const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
-          const topEdge = Math.ceil(rTop) + 1;
-          const botEdge = Math.floor(h - 1 - rBot) - 1;
+          const b = (o.borderWidth || 0);
+          const topEdge = Math.ceil(rTop + b + 1);
+          const botEdge = Math.floor(h - 1 - rBot - b - 1);
           const leftGuide = topEdge <= botEdge
             ? { start: topEdge, end: botEdge }
             : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
           return {
-            top: { start: Math.ceil(rTop), end: Math.floor(w - 1 - rTop) },
+            top: { start: Math.ceil(rTop + b + 1), end: Math.max(0, Math.floor(w - 1 - rTop - b - 1)) },
             left: leftGuide,
-            bottom: { start: Math.ceil(rBot), end: Math.floor(w - 1 - rBot) },
+            bottom: { start: Math.ceil(rBot + b + 1), end: Math.max(0, Math.floor(w - 1 - rBot - b - 1)) },
             right: leftGuide
           };
         }
       },
-      /* ============ END VOLUME SHAPES ============ */
-
       diamond: {
         name: 'Diamond', cat: 'Polygon', params: [], pngOnly: true,
         draw(c, w, h) { c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(w, h / 2); c.lineTo(w / 2, h); c.lineTo(0, h / 2); c.closePath(); },
@@ -1837,13 +2141,17 @@
           c.moveTo(d, 0); c.lineTo(w - d, 0); c.lineTo(w, d); c.lineTo(w, h - d);
           c.lineTo(w - d, h); c.lineTo(d, h); c.lineTo(0, h - d); c.lineTo(0, d); c.closePath();
         },
-        guides: (w, h) => {
+        guides: (w, h, o) => {
           const d = Math.min(w, h) * 0.29;
+          const b = (o.borderWidth || 0);
+          const safe = Math.ceil(d + b + 1);
+          const sX = Math.min(safe, Math.floor(w / 2));
+          const sY = Math.min(safe, Math.floor(h / 2));
           return {
-            top: { start: Math.ceil(d) + 1, end: Math.floor(w - d) - 1 },
-            left: { start: Math.ceil(d) + 1, end: Math.floor(h - d) - 1 },
-            bottom: { start: Math.ceil(d) + 1, end: Math.floor(w - d) - 1 },
-            right: { start: Math.ceil(d) + 1, end: Math.floor(h - d) - 1 }
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
           };
         }
       },
@@ -1892,11 +2200,12 @@
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) * 0.35);
           const t = Math.min(o.tail, Math.min(w, h) * 0.3);
+          const b = (o.borderWidth || 0);
           return {
-            top: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            left: { start: Math.ceil(r), end: Math.floor(h - 1 - t - r * 0.4) },
-            bottom: { start: Math.ceil(r), end: Math.floor(w - 1 - r - t * 1.3) },
-            right: { start: Math.ceil(r), end: Math.floor(h - 1 - t - r * 0.4) }
+            top: { start: Math.ceil(r + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            left: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) },
+            bottom: { start: Math.ceil(r + b + 1), end: Math.floor(w - 1 - r - t * 1.3 - b - 1) },
+            right: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) }
           };
         }
       },
@@ -1922,11 +2231,12 @@
         guides: (w, h, o) => {
           const r = Math.min(o.radius, Math.min(w, h) * 0.35);
           const t = Math.min(o.tail, Math.min(w, h) * 0.3);
+          const b = (o.borderWidth || 0);
           return {
-            top: { start: Math.ceil(r), end: Math.floor(w - 1 - r) },
-            left: { start: Math.ceil(r), end: Math.floor(h - 1 - t - r * 0.4) },
-            bottom: { start: Math.ceil(r + t * 1.3), end: Math.floor(w - 1 - r) },
-            right: { start: Math.ceil(r), end: Math.floor(h - 1 - t - r * 0.4) }
+            top: { start: Math.ceil(r + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            left: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) },
+            bottom: { start: Math.ceil(r + t * 1.3 + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            right: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) }
           };
         }
       },
@@ -1952,11 +2262,12 @@
           const r = Math.min(o.radius * 0.6, maxR);
           const maxN = w - r - 4;
           const n = Math.min(o.notch, maxN);
+          const b = (o.borderWidth || 0);
           return {
-            top: { start: Math.ceil(n) + 1, end: Math.floor(w - 1 - r) },
+            top: { start: Math.ceil(n + b + 1), end: Math.floor(w - 1 - r - b - 1) },
             left: { start: Math.floor(h / 2), end: Math.floor(h / 2) },
-            bottom: { start: Math.ceil(n) + 1, end: Math.floor(w - 1 - r) },
-            right: { start: Math.ceil(r), end: Math.floor(h - 1 - r) }
+            bottom: { start: Math.ceil(n + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            right: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - r - b - 1) }
           };
         }
       },
@@ -2027,14 +2338,13 @@
       shadowWidth: 6, shadowMode: 'both',
       topGuide: null, leftGuide: null, bottomGuide: null, rightGuide: null,
       pngMode: false,
-      /* ⭐ NEW: Volume divider */
       volDividerOn: false,
       volDividerPos: 45,
       volDividerOpacity: 18
     };
 
     const CONFIG_STORAGE_KEY = 'mtz-9-patch-maker-config-v1';
-    const CONFIG_VERSION = 7;
+    const CONFIG_VERSION = 10;
     let configPersistenceReady = false;
     let configSaveTimer = null;
 
@@ -2077,6 +2387,7 @@
         const end = clamp(Math.round(guide.end), 0, length - 1);
         return { start: Math.min(start, end), end: Math.max(start, end) };
       };
+
       ['topGuide', 'bottomGuide'].forEach(key => { state[key] = restoreGuide(savedState[key], state.contentW); });
       ['leftGuide', 'rightGuide'].forEach(key => { state[key] = restoreGuide(savedState[key], state.contentH); });
 
@@ -2112,10 +2423,13 @@
       });
 
       ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
-        $(key).value = state[key];
-        $(key).style.backgroundColor = state[key];
-        $(`${key}Hex`).value = state[key];
-        const picker = $(key).closest('.color-wrap').querySelector('.picker-popover input[type=color]');
+        const trigger = $(key);
+        if (!trigger) return;
+        trigger.value = state[key];
+        trigger.style.backgroundColor = state[key];
+        const hexInput = $(`${key}Hex`);
+        if (hexInput) hexInput.value = state[key];
+        const picker = trigger.closest('.color-wrap')?.querySelector('.picker-popover input[type=color]');
         if (picker) picker.value = state[key];
       });
 
@@ -2139,7 +2453,8 @@
         state: { ...state },
         fileName: $('fileName').value,
         selectedMtz: [...$('mtzList').querySelectorAll('input[type=checkbox]:checked')].map(input => +input.dataset.idx),
-        collapsedSections: [...document.querySelectorAll('.sidebar > .group.collapsed')].map(group => group.dataset.sectionKey)
+        collapsedSections: [...document.querySelectorAll('.sidebar > .group.collapsed')].map(group => group.dataset.sectionKey),
+        hiddenSections: [...document.querySelectorAll('.sidebar > .group.hidden')].map(group => group.dataset.sectionKey)
       };
       try { localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config)); } catch { }
     }
@@ -2182,8 +2497,11 @@
       if (shape.noShadow) return;
       const bw = Math.max(1, borderWidth);
 
+      const rw = Math.max(1, Math.ceil(cw * pixelRatio));
+      const rh = Math.max(1, Math.ceil(ch * pixelRatio));
+
       const ring = document.createElement('canvas');
-      ring.width = cw * pixelRatio; ring.height = ch * pixelRatio;
+      ring.width = rw; ring.height = rh;
       const ringCtx = ring.getContext('2d');
       ringCtx.scale(pixelRatio, pixelRatio);
       shape.draw(ringCtx, cw, ch, outerOpts);
@@ -2197,7 +2515,7 @@
       ringCtx.restore();
 
       const layer = document.createElement('canvas');
-      layer.width = cw * pixelRatio; layer.height = ch * pixelRatio;
+      layer.width = rw; layer.height = rh;
       const layerCtx = layer.getContext('2d');
       layerCtx.scale(pixelRatio, pixelRatio);
       const { r, g, b } = hexToRgb(state.shadowColor);
@@ -2268,7 +2586,6 @@
         }
         c.fill();
 
-        /* ⭐ NEW: Volume divider line */
         if (state.volDividerOn && shapeKey.startsWith('vol') && !state.pngMode) {
           const divY = Math.round(ch * state.volDividerPos / 100);
           const safeY = clamp(divY, 1, ch - 2);
@@ -2364,22 +2681,35 @@
     }
 
     /* ============================================================
-       STRETCH
+       STRETCH — border-aware
        ============================================================ */
-    function drawStretched(c, img, cw, ch, topGuide, leftGuide, tx, ty, tw, th) {
+    function drawStretched(c, img, cw, ch, topGuide, leftGuide, tx, ty, tw, th, borderW = 0) {
       let xS = 0, xE = cw - 1;
       let yS = 0, yE = ch - 1;
       if (topGuide) { xS = topGuide.start; xE = topGuide.end; }
       if (leftGuide) { yS = leftGuide.start; yE = leftGuide.end; }
-      if (xS > xE) { xS = 0; xE = cw - 1; }
-      if (yS > yE) { yS = 0; yE = ch - 1; }
+
+      const innerMin = Math.max(0, borderW);
+      xS = clamp(Math.max(xS, innerMin), 0, cw - 1);
+      xE = clamp(Math.min(xE, cw - 1 - innerMin), 0, cw - 1);
+      yS = clamp(Math.max(yS, innerMin), 0, ch - 1);
+      yE = clamp(Math.min(yE, ch - 1 - innerMin), 0, ch - 1);
+
+      if (xS > xE) { const mid = Math.floor(cw / 2); xS = mid; xE = mid; }
+      if (yS > yE) { const mid = Math.floor(ch / 2); yS = mid; yE = mid; }
 
       const lwSrc = xS, rwSrc = cw - xE - 1;
       const thSrc = yS, bhSrc = ch - yE - 1;
       const mwDst = tw - lwSrc - rwSrc;
       const mhDst = th - thSrc - bhSrc;
 
-      if (mwDst < 0 || mhDst < 0) { c.drawImage(img, tx, ty, tw, th); return; }
+      if (mwDst < 0 || mhDst < 0) {
+        const scale = Math.min(tw / cw, th / ch);
+        const dw = Math.max(1, cw * scale), dh = Math.max(1, ch * scale);
+        c.drawImage(img, 0, 0, cw, ch,
+          tx + (tw - dw) / 2, ty + (th - dh) / 2, dw, dh);
+        return;
+      }
 
       const xSd = [0, lwSrc, xE + 1, cw];
       const xDd = [0, lwSrc, lwSrc + mwDst, lwSrc + mwDst + rwSrc];
@@ -2396,6 +2726,14 @@
       }
     }
 
+    function getEffectiveBorderW() {
+      const shape = SHAPES[state.shape];
+      if (!shape || shape.noBorder) return 0;
+      if (!state.borderOn) return 0;
+      const cw = state.contentW, ch = state.contentH;
+      return Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4));
+    }
+
     function renderPreview(canvasEl, targetW, targetH) {
       const c = canvasEl.getContext('2d');
       const cw = state.contentW, ch = state.contentH;
@@ -2410,7 +2748,9 @@
         const dw = cw * scale, dh = ch * scale;
         c.drawImage(designCanvas, (targetW - dw) / 2, (targetH - dh) / 2, dw, dh);
       } else {
-        drawStretched(c, designCanvas, cw, ch, state.topGuide, state.leftGuide, 0, 0, targetW, targetH);
+        const borderW = getEffectiveBorderW();
+        drawStretched(c, designCanvas, cw, ch, state.topGuide, state.leftGuide,
+          0, 0, targetW, targetH, borderW);
       }
     }
 
@@ -2516,6 +2856,7 @@
 
     function renderZoom() {
       const zc = $('zoomCanvas');
+      if (!zc) return;
       const zCtx = zc.getContext('2d');
       zc.width = 160; zc.height = 160;
       zCtx.imageSmoothingEnabled = false;
@@ -2541,9 +2882,6 @@
       zCtx.strokeRect(1.5, 1.5, magnification - 3, magnification - 3);
     }
 
-    /* ============================================================
-       PERFORMANCE: RAF-BASED REFRESH
-       ============================================================ */
     let rafPending = false;
     let thumbRafPending = false;
     let validationTimer = null;
@@ -2623,17 +2961,21 @@
       const c = clamp(hit.coord, 0, max - 1);
       state[EDGE_KEY[hit.edge]] = { start: c, end: c };
       drawing = { edge: hit.edge, startCoord: c, key: EDGE_KEY[hit.edge] };
-      editor.setPointerCapture(e.pointerId);
+      try { editor.setPointerCapture(e.pointerId); } catch { }
       scheduleRefresh({ skipValidation: true });
     });
 
     editor.addEventListener('pointermove', e => {
       if (!drawing) {
         const hit = edgeFromPixel(getCanvasPixel(e));
-        if (hit) editor.style.cursor = (hit.edge === 'top' || hit.edge === 'bottom') ? 'ew-resize' : 'ns-resize';
-        else editor.style.cursor = state.pngMode ? 'default' : 'crosshair';
+        if (hit) {
+          editor.style.cursor = (hit.edge === 'top' || hit.edge === 'bottom') ? 'ew-resize' : 'ns-resize';
+        } else {
+          editor.style.cursor = state.pngMode ? 'default' : 'crosshair';
+        }
         return;
       }
+      e.preventDefault();
       const p = getCanvasPixel(e);
       const max = (drawing.edge === 'top' || drawing.edge === 'bottom') ? state.contentW : state.contentH;
       let coord = (drawing.edge === 'top' || drawing.edge === 'bottom') ? Math.floor(p.x) - 1 : Math.floor(p.y) - 1;
@@ -2665,7 +3007,9 @@
     function applyAutoGuides() {
       const shape = SHAPES[state.shape];
       if (!shape || !shape.guides) return;
-      const borderW = (!shape.noBorder && state.borderOn) ? state.borderWidth : 0;
+      const borderW = (!shape.noBorder && state.borderOn)
+        ? Math.min(state.borderWidth, Math.floor(Math.min(state.contentW, state.contentH) / 4))
+        : 0;
       const opts = {
         radius: state.radius,
         tail: state.tail,
@@ -2673,6 +3017,7 @@
         borderWidth: borderW
       };
       const g = shape.guides(state.contentW, state.contentH, opts);
+      if (!g) return;
       state.topGuide = normalizeGuide(g.top, state.contentW);
       state.leftGuide = normalizeGuide(g.left, state.contentH);
       state.bottomGuide = normalizeGuide(g.bottom, state.contentW);
@@ -2695,6 +3040,7 @@
       c.scale(pixelRatio, pixelRatio);
       c.clearRect(0, 0, w, h);
       const shape = SHAPES[shapeKey];
+      if (!shape) return;
       const pad = 8;
       const sw = w - pad * 2, sh = h - pad * 2;
       const scale = sw / 96;
@@ -2706,7 +3052,7 @@
         ? Math.min(sw, sh) / 2
         : isVolumeShape
           ? Math.min(sw, sh) * 0.32
-          : state.radius * scale + 4;
+          : Math.max(4, state.radius * scale + 4);
 
       const opts = {
         radius: thumbRadius,
@@ -2728,7 +3074,7 @@
       g.addColorStop(0, state.bgColor);
       g.addColorStop(1, state.gradOn ? state.bgColor2 : state.bgColor);
       c.fillStyle = g;
-      drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'outer', scale, pixelRatio);
+      drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'outer', scale, 1);
       shape.draw(c, sw, sh, opts);
       c.fill();
       if (thumbBorderWidth > 0) {
@@ -2737,7 +3083,6 @@
         shape.draw(c, sw, sh, opts);
         c.stroke();
       }
-      /* ⭐ Volume divider hint in thumbnail */
       if (isVolumeShape && state.volDividerOn && !state.pngMode) {
         const divY = pad + Math.round(sh * state.volDividerPos / 100);
         c.save();
@@ -2746,13 +3091,14 @@
         c.fillRect(pad, divY, sw, 1);
         c.restore();
       }
-      drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'inner', scale, pixelRatio);
+      drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'inner', scale, 1);
       c.restore();
     }
 
     function buildShapeList() {
       SHAPE_GROUPS.forEach(({ listId, categories }) => {
         const list = $(listId);
+        if (!list) return;
         list.innerHTML = '';
         categories.forEach(cat => {
           const items = Object.keys(SHAPES).filter(key => SHAPES[key].cat === cat);
@@ -2782,7 +3128,8 @@
 
     function togglePngMode(on, skipRefresh = false) {
       state.pngMode = on;
-      $('pngModeNote').style.display = on ? '' : 'none';
+      const note = $('pngModeNote');
+      if (note) note.style.display = on ? '' : 'none';
       if (!skipRefresh) refresh();
     }
 
@@ -2795,6 +3142,7 @@
 
     function selectShape(key, options = {}) {
       const { autoGuides = true, enforcePngMode = true } = options;
+      if (!SHAPES[key]) return;
       state.shape = key;
       [...document.querySelectorAll('.shape-btn')].forEach(b =>
         b.classList.toggle('active', b.dataset.shape === key)
@@ -2853,8 +3201,6 @@
       { name: 'call_sim2_normal', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
       { name: 'call_sim1_pressed', w: 192, h: 96, shape: 'simCallerLeft', radius: 48, darken: 0.15 },
       { name: 'call_sim2_pressed', w: 192, h: 96, shape: 'simCallerRight', radius: 48, darken: 0.15 },
-
-      /* ⭐ NEW: Volume panel sliders (vertical) */
       { name: 'volumepanel_slider_light', w: 72, h: 320, shape: 'volTrack', radius: 36 },
       { name: 'volumepanel_slider_ring', w: 72, h: 320, shape: 'volTrack', radius: 36 },
       { name: 'volumepanel_slider_volume', w: 72, h: 320, shape: 'volTrack', radius: 36 },
@@ -2863,14 +3209,10 @@
       { name: 'volumepanel_slider_voice', w: 72, h: 320, shape: 'volTrack', radius: 36 },
       { name: 'volumepanel_slider_media', w: 72, h: 320, shape: 'volTrack', radius: 36 },
       { name: 'volumepanel_slider_expand', w: 72, h: 320, shape: 'volTrackPillTop', radius: 30 },
-
-      /* ⭐ NEW: Horizontal volume bars (compact) */
       { name: 'volumepanel_h_speaker', w: 96, h: 160, shape: 'volTrackFlatTop', radius: 20 },
       { name: 'volumepanel_h_bell', w: 96, h: 200, shape: 'volTrackFlatTop', radius: 20 },
       { name: 'volumepanel_h_alarm', w: 96, h: 260, shape: 'volTrackPillTop', radius: 22 },
       { name: 'volumepanel_h_brightness', w: 96, h: 280, shape: 'volTrackPillTop', radius: 22 },
-
-      /* Common UI */
       { name: 'notification_bg', w: 128, h: 128, shape: 'rounded', radius: 16 },
       { name: 'notification_bg_low', w: 128, h: 128, shape: 'rounded', radius: 16 },
       { name: 'toast_frame', w: 128, h: 96, shape: 'rounded', radius: 16 },
@@ -2889,6 +3231,7 @@
 
     function buildMtzList() {
       const list = $('mtzList');
+      if (!list) return;
       list.innerHTML = '';
       MTZ_FILES.forEach((f, i) => {
         const item = document.createElement('label');
@@ -2901,13 +3244,21 @@
         list.appendChild(item);
       });
     }
-    buildMtzList();
-    $('mtzAll').addEventListener('click', () => $('mtzList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true));
-    $('mtzNone').addEventListener('click', () => $('mtzList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false));
 
-    function hexToRgb(hex) { const v = hex.replace('#', ''); return { r: parseInt(v.substr(0, 2), 16), g: parseInt(v.substr(2, 2), 16), b: parseInt(v.substr(4, 2), 16) }; }
-    function rgbToHex({ r, g, b }) { const h = n => Math.round(clamp(n, 0, 255)).toString(16).padStart(2, '0'); return '#' + h(r) + h(g) + h(b); }
-    function darkenColor(hex, amount) { const c = hexToRgb(hex); return rgbToHex({ r: c.r * (1 - amount), g: c.g * (1 - amount), b: c.b * (1 - amount) }); }
+    function hexToRgb(hex) {
+      const v = (hex || '#000000').replace('#', '');
+      return { r: parseInt(v.substr(0, 2), 16) || 0, g: parseInt(v.substr(2, 2), 16) || 0, b: parseInt(v.substr(4, 2), 16) || 0 };
+    }
+
+    function rgbToHex({ r, g, b }) {
+      const h = n => Math.round(clamp(n, 0, 255)).toString(16).padStart(2, '0');
+      return '#' + h(r) + h(g) + h(b);
+    }
+
+    function darkenColor(hex, amount) {
+      const c = hexToRgb(hex);
+      return rgbToHex({ r: c.r * (1 - amount), g: c.g * (1 - amount), b: c.b * (1 - amount) });
+    }
 
     function makeMtzPng(fileDef) {
       const cw = fileDef.w, ch = fileDef.h;
@@ -2932,7 +3283,12 @@
       if (fileDef.darken) borderColor = darkenColor(borderColor, fileDef.darken);
 
       const b = borderOn ? Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4)) : 0;
-      const innerOpts = { radius: Math.max(0, radius - b), tail: Math.max(3, state.tail - b), notch: Math.max(3, state.notch - b), borderWidth: 0 };
+      const innerOpts = {
+        radius: Math.max(0, radius - b),
+        tail: Math.max(3, state.tail - b),
+        notch: Math.max(3, state.notch - b),
+        borderWidth: 0
+      };
 
       const d = document.createElement('canvas');
       d.width = cw; d.height = ch;
@@ -2965,7 +3321,6 @@
         }
         dc.fill();
 
-        /* ⭐ Volume divider for MTZ bundle */
         if (state.volDividerOn && fileDef.shape.startsWith('vol')) {
           const divY = Math.round(ch * state.volDividerPos / 100);
           const safeY = clamp(divY, 1, ch - 2);
@@ -2996,49 +3351,27 @@
       return out;
     }
 
-    $('downloadZip').addEventListener('click', async () => {
-      const checked = [...$('mtzList').querySelectorAll('input[type=checkbox]:checked')];
-      if (!checked.length) { showToast('Kono file select kora nei!', true); return; }
-
-      const zip = new JSZip();
-      const folder = zip.folder('res-drawable-nodpi');
-      const btn = $('downloadZip');
-      const oldText = btn.textContent;
-      btn.textContent = 'Generating...'; btn.disabled = true;
-
-      try {
-        for (const cb of checked) {
-          const def = MTZ_FILES[+cb.dataset.idx];
-          const canvas = makeMtzPng(def);
-          const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-          const buf = await blob.arrayBuffer();
-          folder.file(def.name + '.9.png', buf);
-        }
-        const zipBlob = await zip.generateAsync({ type: 'blob' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(zipBlob);
-        a.download = 'mtz-9patch-bundle.zip';
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-        showToast(`✓ ${checked.length} ta perfect 9.png download holo!`);
-      } catch (err) {
-        console.error(err);
-        showToast('Error: ' + err.message, true);
-      } finally {
-        btn.textContent = oldText; btn.disabled = false;
-      }
-    });
-
     /* ============================================================
        UI BINDING
        ============================================================ */
+    function closeAllPopovers() {
+      document.querySelectorAll('.picker-popover').forEach(popover => {
+        popover.hidden = true;
+        const trigger = popover.parentElement?.querySelector('.color-trigger');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
     function bindColor(colorEl, hexEl, key) {
-      const popover = colorEl.closest('.color-wrap').querySelector('.picker-popover');
+      if (!colorEl || !hexEl) return;
+      const popover = colorEl.closest('.color-wrap')?.querySelector('.picker-popover');
+      if (!popover) return;
       colorEl.addEventListener('click', () => {
         document.querySelectorAll('.picker-popover').forEach(other => {
           if (other !== popover) {
             other.hidden = true;
-            other.parentElement.querySelector('.color-trigger').setAttribute('aria-expanded', 'false');
+            const otherTrigger = other.parentElement?.querySelector('.color-trigger');
+            if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
           }
         });
         popover.hidden = !popover.hidden;
@@ -3046,12 +3379,14 @@
       });
       hexEl.addEventListener('input', () => {
         let v = hexEl.value.trim();
-        if (v && v[0] !== '#') v = '#' + v;
+        if (!v) return;
+        if (v[0] !== '#') v = '#' + v;
         if (/^#[0-9a-fA-F]{6}$/.test(v)) {
           state[key] = v.toLowerCase();
           colorEl.value = v.toLowerCase();
           colorEl.style.backgroundColor = v;
-          popover.querySelector('input[type=color]').value = v.toLowerCase();
+          const pickerInput = popover.querySelector('input[type=color]');
+          if (pickerInput) pickerInput.value = v.toLowerCase();
           scheduleRefresh({ skipValidation: true });
           scheduleThumbRefresh();
         }
@@ -3061,13 +3396,18 @@
     function applyPickerColor(key, color) {
       const normalized = color.toLowerCase();
       const trigger = $(key);
+      if (!trigger) return;
       state[key] = normalized;
       trigger.value = normalized;
       trigger.style.backgroundColor = normalized;
-      $(`${key}Hex`).value = normalized;
-      const popover = trigger.closest('.color-wrap').querySelector('.picker-popover');
-      popover.querySelector('input[type=color]').value = normalized;
-      popover.hidden = true;
+      const hexInput = $(`${key}Hex`);
+      if (hexInput) hexInput.value = normalized;
+      const popover = trigger.closest('.color-wrap')?.querySelector('.picker-popover');
+      if (popover) {
+        const pickerInput = popover.querySelector('input[type=color]');
+        if (pickerInput) pickerInput.value = normalized;
+        popover.hidden = true;
+      }
       trigger.setAttribute('aria-expanded', 'false');
       scheduleRefresh({ skipValidation: true });
       scheduleThumbRefresh();
@@ -3075,6 +3415,7 @@
 
     ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
       const trigger = $(key);
+      if (!trigger) return;
       const popover = document.createElement('div');
       popover.className = 'picker-popover';
       popover.hidden = true;
@@ -3085,7 +3426,7 @@
       title.textContent = 'Choose a color';
       const palette = document.createElement('div');
       palette.className = 'color-palette';
-      yourDefaultColorPalette.forEach(color => {
+      DEFAULT_COLOR_PALETTE.forEach(color => {
         const swatch = document.createElement('button');
         swatch.type = 'button';
         swatch.className = 'palette-swatch';
@@ -3107,7 +3448,8 @@
         state[key] = color;
         trigger.value = color;
         trigger.style.backgroundColor = color;
-        $(`${key}Hex`).value = color;
+        const hexInput = $(`${key}Hex`);
+        if (hexInput) hexInput.value = color;
         scheduleRefresh({ skipValidation: true });
         clearTimeout(customInput._t);
         customInput._t = setTimeout(scheduleThumbRefresh, 150);
@@ -3124,17 +3466,11 @@
 
     document.addEventListener('click', event => {
       if (event.target.closest('.color-wrap')) return;
-      document.querySelectorAll('.picker-popover').forEach(popover => {
-        popover.hidden = true;
-        popover.parentElement.querySelector('.color-trigger').setAttribute('aria-expanded', 'false');
-      });
+      closeAllPopovers();
     });
     document.addEventListener('keydown', event => {
       if (event.key !== 'Escape') return;
-      document.querySelectorAll('.picker-popover').forEach(popover => {
-        popover.hidden = true;
-        popover.parentElement.querySelector('.color-trigger').setAttribute('aria-expanded', 'false');
-      });
+      closeAllPopovers();
     });
 
     function refreshThumbs() {
@@ -3156,11 +3492,25 @@
       scheduleThumbRefresh();
     });
 
+    function clampRadiusToFit() {
+      const maxR = Math.max(0,
+        Math.floor(Math.min(state.contentW, state.contentH) / 2) - state.borderWidth - 2);
+      if (state.radius > maxR) {
+        state.radius = maxR;
+        const el = $('radius');
+        if (el) el.value = state.radius;
+        const lbl = $('radiusVal');
+        if (lbl) lbl.textContent = state.radius;
+      }
+    }
+
     function bindRange(id, valId, key, format = v => v, onChange = null) {
       const el = $(id);
+      if (!el) return;
       el.addEventListener('input', e => {
         state[key] = +e.target.value;
-        $(valId).textContent = format(state[key]);
+        const valEl = $(valId);
+        if (valEl) valEl.textContent = format(state[key]);
         if (onChange) onChange();
         scheduleRefresh({ skipValidation: true });
         scheduleThumbRefresh();
@@ -3168,12 +3518,17 @@
       el.addEventListener('change', () => scheduleRefresh());
     }
 
-    bindRange('radius', 'radiusVal', 'radius', v => v, applyAutoGuides);
+    bindRange('radius', 'radiusVal', 'radius', v => v, () => {
+      clampRadiusToFit();
+      applyAutoGuides();
+    });
     bindRange('tail', 'tailVal', 'tail', v => v, applyAutoGuides);
     bindRange('notch', 'notchVal', 'notch', v => v, applyAutoGuides);
-    bindRange('borderWidth', 'borderWidthVal', 'borderWidth', v => v, applyAutoGuides);
+    bindRange('borderWidth', 'borderWidthVal', 'borderWidth', v => v, () => {
+      clampRadiusToFit();
+      applyAutoGuides();
+    });
 
-    /* ⭐ NEW: Volume divider bindings */
     $('volDividerOn').addEventListener('change', e => {
       state.volDividerOn = e.target.checked;
       scheduleRefresh({ skipValidation: true });
@@ -3229,14 +3584,49 @@
       [...$('sizePresets').children].forEach(b => b.classList.toggle('active', b === btn));
       const s = +btn.dataset.size;
       state.contentW = s; state.contentH = s;
+      clampRadiusToFit();
       applyAutoGuides();
       refresh();
       scheduleThumbRefresh();
     });
 
-    /* ============================================================
-       SINGLE EXPORT
-       ============================================================ */
+    $('mtzAll').addEventListener('click', () => $('mtzList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true));
+    $('mtzNone').addEventListener('click', () => $('mtzList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false));
+
+    $('downloadZip').addEventListener('click', async () => {
+      const checked = [...$('mtzList').querySelectorAll('input[type=checkbox]:checked')];
+      if (!checked.length) { showToast('Kono file select kora nei!', true); return; }
+
+      const zip = new JSZip();
+      const folder = zip.folder('res-drawable-nodpi');
+      const btn = $('downloadZip');
+      const oldText = btn.textContent;
+      btn.textContent = 'Generating...'; btn.disabled = true;
+
+      try {
+        for (const cb of checked) {
+          const def = MTZ_FILES[+cb.dataset.idx];
+          if (!def) continue;
+          const canvas = makeMtzPng(def);
+          const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+          const buf = await blob.arrayBuffer();
+          folder.file(def.name + '.9.png', buf);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(zipBlob);
+        a.download = 'mtz-9patch-bundle.zip';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+        showToast(`✓ ${checked.length} ta perfect 9.png download holo!`);
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, true);
+      } finally {
+        btn.textContent = oldText; btn.disabled = false;
+      }
+    });
+
     $('downloadBtn').addEventListener('click', () => {
       const cw = state.contentW, ch = state.contentH;
 
@@ -3306,18 +3696,211 @@
     }
 
     /* ============================================================
+       FAB — Section Visibility Panel
+       (FAB toggle OFF করলে পুরো section HTML থেকে hide হয়ে যায়)
+       ============================================================ */
+
+    /** যেকোনো key দিয়ে একটা section-কে সম্পূর্ণ hide/unhide করে
+     *  force=true  → hidden (পুরো div লুকায়)
+     *  force=false → visible
+     *  force undefined → toggle
+     */
+    function toggleSectionHidden(key, force) {
+      const group = document.querySelector(`.sidebar > .group[data-section-key="${key}"]`);
+      if (!group) return;
+      const isHidden = group.classList.contains('hidden');
+      const targetHidden = (typeof force === 'boolean') ? force : !isHidden;
+
+      group.classList.toggle('hidden', targetHidden);
+
+      syncFabBadges();
+      scheduleConfigSave();
+    }
+
+    /** Page load-এ saved hidden list apply করে */
+    function applyHiddenSections(hiddenKeys) {
+      if (!Array.isArray(hiddenKeys)) return;
+      document.querySelectorAll('.sidebar > .group').forEach(group => {
+        if (!group.dataset.sectionKey) return;
+        group.classList.toggle('hidden', hiddenKeys.includes(group.dataset.sectionKey));
+      });
+      syncFabBadges();
+    }
+
+    /** FAB panel-এর list তৈরি — সব section থেকে */
+    function buildFabList() {
+      const list = $('fabSectionList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      const groups = document.querySelectorAll('.sidebar > .group');
+      if (!groups.length) {
+        const empty = document.createElement('div');
+        empty.className = 'fab-panel-hint';
+        empty.textContent = 'No sections found.';
+        list.appendChild(empty);
+        return;
+      }
+
+      groups.forEach(group => {
+        const heading = group.querySelector(':scope > h3');
+        if (!heading) return;
+        const key = group.dataset.sectionKey;
+        if (!key) return;
+
+        // heading-এর ভেতর থেকে শুধু title text (toggle button বাদ)
+        const headingClone = heading.cloneNode(true);
+        headingClone.querySelectorAll('.section-toggle').forEach(el => el.remove());
+        const titleText = headingClone.textContent.trim() || key;
+
+        const item = document.createElement('div');
+        item.className = 'fab-item';
+        item.dataset.key = key;
+        item.setAttribute('role', 'switch');
+        item.setAttribute('tabindex', '0');
+
+        // FAB switch = section visible কিনা (hidden হলে OFF)
+        const isVisible = !group.classList.contains('hidden');
+        item.setAttribute('aria-checked', String(isVisible));
+        item.setAttribute('aria-label', `${titleText} section`);
+
+        const labelEl = document.createElement('span');
+        labelEl.className = 'fab-label';
+        labelEl.textContent = titleText;
+
+        const sw = document.createElement('label');
+        sw.className = 'switch';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = isVisible;
+        input.tabIndex = -1;
+        input.dataset.fabFor = key;
+        const sliderSpan = document.createElement('span');
+        sliderSpan.className = 'slider-t';
+        sw.append(input, sliderSpan);
+
+        item.append(labelEl, sw);
+        list.appendChild(item);
+      });
+    }
+
+    /** FAB-এর প্রতিটা switch-কে sidebar-এর hidden state এর সাথে sync */
+    function syncFabBadges() {
+      document.querySelectorAll('#fabSectionList .fab-item').forEach(item => {
+        const key = item.dataset.key;
+        const group = document.querySelector(`.sidebar > .group[data-section-key="${key}"]`);
+        if (!group) return;
+        const isVisible = !group.classList.contains('hidden');
+        const input = item.querySelector('input[type=checkbox]');
+        if (input) input.checked = isVisible;
+        item.setAttribute('aria-checked', String(isVisible));
+      });
+    }
+
+    /** FAB panel-এর সব setup */
+    function initFab() {
+      const fab = $('sectionFab');
+      const panel = $('sectionFabPanel');
+      const closeBtn = $('fabClose');
+      const showAllBtn = $('fabShowAll');
+      const hideAllBtn = $('fabHideAll');
+      const list = $('fabSectionList');
+      if (!fab || !panel || !list) return;
+
+      const setOpen = open => {
+        panel.hidden = !open;
+        fab.setAttribute('aria-expanded', String(open));
+        fab.setAttribute('aria-label', open ? 'Close section panel' : 'Open section panel');
+        fab.classList.toggle('active', open);
+        if (open) {
+          syncFabBadges();
+          const first = panel.querySelector('.fab-item');
+          if (first) setTimeout(() => first.focus({ preventScroll: true }), 50);
+        }
+      };
+
+      // FAB click → open/close
+      fab.addEventListener('click', e => {
+        e.stopPropagation();
+        setOpen(panel.hidden);
+      });
+
+      // Close button
+      if (closeBtn) closeBtn.addEventListener('click', () => {
+        setOpen(false);
+        fab.focus();
+      });
+
+      // Show all → সব section পুনরায় দেখা যাবে
+      if (showAllBtn) showAllBtn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar > .group[data-section-key]').forEach(g => {
+          toggleSectionHidden(g.dataset.sectionKey, false);
+        });
+        showToast('All sections shown');
+      });
+
+      // Hide all → সব section সম্পূর্ণ লুকাবে
+      if (hideAllBtn) hideAllBtn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar > .group[data-section-key]').forEach(g => {
+          toggleSectionHidden(g.dataset.sectionKey, true);
+        });
+        showToast('All sections hidden');
+      });
+
+      // List item click → section hide/unhide
+      list.addEventListener('click', e => {
+        const item = e.target.closest('.fab-item');
+        if (!item) return;
+        toggleSectionHidden(item.dataset.key);
+      });
+
+      list.addEventListener('keydown', e => {
+        const item = e.target.closest('.fab-item');
+        if (!item) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSectionHidden(item.dataset.key);
+        }
+      });
+
+      // Outside click → close panel
+      document.addEventListener('click', e => {
+        if (panel.hidden) return;
+        if (e.target.closest('#sectionFabPanel') || e.target.closest('#sectionFab')) return;
+        setOpen(false);
+      });
+
+      // Escape → close panel
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !panel.hidden) {
+          setOpen(false);
+          fab.focus();
+        }
+      });
+
+      // Build list
+      buildFabList();
+    }
+
+    /* ============================================================
        INIT
        ============================================================ */
     (function init() {
       const savedConfig = readSavedConfig();
       const migrateOldDefaults = !!savedConfig && savedConfig.version !== CONFIG_VERSION;
       restoreSavedState(savedConfig?.state, migrateOldDefaults);
-      if (savedConfig && SHAPES[state.shape].pngOnly) state.pngMode = true;
+      if (savedConfig && SHAPES[state.shape]?.pngOnly) state.pngMode = true;
       buildShapeList();
+      buildMtzList();
       initSectionToggles(savedConfig?.collapsedSections || []);
+      initFab();
+      // FAB দিয়ে hide করা section গুলো restore
+      applyHiddenSections(savedConfig?.hiddenSections || []);
       const migrateSize = migrateOldDefaults && savedConfig.state?.contentW === 96 && savedConfig.state?.contentH === 96;
       selectShape(state.shape, { autoGuides: !savedConfig || migrateSize, enforcePngMode: !savedConfig });
       syncControlsFromState(savedConfig);
+      clampRadiusToFit();
+      applyAutoGuides();
       updateVolDividerVisibility();
       fitCanvasDisplay();
       refresh();
