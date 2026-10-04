@@ -562,10 +562,30 @@
       background: #222;
       cursor: pointer;
       transition: border-color 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
     .target-color-bar .tc-preview:hover {
       border-color: var(--accent);
+    }
+
+    .target-color-bar .tc-preview.is-color {
+      background-color: #222;
+      background-image:
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%),
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 4px 4px;
+    }
+
+    .target-color-bar .tc-preview.is-color::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--pv-color, transparent);
+      pointer-events: none;
+      border-radius: inherit;
     }
 
     .target-color-bar .tc-value {
@@ -690,6 +710,26 @@
       border-radius: 10px;
       border: 2px solid #444;
       flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .target-picker-preview .tp-swatch.is-color {
+      background-color: #222;
+      background-image:
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%),
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%);
+      background-size: 10px 10px;
+      background-position: 0 0, 5px 5px;
+    }
+
+    .target-picker-preview .tp-swatch.is-color::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--pv-color, transparent);
+      pointer-events: none;
+      border-radius: inherit;
     }
 
     .target-picker-preview .tp-info {
@@ -879,6 +919,9 @@
       display: none;
     }
 
+    /* ============================================
+       COLOR PREVIEW (with checkerboard for alpha)
+    ============================================ */
     .color-preview {
       width: 36px;
       height: 36px;
@@ -893,6 +936,28 @@
       font-size: 13px;
       color: white;
       background: #222;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Checkerboard background — transparency বোঝাতে */
+    .color-preview.is-color {
+      background-color: #222;
+      background-image:
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%),
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 4px 4px;
+    }
+
+    /* আসল রঙ উপরে overlay */
+    .color-preview.is-color::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--pv-color, transparent);
+      pointer-events: none;
+      border-radius: inherit;
     }
 
     .color-info {
@@ -1042,6 +1107,26 @@
       font-weight: bold;
       color: white;
       background: #222;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .large-preview.is-color {
+      background-color: #222;
+      background-image:
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%),
+        linear-gradient(45deg, #3a3a3a 25%, transparent 25%, transparent 75%, #3a3a3a 75%);
+      background-size: 12px 12px;
+      background-position: 0 0, 6px 6px;
+    }
+
+    .large-preview.is-color::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: var(--pv-color, transparent);
+      pointer-events: none;
+      border-radius: inherit;
     }
 
     .dropper-btn {
@@ -1307,9 +1392,6 @@
     <h1 id="mainTitle">XML Editor Pro</h1>
     <p class="subtitle" id="mainSubtitle">Upload your XML to start editing.</p>
 
-    <!-- ============================================
-         UPLOAD SECTION
-    ============================================ -->
     <div class="upload-section" id="uploadSection">
       <span class="upload-icon">📁</span>
 
@@ -1360,7 +1442,6 @@
       </div>
     </div>
 
-    <!-- DASHBOARD — single line -->
     <div class="stats-panel" id="statsPanel">
       <div class="stats-line" id="statsLine"></div>
     </div>
@@ -1401,7 +1482,6 @@
       </div>
     </div>
 
-    <!-- TARGET COLOR BAR (Replace Mode) -->
     <div class="target-color-bar" id="targetColorBar">
       <span class="tc-label">Target</span>
       <div class="tc-preview" id="targetPreview" onclick="openTargetPicker()">🎨</div>
@@ -1499,7 +1579,6 @@
     </div>
   </div>
 
-  <!-- TARGET COLOR PICKER MODAL -->
   <div class="target-picker-overlay" id="targetPickerOverlay" onclick="closeTargetPicker(event)">
     <div class="target-picker" onclick="event.stopPropagation()">
       <div class="target-picker-header">
@@ -1508,7 +1587,7 @@
       </div>
 
       <div class="target-picker-preview">
-        <div class="tp-swatch" id="tpSwatch" style="background:#1686D0;"></div>
+        <div class="tp-swatch is-color" id="tpSwatch" style="--pv-color:#1686D0;"></div>
         <div class="tp-info">
           <label>Selected Color</label>
           <input type="text" id="tpHexInput" value="#1686D0" maxlength="9" placeholder="#RRGGBB">
@@ -1545,8 +1624,17 @@
       'dimen': { tag: 'dimen', icon: 'dp', bg: '#2a2a2a', label: 'Dimension' }
     };
 
-    /* Download file name */
     const DOWNLOAD_FILENAME = 'theme_values.xml';
+
+    /* Android named colors → hex map */
+    const NAMED_COLORS = {
+      'red': '#FF0000', 'blue': '#0000FF', 'green': '#00FF00', 'black': '#000000',
+      'white': '#FFFFFF', 'yellow': '#FFFF00', 'cyan': '#00FFFF', 'magenta': '#FF00FF',
+      'gray': '#808080', 'grey': '#808080', 'lightgray': '#D3D3D3', 'lightgrey': '#D3D3D3',
+      'darkgray': '#A9A9A9', 'darkgrey': '#A9A9A9', 'aqua': '#00FFFF', 'fuchsia': '#FF00FF',
+      'lime': '#00FF00', 'maroon': '#800000', 'navy': '#000080', 'olive': '#808000',
+      'purple': '#800080', 'silver': '#C0C0C0', 'teal': '#008080', 'orange': '#FFA500'
+    };
 
     let allItems = [];
     let currentEditingItem = null;
@@ -1564,6 +1652,143 @@
     let replaceModeOn = false;
     let targetColor = null;
     let pendingTargetColor = null;
+
+    /* @color/xxx reference resolution map */
+    let colorMap = {};
+
+    /* ============================================================
+       🔥 COLOR FORMAT CONVERTER (Android → CSS)
+       Supports: #RGB, #ARGB, #RRGGBB, #AARRGGBB, named, transparent
+       Returns: valid CSS color string or null
+    ============================================================ */
+    function androidColorToCss(value) {
+      if (value == null) return null;
+      const v = String(value).trim();
+      if (!v) return null;
+
+      const lower = v.toLowerCase();
+
+      /* 1) Named colors */
+      if (NAMED_COLORS[lower]) return NAMED_COLORS[lower];
+      if (lower === 'transparent') return 'rgba(0, 0, 0, 0)';
+
+      /* 2) Hex formats */
+      if (v[0] === '#') {
+        const hex = v.slice(1);
+        if (!/^[0-9A-Fa-f]+$/.test(hex)) return null;
+
+        /* #RGB → #RRGGBB */
+        if (hex.length === 3) {
+          const r = hex[0], g = hex[1], b = hex[2];
+          return ('#' + r + r + g + g + b + b).toUpperCase();
+        }
+
+        /* #ARGB (Android) → CSS rgba(R,G,B,A) */
+        if (hex.length === 4) {
+          const a = hex[0], r = hex[1], g = hex[2], b = hex[3];
+          const ai = parseInt(a + a, 16) / 255;
+          const ri = parseInt(r + r, 16);
+          const gi = parseInt(g + g, 16);
+          const bi = parseInt(b + b, 16);
+          return `rgba(${ri}, ${gi}, ${bi}, ${ai.toFixed(3)})`;
+        }
+
+        /* #RRGGBB */
+        if (hex.length === 6) {
+          return ('#' + hex).toUpperCase();
+        }
+
+        /* #AARRGGBB (Android) → CSS rgba(R,G,B,A) */
+        if (hex.length === 8) {
+          const a = hex.slice(0, 2);
+          const r = hex.slice(2, 4);
+          const g = hex.slice(4, 6);
+          const b = hex.slice(6, 8);
+          const ai = parseInt(a, 16) / 255;
+          const ri = parseInt(r, 16);
+          const gi = parseInt(g, 16);
+          const bi = parseInt(b, 16);
+          return `rgba(${ri}, ${gi}, ${bi}, ${ai.toFixed(3)})`;
+        }
+      }
+
+      return null;
+    }
+
+    /* ============================================================
+       🔥 @color/xxx Reference Resolver
+       Chain reference: a → b → #FF0000 সব resolve করে
+    ============================================================ */
+    function resolveColorReference(value) {
+      if (!value) return null;
+      let v = String(value).trim();
+      if (v[0] !== '@') return null;
+
+      const seen = new Set();
+      let depth = 0;
+
+      while (v[0] === '@' && depth < 10) {
+        depth++;
+        /* @color/name, @android:color/name, @*android:color/name */
+        const m = v.match(/^@(?:\*?android:)?color\/([^\s]+)$/);
+        if (!m) return null;
+
+        const refName = m[1].trim();
+        if (seen.has(refName)) return null;
+        seen.add(refName);
+
+        /* allItems থেকে খোঁজো */
+        let found = null;
+        for (let i = 0; i < allItems.length; i++) {
+          const it = allItems[i];
+          if (it.getAttribute('data-type') === 'color' &&
+              it.getAttribute('data-name') === refName) {
+            found = it.getAttribute('data-value');
+            break;
+          }
+        }
+        /* Fallback: parse-time colorMap */
+        if (!found && colorMap[refName]) found = colorMap[refName];
+        if (!found) return null;
+
+        v = String(found).trim();
+      }
+
+      return v;
+    }
+
+    /* Final: Android value → CSS color (references resolve সহ) */
+    function resolveColor(value) {
+      let css = androidColorToCss(value);
+      if (css) return css;
+
+      const resolved = resolveColorReference(value);
+      if (resolved) {
+        css = androidColorToCss(resolved);
+        if (css) return css;
+      }
+      return null;
+    }
+
+    /* ============================================================
+       🔥 Preview Applier — সব জায়গায় এই একটা function use হবে
+    ============================================================ */
+    function applyColorPreview(previewEl, type, value) {
+      const config = TYPE_CONFIG[type] || TYPE_CONFIG['color'];
+
+      if (type === 'color') {
+        const css = resolveColor(value) || 'rgba(0, 0, 0, 0)';
+        previewEl.textContent = '';
+        previewEl.style.background = '';
+        previewEl.classList.add('is-color');
+        previewEl.style.setProperty('--pv-color', css);
+      } else {
+        previewEl.textContent = config.icon;
+        previewEl.classList.remove('is-color');
+        previewEl.style.removeProperty('--pv-color');
+        previewEl.style.background = config.bg;
+      }
+    }
 
     /* ============================
        TOAST
@@ -1606,15 +1831,12 @@
       const btn = document.getElementById('quickColorBtn');
       quickColorMode = !quickColorMode;
       btn.classList.toggle('quick-on', quickColorMode);
-      showToast(quickColorMode
-        ? "⚡ Quick Color: ON"
-        : "Quick Color: OFF");
+      showToast(quickColorMode ? "⚡ Quick Color: ON" : "Quick Color: OFF");
     }
 
     function toggleSerial() {
       serialVisible = !serialVisible;
       const btn = document.getElementById('serialToggleBtn');
-
       if (serialVisible) {
         document.body.classList.remove('hide-serials');
         btn.classList.add('active');
@@ -1631,7 +1853,6 @@
     ============================================ */
     function toggleReplaceMode() {
       replaceModeOn = !replaceModeOn;
-
       const btn = document.getElementById('replaceToggleBtn');
       const bar = document.getElementById('targetColorBar');
 
@@ -1661,7 +1882,6 @@
         showToast("⚠️ Enable Replace Mode first");
         return;
       }
-
       const overlay = document.getElementById('targetPickerOverlay');
       overlay.classList.add('active');
 
@@ -1672,7 +1892,6 @@
       if (!document.getElementById('targetSwatchContainer').dataset.built) {
         renderTargetSwatches();
       }
-
       highlightSelectedSwatch(initial);
     }
 
@@ -1689,7 +1908,6 @@
     function renderTargetSwatches() {
       const container = document.getElementById('targetSwatchContainer');
       const frag = document.createDocumentFragment();
-
       defaultColors.forEach(color => {
         const sw = document.createElement('div');
         sw.className = 'swatch';
@@ -1698,7 +1916,6 @@
         sw.addEventListener('click', onTargetSwatchClick);
         frag.appendChild(sw);
       });
-
       container.appendChild(frag);
       container.dataset.built = '1';
     }
@@ -1711,17 +1928,23 @@
       highlightSelectedSwatch(color);
     }
 
+    /* 🔥 Preview ঠিকভাবে দেখাতে CSS convert করা হয় */
     function updateTargetPickerPreview(color) {
       const swatch = document.getElementById('tpSwatch');
       const input = document.getElementById('tpHexInput');
-      if (swatch) swatch.style.background = color;
+      const css = androidColorToCss(color) || 'rgba(0,0,0,0)';
+      if (swatch) {
+        swatch.classList.add('is-color');
+        swatch.style.setProperty('--pv-color', css);
+      }
       if (input) input.value = color;
       pendingTargetColor = color;
     }
 
     function highlightSelectedSwatch(color) {
+      const c = String(color).trim().toLowerCase();
       document.querySelectorAll('#targetSwatchContainer .swatch').forEach(sw => {
-        if (sw.dataset.color.toLowerCase() === String(color).toLowerCase()) {
+        if (sw.dataset.color.toLowerCase() === c) {
           sw.classList.add('selected');
         } else {
           sw.classList.remove('selected');
@@ -1733,9 +1956,13 @@
       if (e.target && e.target.id === 'tpHexInput') {
         let val = e.target.value.trim();
         if (!val.startsWith('#')) val = '#' + val;
-        if (/^#[0-9A-Fa-f]{6}$/.test(val) || /^#[0-9A-Fa-f]{8}$/.test(val)) {
+        if (/^#[0-9A-Fa-f]{3}$/.test(val) ||
+            /^#[0-9A-Fa-f]{4}$/.test(val) ||
+            /^#[0-9A-Fa-f]{6}$/.test(val) ||
+            /^#[0-9A-Fa-f]{8}$/.test(val)) {
           pendingTargetColor = val;
-          document.getElementById('tpSwatch').style.background = val;
+          const css = androidColorToCss(val);
+          if (css) document.getElementById('tpSwatch').style.setProperty('--pv-color', css);
           highlightSelectedSwatch(val);
         }
       }
@@ -1743,12 +1970,13 @@
 
     function confirmTargetColor() {
       const val = document.getElementById('tpHexInput').value.trim();
-
-      if (!/^#[0-9A-Fa-f]{6}$/.test(val) && !/^#[0-9A-Fa-f]{8}$/.test(val)) {
+      if (!/^#[0-9A-Fa-f]{3}$/.test(val) &&
+          !/^#[0-9A-Fa-f]{4}$/.test(val) &&
+          !/^#[0-9A-Fa-f]{6}$/.test(val) &&
+          !/^#[0-9A-Fa-f]{8}$/.test(val)) {
         showToast("⚠️ Enter a valid hex color (e.g. #1686D0)");
         return;
       }
-
       targetColor = val;
       updateTargetBar(val);
       closeTargetPicker();
@@ -1758,14 +1986,16 @@
     function updateTargetBar(color) {
       const preview = document.getElementById('targetPreview');
       const valueEl = document.getElementById('targetValue');
+      const css = androidColorToCss(color) || 'rgba(0,0,0,0)';
 
-      preview.style.background = color;
+      preview.classList.add('is-color');
+      preview.style.setProperty('--pv-color', css);
       preview.textContent = '';
       valueEl.textContent = color;
     }
 
     /* ============================================
-       REPLACE ACTION — silent (no toast)
+       REPLACE ACTION
     ============================================ */
     function replaceItemColor(item) {
       if (!replaceModeOn) return;
@@ -1782,7 +2012,8 @@
       const oldValue = item.getAttribute('data-value');
       const name = item.getAttribute('data-name');
 
-      if (oldValue === targetColor) return;
+      /* case-insensitive compare */
+      if (String(oldValue).trim().toLowerCase() === String(targetColor).trim().toLowerCase()) return;
 
       updateListItem(item, name, targetColor, 'color');
 
@@ -1825,9 +2056,6 @@
       document.getElementById('editValue').value = '';
 
       const preview = document.getElementById('modalPreview');
-      preview.style.background = config.bg;
-      preview.textContent = config.icon;
-
       const boolGroup = document.getElementById('boolGroup');
       const valueGroup = document.getElementById('valueGroup');
 
@@ -1836,6 +2064,7 @@
         valueGroup.style.display = 'none';
         document.getElementById('editBoolValue').value = 'true';
         document.getElementById('dropperBtn').classList.remove('active');
+        applyColorPreview(preview, 'boolean', '');
       } else {
         boolGroup.style.display = 'none';
         valueGroup.style.display = 'block';
@@ -1843,10 +2072,10 @@
         if (type === 'color') {
           currentHexColor = '#1686D0';
           document.getElementById('editValue').value = '#1686D0';
-          preview.style.background = '#1686D0';
-          preview.textContent = '';
+          applyColorPreview(preview, 'color', '#1686D0');
           document.getElementById('dropperBtn').classList.add('active');
         } else {
+          applyColorPreview(preview, type, '');
           document.getElementById('dropperBtn').classList.remove('active');
         }
       }
@@ -1882,23 +2111,20 @@
       const valueGroup = document.getElementById('valueGroup');
 
       if (type === 'color') {
-        preview.style.background = value;
-        preview.textContent = '';
+        applyColorPreview(preview, 'color', value);
         document.getElementById('editValue').value = value;
         currentHexColor = value;
         document.getElementById('dropperBtn').classList.add('active');
         boolGroup.style.display = 'none';
         valueGroup.style.display = 'block';
       } else if (type === 'boolean') {
-        preview.style.background = config.bg;
-        preview.textContent = config.icon;
+        applyColorPreview(preview, 'boolean', '');
         boolGroup.style.display = 'block';
         valueGroup.style.display = 'none';
         document.getElementById('editBoolValue').value = value;
         document.getElementById('dropperBtn').classList.remove('active');
       } else {
-        preview.style.background = config.bg;
-        preview.textContent = config.icon;
+        applyColorPreview(preview, type, value);
         document.getElementById('editValue').value = value;
         boolGroup.style.display = 'none';
         valueGroup.style.display = 'block';
@@ -1923,8 +2149,7 @@
       document.getElementById('editName').value = element.getAttribute('data-name');
 
       const preview = document.getElementById('modalPreview');
-      preview.style.background = value;
-      preview.textContent = '';
+      applyColorPreview(preview, 'color', value);
       document.getElementById('editValue').value = value;
       currentHexColor = value;
       document.getElementById('dropperBtn').classList.remove('active');
@@ -1973,8 +2198,7 @@
       const color = e.currentTarget.dataset.color;
       currentHexColor = color;
       document.getElementById('editValue').value = color;
-      document.getElementById('modalPreview').style.background = color;
-      document.getElementById('modalPreview').textContent = '';
+      applyColorPreview(document.getElementById('modalPreview'), 'color', color);
       document.getElementById('colorPalette').classList.remove('active');
       applyChanges(false, true);
     }
@@ -2012,6 +2236,9 @@
         document.getElementById('colorList').appendChild(item);
         allItems.push(item);
 
+        /* color map update */
+        if (type === 'color') colorMap[nameInput] = value;
+
         pushHistory({
           type: 'add',
           item: item,
@@ -2033,6 +2260,10 @@
       const oldType = currentEditingItem.getAttribute('data-type') || 'color';
 
       updateListItem(currentEditingItem, nameInput, value, type);
+
+      /* color map update */
+      if (oldType === 'color' && oldName !== nameInput) delete colorMap[oldName];
+      if (type === 'color') colorMap[nameInput] = value;
 
       if (oldName !== nameInput || oldValue !== value || oldType !== type) {
         pushHistory({
@@ -2060,18 +2291,23 @@
       item.setAttribute('data-value', value);
       item.setAttribute('data-type', type);
 
-      let previewStyle = '';
+      /* 🔥 Color preview सঠিকভাবে render হবে */
+      let previewClass = '';
+      let previewStyleAttr = '';
       let previewContent = '';
+
       if (type === 'color') {
-        previewStyle = `background-color: ${value};`;
+        const css = resolveColor(value) || 'rgba(0, 0, 0, 0)';
+        previewClass = ' is-color';
+        previewStyleAttr = `--pv-color: ${css};`;
       } else {
-        previewStyle = `background-color: ${config.bg};`;
+        previewStyleAttr = `background-color: ${config.bg};`;
         previewContent = config.icon;
       }
 
       item.innerHTML = `
             <div class="serial-badge"></div>
-            <div class="color-preview" style="${previewStyle}">${previewContent}</div>
+            <div class="color-preview${previewClass}" style="${previewStyleAttr}">${previewContent}</div>
             <div class="color-info">
                 <span class="color-name">${escapeHtml(name)}</span>
                 <span class="color-hex">${escapeHtml(value)}</span>
@@ -2092,8 +2328,6 @@
     }
 
     function updateListItem(item, name, value, type) {
-      const config = TYPE_CONFIG[type] || TYPE_CONFIG['color'];
-
       item.setAttribute('data-name', name);
       item.setAttribute('data-value', value);
       item.setAttribute('data-type', type);
@@ -2102,14 +2336,10 @@
       const nameEl = item.querySelector('.color-name');
       const valueEl = item.querySelector('.color-hex');
       const typeEl = item.querySelector('.color-type');
+      const config = TYPE_CONFIG[type] || TYPE_CONFIG['color'];
 
-      if (type === 'color') {
-        preview.style.background = value;
-        preview.textContent = '';
-      } else {
-        preview.style.background = config.bg;
-        preview.textContent = config.icon;
-      }
+      /* 🔥 applyColorPreview ব্যবহার করা হচ্ছে */
+      applyColorPreview(preview, type, value);
 
       nameEl.textContent = name;
       valueEl.textContent = value;
@@ -2135,7 +2365,7 @@
     }
 
     /* ============================================
-       DASHBOARD — single line
+       DASHBOARD
     ============================================ */
     function updateStats() {
       const counts = { color: 0, string: 0, boolean: 0, integer: 0, dimen: 0 };
@@ -2310,10 +2540,14 @@
 
       if (action.type === 'edit') {
         updateListItem(action.item, action.oldValue.name, action.oldValue.value, action.oldValue.type);
+        if (action.oldValue.type === 'color') {
+          colorMap[action.oldValue.name] = action.oldValue.value;
+        }
       } else if (action.type === 'add') {
         action.item.remove();
         const idx = allItems.indexOf(action.item);
         if (idx !== -1) allItems.splice(idx, 1);
+        if (action.value.type === 'color') delete colorMap[action.value.name];
         renumberItems();
         updateStats();
       }
@@ -2332,9 +2566,13 @@
 
       if (action.type === 'edit') {
         updateListItem(action.item, action.newValue.name, action.newValue.value, action.newValue.type);
+        if (action.newValue.type === 'color') {
+          colorMap[action.newValue.name] = action.newValue.value;
+        }
       } else if (action.type === 'add') {
         document.getElementById('colorList').appendChild(action.item);
         allItems.push(action.item);
+        if (action.value.type === 'color') colorMap[action.value.name] = action.value.value;
         renumberItems();
         updateStats();
       }
@@ -2380,11 +2618,22 @@
       const listContainer = document.getElementById('colorList');
       listContainer.innerHTML = '';
       allItems = [];
+      colorMap = {};
       history = []; historyIndex = -1; updateHistoryButtons();
       searchTerm = '';
       document.getElementById('searchInput').value = '';
       document.getElementById('searchWrap').classList.remove('has-text');
 
+      /* 🔥 Step 1: প্রথমে colorMap তৈরি করি → @color/xxx reference resolve হবে */
+      const colorNodes = xmlDoc.getElementsByTagName('color');
+      for (let i = 0; i < colorNodes.length; i++) {
+        const n = colorNodes[i];
+        if (n.children.length > 0) continue;
+        const nm = n.getAttribute('name');
+        if (nm) colorMap[nm] = n.textContent.trim();
+      }
+
+      /* Step 2: সব resource types process করি */
       const resourceTypes = [
         { tag: 'color', type: 'color' },
         { tag: 'string', type: 'string' },
@@ -2419,6 +2668,16 @@
       }
 
       listContainer.appendChild(frag);
+
+      /* 🔥 সব item render হওয়ার পর দ্বিতীয়বার update করি —
+         যাতে @color/xxx সব resolve হয় (chained reference সহ) */
+      for (let i = 0; i < allItems.length; i++) {
+        const it = allItems[i];
+        if (it.getAttribute('data-type') === 'color') {
+          const pv = it.querySelector('.color-preview');
+          applyColorPreview(pv, 'color', it.getAttribute('data-value'));
+        }
+      }
 
       document.getElementById('uploadSection').style.display = 'none';
       document.getElementById('mainTitle').style.display = 'none';
@@ -2572,7 +2831,6 @@
       showToast("✔ Saved!");
     }
 
-    /* 🎯 12-hour format: YYYY-MM-DD hh:mm:ss AM/PM */
     function getFormattedTimestamp() {
       const now = new Date();
       const pad = n => String(n).padStart(2, '0');
@@ -2616,7 +2874,6 @@
         grouped[config.tag].push(`    <${config.tag} name="${safeName}">${safeValue}</${config.tag}>`);
       }
 
-      /* 🎯 Timestamp comment — root tag-এর পরে */
       const timestamp = getFormattedTimestamp();
 
       let xmlString = `<?xml version="1.0" encoding="utf-8"?>\n<resources>\n`;
