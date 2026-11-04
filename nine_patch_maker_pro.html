@@ -1,0 +1,3913 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="color-scheme" content="dark">
+  <title>MTZ 9-Patch Maker — Perfect Output</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --panel: #0f172a;
+      --panel-2: #141e33;
+      --border: #243044;
+      --text: #e6edf7;
+      --muted: #8fa1bd;
+      --accent: #7c3aed;
+      --accent-2: #a78bfa;
+      --ok: #10b981;
+      --bad: #ef4444;
+      --sidebar-w: 390px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Bengali", sans-serif;
+      background: radial-gradient(1100px 600px at 85% -10%, #221c4d 0%, transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, #0e2a3a 0%, transparent 55%), var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+
+    button,
+    label,
+    input,
+    select {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    .sidebar {
+      width: var(--sidebar-w);
+      flex: 0 0 var(--sidebar-w);
+      height: 100vh;
+      height: 100dvh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: linear-gradient(180deg, rgba(20, 30, 51, .98), rgba(15, 23, 42, .98));
+      border-right: 1px solid var(--border);
+      padding: 18px 14px calc(40px + var(--safe-bottom));
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      contain: layout style;
+    }
+
+    @media (min-width: 901px) {
+      .sidebar {
+        background: linear-gradient(180deg, rgba(20, 30, 51, .95), rgba(15, 23, 42, .95));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 9px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #26324a;
+      border-radius: 9px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .brand .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 8px 22px -8px #7c3aed;
+      flex: 0 0 auto;
+    }
+
+    .brand .logo svg {
+      width: 20px;
+      height: 20px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .brand h1 {
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .group {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 12px 14px;
+      margin-bottom: 12px;
+    }
+
+    .group h3 {
+      margin: 0 0 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .group h3::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+      order: 1;
+    }
+
+    .group.collapsed h3 {
+      margin-bottom: 0;
+    }
+
+    .group.collapsed> :not(h3) {
+      display: none;
+    }
+
+    /* FAB থেকে hide করলে পুরো section (heading + content) গায়েব */
+    .sidebar>.group.hidden {
+      display: none !important;
+    }
+
+    .section-toggle {
+      order: 2;
+      flex: 0 0 26px;
+      width: 26px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #0b1220;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .section-toggle:hover,
+    .section-toggle:focus-visible {
+      border-color: var(--accent);
+      color: var(--text);
+      outline: none;
+    }
+
+    .section-toggle::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-right: 1.5px solid currentColor;
+      border-bottom: 1.5px solid currentColor;
+      transform: rotate(45deg) translate(-1px, -1px);
+      transition: transform .15s;
+    }
+
+    .section-toggle[aria-expanded="false"]::before {
+      transform: rotate(-45deg) translate(-1px, -1px);
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field>.lbl {
+      font-size: 12px;
+      color: #c3cfe2;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), #22d3ee);
+      outline: none;
+      margin: 8px 0 4px;
+      cursor: pointer;
+      touch-action: pan-y;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--accent);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+      cursor: grab;
+    }
+
+    input[type=range]::-moz-range-thumb {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--accent);
+      cursor: grab;
+    }
+
+    .range-row {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .range-row .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #c3cfe2;
+    }
+
+    .val {
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 38px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .color-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+
+    .color-trigger {
+      width: 34px;
+      height: 28px;
+      padding: 0;
+      border-radius: 8px;
+      border: 1px solid #3b4a63;
+      cursor: pointer;
+      flex: 0 0 34px;
+    }
+
+    .color-trigger:hover,
+    .color-trigger[aria-expanded="true"] {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px;
+    }
+
+    .picker-popover {
+      position: absolute;
+      z-index: 50;
+      top: calc(100% + 7px);
+      right: 0;
+      width: min(226px, calc(100vw - 40px));
+      padding: 10px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .55);
+    }
+
+    .picker-popover[hidden] {
+      display: none;
+    }
+
+    .picker-title {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .picker-popover .color-palette {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .picker-popover .palette-swatch {
+      width: 100%;
+      aspect-ratio: 1;
+      min-width: 0;
+      border: 2px solid rgba(255, 255, 255, .3);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .picker-custom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 9px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .picker-custom input[type=color] {
+      width: 32px;
+      height: 25px;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    .picker-custom input[type=color]::-webkit-color-swatch-wrapper {
+      padding: 0;
+    }
+
+    .picker-custom input[type=color]::-webkit-color-swatch {
+      border: 1px solid #3b4a63;
+      border-radius: 8px;
+    }
+
+    .picker-custom input[type=color]::-moz-color-swatch {
+      border: 1px solid #3b4a63;
+      border-radius: 8px;
+    }
+
+    input[type=text].hex,
+    input[type=number],
+    input[type=text] {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 6px 8px;
+      font-size: 12px;
+      font-family: ui-monospace, monospace;
+      width: 82px;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    input[type=text].hex:focus,
+    input[type=number]:focus,
+    input[type=text]:focus {
+      border-color: var(--accent);
+    }
+
+    .picker-popover .palette-swatch:hover,
+    .picker-popover .palette-swatch:focus-visible {
+      border-color: #fff;
+      box-shadow: 0 0 0 2px var(--accent);
+      transform: translateY(-1px);
+      outline: none;
+    }
+
+    .switch {
+      position: relative;
+      width: 38px;
+      height: 22px;
+      flex: 0 0 38px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .slider-t {
+      position: absolute;
+      inset: 0;
+      background: #26324a;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .slider-t::before {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      top: 3px;
+      background: #8fa1bd;
+      border-radius: 50%;
+      transition: .2s;
+    }
+
+    .switch input:checked+.slider-t {
+      background: var(--accent);
+    }
+
+    .switch input:checked+.slider-t::before {
+      transform: translateX(16px);
+      background: #fff;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: #cbd7e8;
+      border-radius: 9px;
+      padding: 7px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: .15s;
+      font-family: inherit;
+      touch-action: manipulation;
+    }
+
+    .btn:hover {
+      border-color: #3b4a63;
+      background: #111c30;
+      color: #fff;
+    }
+
+    .btn.primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #7c3aed, #5b21b6);
+      border: none;
+      color: #fff;
+      box-shadow: 0 10px 24px -10px #7c3aed;
+    }
+
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      transform: translateY(-1px);
+    }
+
+    .btn.primary:active {
+      transform: translateY(0);
+    }
+
+    .btn.zip {
+      background: linear-gradient(135deg, #059669, #047857);
+      border: none;
+      color: #fff;
+      box-shadow: 0 10px 24px -10px #059669;
+    }
+
+    .btn.zip:hover {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .btn.mini {
+      padding: 5px 8px;
+      font-size: 11px;
+    }
+
+    .presets {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .presets .btn {
+      padding: 5px 9px;
+      font-size: 11px;
+      flex: 1 1 auto;
+      min-width: 44px;
+    }
+
+    .presets .btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .shape-cat {
+      margin-bottom: 10px;
+    }
+
+    .shape-cat:last-child {
+      margin-bottom: 0;
+    }
+
+    .shape-cat-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #7b8da8;
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+
+    .shape-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 5px;
+    }
+
+    .shape-btn {
+      aspect-ratio: 1;
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      cursor: pointer;
+      padding: 0;
+      overflow: hidden;
+      transition: border-color .15s, box-shadow .15s, background .15s, transform .15s;
+      display: grid;
+      place-items: center;
+      min-width: 0;
+    }
+
+    .shape-btn canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .shape-btn:hover {
+      border-color: #3b4a63;
+      transform: translateY(-1px);
+    }
+
+    .shape-btn.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(124, 58, 237, .6), 0 6px 16px -8px var(--accent);
+      background: linear-gradient(135deg, rgba(124, 58, 237, .35), rgba(34, 211, 238, .12));
+    }
+
+    .info {
+      font-size: 11px;
+      color: #8ea0bd;
+      line-height: 1.55;
+      background: rgba(124, 58, 237, .08);
+      border: 1px solid rgba(124, 58, 237, .25);
+      border-radius: 9px;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .info b {
+      color: #c4b5fd;
+      font-weight: 600;
+    }
+
+    .info.warn {
+      background: rgba(245, 158, 11, .08);
+      border-color: rgba(245, 158, 11, .3);
+    }
+
+    .info.warn b {
+      color: #fbbf24;
+    }
+
+    .report {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+    }
+
+    .report .row {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      background: #0b1220;
+      line-height: 1.4;
+    }
+
+    .report .row.ok {
+      border-left: 3px solid var(--ok);
+      color: #a7f3d0;
+    }
+
+    .report .row.bad {
+      border-left: 3px solid var(--bad);
+      color: #fecaca;
+    }
+
+    .report .row .icon {
+      font-weight: 700;
+      flex: 0 0 14px;
+    }
+
+    .zoom-box {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .zoom-box canvas {
+      image-rendering: pixelated;
+      display: block;
+      width: 160px;
+      height: 160px;
+      max-width: 100%;
+      border: 1px solid #243044;
+      border-radius: 4px;
+      background-color: #fff;
+      background-image: linear-gradient(45deg, #cbd5e1 25%, transparent 25%),
+        linear-gradient(-45deg, #cbd5e1 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #cbd5e1 75%),
+        linear-gradient(-45deg, transparent 75%, #cbd5e1 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+    }
+
+    .zoom-box .zlabel {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .mtz-list {
+      max-height: 220px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px;
+      margin-bottom: 10px;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      contain: layout style;
+    }
+
+    .mtz-list::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .mtz-list::-webkit-scrollbar-thumb {
+      background: #26324a;
+      border-radius: 9px;
+    }
+
+    .mtz-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      color: #b8c5db;
+      cursor: pointer;
+      min-height: 32px;
+    }
+
+    .mtz-item:hover {
+      background: #111c30;
+    }
+
+    .mtz-item input {
+      accent-color: var(--accent);
+      cursor: pointer;
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+    }
+
+    .mtz-item .fname {
+      font-family: ui-monospace, monospace;
+      font-size: 10.5px;
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+    }
+
+    .mtz-item .fsize {
+      font-size: 10px;
+      color: #7b8da8;
+      flex: 0 0 auto;
+    }
+
+    .mtz-head {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .mtz-head .btn {
+      flex: 1;
+      padding: 8px;
+      font-size: 11px;
+    }
+
+    .stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 20px calc(40px + var(--safe-bottom));
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .stage-head {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stage-head h2 {
+      font-size: 13px;
+      margin: 0;
+      color: #cbd7e8;
+    }
+
+    .stage-head .pill {
+      font-size: 11px;
+      color: #c4b5fd;
+      background: rgba(124, 58, 237, .15);
+      border: 1px solid rgba(124, 58, 237, .4);
+      border-radius: 99px;
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+
+    .stage-head .shape-name {
+      font-size: 11px;
+      color: #9fb0c9;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+
+    .editor-shell {
+      background: rgba(255, 255, 255, .03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 30px 80px -30px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .04);
+      max-width: 100%;
+      contain: layout paint;
+    }
+
+    .checker {
+      border-radius: 10px;
+      background-image: linear-gradient(45deg, #1a2338 25%, transparent 25%),
+        linear-gradient(-45deg, #1a2338 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #1a2338 75%),
+        linear-gradient(-45deg, transparent 75%, #1a2338 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      background-color: #131c2e;
+      display: inline-block;
+      padding: 6px;
+      line-height: 0;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    #editor {
+      display: block;
+      image-rendering: pixelated;
+      cursor: crosshair;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      max-width: 100%;
+    }
+
+    .hint {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin: 0;
+      text-align: center;
+      line-height: 1.7;
+      max-width: 640px;
+      padding: 0 8px;
+    }
+
+    .hint kbd {
+      background: #1b2438;
+      border: 1px solid var(--border);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-size: 11px;
+      color: #cbd7e8;
+      font-family: inherit;
+    }
+
+    .preview-box {
+      width: 100%;
+      max-width: 760px;
+      background: linear-gradient(180deg, #131c2e, #0f172a);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      contain: layout paint;
+    }
+
+    .preview-box h3 {
+      margin: 0 0 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .preview-box h3::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border), transparent);
+    }
+
+    .preview-row {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .preview-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .preview-item .lbl {
+      font-size: 10.5px;
+      color: var(--muted);
+      letter-spacing: .4px;
+      text-align: center;
+    }
+
+    .stretch-canvas {
+      image-rendering: pixelated;
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: calc(24px + var(--safe-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #059669;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, .8);
+      transition: transform .3s;
+      z-index: 9999;
+      max-width: calc(100vw - 32px);
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.bad {
+      background: #dc2626;
+    }
+
+    @media (max-width: 1280px) {
+      :root {
+        --sidebar-w: 340px;
+      }
+
+      .stage {
+        padding: 20px 16px calc(36px + var(--safe-bottom));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        flex: none;
+        height: auto;
+        position: static;
+        top: auto;
+        border-right: none;
+        border-top: 1px solid var(--border);
+        padding: 16px 12px calc(32px + var(--safe-bottom));
+        overflow-y: visible;
+        overscroll-behavior: auto;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        contain: none;
+        order: 2;
+      }
+
+      .mtz-list {
+        max-height: none;
+        overflow: visible;
+        overscroll-behavior: auto;
+        contain: none;
+      }
+
+      .stage {
+        order: 1;
+        padding: 14px 12px 20px;
+        gap: 14px;
+      }
+
+      .stage-head {
+        max-width: 100%;
+      }
+
+      .shape-grid {
+        grid-template-columns: repeat(8, 1fr);
+      }
+
+      .editor-shell {
+        padding: 14px;
+        border-radius: 16px;
+      }
+
+      .preview-box {
+        padding: 14px;
+      }
+
+      input[type=range] {
+        height: 7px;
+        margin: 10px 0 6px;
+      }
+
+      input[type=range]::-webkit-slider-thumb {
+        width: 20px;
+        height: 20px;
+        border-width: 3px;
+      }
+
+      input[type=range]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+      }
+
+      .switch {
+        width: 44px;
+        height: 26px;
+        flex-basis: 44px;
+      }
+
+      .switch .slider-t::before {
+        width: 20px;
+        height: 20px;
+        left: 3px;
+        top: 3px;
+      }
+
+      .switch input:checked+.slider-t::before {
+        transform: translateX(18px);
+      }
+
+      .btn {
+        padding: 9px 12px;
+        font-size: 12.5px;
+        min-height: 38px;
+      }
+
+      .btn.primary {
+        padding: 14px;
+        min-height: 48px;
+      }
+
+      .mtz-item {
+        padding: 10px 8px;
+        min-height: 40px;
+      }
+
+      .section-toggle {
+        flex-basis: 32px;
+        width: 32px;
+        height: 30px;
+      }
+
+      .color-trigger {
+        width: 42px;
+        height: 34px;
+        flex-basis: 42px;
+      }
+
+      input[type=text].hex {
+        width: 90px;
+        font-size: 13px;
+        padding: 7px 9px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .shape-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      .sidebar {
+        padding: 14px 10px calc(28px + var(--safe-bottom));
+      }
+
+      .group {
+        padding: 11px 11px 13px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+      }
+
+      .stage {
+        padding: 12px 10px 16px;
+        gap: 12px;
+      }
+
+      .editor-shell {
+        padding: 10px;
+        border-radius: 14px;
+      }
+
+      .checker {
+        padding: 5px;
+      }
+
+      .stage-head {
+        font-size: 11px;
+        gap: 6px;
+      }
+
+      .stage-head h2 {
+        font-size: 12px;
+      }
+
+      .stage-head .pill,
+      .stage-head .shape-name {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+
+      .preview-box {
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .preview-row {
+        gap: 10px;
+      }
+
+      .hint {
+        display: none;
+      }
+
+      .presets .btn {
+        padding: 7px 6px;
+        font-size: 12px;
+        min-height: 36px;
+      }
+
+      .zoom-box canvas {
+        width: 140px;
+        height: 140px;
+      }
+
+      .picker-popover {
+        right: auto;
+        left: auto;
+        width: min(280px, calc(100vw - 32px));
+      }
+    }
+
+    @media (max-width: 420px) {
+      .shape-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+      }
+
+      .shape-btn {
+        border-radius: 8px;
+      }
+
+      .brand h1 {
+        font-size: 14px;
+      }
+
+      .brand p {
+        font-size: 10px;
+      }
+
+      .brand .logo {
+        width: 34px;
+        height: 34px;
+      }
+
+      .group h3 {
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      .field>.lbl,
+      .range-row .top {
+        font-size: 11.5px;
+      }
+
+      .stage-head .pill,
+      .stage-head .shape-name {
+        font-size: 9.5px;
+        padding: 3px 7px;
+      }
+
+      .mtz-head .btn {
+        font-size: 10.5px;
+        padding: 7px 5px;
+      }
+    }
+
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+      .stage {
+        padding: 10px 10px 14px;
+      }
+
+      .zoom-box canvas {
+        width: 120px;
+        height: 120px;
+      }
+
+      .mtz-list {
+        max-height: 140px;
+      }
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+      .hint {
+        display: none;
+      }
+
+      .shape-btn:hover {
+        transform: none;
+      }
+
+      .btn:hover {
+        transform: none;
+      }
+
+      .shape-btn {
+        transition: border-color .1s, background .1s, box-shadow .1s;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ============================================================
+       FAB (Floating Action Button) + Section Panel
+       ============================================================ */
+    .fab {
+      position: fixed;
+      right: 20px;
+      bottom: calc(20px + var(--safe-bottom));
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #7c3aed, #22d3ee);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 10px 30px -8px rgba(124, 58, 237, .7), 0 4px 12px rgba(0, 0, 0, .45);
+      z-index: 8000;
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, box-shadow .18s ease;
+      -webkit-tap-highlight-color: transparent;
+      padding: 0;
+    }
+
+    .fab:hover {
+      transform: scale(1.07);
+      box-shadow: 0 14px 34px -8px rgba(124, 58, 237, .9), 0 6px 16px rgba(0, 0, 0, .5);
+    }
+
+    .fab:active {
+      transform: scale(.94);
+    }
+
+    .fab.active {
+      background: linear-gradient(135deg, #22d3ee, #7c3aed);
+    }
+
+    .fab svg {
+      width: 24px;
+      height: 24px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: transform .2s;
+    }
+
+    .fab.active svg {
+      transform: rotate(90deg);
+    }
+
+    .fab-panel {
+      position: fixed;
+      right: 20px;
+      bottom: calc(84px + var(--safe-bottom));
+      width: min(320px, calc(100vw - 40px));
+      max-height: min(72vh, 560px);
+      background: linear-gradient(180deg, rgba(20, 30, 51, .98), rgba(15, 23, 42, .99));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 22px 55px -12px rgba(0, 0, 0, .9), inset 0 1px 0 rgba(255, 255, 255, .04);
+      z-index: 7999;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform-origin: bottom right;
+      animation: fabIn .2s cubic-bezier(.2, .9, .3, 1.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .fab-panel[hidden] {
+      display: none;
+    }
+
+    @keyframes fabIn {
+      from {
+        opacity: 0;
+        transform: scale(.9) translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .fab-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      flex: 0 0 auto;
+    }
+
+    .fab-panel-head .fab-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      transition: .15s;
+    }
+
+    .fab-panel-head .fab-close:hover {
+      border-color: var(--accent);
+      color: #fff;
+      background: #111c30;
+    }
+
+    .fab-panel-hint {
+      padding: 8px 14px 4px;
+      font-size: 10.5px;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 0 0 auto;
+    }
+
+    .fab-panel-actions {
+      display: flex;
+      gap: 6px;
+      padding: 6px 10px 10px;
+      border-bottom: 1px solid var(--border);
+      flex: 0 0 auto;
+    }
+
+    .fab-panel-actions .btn {
+      flex: 1;
+      padding: 7px 8px;
+      font-size: 11px;
+      min-height: 34px;
+    }
+
+    .fab-panel-list {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 6px;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .fab-panel-list::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    .fab-panel-list::-webkit-scrollbar-thumb {
+      background: #26324a;
+      border-radius: 9px;
+    }
+
+    .fab-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #cbd7e8;
+      transition: background .12s;
+      user-select: none;
+      -webkit-user-select: none;
+      min-height: 42px;
+      touch-action: manipulation;
+    }
+
+    .fab-item:hover,
+    .fab-item:focus-visible {
+      background: #111c30;
+      outline: none;
+    }
+
+    .fab-item:focus-visible {
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .fab-item .fab-label {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .fab-item .fab-count {
+      font-size: 9.5px;
+      color: var(--muted);
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      flex: 0 0 auto;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .fab-item .switch {
+      pointer-events: none;
+      flex: 0 0 38px;
+    }
+
+    /* FAB overlap প্রতিরোধে sidebar-এ extra bottom padding */
+    @media (max-width: 900px) {
+      .sidebar {
+        padding-bottom: calc(96px + var(--safe-bottom));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .fab {
+        right: 14px;
+        bottom: calc(14px + var(--safe-bottom));
+        width: 50px;
+        height: 50px;
+      }
+
+      .fab svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .fab-panel {
+        right: 14px;
+        bottom: calc(74px + var(--safe-bottom));
+        width: calc(100vw - 28px);
+        max-height: 65vh;
+      }
+
+      .sidebar {
+        padding-bottom: calc(110px + var(--safe-bottom));
+      }
+
+      .fab-item {
+        padding: 11px 12px;
+        min-height: 46px;
+      }
+    }
+
+    @media (min-width: 1600px) {
+
+      .stage-head,
+      .preview-box {
+        max-width: 900px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo"><svg viewBox="0 0 24 24">
+            <path d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-5 5V5z" />
+          </svg></div>
+        <div>
+          <h1>MTZ 9-Patch Maker</h1>
+          <p>Perfect pure output</p>
+        </div>
+      </div>
+
+      <section class="group">
+        <h3>Shape Library</h3>
+        <div id="shapeList"></div>
+      </section>
+
+      <section class="group">
+        <h3>Other Shapes</h3>
+        <div id="otherShapeList"></div>
+      </section>
+
+      <section class="group">
+        <h3>Base Size</h3>
+        <div class="presets" id="sizePresets">
+          <button class="btn" data-size="48">48</button>
+          <button class="btn" data-size="96">96</button>
+          <button class="btn active" data-size="128">128</button>
+          <button class="btn" data-size="192">192</button>
+          <button class="btn" data-size="256">256</button>
+        </div>
+      </section>
+
+      <section class="group" id="paramGroup">
+        <h3>Shape Parameters</h3>
+        <div class="range-row" id="radiusRow">
+          <div class="top"><span>Corner radius</span><span class="val" id="radiusVal">14</span></div>
+          <input type="range" id="radius" min="0" max="60" value="14">
+        </div>
+        <div class="range-row" id="tailRow" style="display:none;">
+          <div class="top"><span>Tail size</span><span class="val" id="tailVal">15</span></div>
+          <input type="range" id="tail" min="4" max="40" value="15">
+        </div>
+        <div class="range-row" id="notchRow" style="display:none;">
+          <div class="top"><span>Notch depth</span><span class="val" id="notchVal">22</span></div>
+          <input type="range" id="notch" min="6" max="45" value="22">
+        </div>
+
+        <div id="volDividerWrap" style="display:none;">
+          <div class="field" style="margin-bottom:8px;">
+            <span class="lbl">Volume divider</span>
+            <label class="switch"><input type="checkbox" id="volDividerOn"><span class="slider-t"></span></label>
+          </div>
+          <div class="range-row" id="volDividerRow">
+            <div class="top"><span>Divider position</span><span class="val" id="volDividerPosVal">45%</span></div>
+            <input type="range" id="volDividerPos" min="20" max="70" value="45">
+          </div>
+          <div class="range-row" id="volDividerOpacityRow">
+            <div class="top"><span>Divider opacity</span><span class="val" id="volDividerOpacityVal">18%</span></div>
+            <input type="range" id="volDividerOpacity" min="5" max="60" value="18">
+          </div>
+        </div>
+
+        <button class="btn" id="resetGuidesBtn" style="width:100%;margin-top:8px;">↺ Auto Guides Reset</button>
+      </section>
+
+      <section class="group">
+        <h3>Background</h3>
+        <div class="field"><span class="lbl">Gradient on</span><label class="switch"><input type="checkbox"
+              id="gradOn"><span class="slider-t"></span></label></div>
+        <div class="field"><span class="lbl">Color 1</span><span class="color-wrap"><button type="button"
+              class="color-trigger" id="bgColor" value="#041c30" style="background-color:#041c30"
+              aria-label="Choose background color 1" aria-expanded="false"></button><input type="text" class="hex"
+              id="bgColorHex" value="#041c30" maxlength="7"></span></div>
+        <div class="field"><span class="lbl">Color 2</span><span class="color-wrap"><button type="button"
+              class="color-trigger" id="bgColor2" value="#22d3ee" style="background-color:#22d3ee"
+              aria-label="Choose background color 2" aria-expanded="false"></button><input type="text" class="hex"
+              id="bgColor2Hex" value="#22d3ee" maxlength="7"></span></div>
+      </section>
+
+      <section class="group">
+        <h3>Border</h3>
+        <div class="field"><span class="lbl">Border on</span><label class="switch"><input type="checkbox" id="borderOn"
+              checked><span class="slider-t"></span></label></div>
+        <div class="field"><span class="lbl">Color</span><span class="color-wrap"><button type="button"
+              class="color-trigger" id="borderColor" value="#1686d0" style="background-color:#1686d0"
+              aria-label="Choose border color" aria-expanded="false"></button><input type="text" class="hex"
+              id="borderColorHex" value="#1686d0" maxlength="7"></span></div>
+        <div class="range-row">
+          <div class="top"><span>Width</span><span class="val" id="borderWidthVal">2</span></div>
+          <input type="range" id="borderWidth" min="0" max="10" value="2">
+        </div>
+      </section>
+
+      <section class="group">
+        <h3>Shadow</h3>
+        <div class="field"><span class="lbl">Shadow on</span><label class="switch"><input type="checkbox"
+              id="shadowOn"><span class="slider-t"></span></label></div>
+        <div class="field"><label class="lbl" for="shadowMode">Type</label>
+          <select id="shadowMode" class="palette-target"
+            style="background:#0b1220;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 8px;font-size:12px;">
+            <option value="outer">Outer</option>
+            <option value="inner">Inner</option>
+            <option value="both" selected>Inner + outer</option>
+          </select>
+        </div>
+        <div class="field"><span class="lbl">Color</span><span class="color-wrap"><button type="button"
+              class="color-trigger" id="shadowColor" value="#0a2e39" style="background-color:#0a2e39"
+              aria-label="Choose shadow color" aria-expanded="false"></button><input type="text" class="hex"
+              id="shadowColorHex" value="#0a2e39" maxlength="7"></span></div>
+        <div class="range-row">
+          <div class="top"><span>Width</span><span class="val" id="shadowWidthVal">6 px</span></div>
+          <input type="range" id="shadowWidth" min="0" max="20" value="6">
+        </div>
+        <div class="range-row">
+          <div class="top"><span>Opacity</span><span class="val" id="shadowOpacityVal">35%</span></div>
+          <input type="range" id="shadowOpacity" min="5" max="100" value="35">
+        </div>
+      </section>
+
+      <section class="group">
+        <h3>Export Mode</h3>
+        <div class="field"><span class="lbl">PNG mode (no 9-patch)</span><label class="switch"><input type="checkbox"
+              id="pngMode"><span class="slider-t"></span></label></div>
+        <div class="info warn" id="pngModeNote" style="display:none;">
+          <b>PNG mode ON</b> — Circle/Oval/Star/Diamond er moto shape 9-patch e kaj kore na.
+        </div>
+      </section>
+
+      <section class="group" id="validationGroup">
+        <h3>Validation</h3>
+        <div class="report" id="validationReport">
+          <div class="row ok"><span class="icon">•</span>Guide validation cholche...</div>
+        </div>
+      </section>
+
+      <section class="group" id="zoomGroup">
+        <h3>Corner Zoom (16×)</h3>
+        <div class="zoom-box">
+          <canvas id="zoomCanvas" width="160" height="160"></canvas>
+          <span class="zlabel">Top-left 10 × 10 pixels · Blue outline marks the first pixel</span>
+        </div>
+      </section>
+
+      <section class="group">
+        <h3>MTZ Theme Bundle</h3>
+        <div class="info">MIUI theme er jonno <b>50+ common 9.png</b> ek click e.</div>
+        <div class="mtz-head">
+          <button class="btn" id="mtzAll">Select All</button>
+          <button class="btn" id="mtzNone">Clear</button>
+        </div>
+        <div class="mtz-list" id="mtzList"></div>
+        <button class="btn primary zip" id="downloadZip">📦 Download MTZ Bundle (.zip)</button>
+      </section>
+
+      <section class="group">
+        <h3>Export Single File</h3>
+        <div class="field" style="margin-bottom:10px;">
+          <span class="lbl">File name</span>
+          <input type="text" id="fileName" value="shape_bg" style="width:140px;">
+        </div>
+        <button class="btn primary" id="downloadBtn">⬇ Download</button>
+        <p style="font-size:10.5px;color:#7b8da8;margin:9px 0 0;line-height:1.5;text-align:center;">Output: <span
+            id="outInfo">130 × 130 px .9.png</span></p>
+      </section>
+    </aside>
+
+    <main class="stage">
+      <div class="stage-head">
+        <h2>Editor</h2>
+        <span class="shape-name" id="shapeName">Rounded</span>
+        <span class="pill" id="dimPill">130 × 130 px .9.png</span>
+      </div>
+
+      <div class="editor-shell">
+        <div class="checker"><canvas id="editor" width="130" height="130"></canvas></div>
+      </div>
+
+      <p class="hint">
+        <kbd>Top/Bottom edge drag</kbd> horizontal stretch &nbsp;•&nbsp;
+        <kbd>Left/Right edge drag</kbd> vertical stretch
+      </p>
+
+      <div class="preview-box">
+        <h3>Live Stretch Preview</h3>
+        <div class="preview-row">
+          <div class="preview-item"><canvas class="stretch-canvas" id="previewBtn" width="320"
+              height="68"></canvas><span class="lbl">BUTTON (320 × 68)</span></div>
+          <div class="preview-item"><canvas class="stretch-canvas" id="previewDialog" width="380"
+              height="180"></canvas><span class="lbl">DIALOG (380 × 180)</span></div>
+          <div class="preview-item"><canvas class="stretch-canvas" id="previewChat" width="240"
+              height="60"></canvas><span class="lbl">CHAT BUBBLE (240 × 60)</span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- FAB + Section Panel -->
+  <button class="fab" id="sectionFab" type="button" aria-label="Open section panel" aria-expanded="false"
+    aria-controls="sectionFabPanel">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </svg>
+  </button>
+
+  <div class="fab-panel" id="sectionFabPanel" hidden role="dialog" aria-label="Section visibility">
+    <div class="fab-panel-head">
+      <span>Sections</span>
+      <button type="button" class="fab-close" id="fabClose" aria-label="Close panel">✕</button>
+    </div>
+    <div class="fab-panel-actions">
+      <button type="button" class="btn" id="fabShowAll">Show all</button>
+      <button type="button" class="btn" id="fabHideAll">Hide all</button>
+    </div>
+    <div class="fab-panel-list" id="fabSectionList"></div>
+  </div>
+
+  <div class="toast" id="toast">Done!</div>
+
+  <script>
+    /* ============================================================
+       UTILS
+       ============================================================ */
+    const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+    const $ = id => document.getElementById(id);
+
+    const DEFAULT_COLOR_PALETTE = [
+      "#1686d0", "#006378", "#00ff62", "#061d2e", "#0a2e39", "#041c30",
+      "#ffc300", "#ff7e29", "#ff5ca1", "#e68585", "#7646ff", "#000000"
+    ];
+
+    const toast = $('toast');
+    function showToast(msg, bad) {
+      if (!toast) return;
+      toast.textContent = msg;
+      toast.classList.toggle('bad', !!bad);
+      toast.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+
+    function roundRectPath(c, x, y, w, h, r) {
+      r = Math.max(0, Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2));
+      c.beginPath();
+      c.moveTo(x + r, y);
+      c.arcTo(x + w, y, x + w, y + h, r);
+      c.arcTo(x + w, y + h, x, y + h, r);
+      c.arcTo(x, y + h, x, y, r);
+      c.arcTo(x, y, x + w, y, r);
+      c.closePath();
+    }
+
+    function initSectionToggles(collapsedSections = []) {
+      document.querySelectorAll('.sidebar > .group').forEach(group => {
+        const heading = group.querySelector(':scope > h3');
+        if (!heading) return;
+        const key = heading.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        group.dataset.sectionKey = key;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'section-toggle';
+        button.addEventListener('click', () => {
+          const expanded = button.getAttribute('aria-expanded') !== 'false';
+          group.classList.toggle('collapsed', expanded);
+          button.setAttribute('aria-expanded', String(!expanded));
+          button.setAttribute('aria-label', `${expanded ? 'Show' : 'Hide'} ${heading.textContent.trim()}`);
+          button.title = !expanded ? 'Show section' : 'Hide section';
+          scheduleConfigSave();
+        });
+        heading.appendChild(button);
+        const collapsed = collapsedSections.includes(key);
+        group.classList.toggle('collapsed', collapsed);
+        button.setAttribute('aria-expanded', String(!collapsed));
+        button.setAttribute('aria-label', `${collapsed ? 'Show' : 'Hide'} ${heading.textContent.trim()}`);
+        button.title = collapsed ? 'Show section' : 'Hide section';
+      });
+    }
+
+    /* ============================================================
+       SHAPES
+       ============================================================ */
+    const SHAPES = {
+      rounded: {
+        name: 'Rounded', cat: 'Basic', params: ['radius'],
+        draw(c, w, h, o) { roundRectPath(c, 0, 0, w, h, Math.min(o.radius, Math.min(w, h) / 2)); },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sY = Math.min(safeR, Math.floor(h / 2));
+          return {
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
+          };
+        }
+      },
+      pill: {
+        name: 'Pill', cat: 'Basic', params: [],
+        draw(c, w, h) { roundRectPath(c, 0, 0, w, h, Math.min(w, h) / 2); },
+        guides: (w, h, o) => {
+          const b = (o.borderWidth || 0);
+          const r = Math.floor(Math.min(w, h) / 2);
+          const midY = Math.floor(h / 2);
+          const topS = Math.min(r + b, Math.floor(w / 2) - 1);
+          const topE = Math.max(topS, w - 1 - topS);
+          const lS = Math.min(midY, h - 1);
+          const lE = Math.max(lS, midY);
+          return {
+            top: topE >= topS ? { start: topS, end: topE } : { start: Math.floor(w / 2), end: Math.floor(w / 2) },
+            left: { start: lS, end: lE },
+            bottom: topE >= topS ? { start: topS, end: topE } : { start: Math.floor(w / 2), end: Math.floor(w / 2) },
+            right: { start: lS, end: lE }
+          };
+        }
+      },
+      sharp: {
+        name: 'Sharp', cat: 'Basic', params: [],
+        draw(c, w, h) { c.beginPath(); c.rect(0, 0, w, h); c.closePath(); },
+        guides: (w, h, o) => {
+          const b = (o.borderWidth || 0);
+          const lo = Math.max(1, b + 1);
+          const sX = Math.min(lo, Math.max(0, Math.floor(w / 2) - 1));
+          const sY = Math.min(lo, Math.max(0, Math.floor(h / 2) - 1));
+          return {
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
+          };
+        }
+      },
+      card: {
+        name: 'Card', cat: 'Basic', params: ['radius'],
+        draw(c, w, h, o) { roundRectPath(c, 0, 0, w, h, Math.min(o.radius * 0.5, Math.min(w, h) / 2)); },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius * 0.5, Math.min(w, h) / 2);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sY = Math.min(safeR, Math.floor(h / 2));
+          return {
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
+          };
+        }
+      },
+      circle: {
+        name: 'Circle', cat: 'Basic', params: [], pngOnly: true,
+        draw(c, w, h) { const r = Math.min(w, h) / 2; c.beginPath(); c.arc(w / 2, h / 2, r, 0, Math.PI * 2); c.closePath(); },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, left: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) }, bottom: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, right: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) } })
+      },
+      oval: {
+        name: 'Oval', cat: 'Basic', params: [], pngOnly: true,
+        draw(c, w, h) { c.beginPath(); c.ellipse(w / 2, h / 2, w / 2, h / 2, 0, 0, Math.PI * 2); c.closePath(); },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, left: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) }, bottom: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, right: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) } })
+      },
+      squircle: {
+        name: 'Squircle', cat: 'Basic', params: [],
+        draw(c, w, h) {
+          const n = 4, steps = 64; c.beginPath();
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps * Math.PI * 2, ct = Math.cos(t), st = Math.sin(t);
+            const x = w / 2 + Math.sign(ct) * Math.pow(Math.abs(ct), 2 / n) * w / 2;
+            const y = h / 2 + Math.sign(st) * Math.pow(Math.abs(st), 2 / n) * h / 2;
+            if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+          } c.closePath();
+        },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.35), end: Math.ceil(w * 0.65) }, left: { start: Math.floor(h * 0.35), end: Math.ceil(h * 0.65) }, bottom: { start: Math.floor(w * 0.35), end: Math.ceil(w * 0.65) }, right: { start: Math.floor(h * 0.35), end: Math.ceil(h * 0.65) } })
+      },
+      roundedTop: {
+        name: 'Rounded Top', cat: 'Basic', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5); c.beginPath();
+          c.moveTo(0, h); c.lineTo(0, r); c.arcTo(0, 0, r, 0, r);
+          c.lineTo(w - r, 0); c.arcTo(w, 0, w, r, r); c.lineTo(w, h); c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sTop = Math.min(safeR, Math.floor(h / 2));
+          const loB = Math.max(0, b);
+          return {
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sTop, end: Math.max(sTop, h - 1 - loB) },
+            bottom: { start: loB, end: Math.max(loB, w - 1 - loB) },
+            right: { start: sTop, end: Math.max(sTop, h - 1 - loB) }
+          };
+        }
+      },
+      roundedBottom: {
+        name: 'Rounded Bot', cat: 'Basic', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5); c.beginPath();
+          c.moveTo(0, 0); c.lineTo(w, 0); c.lineTo(w, h - r);
+          c.arcTo(w, h, w - r, h, r); c.lineTo(r, h); c.arcTo(0, h, 0, h - r, r); c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const safeR = Math.ceil(r + b + 1);
+          const sX = Math.min(safeR, Math.floor(w / 2));
+          const sBot = Math.min(safeR, Math.floor(h / 2));
+          const loT = Math.max(0, b);
+          return {
+            top: { start: loT, end: Math.max(loT, w - 1 - loT) },
+            left: { start: loT, end: Math.max(loT, h - 1 - sBot) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: loT, end: Math.max(loT, h - 1 - sBot) }
+          };
+        }
+      },
+      radioUnchecked: {
+        name: 'Radio ○', cat: 'Toggle', params: [], noBorder: true, noShadow: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2;
+          const outerR = Math.min(w, h) / 2 - 0.5;
+          const strokeW = Math.max(2, Math.round(Math.min(w, h) * 0.08));
+          const innerR = Math.max(1, outerR - strokeW);
+          c.beginPath();
+          c.arc(cx, cy, outerR, 0, Math.PI * 2);
+          c.moveTo(cx + innerR, cy);
+          c.arc(cx, cy, innerR, 0, Math.PI * 2, true);
+          c.closePath();
+        },
+        guides: (w, h) => {
+          const cx = Math.floor(w / 2);
+          const cy = Math.floor(h / 2);
+          return {
+            top: { start: cx, end: cx },
+            left: { start: cy, end: cy },
+            bottom: { start: cx, end: cx },
+            right: { start: cy, end: cy }
+          };
+        }
+      },
+      radioChecked: {
+        name: 'Radio ●', cat: 'Toggle', params: [], noBorder: true, noShadow: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2;
+          const outerR = Math.min(w, h) / 2 - 0.5;
+          const strokeW = Math.max(2, Math.round(Math.min(w, h) * 0.08));
+          const innerR = Math.max(1, outerR - strokeW);
+          const dotR = Math.max(1, innerR * 0.55);
+          c.beginPath();
+          c.arc(cx, cy, outerR, 0, Math.PI * 2);
+          c.moveTo(cx + innerR, cy);
+          c.arc(cx, cy, innerR, 0, Math.PI * 2, true);
+          c.closePath();
+          c.moveTo(cx + dotR, cy);
+          c.arc(cx, cy, dotR, 0, Math.PI * 2);
+          c.closePath();
+        },
+        guides: (w, h) => {
+          const cx = Math.floor(w / 2);
+          const cy = Math.floor(h / 2);
+          return {
+            top: { start: cx, end: cx },
+            left: { start: cy, end: cy },
+            bottom: { start: cx, end: cx },
+            right: { start: cy, end: cy }
+          };
+        }
+      },
+      simCallerLeft: {
+        name: 'SIM Left', cat: 'Caller', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          c.beginPath();
+          c.moveTo(r, 0);
+          c.lineTo(w, 0);
+          c.lineTo(w, h);
+          c.lineTo(r, h);
+          c.arcTo(0, h, 0, h - r, r);
+          c.lineTo(0, r);
+          c.arcTo(0, 0, r, 0, r);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          const b = (o.borderWidth || 0);
+          const straightStart = Math.ceil(r + b + 1);
+          const straightEnd = Math.floor(h - 1 - r - b - 1);
+          const leftGuide = straightStart <= straightEnd
+            ? { start: straightStart, end: straightEnd }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: Math.ceil(r + b + 1), end: Math.max(0, w - 1 - b) },
+            left: leftGuide,
+            bottom: { start: Math.ceil(r + b + 1), end: Math.max(0, w - 1 - b) },
+            right: { start: b, end: Math.max(b, h - 1 - b) }
+          };
+        }
+      },
+      simCallerRight: {
+        name: 'SIM Right', cat: 'Caller', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          c.beginPath();
+          c.moveTo(0, 0);
+          c.lineTo(w - r, 0);
+          c.arcTo(w, 0, w, r, r);
+          c.lineTo(w, h - r);
+          c.arcTo(w, h, w - r, h, r);
+          c.lineTo(0, h);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) / 2);
+          const b = (o.borderWidth || 0);
+          const straightStart = Math.ceil(r + b + 1);
+          const straightEnd = Math.floor(h - 1 - r - b - 1);
+          const rightGuide = straightStart <= straightEnd
+            ? { start: straightStart, end: straightEnd }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: b, end: Math.max(b, Math.floor(w - 1 - r - b - 1)) },
+            left: { start: b, end: Math.max(b, h - 1 - b) },
+            bottom: { start: b, end: Math.max(b, Math.floor(w - 1 - r - b - 1)) },
+            right: rightGuide
+          };
+        }
+      },
+      volTrack: {
+        name: 'Volume Track', cat: 'Volume', params: ['radius'],
+        draw(c, w, h, o) {
+          const rTop = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          c.beginPath();
+          c.moveTo(rTop, 0);
+          c.lineTo(w - rTop, 0);
+          c.arcTo(w, 0, w, rTop, rTop);
+          c.lineTo(w, h - rBot);
+          c.arcTo(w, h, w - rBot, h, rBot);
+          c.lineTo(rBot, h);
+          c.arcTo(0, h, 0, h - rBot, rBot);
+          c.lineTo(0, rTop);
+          c.arcTo(0, 0, rTop, 0, rTop);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const rTop = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const topEdge = Math.ceil(rTop + b + 1);
+          const botEdge = Math.floor(h - 1 - rBot - b - 1);
+          const leftGuide = topEdge <= botEdge
+            ? { start: topEdge, end: botEdge }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: Math.ceil(rTop + b + 1), end: Math.max(0, Math.floor(w - 1 - rTop - b - 1)) },
+            left: leftGuide,
+            bottom: { start: Math.ceil(rBot + b + 1), end: Math.max(0, Math.floor(w - 1 - rBot - b - 1)) },
+            right: leftGuide
+          };
+        }
+      },
+      volTrackFlatTop: {
+        name: 'Vol FlatTop', cat: 'Volume', params: ['radius'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          c.beginPath();
+          c.moveTo(0, 0);
+          c.lineTo(w, 0);
+          c.lineTo(w, h - r);
+          c.arcTo(w, h, w - r, h, r);
+          c.lineTo(r, h);
+          c.arcTo(0, h, 0, h - r, r);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const loTop = Math.max(0, b);
+          const botLimit = Math.floor(h - 1 - r - b - 1);
+          const leftGuide = (loTop + 1) <= botLimit
+            ? { start: loTop, end: botLimit }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: loTop, end: Math.max(loTop, w - 1 - loTop) },
+            left: leftGuide,
+            bottom: { start: Math.ceil(r + b + 1), end: Math.max(0, Math.floor(w - 1 - r - b - 1)) },
+            right: leftGuide
+          };
+        }
+      },
+      volTrackPillTop: {
+        name: 'Vol PillTop', cat: 'Volume', params: ['radius'],
+        draw(c, w, h, o) {
+          const rTop = Math.min(o.radius * 2, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          c.beginPath();
+          c.moveTo(rTop, 0);
+          c.lineTo(w - rTop, 0);
+          c.arcTo(w, 0, w, rTop, rTop);
+          c.lineTo(w, h - rBot);
+          c.arcTo(w, h, w - rBot, h, rBot);
+          c.lineTo(rBot, h);
+          c.arcTo(0, h, 0, h - rBot, rBot);
+          c.lineTo(0, rTop);
+          c.arcTo(0, 0, rTop, 0, rTop);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const rTop = Math.min(o.radius * 2, Math.min(w, h) * 0.5);
+          const rBot = Math.min(o.radius, Math.min(w, h) * 0.5);
+          const b = (o.borderWidth || 0);
+          const topEdge = Math.ceil(rTop + b + 1);
+          const botEdge = Math.floor(h - 1 - rBot - b - 1);
+          const leftGuide = topEdge <= botEdge
+            ? { start: topEdge, end: botEdge }
+            : { start: Math.floor(h / 2), end: Math.floor(h / 2) };
+          return {
+            top: { start: Math.ceil(rTop + b + 1), end: Math.max(0, Math.floor(w - 1 - rTop - b - 1)) },
+            left: leftGuide,
+            bottom: { start: Math.ceil(rBot + b + 1), end: Math.max(0, Math.floor(w - 1 - rBot - b - 1)) },
+            right: leftGuide
+          };
+        }
+      },
+      diamond: {
+        name: 'Diamond', cat: 'Polygon', params: [], pngOnly: true,
+        draw(c, w, h) { c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(w, h / 2); c.lineTo(w / 2, h); c.lineTo(0, h / 2); c.closePath(); },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, left: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) }, bottom: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, right: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) } })
+      },
+      hexagon: {
+        name: 'Hexagon', cat: 'Polygon', params: [], pngOnly: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2, rx = w / 2, ry = h / 2; c.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const a = Math.PI / 6 + i * Math.PI / 3; const x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry;
+            if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+          } c.closePath();
+        },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.3), end: Math.ceil(w * 0.7) }, left: { start: Math.floor(h * 0.3), end: Math.ceil(h * 0.7) }, bottom: { start: Math.floor(w * 0.3), end: Math.ceil(w * 0.7) }, right: { start: Math.floor(h * 0.3), end: Math.ceil(h * 0.7) } })
+      },
+      octagon: {
+        name: 'Octagon', cat: 'Polygon', params: [],
+        draw(c, w, h) {
+          const d = Math.min(w, h) * 0.29; c.beginPath();
+          c.moveTo(d, 0); c.lineTo(w - d, 0); c.lineTo(w, d); c.lineTo(w, h - d);
+          c.lineTo(w - d, h); c.lineTo(d, h); c.lineTo(0, h - d); c.lineTo(0, d); c.closePath();
+        },
+        guides: (w, h, o) => {
+          const d = Math.min(w, h) * 0.29;
+          const b = (o.borderWidth || 0);
+          const safe = Math.ceil(d + b + 1);
+          const sX = Math.min(safe, Math.floor(w / 2));
+          const sY = Math.min(safe, Math.floor(h / 2));
+          return {
+            top: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            left: { start: sY, end: Math.max(sY, h - 1 - sY) },
+            bottom: { start: sX, end: Math.max(sX, w - 1 - sX) },
+            right: { start: sY, end: Math.max(sY, h - 1 - sY) }
+          };
+        }
+      },
+      pentagon: {
+        name: 'Pentagon', cat: 'Polygon', params: [], pngOnly: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2, rx = w / 2, ry = h / 2; c.beginPath();
+          for (let i = 0; i < 5; i++) {
+            const a = -Math.PI / 2 + i * 2 * Math.PI / 5; const x = cx + Math.cos(a) * rx, y = cy + Math.sin(a) * ry;
+            if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+          } c.closePath();
+        },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.4), end: Math.ceil(w * 0.6) }, left: { start: Math.floor(h * 0.4), end: Math.ceil(h * 0.6) }, bottom: { start: Math.floor(w * 0.4), end: Math.ceil(w * 0.6) }, right: { start: Math.floor(h * 0.4), end: Math.ceil(h * 0.6) } })
+      },
+      star: {
+        name: 'Star', cat: 'Polygon', params: [], pngOnly: true,
+        draw(c, w, h) {
+          const cx = w / 2, cy = h / 2, outer = Math.min(w, h) / 2, inner = outer * 0.42; c.beginPath();
+          for (let i = 0; i < 10; i++) {
+            const r = (i % 2 === 0) ? outer : inner, a = -Math.PI / 2 + i * Math.PI / 5;
+            const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+            if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
+          } c.closePath();
+        },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, left: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) }, bottom: { start: Math.floor(w * 0.48), end: Math.ceil(w * 0.52) }, right: { start: Math.floor(h * 0.48), end: Math.ceil(h * 0.52) } })
+      },
+      chatRightBottom: {
+        name: 'Chat →', cat: 'Chat', params: ['radius', 'tail'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.35);
+          const t = Math.min(o.tail, Math.min(w, h) * 0.3);
+          const bubbleH = h - t;
+          c.beginPath();
+          c.moveTo(r, 0);
+          c.lineTo(w - r, 0);
+          c.arcTo(w, 0, w, r, r);
+          c.lineTo(w, bubbleH - r * 0.4);
+          c.lineTo(w - 0.5, h - 0.5);
+          c.lineTo(w - t * 1.3, bubbleH);
+          c.lineTo(r, bubbleH);
+          c.arcTo(0, bubbleH, 0, bubbleH - r, r);
+          c.lineTo(0, r);
+          c.arcTo(0, 0, r, 0, r);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.35);
+          const t = Math.min(o.tail, Math.min(w, h) * 0.3);
+          const b = (o.borderWidth || 0);
+          return {
+            top: { start: Math.ceil(r + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            left: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) },
+            bottom: { start: Math.ceil(r + b + 1), end: Math.floor(w - 1 - r - t * 1.3 - b - 1) },
+            right: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) }
+          };
+        }
+      },
+      chatLeftBottom: {
+        name: 'Chat ←', cat: 'Chat', params: ['radius', 'tail'],
+        draw(c, w, h, o) {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.35);
+          const t = Math.min(o.tail, Math.min(w, h) * 0.3);
+          const bubbleH = h - t;
+          c.beginPath();
+          c.moveTo(r, 0);
+          c.lineTo(w - r, 0);
+          c.arcTo(w, 0, w, r, r);
+          c.lineTo(w, bubbleH - r);
+          c.arcTo(w, bubbleH, w - r, bubbleH, r);
+          c.lineTo(t * 1.3, bubbleH);
+          c.lineTo(0.5, h - 0.5);
+          c.lineTo(0, bubbleH - r * 0.4);
+          c.lineTo(0, r);
+          c.arcTo(0, 0, r, 0, r);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const r = Math.min(o.radius, Math.min(w, h) * 0.35);
+          const t = Math.min(o.tail, Math.min(w, h) * 0.3);
+          const b = (o.borderWidth || 0);
+          return {
+            top: { start: Math.ceil(r + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            left: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) },
+            bottom: { start: Math.ceil(r + t * 1.3 + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            right: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - t - r * 0.4 - b - 1) }
+          };
+        }
+      },
+      tag: {
+        name: 'Tag', cat: 'Special', params: ['radius', 'notch'],
+        draw(c, w, h, o) {
+          const maxR = Math.min(w, h) * 0.3;
+          const r = Math.min(o.radius * 0.6, maxR);
+          const maxN = w - r - 4;
+          const n = Math.min(o.notch, maxN);
+          c.beginPath();
+          c.moveTo(n, 0);
+          c.lineTo(w - r, 0);
+          c.arcTo(w, 0, w, r, r);
+          c.lineTo(w, h - r);
+          c.arcTo(w, h, w - r, h, r);
+          c.lineTo(n, h);
+          c.lineTo(0, h / 2);
+          c.closePath();
+        },
+        guides: (w, h, o) => {
+          const maxR = Math.min(w, h) * 0.3;
+          const r = Math.min(o.radius * 0.6, maxR);
+          const maxN = w - r - 4;
+          const n = Math.min(o.notch, maxN);
+          const b = (o.borderWidth || 0);
+          return {
+            top: { start: Math.ceil(n + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            left: { start: Math.floor(h / 2), end: Math.floor(h / 2) },
+            bottom: { start: Math.ceil(n + b + 1), end: Math.floor(w - 1 - r - b - 1) },
+            right: { start: Math.ceil(r + b + 1), end: Math.floor(h - 1 - r - b - 1) }
+          };
+        }
+      },
+      shield: {
+        name: 'Shield', cat: 'Special', params: [], pngOnly: true,
+        draw(c, w, h) {
+          c.beginPath(); c.moveTo(0, 0); c.lineTo(w, 0);
+          c.lineTo(w, h * 0.55); c.quadraticCurveTo(w, h * 0.85, w / 2, h);
+          c.quadraticCurveTo(0, h * 0.85, 0, h * 0.55); c.closePath();
+        },
+        guides: (w, h) => ({
+          top: { start: 0, end: w - 1 },
+          left: { start: 0, end: Math.floor(h * 0.5) },
+          bottom: { start: Math.floor(w / 2), end: Math.floor(w / 2) },
+          right: { start: 0, end: Math.floor(h * 0.5) }
+        })
+      },
+      bookmark: {
+        name: 'Bookmark', cat: 'Special', params: [], pngOnly: true,
+        draw(c, w, h) { c.beginPath(); c.moveTo(0, 0); c.lineTo(w, 0); c.lineTo(w, h); c.lineTo(w / 2, h - h * 0.18); c.lineTo(0, h); c.closePath(); },
+        guides: (w, h) => ({
+          top: { start: 0, end: w - 1 },
+          left: { start: 0, end: Math.floor(h * 0.75) },
+          bottom: { start: 0, end: w - 1 },
+          right: { start: 0, end: Math.floor(h * 0.75) }
+        })
+      },
+      cloud: {
+        name: 'Cloud', cat: 'Special', params: [], pngOnly: true,
+        draw(c, w, h) {
+          c.beginPath(); c.moveTo(w * 0.20, h * 0.85);
+          c.bezierCurveTo(w * -0.02, h * 0.85, w * 0.0, h * 0.35, w * 0.22, h * 0.35);
+          c.bezierCurveTo(w * 0.22, h * 0.05, w * 0.55, h * 0.0, w * 0.62, h * 0.22);
+          c.bezierCurveTo(w * 0.80, h * 0.05, w * 1.0, h * 0.25, w * 0.92, h * 0.45);
+          c.bezierCurveTo(w * 1.08, h * 0.55, w * 1.05, h * 0.85, w * 0.85, h * 0.85); c.closePath();
+        },
+        guides: (w, h) => ({ top: { start: Math.floor(w * 0.3), end: Math.ceil(w * 0.7) }, left: { start: Math.floor(h * 0.4), end: Math.ceil(h * 0.7) }, bottom: { start: Math.floor(w * 0.3), end: Math.ceil(w * 0.7) }, right: { start: Math.floor(h * 0.4), end: Math.ceil(h * 0.7) } })
+      },
+      ribbon: {
+        name: 'Ribbon', cat: 'Special', params: [], pngOnly: true,
+        draw(c, w, h) {
+          const n = w * 0.08; c.beginPath(); c.moveTo(n, 0); c.lineTo(w - n, 0); c.lineTo(w, h / 2);
+          c.lineTo(w - n, h); c.lineTo(n, h); c.lineTo(0, h / 2); c.closePath();
+        },
+        guides: (w, h) => {
+          const n = w * 0.08;
+          return {
+            top: { start: Math.ceil(n) + 1, end: Math.floor(w - 1 - n) },
+            left: { start: Math.floor(h / 2), end: Math.floor(h / 2) },
+            bottom: { start: Math.ceil(n) + 1, end: Math.floor(w - 1 - n) },
+            right: { start: Math.floor(h / 2), end: Math.floor(h / 2) }
+          };
+        }
+      }
+    };
+
+    /* ============================================================
+       STATE
+       ============================================================ */
+    const state = {
+      shape: 'rounded',
+      contentW: 128, contentH: 128,
+      radius: 14, tail: 15, notch: 22,
+      gradOn: false,
+      bgColor: '#041c30', bgColor2: '#22d3ee',
+      borderOn: true, borderColor: '#1686d0', borderWidth: 2,
+      shadowOn: false, shadowColor: '#0a2e39', shadowOpacity: 35,
+      shadowWidth: 6, shadowMode: 'both',
+      topGuide: null, leftGuide: null, bottomGuide: null, rightGuide: null,
+      pngMode: false,
+      volDividerOn: false,
+      volDividerPos: 45,
+      volDividerOpacity: 18
+    };
+
+    const CONFIG_STORAGE_KEY = 'mtz-9-patch-maker-config-v1';
+    const CONFIG_VERSION = 10;
+    let configPersistenceReady = false;
+    let configSaveTimer = null;
+
+    function readSavedConfig() {
+      try {
+        const value = localStorage.getItem(CONFIG_STORAGE_KEY);
+        const config = value ? JSON.parse(value) : null;
+        return config && typeof config === 'object' ? config : null;
+      } catch { return null; }
+    }
+
+    function restoreSavedState(savedState, migrateOldDefaults) {
+      if (!savedState || typeof savedState !== 'object') return;
+      if (SHAPES[savedState.shape]) state.shape = savedState.shape;
+      const sizes = [48, 96, 128, 192, 256];
+      if (sizes.includes(savedState.contentW)) state.contentW = savedState.contentW;
+      if (sizes.includes(savedState.contentH)) state.contentH = savedState.contentH;
+
+      const numeric = {
+        radius: [0, 60], tail: [4, 40], notch: [6, 45], borderWidth: [0, 10],
+        shadowOpacity: [5, 100], shadowWidth: [0, 20],
+        volDividerPos: [20, 70], volDividerOpacity: [5, 60]
+      };
+      Object.entries(numeric).forEach(([key, [min, max]]) => {
+        if (Number.isFinite(savedState[key])) state[key] = clamp(savedState[key], min, max);
+      });
+      ['gradOn', 'borderOn', 'shadowOn', 'pngMode', 'volDividerOn'].forEach(key => {
+        if (typeof savedState[key] === 'boolean') state[key] = savedState[key];
+      });
+      ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
+        if (typeof savedState[key] === 'string' && /^#[0-9a-f]{6}$/i.test(savedState[key])) {
+          state[key] = savedState[key].toLowerCase();
+        }
+      });
+      if (['outer', 'inner', 'both'].includes(savedState.shadowMode)) state.shadowMode = savedState.shadowMode;
+
+      const restoreGuide = (guide, length) => {
+        if (!guide || !Number.isFinite(guide.start) || !Number.isFinite(guide.end)) return null;
+        const start = clamp(Math.round(guide.start), 0, length - 1);
+        const end = clamp(Math.round(guide.end), 0, length - 1);
+        return { start: Math.min(start, end), end: Math.max(start, end) };
+      };
+
+      ['topGuide', 'bottomGuide'].forEach(key => { state[key] = restoreGuide(savedState[key], state.contentW); });
+      ['leftGuide', 'rightGuide'].forEach(key => { state[key] = restoreGuide(savedState[key], state.contentH); });
+
+      if (migrateOldDefaults) {
+        if (savedState.contentW === 96 && savedState.contentH === 96) { state.contentW = 128; state.contentH = 128; }
+        if (savedState.bgColor === '#7c3aed') state.bgColor = '#041c30';
+        if (savedState.borderColor === '#ffffff') state.borderColor = '#1686d0';
+        if (savedState.shadowColor === '#000000') state.shadowColor = '#0a2e39';
+      }
+    }
+
+    function syncControlsFromState(savedConfig) {
+      ['gradOn', 'borderOn', 'shadowOn', 'pngMode', 'volDividerOn'].forEach(key => {
+        const el = $(key);
+        if (el) el.checked = state[key];
+      });
+      $('shadowMode').value = state.shadowMode;
+      $('pngModeNote').style.display = state.pngMode ? '' : 'none';
+
+      const ranges = [
+        ['radius', 'radiusVal', value => value], ['tail', 'tailVal', value => value],
+        ['notch', 'notchVal', value => value], ['borderWidth', 'borderWidthVal', value => value],
+        ['shadowOpacity', 'shadowOpacityVal', value => `${value}%`],
+        ['shadowWidth', 'shadowWidthVal', value => `${value} px`],
+        ['volDividerPos', 'volDividerPosVal', value => `${value}%`],
+        ['volDividerOpacity', 'volDividerOpacityVal', value => `${value}%`]
+      ];
+      ranges.forEach(([key, valueId, format]) => {
+        const el = $(key);
+        const labelEl = $(valueId);
+        if (el) el.value = state[key];
+        if (labelEl) labelEl.textContent = format(state[key]);
+      });
+
+      ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
+        const trigger = $(key);
+        if (!trigger) return;
+        trigger.value = state[key];
+        trigger.style.backgroundColor = state[key];
+        const hexInput = $(`${key}Hex`);
+        if (hexInput) hexInput.value = state[key];
+        const picker = trigger.closest('.color-wrap')?.querySelector('.picker-popover input[type=color]');
+        if (picker) picker.value = state[key];
+      });
+
+      [...$('sizePresets').children].forEach(button => {
+        button.classList.toggle('active', +button.dataset.size === state.contentW);
+      });
+      $('fileName').value = typeof savedConfig?.fileName === 'string' ? savedConfig.fileName : 'shape_bg';
+      const selectedMtz = Array.isArray(savedConfig?.selectedMtz)
+        ? new Set(savedConfig.selectedMtz.filter(Number.isInteger))
+        : new Set(MTZ_FILES.map((_, index) => index));
+      $('mtzList').querySelectorAll('input[type=checkbox]').forEach(input => {
+        input.checked = selectedMtz.has(+input.dataset.idx);
+      });
+    }
+
+    function saveConfigNow() {
+      if (!configPersistenceReady) return;
+      clearTimeout(configSaveTimer);
+      const config = {
+        version: CONFIG_VERSION,
+        state: { ...state },
+        fileName: $('fileName').value,
+        selectedMtz: [...$('mtzList').querySelectorAll('input[type=checkbox]:checked')].map(input => +input.dataset.idx),
+        collapsedSections: [...document.querySelectorAll('.sidebar > .group.collapsed')].map(group => group.dataset.sectionKey),
+        hiddenSections: [...document.querySelectorAll('.sidebar > .group.hidden')].map(group => group.dataset.sectionKey)
+      };
+      try { localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(config)); } catch { }
+    }
+
+    function scheduleConfigSave() {
+      if (!configPersistenceReady) return;
+      clearTimeout(configSaveTimer);
+      configSaveTimer = setTimeout(saveConfigNow, 180);
+    }
+
+    const editor = $('editor');
+    const ectx = editor.getContext('2d', { alpha: true });
+    ectx.imageSmoothingEnabled = false;
+
+    const validationCanvas = document.createElement('canvas');
+    const valCtx = validationCanvas.getContext('2d', { willReadFrequently: true });
+
+    const designCanvas = document.createElement('canvas');
+    let designCanvasDirty = true;
+
+    function markDesignCanvasDirty() { designCanvasDirty = true; }
+
+    function ensureDesignCanvas() {
+      const cw = state.contentW, ch = state.contentH;
+      if (designCanvas.width !== cw || designCanvas.height !== ch) {
+        designCanvas.width = cw; designCanvas.height = ch;
+        designCanvasDirty = true;
+      }
+      if (designCanvasDirty) {
+        drawDesign(designCanvas.getContext('2d'), cw, ch);
+        designCanvasDirty = false;
+      }
+    }
+
+    /* ============================================================
+       SHADOW RENDERING
+       ============================================================ */
+    function drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, borderWidth, kind, scale = 1, pixelRatio = 1) {
+      if (!state.shadowOn || (state.shadowMode !== 'both' && state.shadowMode !== kind)) return;
+      if (shape.noShadow) return;
+      const bw = Math.max(1, borderWidth);
+
+      const rw = Math.max(1, Math.ceil(cw * pixelRatio));
+      const rh = Math.max(1, Math.ceil(ch * pixelRatio));
+
+      const ring = document.createElement('canvas');
+      ring.width = rw; ring.height = rh;
+      const ringCtx = ring.getContext('2d');
+      ringCtx.scale(pixelRatio, pixelRatio);
+      shape.draw(ringCtx, cw, ch, outerOpts);
+      ringCtx.fillStyle = '#fff';
+      ringCtx.fill();
+      ringCtx.globalCompositeOperation = 'destination-out';
+      ringCtx.save();
+      ringCtx.translate(bw, bw);
+      shape.draw(ringCtx, cw - bw * 2, ch - bw * 2, innerOpts);
+      ringCtx.fill();
+      ringCtx.restore();
+
+      const layer = document.createElement('canvas');
+      layer.width = rw; layer.height = rh;
+      const layerCtx = layer.getContext('2d');
+      layerCtx.scale(pixelRatio, pixelRatio);
+      const { r, g, b } = hexToRgb(state.shadowColor);
+      layerCtx.shadowColor = `rgba(${r}, ${g}, ${b}, ${state.shadowOpacity / 100})`;
+      layerCtx.shadowBlur = state.shadowWidth * scale * pixelRatio;
+      layerCtx.drawImage(ring, 0, 0, cw, ch);
+
+      if (kind === 'inner') {
+        layerCtx.globalCompositeOperation = 'destination-out';
+        layerCtx.shadowColor = 'transparent';
+        layerCtx.shadowBlur = 0;
+        layerCtx.drawImage(ring, 0, 0, cw, ch);
+        layerCtx.globalCompositeOperation = 'destination-in';
+        layerCtx.save();
+        layerCtx.translate(bw, bw);
+        shape.draw(layerCtx, cw - bw * 2, ch - bw * 2, innerOpts);
+        layerCtx.fillStyle = '#fff';
+        layerCtx.fill();
+        layerCtx.restore();
+      }
+
+      c.drawImage(layer, 0, 0, cw, ch);
+    }
+
+    function drawDesign(c, cw, ch, overrideShape) {
+      c.clearRect(0, 0, cw, ch);
+      c.imageSmoothingEnabled = false;
+
+      const shapeKey = overrideShape || state.shape;
+      const shape = SHAPES[shapeKey];
+      if (!shape) return;
+
+      const ignoresBorder = !!shape.noBorder;
+      const b = (!ignoresBorder && state.borderOn)
+        ? Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4))
+        : 0;
+
+      const outerOpts = { radius: state.radius, tail: state.tail, notch: state.notch, borderWidth: b };
+      const innerOpts = {
+        radius: Math.max(0, state.radius - b),
+        tail: Math.max(3, state.tail - b),
+        notch: Math.max(3, state.notch - b),
+        borderWidth: 0
+      };
+
+      drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, b, 'outer');
+
+      if (b > 0) {
+        shape.draw(c, cw, ch, outerOpts);
+        c.fillStyle = state.borderColor;
+        c.fill();
+      }
+
+      const iw = cw - 2 * b, ih = ch - 2 * b;
+      if (iw > 0 && ih > 0) {
+        c.save();
+        c.translate(b, b);
+        shape.draw(c, iw, ih, innerOpts);
+        c.restore();
+
+        if (state.gradOn) {
+          const g = c.createLinearGradient(0, 0, cw, ch);
+          g.addColorStop(0, state.bgColor);
+          g.addColorStop(1, state.bgColor2);
+          c.fillStyle = g;
+        } else {
+          c.fillStyle = state.bgColor;
+        }
+        c.fill();
+
+        if (state.volDividerOn && shapeKey.startsWith('vol') && !state.pngMode) {
+          const divY = Math.round(ch * state.volDividerPos / 100);
+          const safeY = clamp(divY, 1, ch - 2);
+          c.save();
+          c.globalCompositeOperation = 'source-atop';
+          const alpha = state.volDividerOpacity / 100;
+          c.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+          c.fillRect(0, safeY, cw, 1);
+          c.fillStyle = `rgba(255, 255, 255, ${alpha * 0.35})`;
+          c.fillRect(0, safeY + 1, cw, 1);
+          c.restore();
+        }
+      }
+      drawStrokeShadow(c, cw, ch, shape, outerOpts, innerOpts, b, 'inner');
+    }
+
+    function renderEditor() {
+      const cw = state.contentW, ch = state.contentH;
+      const totalW = cw + 2, totalH = ch + 2;
+
+      if (editor.width !== totalW || editor.height !== totalH) {
+        editor.width = totalW; editor.height = totalH;
+        fitCanvasDisplay();
+      }
+      ensureDesignCanvas();
+
+      ectx.clearRect(0, 0, totalW, totalH);
+      ectx.imageSmoothingEnabled = false;
+      ectx.drawImage(designCanvas, 1, 1);
+
+      if (!state.pngMode) {
+        if (state.topGuide) {
+          const g = state.topGuide;
+          ectx.fillStyle = 'rgba(236,72,153,0.28)';
+          ectx.fillRect(1 + g.start, 1, g.end - g.start + 1, ch);
+        }
+        if (state.leftGuide) {
+          const g = state.leftGuide;
+          ectx.fillStyle = 'rgba(236,72,153,0.28)';
+          ectx.fillRect(1, 1 + g.start, cw, g.end - g.start + 1);
+        }
+        if (state.bottomGuide && state.rightGuide) {
+          const bh = state.bottomGuide, rv = state.rightGuide;
+          ectx.fillStyle = 'rgba(56,189,248,0.18)';
+          ectx.fillRect(1 + bh.start, 1 + rv.start, bh.end - bh.start + 1, rv.end - rv.start + 1);
+        }
+        ectx.fillStyle = '#000000';
+        if (state.topGuide) {
+          const g = state.topGuide;
+          ectx.fillRect(1 + g.start, 0, g.end - g.start + 1, 1);
+        }
+        if (state.leftGuide) {
+          const g = state.leftGuide;
+          ectx.fillRect(0, 1 + g.start, 1, g.end - g.start + 1);
+        }
+        if (state.bottomGuide) {
+          const g = state.bottomGuide;
+          ectx.fillRect(1 + g.start, ch + 1, g.end - g.start + 1, 1);
+        }
+        if (state.rightGuide) {
+          const g = state.rightGuide;
+          ectx.fillRect(cw + 1, 1 + g.start, 1, g.end - g.start + 1);
+        }
+      }
+    }
+
+    function getResponsiveMetrics() {
+      const isNarrow = window.innerWidth < 900;
+      const sidebar = document.querySelector('.sidebar');
+      const sidebarW = isNarrow ? 0 : (sidebar ? sidebar.getBoundingClientRect().width : 390);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const stagePadding = isNarrow ? (vw <= 640 ? 20 : 24) : (vw <= 1280 ? 32 : 40);
+      const shellPadding = isNarrow ? (vw <= 640 ? 20 : 28) : 36;
+      const availableW = Math.max(160, vw - sidebarW - stagePadding - shellPadding);
+      const availableH = Math.max(160, vh * (isNarrow ? 0.55 : 0.7));
+      return { isNarrow, availableW, availableH, vw, vh };
+    }
+
+    function fitCanvasDisplay() {
+      const totalW = editor.width, totalH = editor.height;
+      const { availableW, availableH } = getResponsiveMetrics();
+      const maxDisplay = Math.min(560, availableW, availableH);
+      let scale = Math.floor(maxDisplay / totalW);
+      if (scale < 2) scale = 2;
+      if (scale > 6) scale = 6;
+      editor.style.width = (totalW * scale) + 'px';
+      editor.style.height = (totalH * scale) + 'px';
+      const suffix = state.pngMode ? '.png' : '.9.png';
+      const info = (state.pngMode ? totalW : state.contentW) + ' × ' + (state.pngMode ? totalH : state.contentH) + ' px' + suffix;
+      $('dimPill').textContent = info;
+      $('outInfo').textContent = info;
+    }
+
+    /* ============================================================
+       STRETCH — border-aware
+       ============================================================ */
+    function drawStretched(c, img, cw, ch, topGuide, leftGuide, tx, ty, tw, th, borderW = 0) {
+      let xS = 0, xE = cw - 1;
+      let yS = 0, yE = ch - 1;
+      if (topGuide) { xS = topGuide.start; xE = topGuide.end; }
+      if (leftGuide) { yS = leftGuide.start; yE = leftGuide.end; }
+
+      const innerMin = Math.max(0, borderW);
+      xS = clamp(Math.max(xS, innerMin), 0, cw - 1);
+      xE = clamp(Math.min(xE, cw - 1 - innerMin), 0, cw - 1);
+      yS = clamp(Math.max(yS, innerMin), 0, ch - 1);
+      yE = clamp(Math.min(yE, ch - 1 - innerMin), 0, ch - 1);
+
+      if (xS > xE) { const mid = Math.floor(cw / 2); xS = mid; xE = mid; }
+      if (yS > yE) { const mid = Math.floor(ch / 2); yS = mid; yE = mid; }
+
+      const lwSrc = xS, rwSrc = cw - xE - 1;
+      const thSrc = yS, bhSrc = ch - yE - 1;
+      const mwDst = tw - lwSrc - rwSrc;
+      const mhDst = th - thSrc - bhSrc;
+
+      if (mwDst < 0 || mhDst < 0) {
+        const scale = Math.min(tw / cw, th / ch);
+        const dw = Math.max(1, cw * scale), dh = Math.max(1, ch * scale);
+        c.drawImage(img, 0, 0, cw, ch,
+          tx + (tw - dw) / 2, ty + (th - dh) / 2, dw, dh);
+        return;
+      }
+
+      const xSd = [0, lwSrc, xE + 1, cw];
+      const xDd = [0, lwSrc, lwSrc + mwDst, lwSrc + mwDst + rwSrc];
+      const ySd = [0, thSrc, yE + 1, ch];
+      const yDd = [0, thSrc, thSrc + mhDst, thSrc + mhDst + bhSrc];
+
+      for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) {
+        const sx = xSd[i], sw = xSd[i + 1] - sx;
+        const sy = ySd[j], sh = ySd[j + 1] - sy;
+        const dx = xDd[i], dw = xDd[i + 1] - dx;
+        const dy = yDd[j], dh = yDd[j + 1] - dy;
+        if (sw > 0 && sh > 0 && dw > 0 && dh > 0)
+          c.drawImage(img, sx, sy, sw, sh, tx + dx, ty + dy, dw, dh);
+      }
+    }
+
+    function getEffectiveBorderW() {
+      const shape = SHAPES[state.shape];
+      if (!shape || shape.noBorder) return 0;
+      if (!state.borderOn) return 0;
+      const cw = state.contentW, ch = state.contentH;
+      return Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4));
+    }
+
+    function renderPreview(canvasEl, targetW, targetH) {
+      const c = canvasEl.getContext('2d');
+      const cw = state.contentW, ch = state.contentH;
+      ensureDesignCanvas();
+      c.clearRect(0, 0, canvasEl.width, canvasEl.height);
+      c.imageSmoothingEnabled = false;
+      c.fillStyle = 'rgba(255,255,255,0.02)';
+      c.fillRect(0, 0, canvasEl.width, canvasEl.height);
+
+      if (state.pngMode) {
+        const scale = Math.min(targetW / cw, targetH / ch) * 0.85;
+        const dw = cw * scale, dh = ch * scale;
+        c.drawImage(designCanvas, (targetW - dw) / 2, (targetH - dh) / 2, dw, dh);
+      } else {
+        const borderW = getEffectiveBorderW();
+        drawStretched(c, designCanvas, cw, ch, state.topGuide, state.leftGuide,
+          0, 0, targetW, targetH, borderW);
+      }
+    }
+
+    function renderAllPreviews() {
+      renderPreview($('previewBtn'), 320, 68);
+      renderPreview($('previewDialog'), 380, 180);
+      renderPreview($('previewChat'), 240, 60);
+    }
+
+    function buildFull9PatchCanvas() {
+      const cw = state.contentW, ch = state.contentH;
+      const totalW = cw + 2, totalH = ch + 2;
+      const out = document.createElement('canvas');
+      out.width = totalW; out.height = totalH;
+      const c = out.getContext('2d', { alpha: true });
+      c.imageSmoothingEnabled = false;
+
+      const d = document.createElement('canvas');
+      d.width = cw; d.height = ch;
+      drawDesign(d.getContext('2d'), cw, ch);
+      c.drawImage(d, 1, 1);
+
+      c.fillStyle = '#000000';
+      if (state.topGuide) { const g = state.topGuide; c.fillRect(1 + g.start, 0, g.end - g.start + 1, 1); }
+      if (state.leftGuide) { const g = state.leftGuide; c.fillRect(0, 1 + g.start, 1, g.end - g.start + 1); }
+      if (state.bottomGuide) { const g = state.bottomGuide; c.fillRect(1 + g.start, ch + 1, g.end - g.start + 1, 1); }
+      if (state.rightGuide) { const g = state.rightGuide; c.fillRect(cw + 1, 1 + g.start, 1, g.end - g.start + 1); }
+      return out;
+    }
+
+    function runValidation() {
+      const cw = state.contentW, ch = state.contentH;
+      const totalW = cw + 2, totalH = ch + 2;
+      const out = buildFull9PatchCanvas();
+
+      validationCanvas.width = totalW;
+      validationCanvas.height = totalH;
+      valCtx.clearRect(0, 0, totalW, totalH);
+      valCtx.drawImage(out, 0, 0);
+      const imgData = valCtx.getImageData(0, 0, totalW, totalH);
+      const data = imgData.data;
+
+      function px(x, y) {
+        const i = (y * totalW + x) * 4;
+        return { r: data[i], g: data[i + 1], b: data[i + 2], a: data[i + 3] };
+      }
+
+      const report = [];
+      report.push({ ok: true, msg: `Canvas: ${totalW} × ${totalH} px` });
+
+      const corners = [[0, 0], [totalW - 1, 0], [0, totalH - 1], [totalW - 1, totalH - 1]];
+      const cornerOK = corners.every(([x, y]) => px(x, y).a === 0);
+      report.push({ ok: cornerOK, msg: cornerOK ? '✓ 4 corners transparent' : '✗ Corners NOT transparent' });
+
+      function checkLine(pts, label) {
+        let black = 0, bad = 0;
+        pts.forEach(([x, y]) => {
+          const p = px(x, y);
+          if (p.a === 255 && p.r === 0 && p.g === 0 && p.b === 0) black++;
+          else if (p.a !== 0) bad++;
+        });
+        if (bad > 0) report.push({ ok: false, msg: `✗ ${label}: ${bad} px has AA bleed` });
+        else if (black === 0) report.push({ ok: false, msg: `✗ ${label}: no black guide px` });
+        else report.push({ ok: true, msg: `✓ ${label}: ${black} px pure black` });
+      }
+
+      const topLine = [], botLine = [], leftLine = [], rightLine = [];
+      for (let x = 1; x <= cw; x++) { topLine.push([x, 0]); botLine.push([x, totalH - 1]); }
+      for (let y = 1; y <= ch; y++) { leftLine.push([0, y]); rightLine.push([totalW - 1, y]); }
+
+      checkLine(topLine, 'Top guide');
+      checkLine(botLine, 'Bottom guide');
+      checkLine(leftLine, 'Left guide');
+      checkLine(rightLine, 'Right guide');
+
+      let contentPx = 0;
+      for (let y = 1; y <= ch; y++) for (let x = 1; x <= cw; x++) {
+        if (px(x, y).a > 0) contentPx++;
+      }
+      const hasContent = contentPx > (cw * ch) * 0.05;
+      report.push({ ok: hasContent, msg: hasContent ? `✓ Content: ${contentPx} solid px` : '✗ Content empty' });
+
+      return report;
+    }
+
+    function renderValidationUI() {
+      const container = $('validationReport');
+      if (!container) return;
+      const report = runValidation();
+      container.innerHTML = '';
+      report.forEach(r => {
+        const row = document.createElement('div');
+        row.className = 'row ' + (r.ok ? 'ok' : 'bad');
+        const icon = document.createElement('span');
+        icon.className = 'icon';
+        icon.textContent = r.ok ? '✓' : '✗';
+        const msg = document.createElement('span');
+        msg.textContent = r.msg.replace(/^[✓✗]\s*/, '');
+        row.append(icon, msg);
+        container.appendChild(row);
+      });
+    }
+
+    function renderZoom() {
+      const zc = $('zoomCanvas');
+      if (!zc) return;
+      const zCtx = zc.getContext('2d');
+      zc.width = 160; zc.height = 160;
+      zCtx.imageSmoothingEnabled = false;
+      let source;
+      if (state.pngMode) {
+        ensureDesignCanvas();
+        source = designCanvas;
+      } else {
+        source = buildFull9PatchCanvas();
+      }
+      const cropSize = 10, magnification = 16, zoomSize = cropSize * magnification;
+      zCtx.clearRect(0, 0, zoomSize, zoomSize);
+      zCtx.drawImage(source, 0, 0, cropSize, cropSize, 0, 0, zoomSize, zoomSize);
+      zCtx.strokeStyle = 'rgba(15,23,42,0.5)';
+      zCtx.lineWidth = 1;
+      for (let i = 0; i <= cropSize; i++) {
+        const p = i * magnification;
+        zCtx.beginPath(); zCtx.moveTo(p + 0.5, 0); zCtx.lineTo(p + 0.5, zoomSize); zCtx.stroke();
+        zCtx.beginPath(); zCtx.moveTo(0, p + 0.5); zCtx.lineTo(zoomSize, p + 0.5); zCtx.stroke();
+      }
+      zCtx.strokeStyle = '#1686d0';
+      zCtx.lineWidth = 3;
+      zCtx.strokeRect(1.5, 1.5, magnification - 3, magnification - 3);
+    }
+
+    let rafPending = false;
+    let thumbRafPending = false;
+    let validationTimer = null;
+
+    function scheduleRefresh(opts = {}) {
+      markDesignCanvasDirty();
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => {
+        rafPending = false;
+        renderEditor();
+        renderAllPreviews();
+        renderZoom();
+        fitCanvasDisplay();
+        if (!opts.skipValidation) scheduleValidation();
+        scheduleConfigSave();
+      });
+    }
+
+    function scheduleThumbRefresh() {
+      if (thumbRafPending) return;
+      thumbRafPending = true;
+      requestAnimationFrame(() => {
+        thumbRafPending = false;
+        refreshThumbs();
+      });
+    }
+
+    function scheduleValidation() {
+      clearTimeout(validationTimer);
+      validationTimer = setTimeout(() => {
+        renderValidationUI();
+      }, 350);
+    }
+
+    function refresh() {
+      markDesignCanvasDirty();
+      renderEditor();
+      renderAllPreviews();
+      renderZoom();
+      fitCanvasDisplay();
+      scheduleValidation();
+      scheduleConfigSave();
+    }
+
+    /* ============================================================
+       GUIDE INTERACTION
+       ============================================================ */
+    let drawing = null;
+    const EDGE_KEY = { top: 'topGuide', bottom: 'bottomGuide', left: 'leftGuide', right: 'rightGuide' };
+
+    function getCanvasPixel(e) {
+      const r = editor.getBoundingClientRect();
+      return {
+        x: (e.clientX - r.left) / r.width * editor.width,
+        y: (e.clientY - r.top) / r.height * editor.height
+      };
+    }
+
+    function edgeFromPixel(p) {
+      if (state.pngMode) return null;
+      const cw = state.contentW, ch = state.contentH;
+      if (p.y >= 0 && p.y < 1 && p.x >= 1 && p.x <= cw) return { edge: 'top', coord: Math.floor(p.x) - 1 };
+      if (p.y >= ch + 1 && p.y < ch + 2 && p.x >= 1 && p.x <= cw) return { edge: 'bottom', coord: Math.floor(p.x) - 1 };
+      if (p.x >= 0 && p.x < 1 && p.y >= 1 && p.y <= ch) return { edge: 'left', coord: Math.floor(p.y) - 1 };
+      if (p.x >= cw + 1 && p.x < cw + 2 && p.y >= 1 && p.y <= ch) return { edge: 'right', coord: Math.floor(p.y) - 1 };
+      return null;
+    }
+
+    editor.addEventListener('pointerdown', e => {
+      if (state.pngMode) return;
+      e.preventDefault();
+      const p = getCanvasPixel(e);
+      const hit = edgeFromPixel(p);
+      if (!hit) return;
+      const max = (hit.edge === 'top' || hit.edge === 'bottom') ? state.contentW : state.contentH;
+      const c = clamp(hit.coord, 0, max - 1);
+      state[EDGE_KEY[hit.edge]] = { start: c, end: c };
+      drawing = { edge: hit.edge, startCoord: c, key: EDGE_KEY[hit.edge] };
+      try { editor.setPointerCapture(e.pointerId); } catch { }
+      scheduleRefresh({ skipValidation: true });
+    });
+
+    editor.addEventListener('pointermove', e => {
+      if (!drawing) {
+        const hit = edgeFromPixel(getCanvasPixel(e));
+        if (hit) {
+          editor.style.cursor = (hit.edge === 'top' || hit.edge === 'bottom') ? 'ew-resize' : 'ns-resize';
+        } else {
+          editor.style.cursor = state.pngMode ? 'default' : 'crosshair';
+        }
+        return;
+      }
+      e.preventDefault();
+      const p = getCanvasPixel(e);
+      const max = (drawing.edge === 'top' || drawing.edge === 'bottom') ? state.contentW : state.contentH;
+      let coord = (drawing.edge === 'top' || drawing.edge === 'bottom') ? Math.floor(p.x) - 1 : Math.floor(p.y) - 1;
+      coord = clamp(coord, 0, max - 1);
+      state[drawing.key] = {
+        start: Math.min(drawing.startCoord, coord),
+        end: Math.max(drawing.startCoord, coord)
+      };
+      scheduleRefresh({ skipValidation: true });
+    });
+
+    ['pointerup', 'pointercancel'].forEach(ev => editor.addEventListener(ev, () => {
+      if (!drawing) return;
+      drawing = null;
+      scheduleRefresh();
+    }));
+
+    /* ============================================================
+       GUIDE NORMALIZATION
+       ============================================================ */
+    function normalizeGuide(g, len) {
+      if (!g || len <= 0) return null;
+      let s = clamp(Math.round(g.start), 0, len - 1);
+      let e = clamp(Math.round(g.end), 0, len - 1);
+      if (s > e) [s, e] = [e, s];
+      return { start: s, end: e };
+    }
+
+    function applyAutoGuides() {
+      const shape = SHAPES[state.shape];
+      if (!shape || !shape.guides) return;
+      const borderW = (!shape.noBorder && state.borderOn)
+        ? Math.min(state.borderWidth, Math.floor(Math.min(state.contentW, state.contentH) / 4))
+        : 0;
+      const opts = {
+        radius: state.radius,
+        tail: state.tail,
+        notch: state.notch,
+        borderWidth: borderW
+      };
+      const g = shape.guides(state.contentW, state.contentH, opts);
+      if (!g) return;
+      state.topGuide = normalizeGuide(g.top, state.contentW);
+      state.leftGuide = normalizeGuide(g.left, state.contentH);
+      state.bottomGuide = normalizeGuide(g.bottom, state.contentW);
+      state.rightGuide = normalizeGuide(g.right, state.contentH);
+    }
+
+    /* ============================================================
+       SHAPE PICKER UI
+       ============================================================ */
+    const SHAPE_GROUPS = [
+      { listId: 'shapeList', categories: ['Basic', 'Toggle'] },
+      { listId: 'otherShapeList', categories: ['Polygon', 'Chat', 'Caller', 'Volume', 'Special'] }
+    ];
+
+    function drawThumb(canvas, shapeKey) {
+      const w = 64, h = 64, pixelRatio = 3;
+      canvas.width = w * pixelRatio;
+      canvas.height = h * pixelRatio;
+      const c = canvas.getContext('2d');
+      c.scale(pixelRatio, pixelRatio);
+      c.clearRect(0, 0, w, h);
+      const shape = SHAPES[shapeKey];
+      if (!shape) return;
+      const pad = 8;
+      const sw = w - pad * 2, sh = h - pad * 2;
+      const scale = sw / 96;
+
+      const isCallerShape = shapeKey === 'simCallerLeft' || shapeKey === 'simCallerRight';
+      const isVolumeShape = shapeKey === 'volTrack' || shapeKey === 'volTrackFlatTop' || shapeKey === 'volTrackPillTop';
+
+      const thumbRadius = isCallerShape
+        ? Math.min(sw, sh) / 2
+        : isVolumeShape
+          ? Math.min(sw, sh) * 0.32
+          : Math.max(4, state.radius * scale + 4);
+
+      const opts = {
+        radius: thumbRadius,
+        tail: Math.max(6, state.tail * scale),
+        notch: Math.max(8, state.notch * scale),
+        borderWidth: 0
+      };
+      const ignoresBorder = !!shape.noBorder;
+      const thumbBorderWidth = (!ignoresBorder && state.borderOn) ? Math.min(2, state.borderWidth) : 0;
+      const innerOpts = {
+        radius: Math.max(0, opts.radius - thumbBorderWidth),
+        tail: Math.max(3, opts.tail - thumbBorderWidth),
+        notch: Math.max(3, opts.notch - thumbBorderWidth),
+        borderWidth: 0
+      };
+      c.save();
+      c.translate(pad, pad);
+      const g = c.createLinearGradient(0, 0, sw, sh);
+      g.addColorStop(0, state.bgColor);
+      g.addColorStop(1, state.gradOn ? state.bgColor2 : state.bgColor);
+      c.fillStyle = g;
+      drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'outer', scale, 1);
+      shape.draw(c, sw, sh, opts);
+      c.fill();
+      if (thumbBorderWidth > 0) {
+        c.strokeStyle = state.borderColor;
+        c.lineWidth = Math.min(2, state.borderWidth);
+        shape.draw(c, sw, sh, opts);
+        c.stroke();
+      }
+      if (isVolumeShape && state.volDividerOn && !state.pngMode) {
+        const divY = pad + Math.round(sh * state.volDividerPos / 100);
+        c.save();
+        c.globalCompositeOperation = 'source-atop';
+        c.fillStyle = `rgba(0,0,0,${state.volDividerOpacity / 100})`;
+        c.fillRect(pad, divY, sw, 1);
+        c.restore();
+      }
+      drawStrokeShadow(c, sw, sh, shape, opts, innerOpts, thumbBorderWidth, 'inner', scale, 1);
+      c.restore();
+    }
+
+    function buildShapeList() {
+      SHAPE_GROUPS.forEach(({ listId, categories }) => {
+        const list = $(listId);
+        if (!list) return;
+        list.innerHTML = '';
+        categories.forEach(cat => {
+          const items = Object.keys(SHAPES).filter(key => SHAPES[key].cat === cat);
+          if (!items.length) return;
+          const catDiv = document.createElement('div');
+          catDiv.className = 'shape-cat';
+          catDiv.innerHTML = `<div class="shape-cat-title">${cat}</div>`;
+          const grid = document.createElement('div');
+          grid.className = 'shape-grid';
+          items.forEach(key => {
+            const btn = document.createElement('button');
+            btn.className = 'shape-btn' + (key === state.shape ? ' active' : '');
+            btn.dataset.shape = key;
+            btn.title = SHAPES[key].name;
+            btn.setAttribute('aria-label', SHAPES[key].name);
+            const cv = document.createElement('canvas');
+            btn.appendChild(cv);
+            drawThumb(cv, key);
+            btn.addEventListener('click', () => selectShape(key));
+            grid.appendChild(btn);
+          });
+          catDiv.appendChild(grid);
+          list.appendChild(catDiv);
+        });
+      });
+    }
+
+    function togglePngMode(on, skipRefresh = false) {
+      state.pngMode = on;
+      const note = $('pngModeNote');
+      if (note) note.style.display = on ? '' : 'none';
+      if (!skipRefresh) refresh();
+    }
+
+    function updateVolDividerVisibility() {
+      const wrap = $('volDividerWrap');
+      if (!wrap) return;
+      const isVol = state.shape.startsWith('vol');
+      wrap.style.display = isVol ? '' : 'none';
+    }
+
+    function selectShape(key, options = {}) {
+      const { autoGuides = true, enforcePngMode = true } = options;
+      if (!SHAPES[key]) return;
+      state.shape = key;
+      [...document.querySelectorAll('.shape-btn')].forEach(b =>
+        b.classList.toggle('active', b.dataset.shape === key)
+      );
+      const shape = SHAPES[key];
+      const params = shape.params || [];
+      $('radiusRow').style.display = params.includes('radius') ? '' : 'none';
+      $('tailRow').style.display = params.includes('tail') ? '' : 'none';
+      $('notchRow').style.display = params.includes('notch') ? '' : 'none';
+      $('shapeName').textContent = shape.name;
+
+      updateVolDividerVisibility();
+
+      if (enforcePngMode) {
+        if (shape.pngOnly && !state.pngMode) {
+          $('pngMode').checked = true;
+          togglePngMode(true, true);
+        } else if (!shape.pngOnly && state.pngMode) {
+          $('pngMode').checked = false;
+          togglePngMode(false, true);
+        }
+      }
+      if (autoGuides) applyAutoGuides();
+      refresh();
+    }
+
+    $('pngMode').addEventListener('change', e => togglePngMode(e.target.checked));
+
+    /* ============================================================
+       MTZ BUNDLE
+       ============================================================ */
+    const MTZ_FILES = [
+      { name: 'dialog_bg', w: 128, h: 128, shape: 'rounded', radius: 24 },
+      { name: 'dialog_top', w: 128, h: 80, shape: 'roundedTop', radius: 24 },
+      { name: 'dialog_middle', w: 128, h: 40, shape: 'sharp' },
+      { name: 'dialog_bottom', w: 128, h: 80, shape: 'roundedBottom', radius: 24 },
+      { name: 'btn_default_normal', w: 96, h: 48, shape: 'pill' },
+      { name: 'btn_default_pressed', w: 96, h: 48, shape: 'pill', darken: 0.20 },
+      { name: 'btn_default_disabled', w: 96, h: 48, shape: 'pill', alpha: 0.5 },
+      { name: 'btn_default_small_normal', w: 72, h: 40, shape: 'pill' },
+      { name: 'btn_default_small_pressed', w: 72, h: 40, shape: 'pill', darken: 0.20 },
+      { name: 'btn_default_small_disabled', w: 72, h: 40, shape: 'pill', alpha: 0.5 },
+      { name: 'btn_radio_off', w: 48, h: 48, shape: 'radioUnchecked' },
+      { name: 'btn_radio_on', w: 48, h: 48, shape: 'radioChecked' },
+      { name: 'radio_off_holo', w: 48, h: 48, shape: 'radioUnchecked' },
+      { name: 'radio_on_holo', w: 48, h: 48, shape: 'radioChecked' },
+      { name: 'radio_off', w: 48, h: 48, shape: 'radioUnchecked' },
+      { name: 'radio_on', w: 48, h: 48, shape: 'radioChecked' },
+      { name: 'contact_call_button_left', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'contact_call_button_right', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'caller_sim1_bg', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'caller_sim2_bg', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'sim1_caller_panel', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'sim2_caller_panel', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'call_sim1_normal', w: 192, h: 96, shape: 'simCallerLeft', radius: 48 },
+      { name: 'call_sim2_normal', w: 192, h: 96, shape: 'simCallerRight', radius: 48 },
+      { name: 'call_sim1_pressed', w: 192, h: 96, shape: 'simCallerLeft', radius: 48, darken: 0.15 },
+      { name: 'call_sim2_pressed', w: 192, h: 96, shape: 'simCallerRight', radius: 48, darken: 0.15 },
+      { name: 'volumepanel_slider_light', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_ring', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_volume', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_alarm', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_brightness', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_voice', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_media', w: 72, h: 320, shape: 'volTrack', radius: 36 },
+      { name: 'volumepanel_slider_expand', w: 72, h: 320, shape: 'volTrackPillTop', radius: 30 },
+      { name: 'volumepanel_h_speaker', w: 96, h: 160, shape: 'volTrackFlatTop', radius: 20 },
+      { name: 'volumepanel_h_bell', w: 96, h: 200, shape: 'volTrackFlatTop', radius: 20 },
+      { name: 'volumepanel_h_alarm', w: 96, h: 260, shape: 'volTrackPillTop', radius: 22 },
+      { name: 'volumepanel_h_brightness', w: 96, h: 280, shape: 'volTrackPillTop', radius: 22 },
+      { name: 'notification_bg', w: 128, h: 128, shape: 'rounded', radius: 16 },
+      { name: 'notification_bg_low', w: 128, h: 128, shape: 'rounded', radius: 16 },
+      { name: 'toast_frame', w: 128, h: 96, shape: 'rounded', radius: 16 },
+      { name: 'popup_bg', w: 128, h: 128, shape: 'rounded', radius: 12 },
+      { name: 'popup_bg_light', w: 128, h: 128, shape: 'rounded', radius: 12 },
+      { name: 'menu_dropdown_panel', w: 128, h: 128, shape: 'rounded', radius: 12 },
+      { name: 'edit_text', w: 128, h: 64, shape: 'rounded', radius: 10 },
+      { name: 'edit_text_holo', w: 128, h: 64, shape: 'rounded', radius: 10 },
+      { name: 'list_selector_background', w: 128, h: 96, shape: 'sharp' },
+      { name: 'switch_bg', w: 96, h: 72, shape: 'pill' },
+      { name: 'switch_bg_on', w: 96, h: 72, shape: 'pill' },
+      { name: 'switch_bg_off', w: 96, h: 72, shape: 'pill' },
+      { name: 'tab_indicator', w: 128, h: 64, shape: 'roundedBottom', radius: 12 },
+      { name: 'spinner_bg_holo', w: 128, h: 64, shape: 'rounded', radius: 10 }
+    ];
+
+    function buildMtzList() {
+      const list = $('mtzList');
+      if (!list) return;
+      list.innerHTML = '';
+      MTZ_FILES.forEach((f, i) => {
+        const item = document.createElement('label');
+        item.className = 'mtz-item';
+        item.innerHTML = `
+          <input type="checkbox" checked data-idx="${i}">
+          <span class="fname">${f.name}.9.png</span>
+          <span class="fsize">${f.w}×${f.h}</span>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function hexToRgb(hex) {
+      const v = (hex || '#000000').replace('#', '');
+      return { r: parseInt(v.substr(0, 2), 16) || 0, g: parseInt(v.substr(2, 2), 16) || 0, b: parseInt(v.substr(4, 2), 16) || 0 };
+    }
+
+    function rgbToHex({ r, g, b }) {
+      const h = n => Math.round(clamp(n, 0, 255)).toString(16).padStart(2, '0');
+      return '#' + h(r) + h(g) + h(b);
+    }
+
+    function darkenColor(hex, amount) {
+      const c = hexToRgb(hex);
+      return rgbToHex({ r: c.r * (1 - amount), g: c.g * (1 - amount), b: c.b * (1 - amount) });
+    }
+
+    function makeMtzPng(fileDef) {
+      const cw = fileDef.w, ch = fileDef.h;
+      const totalW = cw + 2, totalH = ch + 2;
+
+      const out = document.createElement('canvas');
+      out.width = totalW; out.height = totalH;
+      const c = out.getContext('2d', { alpha: true });
+      c.imageSmoothingEnabled = false;
+
+      const shape = SHAPES[fileDef.shape] || SHAPES.rounded;
+      const radius = fileDef.radius != null ? fileDef.radius : state.radius;
+      const outerOpts = { radius, tail: state.tail, notch: state.notch, borderWidth: 0 };
+      const ignoresBorder = !!shape.noBorder;
+
+      let bg1 = state.bgColor;
+      let bg2 = state.gradOn ? state.bgColor2 : state.bgColor;
+      if (fileDef.darken) { bg1 = darkenColor(bg1, fileDef.darken); bg2 = darkenColor(bg2, fileDef.darken); }
+
+      const borderOn = !ignoresBorder && state.borderOn;
+      let borderColor = state.borderColor;
+      if (fileDef.darken) borderColor = darkenColor(borderColor, fileDef.darken);
+
+      const b = borderOn ? Math.min(state.borderWidth, Math.floor(Math.min(cw, ch) / 4)) : 0;
+      const innerOpts = {
+        radius: Math.max(0, radius - b),
+        tail: Math.max(3, state.tail - b),
+        notch: Math.max(3, state.notch - b),
+        borderWidth: 0
+      };
+
+      const d = document.createElement('canvas');
+      d.width = cw; d.height = ch;
+      const dc = d.getContext('2d');
+      dc.imageSmoothingEnabled = false;
+
+      if (fileDef.alpha != null) dc.globalAlpha = fileDef.alpha;
+
+      drawStrokeShadow(dc, cw, ch, shape, outerOpts, innerOpts, b, 'outer');
+
+      if (b > 0) {
+        shape.draw(dc, cw, ch, outerOpts);
+        dc.fillStyle = borderColor;
+        dc.fill();
+      }
+
+      const iw = cw - 2 * b, ih = ch - 2 * b;
+      if (iw > 0 && ih > 0) {
+        dc.save();
+        dc.translate(b, b);
+        shape.draw(dc, iw, ih, innerOpts);
+        dc.restore();
+
+        if (state.gradOn) {
+          const g = dc.createLinearGradient(0, 0, cw, ch);
+          g.addColorStop(0, bg1); g.addColorStop(1, bg2);
+          dc.fillStyle = g;
+        } else {
+          dc.fillStyle = bg1;
+        }
+        dc.fill();
+
+        if (state.volDividerOn && fileDef.shape.startsWith('vol')) {
+          const divY = Math.round(ch * state.volDividerPos / 100);
+          const safeY = clamp(divY, 1, ch - 2);
+          dc.save();
+          dc.globalCompositeOperation = 'source-atop';
+          const alpha = state.volDividerOpacity / 100;
+          dc.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+          dc.fillRect(0, safeY, cw, 1);
+          dc.fillStyle = `rgba(255, 255, 255, ${alpha * 0.35})`;
+          dc.fillRect(0, safeY + 1, cw, 1);
+          dc.restore();
+        }
+      }
+      drawStrokeShadow(dc, cw, ch, shape, outerOpts, innerOpts, b, 'inner');
+      dc.globalAlpha = 1;
+
+      c.drawImage(d, 1, 1);
+
+      const g = shape.guides ? shape.guides(cw, ch, { radius, tail: state.tail, notch: state.notch, borderWidth: b }) : null;
+      c.fillStyle = '#000000';
+      if (g) {
+        if (g.top) { const gg = normalizeGuide(g.top, cw); if (gg) c.fillRect(1 + gg.start, 0, gg.end - gg.start + 1, 1); }
+        if (g.left) { const gg = normalizeGuide(g.left, ch); if (gg) c.fillRect(0, 1 + gg.start, 1, gg.end - gg.start + 1); }
+        if (g.bottom) { const gg = normalizeGuide(g.bottom, cw); if (gg) c.fillRect(1 + gg.start, ch + 1, gg.end - gg.start + 1, 1); }
+        if (g.right) { const gg = normalizeGuide(g.right, ch); if (gg) c.fillRect(cw + 1, 1 + gg.start, 1, gg.end - gg.start + 1); }
+      }
+
+      return out;
+    }
+
+    /* ============================================================
+       UI BINDING
+       ============================================================ */
+    function closeAllPopovers() {
+      document.querySelectorAll('.picker-popover').forEach(popover => {
+        popover.hidden = true;
+        const trigger = popover.parentElement?.querySelector('.color-trigger');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    function bindColor(colorEl, hexEl, key) {
+      if (!colorEl || !hexEl) return;
+      const popover = colorEl.closest('.color-wrap')?.querySelector('.picker-popover');
+      if (!popover) return;
+      colorEl.addEventListener('click', () => {
+        document.querySelectorAll('.picker-popover').forEach(other => {
+          if (other !== popover) {
+            other.hidden = true;
+            const otherTrigger = other.parentElement?.querySelector('.color-trigger');
+            if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
+          }
+        });
+        popover.hidden = !popover.hidden;
+        colorEl.setAttribute('aria-expanded', String(!popover.hidden));
+      });
+      hexEl.addEventListener('input', () => {
+        let v = hexEl.value.trim();
+        if (!v) return;
+        if (v[0] !== '#') v = '#' + v;
+        if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+          state[key] = v.toLowerCase();
+          colorEl.value = v.toLowerCase();
+          colorEl.style.backgroundColor = v;
+          const pickerInput = popover.querySelector('input[type=color]');
+          if (pickerInput) pickerInput.value = v.toLowerCase();
+          scheduleRefresh({ skipValidation: true });
+          scheduleThumbRefresh();
+        }
+      });
+    }
+
+    function applyPickerColor(key, color) {
+      const normalized = color.toLowerCase();
+      const trigger = $(key);
+      if (!trigger) return;
+      state[key] = normalized;
+      trigger.value = normalized;
+      trigger.style.backgroundColor = normalized;
+      const hexInput = $(`${key}Hex`);
+      if (hexInput) hexInput.value = normalized;
+      const popover = trigger.closest('.color-wrap')?.querySelector('.picker-popover');
+      if (popover) {
+        const pickerInput = popover.querySelector('input[type=color]');
+        if (pickerInput) pickerInput.value = normalized;
+        popover.hidden = true;
+      }
+      trigger.setAttribute('aria-expanded', 'false');
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    }
+
+    ['bgColor', 'bgColor2', 'borderColor', 'shadowColor'].forEach(key => {
+      const trigger = $(key);
+      if (!trigger) return;
+      const popover = document.createElement('div');
+      popover.className = 'picker-popover';
+      popover.hidden = true;
+      popover.setAttribute('role', 'dialog');
+      popover.setAttribute('aria-label', `Choose ${key} color`);
+      const title = document.createElement('p');
+      title.className = 'picker-title';
+      title.textContent = 'Choose a color';
+      const palette = document.createElement('div');
+      palette.className = 'color-palette';
+      DEFAULT_COLOR_PALETTE.forEach(color => {
+        const swatch = document.createElement('button');
+        swatch.type = 'button';
+        swatch.className = 'palette-swatch';
+        swatch.style.backgroundColor = color;
+        swatch.title = color;
+        swatch.setAttribute('aria-label', color);
+        swatch.addEventListener('click', () => applyPickerColor(key, color));
+        palette.appendChild(swatch);
+      });
+      const custom = document.createElement('label');
+      custom.className = 'picker-custom';
+      custom.append('Custom color');
+      const customInput = document.createElement('input');
+      customInput.type = 'color';
+      customInput.value = state[key];
+      customInput.setAttribute('aria-label', 'Choose a custom color');
+      customInput.addEventListener('input', () => {
+        const color = customInput.value.toLowerCase();
+        state[key] = color;
+        trigger.value = color;
+        trigger.style.backgroundColor = color;
+        const hexInput = $(`${key}Hex`);
+        if (hexInput) hexInput.value = color;
+        scheduleRefresh({ skipValidation: true });
+        clearTimeout(customInput._t);
+        customInput._t = setTimeout(scheduleThumbRefresh, 150);
+      });
+      custom.appendChild(customInput);
+      popover.append(title, palette, custom);
+      trigger.closest('.color-wrap').appendChild(popover);
+    });
+
+    bindColor($('bgColor'), $('bgColorHex'), 'bgColor');
+    bindColor($('bgColor2'), $('bgColor2Hex'), 'bgColor2');
+    bindColor($('borderColor'), $('borderColorHex'), 'borderColor');
+    bindColor($('shadowColor'), $('shadowColorHex'), 'shadowColor');
+
+    document.addEventListener('click', event => {
+      if (event.target.closest('.color-wrap')) return;
+      closeAllPopovers();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      closeAllPopovers();
+    });
+
+    function refreshThumbs() {
+      document.querySelectorAll('.shape-btn').forEach(b => {
+        const cv = b.querySelector('canvas');
+        if (cv) drawThumb(cv, b.dataset.shape);
+      });
+    }
+
+    $('gradOn').addEventListener('change', e => {
+      state.gradOn = e.target.checked;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
+    $('borderOn').addEventListener('change', e => {
+      state.borderOn = e.target.checked;
+      applyAutoGuides();
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
+
+    function clampRadiusToFit() {
+      const maxR = Math.max(0,
+        Math.floor(Math.min(state.contentW, state.contentH) / 2) - state.borderWidth - 2);
+      if (state.radius > maxR) {
+        state.radius = maxR;
+        const el = $('radius');
+        if (el) el.value = state.radius;
+        const lbl = $('radiusVal');
+        if (lbl) lbl.textContent = state.radius;
+      }
+    }
+
+    function bindRange(id, valId, key, format = v => v, onChange = null) {
+      const el = $(id);
+      if (!el) return;
+      el.addEventListener('input', e => {
+        state[key] = +e.target.value;
+        const valEl = $(valId);
+        if (valEl) valEl.textContent = format(state[key]);
+        if (onChange) onChange();
+        scheduleRefresh({ skipValidation: true });
+        scheduleThumbRefresh();
+      });
+      el.addEventListener('change', () => scheduleRefresh());
+    }
+
+    bindRange('radius', 'radiusVal', 'radius', v => v, () => {
+      clampRadiusToFit();
+      applyAutoGuides();
+    });
+    bindRange('tail', 'tailVal', 'tail', v => v, applyAutoGuides);
+    bindRange('notch', 'notchVal', 'notch', v => v, applyAutoGuides);
+    bindRange('borderWidth', 'borderWidthVal', 'borderWidth', v => v, () => {
+      clampRadiusToFit();
+      applyAutoGuides();
+    });
+
+    $('volDividerOn').addEventListener('change', e => {
+      state.volDividerOn = e.target.checked;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
+    bindRange('volDividerPos', 'volDividerPosVal', 'volDividerPos', v => `${v}%`);
+    bindRange('volDividerOpacity', 'volDividerOpacityVal', 'volDividerOpacity', v => `${v}%`);
+
+    $('shadowOn').addEventListener('change', e => {
+      state.shadowOn = e.target.checked;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
+    $('shadowMode').addEventListener('change', e => {
+      state.shadowMode = e.target.value;
+      scheduleRefresh({ skipValidation: true });
+      scheduleThumbRefresh();
+    });
+    $('shadowOpacity').addEventListener('input', e => {
+      state.shadowOpacity = +e.target.value;
+      $('shadowOpacityVal').textContent = `${state.shadowOpacity}%`;
+      if (state.shadowOn) {
+        scheduleRefresh({ skipValidation: true });
+        scheduleThumbRefresh();
+      }
+    });
+    $('shadowWidth').addEventListener('input', e => {
+      state.shadowWidth = +e.target.value;
+      $('shadowWidthVal').textContent = `${state.shadowWidth} px`;
+      if (state.shadowOn) {
+        scheduleRefresh({ skipValidation: true });
+        scheduleThumbRefresh();
+      }
+    });
+
+    $('resetGuidesBtn').addEventListener('click', () => {
+      applyAutoGuides();
+      refresh();
+      showToast('Auto guides restored');
+    });
+
+    document.addEventListener('input', event => {
+      if (event.target.matches('input, select')) scheduleConfigSave();
+    });
+    document.addEventListener('change', event => {
+      if (event.target.matches('input, select')) saveConfigNow();
+    });
+    window.addEventListener('beforeunload', saveConfigNow);
+
+    $('sizePresets').addEventListener('click', e => {
+      const btn = e.target.closest('button[data-size]');
+      if (!btn) return;
+      [...$('sizePresets').children].forEach(b => b.classList.toggle('active', b === btn));
+      const s = +btn.dataset.size;
+      state.contentW = s; state.contentH = s;
+      clampRadiusToFit();
+      applyAutoGuides();
+      refresh();
+      scheduleThumbRefresh();
+    });
+
+    $('mtzAll').addEventListener('click', () => $('mtzList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true));
+    $('mtzNone').addEventListener('click', () => $('mtzList').querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false));
+
+    $('downloadZip').addEventListener('click', async () => {
+      const checked = [...$('mtzList').querySelectorAll('input[type=checkbox]:checked')];
+      if (!checked.length) { showToast('Kono file select kora nei!', true); return; }
+
+      const zip = new JSZip();
+      const folder = zip.folder('res-drawable-nodpi');
+      const btn = $('downloadZip');
+      const oldText = btn.textContent;
+      btn.textContent = 'Generating...'; btn.disabled = true;
+
+      try {
+        for (const cb of checked) {
+          const def = MTZ_FILES[+cb.dataset.idx];
+          if (!def) continue;
+          const canvas = makeMtzPng(def);
+          const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+          const buf = await blob.arrayBuffer();
+          folder.file(def.name + '.9.png', buf);
+        }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(zipBlob);
+        a.download = 'mtz-9patch-bundle.zip';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+        showToast(`✓ ${checked.length} ta perfect 9.png download holo!`);
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, true);
+      } finally {
+        btn.textContent = oldText; btn.disabled = false;
+      }
+    });
+
+    $('downloadBtn').addEventListener('click', () => {
+      const cw = state.contentW, ch = state.contentH;
+
+      if (state.pngMode) {
+        const out = document.createElement('canvas');
+        out.width = cw; out.height = ch;
+        const octx = out.getContext('2d', { alpha: true });
+        octx.imageSmoothingEnabled = false;
+        drawDesign(octx, cw, ch);
+
+        out.toBlob(blob => {
+          if (!blob) return alert('Export failed!');
+          const base = ($('fileName').value.trim() || 'shape').replace(/[^\w\-]+/g, '_').replace(/\.(9\.)?png$/i, '');
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = base + '.png';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+          showToast('PNG download holo!');
+        }, 'image/png');
+        return;
+      }
+
+      const report = runValidation();
+      const fails = report.filter(r => !r.ok).length;
+
+      const out = buildFull9PatchCanvas();
+      out.toBlob(blob => {
+        if (!blob) return alert('Export failed!');
+        const base = ($('fileName').value.trim() || 'shape').replace(/[^\w\-]+/g, '_').replace(/\.9\.png$/i, '');
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = base + '.9.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+        showToast(fails > 0 ? `✓ Export (${fails} warning)` : '✓ Perfect .9.png download!');
+      }, 'image/png');
+    });
+
+    /* ============================================================
+       RESPONSIVE RESIZE
+       ============================================================ */
+    function debounce(fn, wait) {
+      let t = null;
+      return function (...args) {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+
+    const handleResize = debounce(() => { fitCanvasDisplay(); }, 120);
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => { fitCanvasDisplay(); renderAllPreviews(); }, 250);
+    });
+
+    if (window.ResizeObserver) {
+      const stageEl = document.querySelector('.stage');
+      if (stageEl) {
+        const ro = new ResizeObserver(debounce(() => { fitCanvasDisplay(); }, 100));
+        ro.observe(stageEl);
+      }
+    }
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', debounce(() => { fitCanvasDisplay(); }, 100));
+    }
+
+    /* ============================================================
+       FAB — Section Visibility Panel
+       (FAB toggle OFF করলে পুরো section HTML থেকে hide হয়ে যায়)
+       ============================================================ */
+
+    /** যেকোনো key দিয়ে একটা section-কে সম্পূর্ণ hide/unhide করে
+     *  force=true  → hidden (পুরো div লুকায়)
+     *  force=false → visible
+     *  force undefined → toggle
+     */
+    function toggleSectionHidden(key, force) {
+      const group = document.querySelector(`.sidebar > .group[data-section-key="${key}"]`);
+      if (!group) return;
+      const isHidden = group.classList.contains('hidden');
+      const targetHidden = (typeof force === 'boolean') ? force : !isHidden;
+
+      group.classList.toggle('hidden', targetHidden);
+
+      syncFabBadges();
+      scheduleConfigSave();
+    }
+
+    /** Page load-এ saved hidden list apply করে */
+    function applyHiddenSections(hiddenKeys) {
+      if (!Array.isArray(hiddenKeys)) return;
+      document.querySelectorAll('.sidebar > .group').forEach(group => {
+        if (!group.dataset.sectionKey) return;
+        group.classList.toggle('hidden', hiddenKeys.includes(group.dataset.sectionKey));
+      });
+      syncFabBadges();
+    }
+
+    /** FAB panel-এর list তৈরি — সব section থেকে */
+    function buildFabList() {
+      const list = $('fabSectionList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      const groups = document.querySelectorAll('.sidebar > .group');
+      if (!groups.length) {
+        const empty = document.createElement('div');
+        empty.className = 'fab-panel-hint';
+        empty.textContent = 'No sections found.';
+        list.appendChild(empty);
+        return;
+      }
+
+      groups.forEach(group => {
+        const heading = group.querySelector(':scope > h3');
+        if (!heading) return;
+        const key = group.dataset.sectionKey;
+        if (!key) return;
+
+        // heading-এর ভেতর থেকে শুধু title text (toggle button বাদ)
+        const headingClone = heading.cloneNode(true);
+        headingClone.querySelectorAll('.section-toggle').forEach(el => el.remove());
+        const titleText = headingClone.textContent.trim() || key;
+
+        const item = document.createElement('div');
+        item.className = 'fab-item';
+        item.dataset.key = key;
+        item.setAttribute('role', 'switch');
+        item.setAttribute('tabindex', '0');
+
+        // FAB switch = section visible কিনা (hidden হলে OFF)
+        const isVisible = !group.classList.contains('hidden');
+        item.setAttribute('aria-checked', String(isVisible));
+        item.setAttribute('aria-label', `${titleText} section`);
+
+        const labelEl = document.createElement('span');
+        labelEl.className = 'fab-label';
+        labelEl.textContent = titleText;
+
+        const sw = document.createElement('label');
+        sw.className = 'switch';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.checked = isVisible;
+        input.tabIndex = -1;
+        input.dataset.fabFor = key;
+        const sliderSpan = document.createElement('span');
+        sliderSpan.className = 'slider-t';
+        sw.append(input, sliderSpan);
+
+        item.append(labelEl, sw);
+        list.appendChild(item);
+      });
+    }
+
+    /** FAB-এর প্রতিটা switch-কে sidebar-এর hidden state এর সাথে sync */
+    function syncFabBadges() {
+      document.querySelectorAll('#fabSectionList .fab-item').forEach(item => {
+        const key = item.dataset.key;
+        const group = document.querySelector(`.sidebar > .group[data-section-key="${key}"]`);
+        if (!group) return;
+        const isVisible = !group.classList.contains('hidden');
+        const input = item.querySelector('input[type=checkbox]');
+        if (input) input.checked = isVisible;
+        item.setAttribute('aria-checked', String(isVisible));
+      });
+    }
+
+    /** FAB panel-এর সব setup */
+    function initFab() {
+      const fab = $('sectionFab');
+      const panel = $('sectionFabPanel');
+      const closeBtn = $('fabClose');
+      const showAllBtn = $('fabShowAll');
+      const hideAllBtn = $('fabHideAll');
+      const list = $('fabSectionList');
+      if (!fab || !panel || !list) return;
+
+      const setOpen = open => {
+        panel.hidden = !open;
+        fab.setAttribute('aria-expanded', String(open));
+        fab.setAttribute('aria-label', open ? 'Close section panel' : 'Open section panel');
+        fab.classList.toggle('active', open);
+        if (open) {
+          syncFabBadges();
+          const first = panel.querySelector('.fab-item');
+          if (first) setTimeout(() => first.focus({ preventScroll: true }), 50);
+        }
+      };
+
+      // FAB click → open/close
+      fab.addEventListener('click', e => {
+        e.stopPropagation();
+        setOpen(panel.hidden);
+      });
+
+      // Close button
+      if (closeBtn) closeBtn.addEventListener('click', () => {
+        setOpen(false);
+        fab.focus();
+      });
+
+      // Show all → সব section পুনরায় দেখা যাবে
+      if (showAllBtn) showAllBtn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar > .group[data-section-key]').forEach(g => {
+          toggleSectionHidden(g.dataset.sectionKey, false);
+        });
+        showToast('All sections shown');
+      });
+
+      // Hide all → সব section সম্পূর্ণ লুকাবে
+      if (hideAllBtn) hideAllBtn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar > .group[data-section-key]').forEach(g => {
+          toggleSectionHidden(g.dataset.sectionKey, true);
+        });
+        showToast('All sections hidden');
+      });
+
+      // List item click → section hide/unhide
+      list.addEventListener('click', e => {
+        const item = e.target.closest('.fab-item');
+        if (!item) return;
+        toggleSectionHidden(item.dataset.key);
+      });
+
+      list.addEventListener('keydown', e => {
+        const item = e.target.closest('.fab-item');
+        if (!item) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSectionHidden(item.dataset.key);
+        }
+      });
+
+      // Outside click → close panel
+      document.addEventListener('click', e => {
+        if (panel.hidden) return;
+        if (e.target.closest('#sectionFabPanel') || e.target.closest('#sectionFab')) return;
+        setOpen(false);
+      });
+
+      // Escape → close panel
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !panel.hidden) {
+          setOpen(false);
+          fab.focus();
+        }
+      });
+
+      // Build list
+      buildFabList();
+    }
+
+    /* ============================================================
+       INIT
+       ============================================================ */
+    (function init() {
+      const savedConfig = readSavedConfig();
+      const migrateOldDefaults = !!savedConfig && savedConfig.version !== CONFIG_VERSION;
+      restoreSavedState(savedConfig?.state, migrateOldDefaults);
+      if (savedConfig && SHAPES[state.shape]?.pngOnly) state.pngMode = true;
+      buildShapeList();
+      buildMtzList();
+      initSectionToggles(savedConfig?.collapsedSections || []);
+      initFab();
+      // FAB দিয়ে hide করা section গুলো restore
+      applyHiddenSections(savedConfig?.hiddenSections || []);
+      const migrateSize = migrateOldDefaults && savedConfig.state?.contentW === 96 && savedConfig.state?.contentH === 96;
+      selectShape(state.shape, { autoGuides: !savedConfig || migrateSize, enforcePngMode: !savedConfig });
+      syncControlsFromState(savedConfig);
+      clampRadiusToFit();
+      applyAutoGuides();
+      updateVolDividerVisibility();
+      fitCanvasDisplay();
+      refresh();
+      configPersistenceReady = true;
+      if (migrateOldDefaults) saveConfigNow();
+    })();
+  </script>
+</body>
+
+</html>

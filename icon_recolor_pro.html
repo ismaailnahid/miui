@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Icon Recolor Pro</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #3b82f6;
+      border-radius: 10px;
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0f1a 0%, #05080f 100%);
+      min-height: 100vh;
+      padding: 12px;
+      font-family: 'Segoe UI', 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 20px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      body {
+        padding: 32px;
+      }
+    }
+
+    .app-container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    .forge-card {
+      background: rgba(18, 22, 28, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .forge-card {
+        border-radius: 32px;
+      }
+    }
+
+    .premium-header {
+      background: linear-gradient(135deg, #0f2642 0%, #1a2740 100%);
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    @media (min-width: 768px) {
+      .premium-header {
+        padding: 24px 32px;
+      }
+    }
+
+    .logo-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .logo-area h1 {
+      font-size: 18px;
+      background: linear-gradient(135deg, #fff, #60a5fa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    @media (min-width: 480px) {
+      .logo-area h1 {
+        font-size: 22px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .logo-area h1 {
+        font-size: 28px;
+      }
+    }
+
+    .badge-container {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .pro-badge,
+    .dual-badge,
+    .blur-badge,
+    .smooth-badge,
+    .edge-badge {
+      padding: 4px 10px;
+      border-radius: 40px;
+      font-size: 10px;
+      font-weight: bold;
+      color: white;
+      white-space: nowrap;
+    }
+
+    @media (min-width: 480px) {
+
+      .pro-badge,
+      .dual-badge,
+      .blur-badge,
+      .smooth-badge,
+      .edge-badge {
+        padding: 5px 12px;
+        font-size: 11px;
+      }
+    }
+
+    .pro-badge {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    .dual-badge {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+
+    .blur-badge {
+      background: linear-gradient(135deg, #ec489a, #db2777);
+    }
+
+    .smooth-badge {
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+    }
+
+    .edge-badge {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+    }
+
+    .simple-counter {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 60px;
+      padding: 5px 12px;
+      font-size: 11px;
+      color: #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(4px);
+    }
+
+    .main-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .main-workspace {
+        flex-direction: row;
+        gap: 24px;
+        padding: 24px;
+      }
+    }
+
+    .preview-section {
+      flex: 1.2;
+      min-width: 0;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 24px;
+      padding: 16px;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      height: fit-content;
+    }
+
+    @media (min-width: 768px) {
+      .preview-section {
+        position: sticky;
+        top: 12px;
+        padding: 20px;
+      }
+    }
+
+    .preview-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #e2e8f0;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    @media (min-width: 480px) {
+      .preview-title {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .zoom-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 4px 10px;
+      border-radius: 60px;
+    }
+
+    .zoom-btn {
+      background: rgba(59, 130, 246, 0.3);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: white;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+
+    .zoom-btn:active {
+      transform: scale(0.95);
+    }
+
+    .zoom-level {
+      font-size: 12px;
+      color: #60a5fa;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    .preview-box {
+      background: #0a0f1a;
+      border-radius: 20px;
+      border: 2px solid rgba(59, 130, 246, 0.5);
+      position: relative;
+      min-height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .preview-box {
+        min-height: 280px;
+      }
+    }
+
+    .preview-inner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.2s ease;
+    }
+
+    .preview-inner img {
+      display: block;
+      max-width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+      pointer-events: none;
+    }
+
+    @media (min-width: 768px) {
+      .preview-inner img {
+        max-height: 350px;
+      }
+    }
+
+    .preview-filename {
+      font-size: 11px;
+      color: #94a3b8;
+      word-break: break-all;
+      text-align: center;
+      margin-top: 8px;
+      padding: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+    }
+
+    .preview-note {
+      margin-top: 12px;
+      font-size: 10px;
+      color: #60a5fa;
+      text-align: center;
+    }
+
+    .color-controls {
+      flex: 2;
+      min-width: 0;
+    }
+
+    .top-control-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 480px) {
+      .top-control-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .mode-btn {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      padding: 10px 20px;
+      border-radius: 60px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: white;
+      width: 100%;
+    }
+
+    @media (min-width: 480px) {
+      .mode-btn {
+        width: auto;
+        padding: 10px 24px;
+      }
+    }
+
+    .dual-header-compact {
+      background: rgba(139, 92, 246, 0.2);
+      border-radius: 60px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .dual-header-compact h4 {
+      color: #cbd5e1;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-dual-btn {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      padding: 5px 12px;
+      border-radius: 60px;
+      font-size: 11px;
+      font-weight: bold;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .toggle-dual-btn.off {
+      background: linear-gradient(135deg, #475569, #334155);
+    }
+
+    .effects-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .effects-row {
+        flex-direction: row;
+      }
+    }
+
+    .effect-item {
+      flex: 1;
+      min-width: 0;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 60px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .effect-item.blur {
+      border: 1px solid rgba(236, 72, 153, 0.4);
+    }
+
+    .effect-item.smooth {
+      border: 1px solid rgba(20, 184, 166, 0.4);
+    }
+
+    .effect-item.edge {
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .effect-label {
+      color: #cbd5e1;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .effect-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .effect-control input {
+      width: 80px;
+      height: 4px;
+      border-radius: 2px;
+      background: #334155;
+    }
+
+    .effect-value {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      min-width: 45px;
+      text-align: center;
+    }
+
+    .effect-value.blur-val {
+      background: #ec489a20;
+      color: #f472b6;
+    }
+
+    .effect-value.smooth-val {
+      background: #14b8a620;
+      color: #2dd4bf;
+    }
+
+    .effect-value.edge-val {
+      background: #f59e0b20;
+      color: #fbbf24;
+    }
+
+    .dual-color-section {
+      background: rgba(139, 92, 246, 0.15);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+    }
+
+    .color-pair {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    @media (min-width: 640px) {
+      .color-pair {
+        flex-direction: row;
+      }
+    }
+
+    .color-item {
+      flex: 1;
+      min-width: 0;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .color-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    @media (min-width: 480px) {
+      .color-row {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    .color-picker-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+    }
+
+    .threshold-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 60px;
+    }
+
+    .threshold-group label {
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .threshold-group input {
+      width: 70px;
+      height: 3px;
+    }
+
+    .threshold-group span {
+      font-size: 10px;
+      color: #facc15;
+      min-width: 35px;
+    }
+
+    .color-label {
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .color-label.primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .color-label.secondary {
+      background: #8b5cf6;
+      color: white;
+    }
+
+    .hex-input {
+      background: #1e293b;
+      border: 1px solid #3b82f6;
+      border-radius: 50px;
+      padding: 6px 8px;
+      font-family: monospace;
+      font-weight: bold;
+      width: 85px;
+      text-align: center;
+      color: #facc15;
+      font-size: 11px;
+    }
+
+    .color-swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .mini-preset-title {
+      font-size: 10px;
+      color: #94a3b8;
+      margin: 10px 0 6px;
+    }
+
+    .mini-preset-gallery {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mini-preset {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .dual-info {
+      font-size: 10px;
+      color: #a78bfa;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .single-color-section {
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 17px;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+    }
+
+    @media (min-width: 480px) {
+      .single-color-section {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+      }
+    }
+
+    .single-color-section.hidden {
+      display: none;
+    }
+
+    .single-color-section>span {
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .single-color-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+    }
+
+    .single-threshold-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 10px;
+      border-radius: 60px;
+    }
+
+    .single-threshold-group span {
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .single-threshold-group input {
+      width: 70px;
+      height: 3px;
+    }
+
+    .single-threshold-group .threshold-val {
+      color: #facc15;
+      font-size: 10px;
+      min-width: 35px;
+    }
+
+    .preset-gallery {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px;
+      border-radius: 17px;
+      justify-content: center;
+    }
+
+    .preset {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    @media (min-width: 480px) {
+      .preset {
+        width: 38px;
+        height: 38px;
+      }
+    }
+
+    .upload-zone {
+      background: rgba(30, 41, 59, 0.6);
+      padding: 12px;
+      border-radius: 16px;
+      border: 2px dashed rgba(59, 130, 246, 0.5);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .upload-zone.hidden {
+      display: none;
+    }
+
+    .upload-btn {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      padding: 8px 16px;
+      border-radius: 60px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      font-size: 12px;
+    }
+
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      font-size: 11px;
+      transition: 0.2s;
+      white-space: nowrap;
+    }
+
+    @media (min-width: 480px) {
+      .action-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+      }
+    }
+
+    .action-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+    }
+
+    .action-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .action-success {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+    }
+
+    .action-select {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+    }
+
+    .action-deselect {
+      background: linear-gradient(135deg, #64748b, #475569);
+      color: white;
+    }
+
+    .action-invert {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: white;
+    }
+
+    .action-btn:active {
+      transform: translateY(1px);
+    }
+
+    .progress-section {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 60px;
+      padding: 12px 16px;
+      margin-top: 16px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .progress-status {
+      color: #60a5fa;
+      font-size: 11px;
+    }
+
+    .progress-percent {
+      color: #facc15;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .progress-bar-container {
+      background: #1e293b;
+      border-radius: 60px;
+      overflow: hidden;
+      height: 6px;
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      transition: width 0.3s ease;
+    }
+
+    .progress-detail {
+      font-size: 10px;
+      color: #94a3b8;
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-height: 450px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    @media (min-width: 480px) {
+      .grid-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .grid-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .grid-container {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .icon-card {
+      background: linear-gradient(145deg, #1e293b, #0f172a);
+      border-radius: 16px;
+      padding: 12px 8px 10px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .icon-card.processing {
+      opacity: 0.6;
+      border-color: #f59e0b;
+    }
+
+    .icon-card.processing::after {
+      content: "\f110";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: #f59e0b;
+      animation: spin 1s linear infinite;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 8px;
+      border-radius: 50%;
+    }
+
+    @keyframes spin {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .icon-card.selected-for-preview {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+    }
+
+    .icon-card img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      background: #0a0f1a;
+      border-radius: 12px;
+      padding: 6px;
+      margin-bottom: 6px;
+    }
+
+    @media (min-width: 480px) {
+      .icon-card img {
+        width: 85px;
+        height: 85px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .icon-card img {
+        width: 100px;
+        height: 100px;
+      }
+    }
+
+    .card-title {
+      font-size: 10px;
+      color: #facc15;
+      margin: 6px 0;
+      font-weight: 600;
+      word-break: break-all;
+      text-align: center;
+      max-width: 100%;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      width: 100%;
+    }
+
+    .select-check input {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #3b82f6;
+      margin: 0;
+    }
+
+    .icon-action {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 5px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .download-btn {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+    }
+
+    .delete-btn {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      backdrop-filter: blur(16px);
+      padding: 10px 20px;
+      border-radius: 60px;
+      color: #facc15;
+      z-index: 1000;
+      animation: slideUpFade 0.4s ease;
+      border: 1px solid rgba(59, 130, 246, 0.5);
+      font-weight: 600;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+      max-width: 90vw;
+    }
+
+    @keyframes slideUpFade {
+      from {
+        bottom: 0;
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+
+      to {
+        bottom: 20px;
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <div class="forge-card">
+      <div class="premium-header">
+        <div class="logo-area">
+          <div>
+            <h1><i class="fas fa-crown"></i> ICON RECOLOR PRO</h1>
+            <div class="badge-container">
+              <span class="pro-badge"><i class="fas fa-eye"></i> LIVE PREVIEW</span>
+              <span class="dual-badge"><i class="fas fa-layer-group"></i> DUAL COLOR</span>
+              <span class="blur-badge"><i class="fas fa-tint"></i> BLUR</span>
+              <span class="smooth-badge"><i class="fas fa-feather-alt"></i> SMOOTH</span>
+              <span class="edge-badge"><i class="fas fa-border-all"></i> EDGE DETECT</span>
+            </div>
+          </div>
+          <div class="simple-counter">
+            <i class="fas fa-images"></i> <span id="totalCount">0</span>
+            <span style="margin:0 4px">•</span>
+            <i class="fas fa-check-square"></i> <span id="selectedCount">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-workspace">
+        <div class="preview-section">
+          <div class="preview-title">
+            <span><i class="fas fa-eye"></i> LIVE PREVIEW</span>
+            <div class="zoom-controls">
+              <button id="zoomOutBtn" class="zoom-btn"><i class="fas fa-search-minus"></i></button>
+              <span id="zoomLevel" class="zoom-level">100%</span>
+              <button id="zoomInBtn" class="zoom-btn"><i class="fas fa-search-plus"></i></button>
+              <button id="resetZoomBtn" class="zoom-btn reset-zoom-btn"><i class="fas fa-sync-alt"></i></button>
+            </div>
+          </div>
+          <div class="preview-box" id="previewBox">
+            <div class="preview-inner" id="previewInner">
+              <img id="previewImg" src="" alt="Preview">
+            </div>
+          </div>
+          <div class="preview-filename" id="previewFilename">Select an image</div>
+          <div class="preview-note"><i class="fas fa-info-circle"></i> Click any image → preview | Use +/- to zoom</div>
+        </div>
+
+        <div class="color-controls">
+          <div class="top-control-row">
+            <button class="mode-btn active" data-mode="recolor"><i class="fas fa-paint-roller"></i> RECOLOR</button>
+            <div class="dual-header-compact">
+              <h4><i class="fas fa-layer-group"></i> DUAL COLOR</h4>
+              <button id="toggleDualBtn" class="toggle-dual-btn off"><i class="fas fa-toggle-off"></i> OFF</button>
+            </div>
+          </div>
+
+          <div id="dualColorContainer" style="display: none;">
+            <div class="dual-color-section">
+              <div class="color-pair">
+                <div class="color-item">
+                  <span class="color-label primary"><i class="fas fa-star"></i> PRIMARY</span>
+                  <div class="color-row">
+                    <div class="color-picker-group">
+                      <input type="text" id="primaryHex" class="hex-input" value="#3B82F6">
+                      <div id="primarySwatch" class="color-swatch" style="background:#3B82F6"></div>
+                    </div>
+                    <div class="threshold-group">
+                      <label><i class="fas fa-chart-line"></i> TH</label>
+                      <input type="range" id="primaryThresholdSlider" min="0" max="100" value="25">
+                      <span id="primaryThresholdValue">25%</span>
+                    </div>
+                  </div>
+                  <div class="mini-preset-title"><i class="fas fa-palette"></i> PRESETS</div>
+                  <div class="mini-preset-gallery" id="primaryMiniPresets"></div>
+                </div>
+                <div class="color-item">
+                  <span class="color-label secondary"><i class="fas fa-star-of-life"></i> SECONDARY</span>
+                  <div class="color-row">
+                    <div class="color-picker-group">
+                      <input type="text" id="secondaryHex" class="hex-input" value="#8B5CF6">
+                      <div id="secondarySwatch" class="color-swatch" style="background:#8B5CF6"></div>
+                    </div>
+                    <div class="threshold-group">
+                      <label><i class="fas fa-chart-line"></i> TH</label>
+                      <input type="range" id="secondaryThresholdSlider" min="0" max="100" value="25">
+                      <span id="secondaryThresholdValue">25%</span>
+                    </div>
+                  </div>
+                  <div class="mini-preset-title"><i class="fas fa-palette"></i> PRESETS</div>
+                  <div class="mini-preset-gallery" id="secondaryMiniPresets"></div>
+                </div>
+              </div>
+              <div class="dual-info"><i class="fas fa-info-circle"></i> Primary & Secondary dominant colors</div>
+            </div>
+          </div>
+
+          <div id="singleColorSection" class="single-color-section">
+            <span><i class="fas fa-eye-dropper"></i> SINGLE COLOR</span>
+            <div class="single-color-controls">
+              <div class="color-picker-row">
+                <input type="text" id="hexInput" class="hex-input" value="#1686D0">
+                <div id="colorSwatch" class="color-swatch" style="background:#1686D0"></div>
+              </div>
+              <div class="single-threshold-group">
+                <span><i class="fas fa-chart-line"></i> TH</span>
+                <input type="range" id="thresholdSlider" min="0" max="100" value="25">
+                <span id="thresholdValue" class="threshold-val">25%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="effects-row">
+            <div class="effect-item blur">
+              <span class="effect-label"><i class="fas fa-tint"></i> BLUR</span>
+              <div class="effect-control">
+                <input type="range" id="blurSlider" min="0" max="15" step="0.5" value="0">
+                <span id="blurValue" class="effect-value blur-val">0px</span>
+              </div>
+            </div>
+            <div class="effect-item smooth">
+              <span class="effect-label"><i class="fas fa-feather-alt"></i> SMOOTH</span>
+              <div class="effect-control">
+                <input type="range" id="smoothSlider" min="0" max="200" value="0">
+                <span id="smoothValue" class="effect-value smooth-val">0%</span>
+              </div>
+            </div>
+            <div class="effect-item edge">
+              <span class="effect-label"><i class="fas fa-border-all"></i> EDGE</span>
+              <div class="effect-control">
+                <input type="range" id="edgeSlider" min="0" max="200" value="0">
+                <span id="edgeValue" class="effect-value edge-val">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="preset-gallery" id="presetGallery"></div>
+
+          <div class="upload-zone" id="uploadZone">
+            <button id="uploadBtn" class="upload-btn"><i class="fas fa-cloud-upload-alt"></i> UPLOAD</button>
+            <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.webp,.bmp,.zip" style="display:none">
+          </div>
+
+          <div class="action-bar">
+            <button id="applyAllBtn" class="action-btn action-primary"><i class="fas fa-play"></i> APPLY ALL</button>
+            <button id="selectAllBtn" class="action-btn action-select"><i class="fas fa-check-double"></i> SELECT
+              ALL</button>
+            <button id="deselectAllBtn" class="action-btn action-deselect"><i class="fas fa-times-circle"></i>
+              SELECT NONE</button>
+            <button id="invertSelectBtn" class="action-btn action-invert"><i class="fas fa-exchange-alt"></i>
+              INVERT</button>
+            <button id="clearAllBtn" class="action-btn action-danger"><i class="fas fa-trash"></i> CLEAR</button>
+            <button id="zipSelectedBtn" class="action-btn action-success"><i class="fas fa-file-archive"></i>
+              COMPRESS</button>
+          </div>
+
+          <div id="progressSection" class="progress-section" style="display: none;">
+            <div class="progress-header">
+              <span id="progressStatus" class="progress-status"><i class="fas fa-spinner fa-pulse"></i>
+                Processing...</span>
+              <span id="progressPercent" class="progress-percent">0%</span>
+            </div>
+            <div class="progress-bar-container">
+              <div id="progressBarFill" class="progress-bar-fill"></div>
+            </div>
+            <div id="progressDetail" class="progress-detail"></div>
+          </div>
+
+          <div class="grid-container" id="gridContainer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Audio player for success sound
+      function playSuccessSound() {
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const now = audioContext.currentTime;
+
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.value = 880;
+          gainNode.gain.value = 0.3;
+
+          oscillator.start();
+          gainNode.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
+          oscillator.stop(now + 0.5);
+
+          setTimeout(() => {
+            const oscillator2 = audioContext.createOscillator();
+            const gainNode2 = audioContext.createGain();
+            oscillator2.connect(gainNode2);
+            gainNode2.connect(audioContext.destination);
+            oscillator2.frequency.value = 660;
+            gainNode2.gain.value = 0.2;
+            oscillator2.start();
+            gainNode2.gain.exponentialRampToValueAtTime(0.00001, now + 1);
+            oscillator2.stop(now + 1);
+          }, 300);
+        } catch (e) {
+          console.log("Audio not supported");
+        }
+      }
+
+      function debounce(func, delay = 300) {
+        let timer;
+        return function (...args) {
+          clearTimeout(timer);
+          timer = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+
+      let iconItems = [], nextId = 1, currentMode = "recolor", currentPreviewItem = null, previewProcessedBlob = null, dualColorEnabled = false;
+      let singleThreshold = 25;
+      let primaryThreshold = 25;
+      let secondaryThreshold = 25;
+      let blurStrength = 0;
+      let smoothStrength = 0;
+      let edgeStrength = 0;
+      let currentZoom = 3;
+      const MIN_ZOOM = 0.5;
+      const MAX_ZOOM = 10;
+      const ZOOM_STEP = 0.1;
+
+      let isApplyingAll = false;
+      let isZipping = false;
+
+      // Upload progress tracking
+      let totalFilesToUpload = 0;
+      let uploadedFilesCount = 0;
+      let uploadProgressToast = null;
+
+      let progressSection, progressStatus, progressPercent, progressBarFill, progressDetail;
+
+      const yourDefaultColorPalette = ["#1686D0", "#006378", "#00FF62", "#061D2E", "#0A2E39", "#041C30", "#FFC300", "#FF7E29", "#FF5CA1", "#E68585", "#7646FF", "#000000"];
+      const primaryColorPalette = [...yourDefaultColorPalette];
+      const secondaryColorPalette = [...yourDefaultColorPalette];
+
+      const dom = {
+        gridContainer: document.getElementById('gridContainer'),
+        hexInput: document.getElementById('hexInput'),
+        colorSwatch: document.getElementById('colorSwatch'),
+        primaryHex: document.getElementById('primaryHex'),
+        primarySwatch: document.getElementById('primarySwatch'),
+        secondaryHex: document.getElementById('secondaryHex'),
+        secondarySwatch: document.getElementById('secondarySwatch'),
+        thresholdSlider: document.getElementById('thresholdSlider'),
+        thresholdSpan: document.getElementById('thresholdValue'),
+        primaryThresholdSlider: document.getElementById('primaryThresholdSlider'),
+        primaryThresholdValue: document.getElementById('primaryThresholdValue'),
+        secondaryThresholdSlider: document.getElementById('secondaryThresholdSlider'),
+        secondaryThresholdValue: document.getElementById('secondaryThresholdValue'),
+        blurSlider: document.getElementById('blurSlider'),
+        blurValue: document.getElementById('blurValue'),
+        smoothSlider: document.getElementById('smoothSlider'),
+        smoothValue: document.getElementById('smoothValue'),
+        edgeSlider: document.getElementById('edgeSlider'),
+        edgeValue: document.getElementById('edgeValue'),
+        uploadBtn: document.getElementById('uploadBtn'),
+        hiddenFileInput: document.getElementById('fileInput'),
+        applyAllBtn: document.getElementById('applyAllBtn'),
+        clearAllBtn: document.getElementById('clearAllBtn'),
+        zipSelectedBtn: document.getElementById('zipSelectedBtn'),
+        selectAllBtn: document.getElementById('selectAllBtn'),
+        deselectAllBtn: document.getElementById('deselectAllBtn'),
+        invertSelectBtn: document.getElementById('invertSelectBtn'),
+        previewImg: document.getElementById('previewImg'),
+        previewFilename: document.getElementById('previewFilename'),
+        totalCountSpan: document.getElementById('totalCount'),
+        selectedCountSpan: document.getElementById('selectedCount'),
+        toggleDualBtn: document.getElementById('toggleDualBtn'),
+        dualColorContainer: document.getElementById('dualColorContainer'),
+        singleColorSection: document.getElementById('singleColorSection'),
+        presetGallery: document.getElementById('presetGallery'),
+        uploadZone: document.getElementById('uploadZone'),
+        previewInner: document.getElementById('previewInner'),
+        zoomInBtn: document.getElementById('zoomInBtn'),
+        zoomOutBtn: document.getElementById('zoomOutBtn'),
+        resetZoomBtn: document.getElementById('resetZoomBtn'),
+        zoomLevel: document.getElementById('zoomLevel')
+      };
+
+      function initProgressElements() {
+        progressSection = document.getElementById('progressSection');
+        progressStatus = document.getElementById('progressStatus');
+        progressPercent = document.getElementById('progressPercent');
+        progressBarFill = document.getElementById('progressBarFill');
+        progressDetail = document.getElementById('progressDetail');
+      }
+
+      function showProgress(total, show = true) {
+        if (!progressSection) initProgressElements();
+        if (progressSection) {
+          progressSection.style.display = show ? 'block' : 'none';
+          if (show) {
+            updateProgress(0, total, 'Starting...');
+          }
+        }
+      }
+
+      function updateProgress(current, total, fileName = '') {
+        if (!progressBarFill) initProgressElements();
+        if (!progressBarFill) return;
+        let percent = total > 0 ? (current / total) * 100 : 0;
+        progressBarFill.style.width = `${percent}%`;
+        progressPercent.innerText = `${Math.round(percent)}% (${current}/${total})`;
+        if (fileName) {
+          let shortName = fileName.length > 35 ? fileName.slice(0, 32) + '...' : fileName;
+          progressDetail.innerText = `${current}/${total} - ${shortName}`;
+          progressStatus.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> Processing: ${current}/${total} - ${shortName}`;
+        } else {
+          progressStatus.innerHTML = `<i class="fas fa-spinner fa-pulse"></i> Processing ${current}/${total} images...`;
+        }
+        if (current === total && total > 0) {
+          progressStatus.innerHTML = `<i class="fas fa-check-circle"></i> Completed! ${total} images done.`;
+          setTimeout(() => {
+            if (progressSection) progressSection.style.display = 'none';
+          }, 2500);
+        }
+      }
+
+      function getFileExtension(filename) {
+        return filename.split('.').pop().toLowerCase();
+      }
+
+      function normalizeHex(hex) {
+        let h = hex.trim();
+        if (!h.startsWith('#')) h = '#' + h;
+        if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(h)) {
+          if (h.length === 4) h = '#' + h[1] + h[1] + h[2] + h[2] + h[3] + h[3];
+          return h.toUpperCase();
+        }
+        return null;
+      }
+
+      // Updated toast with upload progress support
+      function toast(msg, ok = true, isProgress = false, current = null, total = null) {
+        let t = document.createElement('div');
+        t.className = 'toast-msg';
+
+        if (isProgress && current !== null && total !== null) {
+          let percent = Math.round((current / total) * 100);
+          t.innerHTML = `<i class="fas ${ok ? 'fa-cloud-upload-alt' : 'fa-info-circle'}"></i> ${msg} (${current}/${total}) ${percent}%`;
+        } else {
+          t.innerHTML = `<i class="fas ${ok ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${msg}`;
+        }
+
+        document.body.appendChild(t);
+        setTimeout(() => {
+          t.style.animation = 'slideUpFade 0.3s ease reverse';
+          setTimeout(() => t.remove(), 300);
+        }, 2300);
+      }
+
+      function updateUploadProgress(current, total, fileName) {
+        // Remove existing upload progress toast if any
+        const existingToasts = document.querySelectorAll('.toast-msg');
+        for (let toastEl of existingToasts) {
+          if (toastEl.innerText.includes('Uploading') || toastEl.innerText.includes('📤')) {
+            toastEl.remove();
+          }
+        }
+
+        let percent = Math.round((current / total) * 100);
+        let t = document.createElement('div');
+        t.className = 'toast-msg';
+        t.innerHTML = `<i class="fas fa-cloud-upload-alt"></i> 📤 Uploading: ${current}/${total} files (${percent}%) - ${fileName.length > 25 ? fileName.slice(0, 22) + '...' : fileName}`;
+        document.body.appendChild(t);
+
+        setTimeout(() => {
+          if (t && t.remove) t.remove();
+        }, 2000);
+      }
+
+      function shortName(n) { return n.length > 25 ? n.slice(0, 22) + '...' : n; }
+
+      function getImageSize(blob) {
+        return new Promise(r => {
+          let url = URL.createObjectURL(blob), img = new Image();
+          img.onload = () => {
+            URL.revokeObjectURL(url);
+            r({ width: img.width, height: img.height });
+          };
+          img.onerror = () => r({ width: 100, height: 100 });
+          img.src = url;
+        });
+      }
+
+      function updateCounters() {
+        dom.totalCountSpan.innerText = iconItems.length;
+        dom.selectedCountSpan.innerText = iconItems.filter(i => i.selected).length;
+      }
+
+      function updateZoom() {
+        if (dom.previewInner) {
+          dom.previewInner.style.transform = `scale(${currentZoom})`;
+          dom.zoomLevel.innerText = `${Math.round(currentZoom * 100)}%`;
+        }
+      }
+
+      function zoomIn() {
+        if (currentZoom < MAX_ZOOM) {
+          currentZoom = Math.min(MAX_ZOOM, currentZoom + ZOOM_STEP);
+          updateZoom();
+        }
+      }
+
+      function zoomOut() {
+        if (currentZoom > MIN_ZOOM) {
+          currentZoom = Math.max(MIN_ZOOM, currentZoom - ZOOM_STEP);
+          updateZoom();
+        }
+      }
+
+      function resetZoom() {
+        currentZoom = 1;
+        updateZoom();
+      }
+
+      function applyEdgeDetectAndEnhance(imgData, strength) {
+        if (strength <= 0) return false;
+        let data = imgData.data;
+        let w = imgData.width;
+        let h = imgData.height;
+        let edgeIntensity = strength / 100;
+        let originalData = new Uint8ClampedArray(data);
+        let changed = false;
+        for (let y = 1; y < h - 1; y++) {
+          for (let x = 1; x < w - 1; x++) {
+            let idx = (y * w + x) * 4;
+            let gx_r = 0, gx_g = 0, gx_b = 0;
+            let gy_r = 0, gy_g = 0, gy_b = 0;
+            const sobelX = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]];
+            const sobelY = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]];
+            for (let ky = -1; ky <= 1; ky++) {
+              for (let kx = -1; kx <= 1; kx++) {
+                let nidx = ((y + ky) * w + (x + kx)) * 4;
+                let weightX = sobelX[ky + 1][kx + 1];
+                let weightY = sobelY[ky + 1][kx + 1];
+                gx_r += originalData[nidx] * weightX;
+                gx_g += originalData[nidx + 1] * weightX;
+                gx_b += originalData[nidx + 2] * weightX;
+                gy_r += originalData[nidx] * weightY;
+                gy_g += originalData[nidx + 1] * weightY;
+                gy_b += originalData[nidx + 2] * weightY;
+              }
+            }
+            let magnitude = Math.sqrt(gx_r * gx_r + gy_r * gy_r) + Math.sqrt(gx_g * gx_g + gy_g * gy_g) + Math.sqrt(gx_b * gx_b + gy_b * gy_b);
+            magnitude = magnitude / 3;
+            if (magnitude > 20) {
+              let factor = edgeIntensity * (magnitude / 255) * 1.5;
+              data[idx] = Math.min(255, Math.max(0, originalData[idx] + (originalData[idx] - 128) * factor));
+              data[idx + 1] = Math.min(255, Math.max(0, originalData[idx + 1] + (originalData[idx + 1] - 128) * factor));
+              data[idx + 2] = Math.min(255, Math.max(0, originalData[idx + 2] + (originalData[idx + 2] - 128) * factor));
+              changed = true;
+            }
+          }
+        }
+        return changed;
+      }
+
+      function applyEdgeSmoothing(imgData, strength) {
+        if (strength <= 0) return false;
+        let data = imgData.data;
+        let w = imgData.width;
+        let h = imgData.height;
+        let smoothFactor = Math.min(0.5, strength / 400);
+        let originalData = new Uint8ClampedArray(data);
+        let changed = false;
+        for (let y = 1; y < h - 1; y++) {
+          for (let x = 1; x < w - 1; x++) {
+            let idx = (y * w + x) * 4;
+            if (data[idx + 3] > 10) {
+              let neighbors = [];
+              for (let dy = -1; dy <= 1; dy++) {
+                for (let dx = -1; dx <= 1; dx++) {
+                  if (dx === 0 && dy === 0) continue;
+                  let nidx = ((y + dy) * w + (x + dx)) * 4;
+                  if (originalData[nidx + 3] > 10) {
+                    neighbors.push({
+                      r: originalData[nidx],
+                      g: originalData[nidx + 1],
+                      b: originalData[nidx + 2]
+                    });
+                  }
+                }
+              }
+              if (neighbors.length > 0) {
+                let avgR = 0, avgG = 0, avgB = 0;
+                for (let n of neighbors) {
+                  avgR += n.r;
+                  avgG += n.g;
+                  avgB += n.b;
+                }
+                avgR /= neighbors.length;
+                avgG /= neighbors.length;
+                avgB /= neighbors.length;
+                let diff = Math.abs(data[idx] - avgR) + Math.abs(data[idx + 1] - avgG) + Math.abs(data[idx + 2] - avgB);
+                if (diff > 20) {
+                  let factor = smoothFactor * (diff / 255);
+                  data[idx] = Math.round(data[idx] * (1 - factor) + avgR * factor);
+                  data[idx + 1] = Math.round(data[idx + 1] * (1 - factor) + avgG * factor);
+                  data[idx + 2] = Math.round(data[idx + 2] * (1 - factor) + avgB * factor);
+                  changed = true;
+                }
+              }
+            }
+          }
+        }
+        return changed;
+      }
+
+      function dualColorReplace(imgData, priRGB, secRGB, priThr, secThr) {
+        let data = imgData.data;
+        let colorMap = new Map();
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) {
+            let r = data[i], g = data[i + 1], b = data[i + 2];
+            let key = `${Math.round(r / 16)},${Math.round(g / 16)},${Math.round(b / 16)}`;
+            colorMap.set(key, (colorMap.get(key) || 0) + 1);
+          }
+        }
+        let sorted = Array.from(colorMap.entries()).sort((a, b) => b[1] - a[1]);
+        let dominantColors = [];
+        for (let i = 0; i < Math.min(2, sorted.length); i++) {
+          let [r, g, b] = sorted[i][0].split(',').map(Number);
+          dominantColors.push({ r: r * 16, g: g * 16, b: b * 16 });
+        }
+        if (dominantColors.length === 0) return false;
+        let changed = false;
+        let maxDist = Math.hypot(255, 255, 255);
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) {
+            let p = { r: data[i], g: data[i + 1], b: data[i + 2] };
+            let d1 = Math.hypot(p.r - dominantColors[0].r, p.g - dominantColors[0].g, p.b - dominantColors[0].b);
+            let sim1 = (1 - d1 / maxDist) * 100;
+            if (sim1 >= (100 - priThr)) {
+              data[i] = priRGB.r;
+              data[i + 1] = priRGB.g;
+              data[i + 2] = priRGB.b;
+              changed = true;
+              continue;
+            }
+            if (dominantColors.length > 1) {
+              let d2 = Math.hypot(p.r - dominantColors[1].r, p.g - dominantColors[1].g, p.b - dominantColors[1].b);
+              let sim2 = (1 - d2 / maxDist) * 100;
+              if (sim2 >= (100 - secThr)) {
+                data[i] = secRGB.r;
+                data[i + 1] = secRGB.g;
+                data[i + 2] = secRGB.b;
+                changed = true;
+              }
+            }
+          }
+        }
+        return changed;
+      }
+
+      function forceColorReplace(imgData, targetRGB, thr) {
+        let data = imgData.data, tr = 0, tg = 0, tb = 0, cnt = 0;
+        for (let i = 0; i < data.length; i += 4) if (data[i + 3] > 10) { tr += data[i]; tg += data[i + 1]; tb += data[i + 2]; cnt++; }
+        if (cnt === 0) return false;
+        let avg = { r: tr / cnt, g: tg / cnt, b: tb / cnt }, changed = false, maxDist = Math.hypot(255, 255, 255);
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i + 3] > 10) {
+            let dist = Math.hypot(data[i] - avg.r, data[i + 1] - avg.g, data[i + 2] - avg.b), sim = (1 - dist / maxDist) * 100;
+            if (sim >= (100 - thr) || thr === 100) {
+              data[i] = targetRGB.r; data[i + 1] = targetRGB.g; data[i + 2] = targetRGB.b; changed = true;
+            }
+          }
+        }
+        return changed;
+      }
+
+      function isWebPFile(blob, filename) {
+        return blob.type === 'image/webp' || filename.toLowerCase().endsWith('.webp');
+      }
+
+      async function convertWebPToPNG(webpBlob) {
+        return new Promise((resolve) => {
+          let img = new Image();
+          let url = URL.createObjectURL(webpBlob);
+          img.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((pngBlob) => {
+              URL.revokeObjectURL(url);
+              resolve(pngBlob);
+            }, 'image/png');
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(webpBlob);
+          };
+          img.src = url;
+        });
+      }
+
+      async function convertPNGToWebP(pngBlob, quality = 0.92) {
+        return new Promise((resolve) => {
+          let img = new Image();
+          let url = URL.createObjectURL(pngBlob);
+          img.onload = () => {
+            let canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob((webpBlob) => {
+              URL.revokeObjectURL(url);
+              resolve(webpBlob);
+            }, 'image/webp', quality);
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve(pngBlob);
+          };
+          img.src = url;
+        });
+      }
+
+      async function processImageWithAllEffects(blob, mode, origW, origH, itemId = null) {
+        if (itemId) {
+          let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
+          if (card) card.classList.add('processing');
+        }
+        return new Promise(resolve => {
+          let img = new Image();
+          let url = URL.createObjectURL(blob);
+          img.onload = () => {
+            let procWidth = Math.min(img.width, 900);
+            let procHeight = Math.floor((procWidth / img.width) * img.height);
+            let procCanvas = document.createElement('canvas');
+            procCanvas.width = procWidth;
+            procCanvas.height = procHeight;
+            let ctx = procCanvas.getContext('2d', { alpha: true });
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(img, 0, 0, procWidth, procHeight);
+            let imgData = ctx.getImageData(0, 0, procWidth, procHeight);
+            if (dualColorEnabled) {
+              let priHex = normalizeHex(dom.primaryHex.value) || "#3B82F6";
+              let secHex = normalizeHex(dom.secondaryHex.value) || "#8B5CF6";
+              let priRGB = { r: parseInt(priHex.slice(1, 3), 16), g: parseInt(priHex.slice(3, 5), 16), b: parseInt(priHex.slice(5, 7), 16) };
+              let secRGB = { r: parseInt(secHex.slice(1, 3), 16), g: parseInt(secHex.slice(3, 5), 16), b: parseInt(secHex.slice(5, 7), 16) };
+              dualColorReplace(imgData, priRGB, secRGB, primaryThreshold, secondaryThreshold);
+            } else {
+              let targetHex = normalizeHex(dom.hexInput.value) || "#1686D0";
+              let targetRGB = { r: parseInt(targetHex.slice(1, 3), 16), g: parseInt(targetHex.slice(3, 5), 16), b: parseInt(targetHex.slice(5, 7), 16) };
+              forceColorReplace(imgData, targetRGB, singleThreshold);
+            }
+            if (smoothStrength > 0) applyEdgeSmoothing(imgData, smoothStrength);
+            if (edgeStrength > 0) applyEdgeDetectAndEnhance(imgData, edgeStrength);
+            ctx.putImageData(imgData, 0, 0);
+            let finalCanvas = document.createElement('canvas');
+            finalCanvas.width = origW;
+            finalCanvas.height = origH;
+            let fCtx = finalCanvas.getContext('2d');
+            if (blurStrength > 0) {
+              fCtx.filter = `blur(${blurStrength}px)`;
+            }
+            fCtx.drawImage(procCanvas, 0, 0, procWidth, procHeight, 0, 0, origW, origH);
+            finalCanvas.toBlob(resBlob => {
+              URL.revokeObjectURL(url);
+              if (itemId) {
+                let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
+                if (card) card.classList.remove('processing');
+              }
+              resolve(resBlob);
+            }, 'image/png');
+          };
+          img.onerror = () => {
+            URL.revokeObjectURL(url);
+            if (itemId) {
+              let card = document.querySelector(`.icon-card[data-id="${itemId}"]`);
+              if (card) card.classList.remove('processing');
+            }
+            resolve(blob);
+          };
+          img.src = url;
+        });
+      }
+
+      const updatePreviewWithCurrentColor = debounce(async () => {
+        if (!currentPreviewItem) {
+          dom.previewImg.src = "";
+          dom.previewFilename.innerText = "Select an image";
+          return;
+        }
+        let newBlob = await processImageWithAllEffects(currentPreviewItem.originalBlob, currentMode, currentPreviewItem.origW, currentPreviewItem.origH, currentPreviewItem.id);
+        if (previewProcessedBlob) URL.revokeObjectURL(previewProcessedBlob);
+        previewProcessedBlob = newBlob;
+        dom.previewImg.src = URL.createObjectURL(newBlob);
+        let displayName = currentPreviewItem.isOriginalWebP ? currentPreviewItem.originalName : currentPreviewItem.name;
+        dom.previewFilename.innerText = shortName(displayName) + " (preview)";
+      }, 200);
+
+      let batchWebPCount = 0;
+      let batchConvertedCount = 0;
+      let conversionToastShown = false;
+
+      async function addItemWithoutProcessing(blob, name, showUploadProgress = true, currentFileNum = null, totalFiles = null) {
+        let id = nextId++;
+        let finalBlob = blob;
+        let finalName = name;
+        let originalName = name;
+        let isOriginalWebP = isWebPFile(blob, name);
+
+        if (showUploadProgress && currentFileNum && totalFiles) {
+          updateUploadProgress(currentFileNum, totalFiles, name);
+        }
+
+        if (isOriginalWebP) {
+          batchWebPCount++;
+          if (!conversionToastShown) {
+            conversionToastShown = true;
+            toast(`🔄 Converting WebP file(s) to PNG for editing...`, true);
+          }
+          finalBlob = await convertWebPToPNG(blob);
+          finalName = name.replace(/\.webp$/i, '.png');
+          batchConvertedCount++;
+        }
+
+        let dims = await getImageSize(finalBlob);
+        iconItems.push({
+          id,
+          name: finalName,
+          originalName: originalName,
+          originalBlob: finalBlob,
+          originalWebPBlob: isOriginalWebP ? blob : null,
+          isOriginalWebP: isOriginalWebP,
+          origW: dims.width,
+          origH: dims.height,
+          processedBlob: null,
+          processedURL: null,
+          selected: true
+        });
+        renderGrid();
+        if (iconItems.length === 1 && !currentPreviewItem) setCurrentPreviewItem(iconItems[0]);
+        updateCounters();
+        if (dom.uploadZone) dom.uploadZone.classList.add('hidden');
+      }
+
+      async function setCurrentPreviewItem(item) {
+        currentPreviewItem = item;
+        await updatePreviewWithCurrentColor();
+        renderGrid();
+      }
+
+      async function downloadSingleImage(item) {
+        toast(`🔄 Processing ${shortName(item.name)}...`, true);
+        let processedPNG = await processImageWithAllEffects(item.originalBlob, currentMode, item.origW, item.origH, item.id);
+        let finalBlob = processedPNG;
+        let finalName = item.name;
+        if (item.isOriginalWebP) {
+          finalBlob = await convertPNGToWebP(processedPNG, 0.92);
+          finalName = item.originalName;
+        }
+        saveAs(finalBlob, finalName);
+        toast(`✅ Downloaded: ${shortName(finalName)}`, true);
+        playSuccessSound();
+      }
+
+      function renderGrid() {
+        if (iconItems.length === 0) {
+          dom.gridContainer.innerHTML = `<div style="text-align:center; padding:20px; color:#64748b; grid-column:1/-1;">📸 Upload images or ZIP archives</div>`;
+          if (dom.uploadZone) dom.uploadZone.classList.remove('hidden');
+          return;
+        }
+        let html = '';
+        for (let item of iconItems) {
+          let isPreview = (currentPreviewItem && currentPreviewItem.id === item.id);
+          let imgSrc = item.processedURL ? item.processedURL : URL.createObjectURL(item.originalBlob);
+          let displayName = item.isOriginalWebP ? item.originalName : item.name;
+          html += `<div class="icon-card ${isPreview ? 'selected-for-preview' : ''}" data-id="${item.id}">
+            <img src="${imgSrc}" alt="${item.name}" loading="lazy">
+            <div class="card-title">${shortName(displayName)}</div>
+            <div class="card-actions">
+              <div class="select-check">
+                <input type="checkbox" class="item-checkbox" data-id="${item.id}" ${item.selected ? 'checked' : ''}>
+              </div>
+              <button class="icon-action download-btn" data-id="${item.id}" data-action="download"><i class="fas fa-download"></i></button>
+              <button class="icon-action delete-btn" data-id="${item.id}" data-action="delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>`;
+        }
+        dom.gridContainer.innerHTML = html;
+        document.querySelectorAll('.icon-card').forEach(card => {
+          let id = parseInt(card.dataset.id);
+          card.addEventListener('click', debounce((e) => {
+            if (e.target.type === 'checkbox' || e.target.closest('.icon-action')) return;
+            let item = iconItems.find(i => i.id === id);
+            if (item) setCurrentPreviewItem(item);
+          }, 200));
+        });
+        document.querySelectorAll('.item-checkbox').forEach(cb => {
+          cb.addEventListener('change', (e) => {
+            e.stopPropagation();
+            let id = parseInt(cb.dataset.id);
+            let item = iconItems.find(i => i.id === id);
+            if (item) { item.selected = cb.checked; updateCounters(); }
+          });
+        });
+        document.querySelectorAll('.download-btn').forEach(btn => {
+          btn.addEventListener('click', debounce(async (e) => {
+            e.stopPropagation();
+            let id = parseInt(btn.dataset.id);
+            let item = iconItems.find(i => i.id === id);
+            if (item) {
+              await downloadSingleImage(item);
+            }
+          }, 300));
+        });
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', debounce((e) => {
+            e.stopPropagation();
+            let id = parseInt(btn.dataset.id);
+            let idx = iconItems.findIndex(i => i.id === id);
+            if (idx !== -1) {
+              if (currentPreviewItem && currentPreviewItem.id === id) {
+                currentPreviewItem = null;
+                dom.previewImg.src = "";
+                dom.previewFilename.innerText = "Select an image";
+              }
+              iconItems.splice(idx, 1);
+              if (iconItems.length > 0 && !currentPreviewItem) setCurrentPreviewItem(iconItems[0]);
+              else if (iconItems.length === 0) { currentPreviewItem = null; dom.previewImg.src = ""; }
+              renderGrid();
+              updateCounters();
+              toast(`🗑️ Removed`, true);
+            }
+          }, 300));
+        });
+      }
+
+      async function handleFiles(files) {
+        batchWebPCount = 0;
+        batchConvertedCount = 0;
+        conversionToastShown = false;
+
+        let validFiles = [];
+        for (let file of files) {
+          let ext = getFileExtension(file.name);
+          if (file.type.startsWith('image/') || ['png', 'jpg', 'jpeg', 'webp', 'bmp'].includes(ext)) {
+            validFiles.push({ file, type: 'image' });
+          } else if (ext === 'zip' || file.type === 'application/zip') {
+            validFiles.push({ file, type: 'zip' });
+          }
+        }
+
+        totalFilesToUpload = validFiles.length;
+        uploadedFilesCount = 0;
+
+        for (let i = 0; i < validFiles.length; i++) {
+          let { file, type } = validFiles[i];
+          uploadedFilesCount++;
+
+          if (type === 'image') {
+            await addItemWithoutProcessing(file, file.name, true, uploadedFilesCount, totalFilesToUpload);
+          } else if (type === 'zip') {
+            try {
+              let zip = await JSZip.loadAsync(file);
+              let images = [];
+              for (let [path, data] of Object.entries(zip.files)) {
+                if (!data.dir && /\.(png|jpg|jpeg|webp|bmp)$/i.test(path)) {
+                  let blob = await data.async('blob');
+                  images.push({ blob, name: path.split('/').pop() });
+                }
+              }
+              if (images.length === 0) {
+                toast(`⚠️ No images found in ${file.name}`, false);
+                continue;
+              }
+              toast(`📦 Extracting ${images.length} images from ${file.name}...`, true);
+              for (let img of images) {
+                await addItemWithoutProcessing(img.blob, img.name, false);
+              }
+              toast(`✅ Extracted ${images.length} images from ${file.name}`, true);
+            } catch (e) {
+              toast(`❌ ZIP failed: ${file.name}`, false);
+            }
+          }
+        }
+
+        if (batchWebPCount > 0 && batchConvertedCount === batchWebPCount) {
+          toast(`✅ ${batchWebPCount} WebP file(s) converted to PNG. Will save back as WebP on download.`, true);
+        }
+
+        if (totalFilesToUpload > 0) {
+          toast(`✅ Upload complete! ${iconItems.length} total images added.`, true);
+          playSuccessSound();
+        }
+      }
+
+      const selectAll = debounce(() => {
+        iconItems.forEach(i => i.selected = true);
+        renderGrid();
+        updateCounters();
+        toast(`✅ Selected ${iconItems.length} images`, true);
+      }, 250);
+
+      const deselectAll = debounce(() => {
+        iconItems.forEach(i => i.selected = false);
+        renderGrid();
+        updateCounters();
+        toast(`❌ Deselected all`, true);
+      }, 250);
+
+      const invertSelection = debounce(() => {
+        iconItems.forEach(i => i.selected = !i.selected);
+        renderGrid();
+        updateCounters();
+        toast(`🔄 Inverted (${iconItems.filter(i => i.selected).length} selected)`, true);
+      }, 250);
+
+      const applyToAllItems = debounce(async () => {
+        if (isApplyingAll) { toast("Process in progress, please wait...", false); return; }
+        if (!iconItems.length) { toast(`No images to process`, false); return; }
+        isApplyingAll = true;
+        dom.applyAllBtn.disabled = true;
+        let itemsToProcess = iconItems.filter(i => i.selected);
+        let total = itemsToProcess.length;
+        if (total === 0) {
+          toast(`No images selected!`, false);
+          isApplyingAll = false;
+          dom.applyAllBtn.disabled = false;
+          return;
+        }
+        showProgress(total, true);
+        let processed = 0;
+        for (let item of itemsToProcess) {
+          processed++;
+          updateProgress(processed, total, item.name);
+          let newBlob = await processImageWithAllEffects(item.originalBlob, currentMode, item.origW, item.origH, item.id);
+          if (item.processedURL) URL.revokeObjectURL(item.processedURL);
+          item.processedBlob = newBlob;
+          item.processedURL = URL.createObjectURL(newBlob);
+        }
+        renderGrid();
+        if (currentPreviewItem) await updatePreviewWithCurrentColor();
+        toast(`✨ Process completed! ${total} images done.`, true);
+        playSuccessSound();
+        dom.applyAllBtn.disabled = false;
+        isApplyingAll = false;
+      }, 400);
+
+      const zipSelected = debounce(async () => {
+        if (isZipping) { toast("ZIP creation in progress, please wait...", false); return; }
+        let selected = iconItems.filter(i => i.selected);
+        if (selected.length === 0) { toast(`Select at least one image`, false); return; }
+        isZipping = true;
+        dom.zipSelectedBtn.disabled = true;
+        showProgress(selected.length, true);
+        toast(`📦 Creating ZIP archive...`, true);
+        let zip = new JSZip();
+        let processed = 0;
+        for (let item of selected) {
+          processed++;
+          updateProgress(processed, selected.length, item.name);
+          let processedPNG = await processImageWithAllEffects(item.originalBlob, currentMode, item.origW, item.origH, item.id);
+          let finalBlob = processedPNG;
+          let finalName = item.name;
+          if (item.isOriginalWebP) {
+            finalBlob = await convertPNGToWebP(processedPNG, 0.92);
+            finalName = item.originalName;
+          }
+          zip.file(finalName, finalBlob);
+        }
+        let zipBlob = await zip.generateAsync({ type: "blob" });
+        saveAs(zipBlob, `icons_processed_${Date.now()}.zip`);
+        toast(`✅ ZIP ready! ${selected.length} files.`, true);
+        playSuccessSound();
+        dom.zipSelectedBtn.disabled = false;
+        isZipping = false;
+      }, 500);
+
+      function clearAll() {
+        iconItems.forEach(i => { if (i.processedURL) URL.revokeObjectURL(i.processedURL); });
+        iconItems = [];
+        batchWebPCount = 0;
+        batchConvertedCount = 0;
+        conversionToastShown = false;
+        if (previewProcessedBlob) URL.revokeObjectURL(previewProcessedBlob);
+        currentPreviewItem = null;
+        dom.previewImg.src = "";
+        dom.previewFilename.innerText = "Select an image";
+        renderGrid();
+        updateCounters();
+        toast(`🗑️ All cleared`, true);
+      }
+
+      const toggleDualColor = debounce(() => {
+        dualColorEnabled = !dualColorEnabled;
+        if (dualColorEnabled) {
+          dom.dualColorContainer.style.display = "block";
+          dom.toggleDualBtn.innerHTML = '<i class="fas fa-toggle-on"></i> ON';
+          dom.toggleDualBtn.classList.remove('off');
+          dom.presetGallery.style.display = "none";
+          if (dom.singleColorSection) {
+            dom.singleColorSection.classList.add('hidden');
+          }
+          toast(`🎨 Dual Color Mode Activated`, true);
+        } else {
+          dom.dualColorContainer.style.display = "none";
+          dom.toggleDualBtn.innerHTML = '<i class="fas fa-toggle-off"></i> OFF';
+          dom.toggleDualBtn.classList.add('off');
+          dom.presetGallery.style.display = "flex";
+          if (dom.singleColorSection) {
+            dom.singleColorSection.classList.remove('hidden');
+          }
+          toast(`🎨 Single Color Mode`, true);
+        }
+        if (currentPreviewItem) updatePreviewWithCurrentColor();
+      }, 300);
+
+      function buildMiniPresetGalleries() {
+        let primary = document.getElementById('primaryMiniPresets'), secondary = document.getElementById('secondaryMiniPresets');
+        primary.innerHTML = ''; secondary.innerHTML = '';
+        primaryColorPalette.forEach(hex => {
+          let sw = document.createElement('div'); sw.className = 'mini-preset'; sw.style.backgroundColor = hex;
+          sw.onclick = debounce(() => {
+            dom.primaryHex.value = hex; dom.primarySwatch.style.backgroundColor = hex;
+            if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor();
+            toast(`Primary: ${hex}`, true);
+          }, 200);
+          primary.appendChild(sw);
+        });
+        secondaryColorPalette.forEach(hex => {
+          let sw = document.createElement('div'); sw.className = 'mini-preset'; sw.style.backgroundColor = hex;
+          sw.onclick = debounce(() => {
+            dom.secondaryHex.value = hex; dom.secondarySwatch.style.backgroundColor = hex;
+            if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor();
+            toast(`Secondary: ${hex}`, true);
+          }, 200);
+          secondary.appendChild(sw);
+        });
+      }
+
+      function buildMainPresetGallery() {
+        let container = document.getElementById('presetGallery');
+        container.innerHTML = '';
+        yourDefaultColorPalette.forEach(hex => {
+          let sw = document.createElement('div'); sw.className = 'preset'; sw.style.backgroundColor = hex;
+          sw.onclick = debounce(() => {
+            dom.hexInput.value = hex; dom.colorSwatch.style.backgroundColor = hex;
+            if (currentPreviewItem && !dualColorEnabled) updatePreviewWithCurrentColor();
+            toast(`${hex}`, true);
+          }, 200);
+          container.appendChild(sw);
+        });
+      }
+
+      function initColorPickers() {
+        dom.colorSwatch.onclick = () => {
+          let p = document.createElement('input'); p.type = 'color'; p.value = normalizeHex(dom.hexInput.value) || "#1686D0";
+          p.addEventListener('input', (e) => { dom.hexInput.value = e.target.value; dom.colorSwatch.style.backgroundColor = e.target.value; if (currentPreviewItem && !dualColorEnabled) updatePreviewWithCurrentColor(); });
+          p.click();
+        };
+        dom.primarySwatch.onclick = () => {
+          let p = document.createElement('input'); p.type = 'color'; p.value = normalizeHex(dom.primaryHex.value) || "#3B82F6";
+          p.addEventListener('input', (e) => { dom.primaryHex.value = e.target.value; dom.primarySwatch.style.backgroundColor = e.target.value; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); });
+          p.click();
+        };
+        dom.secondarySwatch.onclick = () => {
+          let p = document.createElement('input'); p.type = 'color'; p.value = normalizeHex(dom.secondaryHex.value) || "#8B5CF6";
+          p.addEventListener('input', (e) => { dom.secondaryHex.value = e.target.value; dom.secondarySwatch.style.backgroundColor = e.target.value; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); });
+          p.click();
+        };
+      }
+
+      function initSliders() {
+        dom.thresholdSlider.oninput = (e) => { singleThreshold = parseInt(e.target.value); dom.thresholdSpan.innerText = singleThreshold + '%'; if (currentPreviewItem && !dualColorEnabled) updatePreviewWithCurrentColor(); };
+        dom.primaryThresholdSlider.oninput = (e) => { primaryThreshold = parseInt(e.target.value); dom.primaryThresholdValue.innerText = primaryThreshold + '%'; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); };
+        dom.secondaryThresholdSlider.oninput = (e) => { secondaryThreshold = parseInt(e.target.value); dom.secondaryThresholdValue.innerText = secondaryThreshold + '%'; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); };
+        dom.blurSlider.oninput = (e) => { blurStrength = parseFloat(e.target.value); dom.blurValue.innerText = blurStrength + 'px'; if (currentPreviewItem) updatePreviewWithCurrentColor(); };
+        dom.smoothSlider.oninput = (e) => { smoothStrength = parseInt(e.target.value); dom.smoothValue.innerText = smoothStrength + '%'; if (currentPreviewItem) updatePreviewWithCurrentColor(); };
+        dom.edgeSlider.oninput = (e) => { edgeStrength = parseInt(e.target.value); dom.edgeValue.innerText = edgeStrength + '%'; if (currentPreviewItem) updatePreviewWithCurrentColor(); };
+      }
+
+      function initZoomControls() {
+        if (dom.zoomInBtn) dom.zoomInBtn.onclick = debounce(zoomIn, 100);
+        if (dom.zoomOutBtn) dom.zoomOutBtn.onclick = debounce(zoomOut, 100);
+        if (dom.resetZoomBtn) dom.resetZoomBtn.onclick = debounce(resetZoom, 100);
+      }
+
+      dom.uploadBtn.onclick = () => dom.hiddenFileInput.click();
+      dom.hiddenFileInput.onchange = async (e) => { if (e.target.files.length) { await handleFiles(Array.from(e.target.files)); dom.hiddenFileInput.value = ''; } };
+      dom.clearAllBtn.onclick = debounce(clearAll, 300);
+      dom.selectAllBtn.onclick = selectAll;
+      dom.deselectAllBtn.onclick = deselectAll;
+      dom.invertSelectBtn.onclick = invertSelection;
+      dom.toggleDualBtn.onclick = toggleDualColor;
+      dom.applyAllBtn.onclick = applyToAllItems;
+      dom.zipSelectedBtn.onclick = zipSelected;
+
+      dom.hexInput.oninput = debounce(() => { let v = normalizeHex(dom.hexInput.value); if (v) dom.colorSwatch.style.backgroundColor = v; if (currentPreviewItem && !dualColorEnabled) updatePreviewWithCurrentColor(); }, 150);
+      dom.primaryHex.oninput = debounce(() => { let v = normalizeHex(dom.primaryHex.value); if (v) dom.primarySwatch.style.backgroundColor = v; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); }, 150);
+      dom.secondaryHex.oninput = debounce(() => { let v = normalizeHex(dom.secondaryHex.value); if (v) dom.secondarySwatch.style.backgroundColor = v; if (currentPreviewItem && dualColorEnabled) updatePreviewWithCurrentColor(); }, 150);
+
+      buildMainPresetGallery();
+      buildMiniPresetGalleries();
+      initColorPickers();
+      initSliders();
+      initZoomControls();
+      initProgressElements();
+
+      dom.hexInput.value = "#1686D0";
+      dom.colorSwatch.style.backgroundColor = "#1686D0";
+      dom.primaryHex.value = "#1686D0";
+      dom.primarySwatch.style.backgroundColor = "#1686D0";
+      dom.secondaryHex.value = "#061D2E";
+      dom.secondarySwatch.style.backgroundColor = "#061D2E";
+      dom.thresholdSlider.value = 25; singleThreshold = 25; dom.thresholdSpan.innerText = "25%";
+      dom.primaryThresholdSlider.value = 25; primaryThreshold = 25; dom.primaryThresholdValue.innerText = "25%";
+      dom.secondaryThresholdSlider.value = 25; secondaryThreshold = 25; dom.secondaryThresholdValue.innerText = "25%";
+      dom.blurSlider.value = 0; blurStrength = 0; dom.blurValue.innerText = "0px";
+      dom.smoothSlider.value = 0; smoothStrength = 0; dom.smoothValue.innerText = "0%";
+      dom.edgeSlider.value = 0; edgeStrength = 0; dom.edgeValue.innerText = "0%";
+      updateCounters();
+      updateZoom();
+    })();
+  </script>
+</body>
+
+</html>

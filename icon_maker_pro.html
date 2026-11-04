@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Icon Maker Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ===== Root Variables ===== */
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a26;
+      --bg-hover: #262636;
+      --text-primary: #e8edf5;
+      --text-secondary: #8a9aaa;
+      --text-muted: #4a5a6a;
+      --accent: #6c8cff;
+      --accent-hover: #8aa4ff;
+      --success: #4ade80;
+      --warning: #f5a342;
+      --danger: #ff6b6b;
+      --border-color: rgba(255, 255, 255, 0.06);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.2s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: var(--bg-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+      margin: 0;
+    }
+
+    .tool-container {
+      width: 100%;
+      max-width: 960px;
+      background: var(--bg-secondary);
+      border-radius: 28px;
+      box-shadow: var(--shadow), 0 0 0 1px var(--border-color);
+      padding: 1.6rem 1.8rem 1.8rem;
+      position: relative;
+    }
+
+    /* ===== Header ===== */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.4rem;
+      padding: 0 4px;
+      flex-wrap: wrap;
+    }
+
+    .header h1 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header h1 i {
+      color: var(--accent);
+    }
+
+    .header .version {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 12px;
+      border-radius: 30px;
+      margin-left: auto;
+      border: 1px solid var(--border-color);
+    }
+
+    /* ===== Two-Column Layout ===== */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* ===== Upload Section ===== */
+    .upload-section {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .upload-section .section-title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .upload-section .section-title i {
+      color: var(--accent);
+    }
+
+    .upload-section .section-title .badge {
+      font-size: 0.5rem;
+      background: rgba(108, 140, 255, 0.1);
+      padding: 0.1rem 0.6rem;
+      border-radius: 30px;
+      color: var(--accent-hover);
+      margin-left: auto;
+    }
+
+    /* ===== Direct Buttons ===== */
+    .direct-buttons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .direct-btn {
+      flex: 1;
+      min-width: 80px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-secondary);
+      font-size: 0.6rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .direct-btn:hover {
+      background: rgba(108, 140, 255, 0.06);
+      border-color: rgba(108, 140, 255, 0.2);
+      color: var(--text-primary);
+    }
+
+    .direct-btn:active {
+      transform: scale(0.96);
+    }
+
+    .direct-btn.primary {
+      background: rgba(108, 140, 255, 0.08);
+      border-color: rgba(108, 140, 255, 0.1);
+      color: var(--accent-hover);
+    }
+
+    .direct-btn.primary:hover {
+      background: rgba(108, 140, 255, 0.15);
+    }
+
+    .direct-btn.warning {
+      background: rgba(245, 163, 66, 0.06);
+      border-color: rgba(245, 163, 66, 0.1);
+      color: var(--warning);
+    }
+
+    .direct-btn.warning:hover {
+      background: rgba(245, 163, 66, 0.12);
+    }
+
+    .direct-btn.danger {
+      background: rgba(255, 70, 70, 0.06);
+      border-color: rgba(255, 70, 70, 0.1);
+      color: var(--danger);
+    }
+
+    .direct-btn.danger:hover {
+      background: rgba(255, 70, 70, 0.12);
+    }
+
+    .direct-btn input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .direct-btn .icon {
+      font-size: 0.75rem;
+    }
+
+    .direct-btn .label {
+      font-size: 0.55rem;
+    }
+
+    /* ===== File Status Bar ===== */
+    .file-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      margin-top: 6px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      min-height: 30px;
+    }
+
+    .file-status-bar .status-text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-status-bar .status-text i {
+      margin-right: 4px;
+    }
+
+    .file-status-bar .status-text.success i {
+      color: var(--success);
+    }
+
+    .file-status-bar .remove-btn {
+      background: rgba(255, 70, 70, 0.08);
+      border: none;
+      color: var(--danger);
+      padding: 2px 8px;
+      border-radius: 30px;
+      font-size: 0.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .file-status-bar .remove-btn:hover {
+      background: rgba(255, 70, 70, 0.15);
+    }
+
+    .file-status-bar .remove-btn.hidden {
+      display: none;
+    }
+
+    /* ===== Preview Section ===== */
+    .preview-section {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .preview-header .title {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .preview-header .title i {
+      color: var(--accent);
+    }
+
+    .preview-header .status {
+      font-size: 0.5rem;
+      padding: 2px 10px;
+      border-radius: 30px;
+      background: rgba(255, 200, 50, 0.08);
+      color: #f5b342;
+      transition: var(--transition);
+    }
+
+    .preview-header .status.active {
+      background: rgba(50, 255, 150, 0.08);
+      color: var(--success);
+    }
+
+    /* ===== Canvas ===== */
+    .canvas-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .canvas-wrapper canvas {
+      width: 160px;
+      height: 160px;
+      border-radius: 20px;
+      border: 2px solid var(--border-color);
+      background: transparent;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ===== Controls ===== */
+    .controls-row {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      margin: 4px 0;
+    }
+
+    .ctrl-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(108, 140, 255, 0.08);
+      color: var(--accent-hover);
+    }
+
+    .ctrl-btn:active {
+      transform: scale(0.9);
+    }
+
+    /* ===== Size Controls ===== */
+    .size-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      margin: 4px 0;
+      flex-wrap: wrap;
+    }
+
+    .size-row label {
+      font-size: 0.5rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .size-row input {
+      width: 36px;
+      padding: 2px 4px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--text-primary);
+      font-weight: 600;
+      text-align: center;
+      font-size: 0.55rem;
+    }
+
+    .size-row input:focus {
+      outline: 2px solid rgba(108, 140, 255, 0.15);
+      border-color: transparent;
+    }
+
+    .size-row input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+    }
+
+    .size-row input[type="number"] {
+      -moz-appearance: textfield;
+    }
+
+    .preset-row {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 3px 0;
+    }
+
+    .preset-btn {
+      padding: 1px 8px;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      font-size: 0.45rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .preset-btn:hover {
+      background: rgba(108, 140, 255, 0.06);
+      color: var(--accent-hover);
+    }
+
+    .preset-btn.active {
+      background: rgba(108, 140, 255, 0.12);
+      color: var(--accent-hover);
+      border-color: var(--accent);
+    }
+
+    /* ===== Action Buttons ===== */
+    .action-row {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 60px;
+      padding: 5px 10px;
+      border-radius: 30px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-secondary);
+      font-size: 0.55rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+    }
+
+    .action-btn:active {
+      transform: scale(0.96);
+    }
+
+    .action-btn.primary {
+      background: rgba(108, 140, 255, 0.06);
+      color: var(--accent-hover);
+    }
+
+    .action-btn.primary:hover {
+      background: rgba(108, 140, 255, 0.12);
+    }
+
+    .action-btn.success {
+      background: rgba(50, 255, 150, 0.06);
+      color: var(--success);
+    }
+
+    .action-btn.success:hover {
+      background: rgba(50, 255, 150, 0.12);
+    }
+
+    .action-btn.warning {
+      background: rgba(245, 163, 66, 0.06);
+      color: var(--warning);
+    }
+
+    .action-btn.warning:hover {
+      background: rgba(245, 163, 66, 0.12);
+    }
+
+    .action-btn.danger {
+      background: rgba(255, 70, 70, 0.06);
+      color: var(--danger);
+    }
+
+    .action-btn.danger:hover {
+      background: rgba(255, 70, 70, 0.12);
+    }
+
+    .action-btn.apply-btn {
+      background: rgba(108, 140, 255, 0.08);
+      color: var(--accent-hover);
+      border-color: rgba(108, 140, 255, 0.06);
+      font-weight: 600;
+    }
+
+    .action-btn.apply-btn:hover {
+      background: rgba(108, 140, 255, 0.15);
+    }
+
+    .action-btn.apply-btn.applied {
+      background: rgba(74, 222, 128, 0.08);
+      color: var(--success);
+      border-color: rgba(74, 222, 128, 0.1);
+    }
+
+    .action-btn.apply-btn.applied:hover {
+      background: rgba(74, 222, 128, 0.15);
+    }
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 6px;
+      font-size: 0.5rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .info-bar .hl {
+      color: var(--accent-hover);
+    }
+
+    /* ===== Preview Grid ===== */
+    .preview-grid-section {
+      margin-top: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.6rem;
+    }
+
+    .preview-grid-section .grid-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .preview-grid-section .grid-header span {
+      font-size: 0.55rem;
+      color: var(--text-muted);
+    }
+
+    .preview-grid-section .grid-header .count {
+      color: var(--accent-hover);
+      font-weight: 500;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+      padding: 2px;
+    }
+
+    .preview-grid::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    .preview-grid::-webkit-scrollbar-thumb {
+      background: rgba(108, 140, 255, 0.2);
+      border-radius: 10px;
+    }
+
+    .preview-grid-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      transition: var(--transition);
+      background: transparent;
+    }
+
+    .preview-grid-item:hover {
+      transform: scale(1.05);
+      border-color: rgba(108, 140, 255, 0.2);
+      z-index: 2;
+    }
+
+    .preview-grid-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(108, 140, 255, 0.1);
+    }
+
+    .preview-grid-item canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .preview-grid-item .check {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: all var(--transition);
+    }
+
+    .preview-grid-item.active .check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .preview-grid-item .name-tag {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-size: 0.3rem;
+      padding: 1px 3px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .preview-grid-item:hover .name-tag {
+      opacity: 1;
+    }
+
+    .preview-grid-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.55rem;
+      padding: 16px 0;
+    }
+
+    .preview-grid-empty i {
+      margin-right: 4px;
+      opacity: 0.5;
+    }
+
+    /* ===== Toast ===== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      font-size: 0.65rem;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      max-width: 90%;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success {
+      border-color: var(--success);
+    }
+
+    .toast.error {
+      border-color: var(--danger);
+    }
+
+    .toast.warning {
+      border-color: var(--warning);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .tool-container {
+        padding: 1rem;
+      }
+
+      .two-col {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+      }
+
+      .canvas-wrapper canvas {
+        width: 140px;
+        height: 140px;
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 8px;
+      }
+
+      .tool-container {
+        padding: 0.7rem;
+        border-radius: 20px;
+      }
+
+      .header h1 {
+        font-size: 1rem;
+      }
+
+      .direct-btn {
+        font-size: 0.5rem;
+        padding: 6px 10px;
+        min-width: 60px;
+      }
+
+      .canvas-wrapper canvas {
+        width: 120px;
+        height: 120px;
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+        gap: 4px;
+        max-height: 140px;
+      }
+
+      .action-btn {
+        font-size: 0.45rem;
+        padding: 4px 8px;
+        min-width: 50px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .canvas-wrapper canvas {
+        width: 100px;
+        height: 100px;
+      }
+
+      .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(38px, 1fr));
+      }
+
+      .size-row input {
+        width: 30px;
+        font-size: 0.45rem;
+      }
+
+      .ctrl-btn {
+        width: 24px;
+        height: 24px;
+        font-size: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="tool-container" id="app">
+    <!-- ===== Header ===== -->
+    <div class="header">
+      <h1><i class="fas fa-wand-magic-sparkles"></i> Icon Maker</h1>
+      <span class="version">Pro v5.0</span>
+    </div>
+
+    <!-- ===== Two-Column Layout ===== -->
+    <div class="two-col">
+      <!-- ===== Left Column: Upload ===== -->
+      <div>
+        <!-- Background -->
+        <div class="upload-section">
+          <div class="section-title">
+            <i class="fas fa-image"></i> Background
+            <span class="badge" id="bgBadge">0</span>
+          </div>
+          <div class="direct-buttons">
+            <button class="direct-btn primary">
+              <span class="icon"><i class="fas fa-folder-open"></i></span>
+              <span class="label">Browse</span>
+              <input type="file" id="bgInput" accept="image/*, .zip" />
+            </button>
+            <button class="direct-btn danger" id="bgRemoveBtn">
+              <span class="icon"><i class="fas fa-times"></i></span>
+              <span class="label">Remove</span>
+            </button>
+          </div>
+          <div class="file-status-bar">
+            <span class="status-text" id="bgStatus"><i class="fas fa-info-circle"></i> No file selected</span>
+          </div>
+        </div>
+
+        <!-- Front Icons -->
+        <div class="upload-section" style="margin-top:0.8rem;">
+          <div class="section-title">
+            <i class="fas fa-layer-group"></i> Front Icons
+            <span class="badge" id="fgBadge">0</span>
+          </div>
+          <div class="direct-buttons">
+            <button class="direct-btn primary">
+              <span class="icon"><i class="fas fa-folder-open"></i></span>
+              <span class="label">Browse</span>
+              <input type="file" id="fgInput" accept="image/*, .zip" multiple />
+            </button>
+            <button class="direct-btn warning">
+              <span class="icon"><i class="fas fa-file-archive"></i></span>
+              <span class="label">ZIP</span>
+              <input type="file" id="zipInput" accept=".zip" />
+            </button>
+            <button class="direct-btn danger" id="fgRemoveAllBtn">
+              <span class="icon"><i class="fas fa-trash"></i></span>
+              <span class="label">All</span>
+            </button>
+          </div>
+          <div class="file-status-bar">
+            <span class="status-text" id="fgStatus"><i class="fas fa-info-circle"></i> No icons</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Right Column: Preview ===== -->
+      <div class="preview-section">
+        <div class="preview-header">
+          <span class="title"><i class="fas fa-eye"></i> Preview</span>
+          <span class="status" id="applyStatus">⏳ Apply</span>
+        </div>
+
+        <!-- Canvas -->
+        <div class="canvas-wrapper">
+          <canvas id="previewCanvas" width="160" height="160"></canvas>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-row">
+          <button class="ctrl-btn" id="moveLeft"><i class="fas fa-arrow-left"></i></button>
+          <button class="ctrl-btn" id="moveUp"><i class="fas fa-arrow-up"></i></button>
+          <button class="ctrl-btn" id="moveDown"><i class="fas fa-arrow-down"></i></button>
+          <button class="ctrl-btn" id="moveRight"><i class="fas fa-arrow-right"></i></button>
+          <button class="ctrl-btn" id="centerIcon"><i class="fas fa-crosshairs"></i></button>
+        </div>
+
+        <!-- Size -->
+        <div class="size-row">
+          <label>W <input type="number" id="iconWidth" value="80" step="1" min="10" max="500" /></label>
+          <label>H <input type="number" id="iconHeight" value="80" step="1" min="10" max="500" /></label>
+        </div>
+        <div class="preset-row" id="presetRow">
+          <button class="preset-btn" data-size="64">64</button>
+          <button class="preset-btn" data-size="72">72</button>
+          <button class="preset-btn active" data-size="80">80</button>
+          <button class="preset-btn" data-size="96">96</button>
+          <button class="preset-btn" data-size="128">128</button>
+          <button class="preset-btn" data-size="192">192</button>
+          <button class="preset-btn" data-size="256">256</button>
+        </div>
+
+        <!-- Actions -->
+        <div class="action-row">
+          <button class="action-btn apply-btn" id="applyBtn"><i class="fas fa-check-circle"></i> Apply</button>
+          <button class="action-btn primary" id="downloadSingleBtn"><i class="fas fa-download"></i> Single</button>
+          <button class="action-btn success" id="downloadZipBtn"><i class="fas fa-file-archive"></i> ZIP</button>
+          <button class="action-btn warning" id="resetBtn"><i class="fas fa-undo"></i> Reset</button>
+        </div>
+
+        <div class="info-bar">
+          <span id="selectedInfo">None selected</span>
+          <span id="posInfo" class="hl">x:0 y:0</span>
+        </div>
+
+        <!-- ===== Grid View (Below Preview) ===== -->
+        <div class="preview-grid-section">
+          <div class="grid-header">
+            <span>📋 Icon Preview Grid</span>
+            <span class="count" id="gridCount">0 items</span>
+          </div>
+          <div class="preview-grid" id="previewGrid">
+            <div class="preview-grid-empty"><i class="fas fa-layer-group"></i> No icons</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Toast ===== -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===== Libraries ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ======================================================================
+      // Configuration
+      // ======================================================================
+      const CONFIG = {
+        CANVAS_SIZE: 160,
+        DEFAULT_SIZE: 80,
+        MIN_SIZE: 10,
+        MAX_SIZE: 1000,
+        MOVE_STEP: 4,
+        MAX_FILE_SIZE: 1000 * 1024 * 1024,
+        SUPPORTED_IMAGES: ['png', 'jpg', 'jpeg', 'webp', 'bmp', 'gif', 'tiff', 'ico', 'avif'],
+      };
+
+      // ======================================================================
+      // State
+      // ======================================================================
+      const state = {
+        bgImage: null,
+        bgFile: null,
+        fgImages: [],
+        selectedFgIndex: -1,
+        offsetX: 0,
+        offsetY: 0,
+        fgWidth: CONFIG.DEFAULT_SIZE,
+        fgHeight: CONFIG.DEFAULT_SIZE,
+        canvasSize: CONFIG.CANVAS_SIZE,
+        isApplied: false,
+        isProcessing: false,
+      };
+
+      // ======================================================================
+      // DOM References
+      // ======================================================================
+      const $ = id => document.getElementById(id);
+      const canvas = $('previewCanvas');
+      const ctx = canvas.getContext('2d');
+
+      const bgInput = $('bgInput');
+      const fgInput = $('fgInput');
+      const zipInput = $('zipInput');
+      const bgStatus = $('bgStatus');
+      const fgStatus = $('fgStatus');
+      const bgBadge = $('bgBadge');
+      const fgBadge = $('fgBadge');
+      const bgRemoveBtn = $('bgRemoveBtn');
+      const fgRemoveAllBtn = $('fgRemoveAllBtn');
+      const previewGrid = $('previewGrid');
+      const gridCount = $('gridCount');
+      const selectedInfo = $('selectedInfo');
+      const posInfo = $('posInfo');
+      const iconWidth = $('iconWidth');
+      const iconHeight = $('iconHeight');
+      const applyStatus = $('applyStatus');
+      const applyBtn = $('applyBtn');
+      const toast = $('toast');
+
+      // ======================================================================
+      // Toast System
+      // ======================================================================
+      let toastTimeout = null;
+
+      function showToast(message, type = 'info', duration = 2500) {
+        if (toastTimeout) {
+          clearTimeout(toastTimeout);
+          toast.classList.remove('show');
+        }
+        toast.textContent = message;
+        toast.className = 'toast ' + type;
+        void toast.offsetWidth;
+        toast.classList.add('show');
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+          toastTimeout = null;
+        }, duration);
+      }
+
+      // ======================================================================
+      // Utilities
+      // ======================================================================
+      function sanitizeFileName(name) {
+        return name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      }
+
+      function getOriginalFileName(file) {
+        const name = file.name || 'icon';
+        return name.split('.').slice(0, -1).join('.') || 'icon';
+      }
+
+      function formatFileSize(bytes) {
+        if (bytes < 1024) return bytes + 'B';
+        if (bytes < 1048576) return (bytes / 1024).toFixed(0) + 'KB';
+        return (bytes / 1048576).toFixed(1) + 'MB';
+      }
+
+      function isImageSupported(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        return CONFIG.SUPPORTED_IMAGES.includes(ext);
+      }
+
+      function loadImageFile(file) {
+        return new Promise((resolve, reject) => {
+          if (file.size > CONFIG.MAX_FILE_SIZE) {
+            reject(new Error(`File size ${formatFileSize(file.size)} - max ${formatFileSize(CONFIG.MAX_FILE_SIZE)}`));
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+              resolve({
+                image: img,
+                dataUrl: e.target.result,
+                name: file.name,
+                size: file.size,
+                width: img.width,
+                height: img.height,
+                originalName: getOriginalFileName(file),
+              });
+            };
+            img.onerror = () => reject(new Error('Failed to load image'));
+            img.src = e.target.result;
+          };
+          reader.onerror = () => reject(new Error('Failed to read file'));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function isDuplicateImage(newImage, existingImages) {
+        return existingImages.some(img =>
+          img.name === newImage.name && img.size === newImage.size
+        );
+      }
+
+      // ======================================================================
+      // File Processor
+      // ======================================================================
+      async function processFiles(files, isBackground = false) {
+        if (state.isProcessing) return;
+
+        try {
+          state.isProcessing = true;
+
+          const imageFiles = [];
+          const zipFiles = [];
+
+          for (const file of files) {
+            if (file.name.toLowerCase().endsWith('.zip')) {
+              zipFiles.push(file);
+            } else if (file.type.startsWith('image/')) {
+              imageFiles.push(file);
+            }
+          }
+
+          let addedCount = 0;
+
+          // Process images
+          for (const file of imageFiles) {
+            try {
+              const result = await loadImageFile(file);
+              if (isBackground) {
+                state.bgImage = result.image;
+                state.bgFile = result;
+                state.isApplied = false;
+                addedCount++;
+                break;
+              } else {
+                if (!isDuplicateImage(result, state.fgImages)) {
+                  state.fgImages.push(result);
+                  addedCount++;
+                }
+              }
+            } catch (err) { console.warn(err); }
+          }
+
+          // Process ZIP files
+          for (const zipFile of zipFiles) {
+            try {
+              const zip = await JSZip.loadAsync(zipFile);
+              const extracted = [];
+              for (const [name, entry] of Object.entries(zip.files)) {
+                if (entry.dir || !isImageSupported(name)) continue;
+                try {
+                  const blob = await entry.async('blob');
+                  extracted.push(new File([blob], name, { type: blob.type || 'image/png' }));
+                } catch (err) { }
+              }
+              if (extracted.length === 0) {
+                showToast(`No images found in ZIP: ${zipFile.name}`, 'warning');
+                continue;
+              }
+              for (const imgFile of extracted) {
+                try {
+                  const result = await loadImageFile(imgFile);
+                  if (isBackground) {
+                    if (!state.bgFile) {
+                      state.bgImage = result.image;
+                      state.bgFile = result;
+                      state.isApplied = false;
+                      addedCount++;
+                    }
+                    break;
+                  } else {
+                    if (!isDuplicateImage(result, state.fgImages)) {
+                      state.fgImages.push(result);
+                      addedCount++;
+                    }
+                  }
+                } catch (err) { }
+              }
+            } catch (error) {
+              showToast(`Failed to process ZIP: ${zipFile.name}`, 'error');
+            }
+          }
+
+          if (addedCount === 0) {
+            showToast('No files added', 'warning');
+            return;
+          }
+
+          if (isBackground) {
+            if (state.fgImages.length > 0 && state.selectedFgIndex === -1) {
+              state.selectedFgIndex = 0;
+            }
+            updateBgUI();
+            updateFgUI();
+            updateStatus();
+            renderPreview();
+            renderGrid();
+            showToast('Background updated', 'success');
+          } else {
+            if (state.selectedFgIndex === -1 && state.fgImages.length > 0) {
+              state.selectedFgIndex = 0;
+            }
+            state.isApplied = false;
+            updateFgUI();
+            updateStatus();
+            renderPreview();
+            renderGrid();
+            showToast(`${addedCount} icon(s) added`, 'success');
+          }
+
+        } catch (error) {
+          showToast(error.message || 'Failed to process files', 'error');
+        } finally {
+          state.isProcessing = false;
+          bgInput.value = '';
+          fgInput.value = '';
+          zipInput.value = '';
+        }
+      }
+
+      // ======================================================================
+      // UI Updates
+      // ======================================================================
+      function updateBgUI() {
+        const has = state.bgFile !== null;
+        bgBadge.textContent = has ? '1' : '0';
+        if (!has) {
+          bgStatus.innerHTML = `<i class="fas fa-info-circle"></i> No file selected`;
+          return;
+        }
+        bgStatus.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);"></i> ${sanitizeFileName(state.bgFile.name)} (${formatFileSize(state.bgFile.size)})`;
+      }
+
+      function updateFgUI() {
+        const count = state.fgImages.length;
+        fgBadge.textContent = count;
+        if (count === 0) {
+          fgStatus.innerHTML = `<i class="fas fa-info-circle"></i> No icons`;
+          selectedInfo.textContent = 'None selected';
+          return;
+        }
+        fgStatus.innerHTML = `<i class="fas fa-check-circle" style="color:var(--success);"></i> ${count} icon(s)`;
+        if (state.selectedFgIndex >= 0 && state.selectedFgIndex < count) {
+          const item = state.fgImages[state.selectedFgIndex];
+          selectedInfo.textContent = `${item.originalName} (${item.width}×${item.height})`;
+        } else {
+          selectedInfo.textContent = 'None selected';
+        }
+      }
+
+      function updateStatus() {
+        if (state.isApplied) {
+          applyStatus.textContent = '✅ Applied';
+          applyStatus.className = 'status active';
+          applyBtn.className = 'action-btn apply-btn applied';
+          applyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Applied';
+        } else {
+          applyStatus.textContent = '⏳ Apply';
+          applyStatus.className = 'status';
+          applyBtn.className = 'action-btn apply-btn';
+          applyBtn.innerHTML = '<i class="fas fa-check-circle"></i> Apply';
+        }
+      }
+
+      function updateInfo() {
+        posInfo.textContent = `x:${state.offsetX} y:${state.offsetY}`;
+        iconWidth.value = state.fgWidth;
+        iconHeight.value = state.fgHeight;
+        updatePresetButtons(state.fgWidth, state.fgHeight);
+      }
+
+      function updatePresetButtons(width, height) {
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+          const size = parseInt(btn.dataset.size);
+          btn.classList.toggle('active', size === width && size === height);
+        });
+      }
+
+      // ======================================================================
+      // Render Preview
+      // ======================================================================
+      function renderPreview() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        if (state.bgImage) {
+          ctx.drawImage(state.bgImage, 0, 0, w, h);
+        }
+
+        if (state.selectedFgIndex >= 0 && state.fgImages[state.selectedFgIndex]) {
+          const item = state.fgImages[state.selectedFgIndex];
+          if (item.image) {
+            const cx = (w - state.fgWidth) / 2 + state.offsetX;
+            const cy = (h - state.fgHeight) / 2 + state.offsetY;
+            ctx.drawImage(item.image, cx, cy, state.fgWidth, state.fgHeight);
+            if (!state.isApplied) {
+              ctx.strokeStyle = 'rgba(108, 140, 255, 0.5)';
+              ctx.lineWidth = 1.5;
+              ctx.setLineDash([3, 3]);
+              ctx.strokeRect(cx, cy, state.fgWidth, state.fgHeight);
+              ctx.setLineDash([]);
+            }
+          }
+        }
+      }
+
+      // ======================================================================
+      // Render Grid
+      // ======================================================================
+      function renderGrid() {
+        const count = state.fgImages.length;
+        gridCount.textContent = count + ' item' + (count !== 1 ? 's' : '');
+
+        if (count === 0) {
+          previewGrid.innerHTML = `<div class="preview-grid-empty"><i class="fas fa-layer-group"></i> No icons</div>`;
+          return;
+        }
+
+        previewGrid.innerHTML = '';
+
+        state.fgImages.forEach((item, index) => {
+          const div = document.createElement('div');
+          div.className = 'preview-grid-item' + (index === state.selectedFgIndex ? ' active' : '');
+          div.dataset.index = index;
+
+          const c = document.createElement('canvas');
+          c.width = 60;
+          c.height = 60;
+          const cx = c.getContext('2d');
+
+          // Background
+          if (state.bgImage) {
+            cx.drawImage(state.bgImage, 0, 0, 60, 60);
+          } else {
+            cx.clearRect(0, 0, 60, 60);
+          }
+
+          // Icon
+          if (item.image) {
+            const iw = Math.min(50, state.fgWidth * (60 / state.canvasSize));
+            const ih = Math.min(50, state.fgHeight * (60 / state.canvasSize));
+            const ix = (60 - iw) / 2 + (state.offsetX * (60 / state.canvasSize));
+            const iy = (60 - ih) / 2 + (state.offsetY * (60 / state.canvasSize));
+            cx.drawImage(item.image, ix, iy, iw, ih);
+          }
+
+          div.appendChild(c);
+
+          // Check mark
+          const check = document.createElement('div');
+          check.className = 'check';
+          check.innerHTML = '<i class="fas fa-check"></i>';
+          div.appendChild(check);
+
+          // Name tag
+          const nameTag = document.createElement('div');
+          nameTag.className = 'name-tag';
+          nameTag.textContent = sanitizeFileName(item.originalName);
+          div.appendChild(nameTag);
+
+          div.addEventListener('click', function (e) {
+            const idx = parseInt(this.dataset.index);
+            if (idx >= 0 && idx < state.fgImages.length) {
+              state.selectedFgIndex = idx;
+              updateFgUI();
+              renderPreview();
+              renderGrid();
+            }
+          });
+
+          previewGrid.appendChild(div);
+        });
+      }
+
+      // ======================================================================
+      // Size Controls
+      // ======================================================================
+      function updateSizeFromInputs() {
+        let w = parseInt(iconWidth.value) || CONFIG.MIN_SIZE;
+        let h = parseInt(iconHeight.value) || CONFIG.MIN_SIZE;
+        w = Math.min(Math.max(w, CONFIG.MIN_SIZE), CONFIG.MAX_SIZE);
+        h = Math.min(Math.max(h, CONFIG.MIN_SIZE), CONFIG.MAX_SIZE);
+        state.fgWidth = w;
+        state.fgHeight = h;
+        iconWidth.value = w;
+        iconHeight.value = h;
+        updateInfo();
+        renderPreview();
+        renderGrid();
+        updatePresetButtons(w, h);
+      }
+
+      function setPresetSize(size) {
+        state.fgWidth = size;
+        state.fgHeight = size;
+        iconWidth.value = size;
+        iconHeight.value = size;
+        updateInfo();
+        renderPreview();
+        renderGrid();
+        updatePresetButtons(size, size);
+      }
+
+      // ======================================================================
+      // Apply
+      // ======================================================================
+      function applySettings() {
+        if (!state.bgImage) {
+          showToast('Please set a background first', 'warning');
+          return;
+        }
+        if (state.fgImages.length === 0) {
+          showToast('Please add front icons', 'warning');
+          return;
+        }
+        if (state.selectedFgIndex === -1) {
+          showToast('Please select an icon', 'warning');
+          return;
+        }
+        state.isApplied = true;
+        updateStatus();
+        renderPreview();
+        renderGrid();
+        showToast('✅ Applied successfully!', 'success');
+      }
+
+      // ======================================================================
+      // Download
+      // ======================================================================
+      function downloadSingle() {
+        if (!state.isApplied) {
+          showToast('Please Apply first', 'warning');
+          return;
+        }
+        if (state.selectedFgIndex < 0 || !state.fgImages[state.selectedFgIndex]) {
+          showToast('Select an icon', 'warning');
+          return;
+        }
+        try {
+          const off = document.createElement('canvas');
+          off.width = state.canvasSize;
+          off.height = state.canvasSize;
+          const octx = off.getContext('2d');
+          if (state.bgImage) {
+            octx.drawImage(state.bgImage, 0, 0, state.canvasSize, state.canvasSize);
+          }
+          const item = state.fgImages[state.selectedFgIndex];
+          if (item && item.image) {
+            const cx = (state.canvasSize - state.fgWidth) / 2 + state.offsetX;
+            const cy = (state.canvasSize - state.fgHeight) / 2 + state.offsetY;
+            octx.drawImage(item.image, cx, cy, state.fgWidth, state.fgHeight);
+          }
+          const link = document.createElement('a');
+          const name = item.originalName || 'icon';
+          link.download = `${sanitizeFileName(name)}.png`;
+          link.href = off.toDataURL('image/png');
+          link.click();
+          showToast('✅ Downloaded successfully', 'success');
+        } catch (error) {
+          showToast('Download failed', 'error');
+        }
+      }
+
+      async function downloadZip() {
+        if (!state.isApplied) {
+          showToast('Please Apply first', 'warning');
+          return;
+        }
+        if (state.fgImages.length === 0) {
+          showToast('No icons to download', 'warning');
+          return;
+        }
+        try {
+          showToast('⏳ Creating ZIP...', 'info', 3000);
+          const zip = new JSZip();
+          const folder = zip.folder('launcher_icons');
+          for (let i = 0; i < state.fgImages.length; i++) {
+            const off = document.createElement('canvas');
+            off.width = state.canvasSize;
+            off.height = state.canvasSize;
+            const octx = off.getContext('2d');
+            if (state.bgImage) {
+              octx.drawImage(state.bgImage, 0, 0, state.canvasSize, state.canvasSize);
+            }
+            const item = state.fgImages[i];
+            if (item && item.image) {
+              const cx = (state.canvasSize - state.fgWidth) / 2 + state.offsetX;
+              const cy = (state.canvasSize - state.fgHeight) / 2 + state.offsetY;
+              octx.drawImage(item.image, cx, cy, state.fgWidth, state.fgHeight);
+            }
+            const blob = await new Promise(resolve => off.toBlob(resolve, 'image/png'));
+            const name = item.originalName || `icon_${i + 1}`;
+            folder.file(`${sanitizeFileName(name)}.png`, blob);
+          }
+          const content = await zip.generateAsync({ type: 'blob' });
+          saveAs(content, 'launcher_icons.zip');
+          showToast('✅ ZIP downloaded successfully', 'success');
+        } catch (error) {
+          showToast('ZIP creation failed', 'error');
+        }
+      }
+
+      // ======================================================================
+      // Reset
+      // ======================================================================
+      function resetAll() {
+        state.offsetX = 0;
+        state.offsetY = 0;
+        state.fgWidth = CONFIG.DEFAULT_SIZE;
+        state.fgHeight = CONFIG.DEFAULT_SIZE;
+        state.isApplied = false;
+        state.selectedFgIndex = -1;
+        state.fgImages = [];
+        state.bgImage = null;
+        state.bgFile = null;
+        iconWidth.value = CONFIG.DEFAULT_SIZE;
+        iconHeight.value = CONFIG.DEFAULT_SIZE;
+        bgInput.value = '';
+        fgInput.value = '';
+        zipInput.value = '';
+        try { localStorage.removeItem('iconMakerState'); } catch (e) { }
+        updateBgUI();
+        updateFgUI();
+        updateStatus();
+        updateInfo();
+        renderPreview();
+        renderGrid();
+        showToast('🔄 Reset completed', 'info');
+      }
+
+      // ======================================================================
+      // Event Listeners
+      // ======================================================================
+      function setupHandler(input, handler) {
+        input.addEventListener('change', () => {
+          if (input.files.length) handler(input.files);
+          input.value = '';
+        });
+      }
+
+      setupHandler(bgInput, (files) => processFiles(files, true));
+      setupHandler(fgInput, (files) => processFiles(files, false));
+      setupHandler(zipInput, (files) => processFiles(files, false));
+
+      bgRemoveBtn.addEventListener('click', () => {
+        state.bgImage = null;
+        state.bgFile = null;
+        state.isApplied = false;
+        updateBgUI();
+        updateStatus();
+        renderPreview();
+        renderGrid();
+        showToast('Background removed', 'info');
+      });
+
+      fgRemoveAllBtn.addEventListener('click', () => {
+        if (state.fgImages.length === 0) return;
+        state.fgImages = [];
+        state.selectedFgIndex = -1;
+        state.isApplied = false;
+        updateFgUI();
+        updateStatus();
+        renderPreview();
+        renderGrid();
+        showToast('All icons removed', 'info');
+      });
+
+      // Movement controls
+      ['Left', 'Right', 'Up', 'Down'].forEach(dir => {
+        const btn = $(`move${dir}`);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const step = CONFIG.MOVE_STEP;
+            if (dir === 'Left') state.offsetX -= step;
+            else if (dir === 'Right') state.offsetX += step;
+            else if (dir === 'Up') state.offsetY -= step;
+            else if (dir === 'Down') state.offsetY += step;
+            renderPreview();
+            renderGrid();
+            updateInfo();
+          });
+        }
+      });
+
+      document.getElementById('centerIcon').addEventListener('click', () => {
+        state.offsetX = 0;
+        state.offsetY = 0;
+        renderPreview();
+        renderGrid();
+        updateInfo();
+        showToast('📌 Centered', 'info');
+      });
+
+      // Size
+      iconWidth.addEventListener('input', updateSizeFromInputs);
+      iconHeight.addEventListener('input', updateSizeFromInputs);
+      iconWidth.addEventListener('blur', updateSizeFromInputs);
+      iconHeight.addEventListener('blur', updateSizeFromInputs);
+
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          setPresetSize(parseInt(this.dataset.size));
+        });
+      });
+
+      // Actions
+      document.getElementById('applyBtn').addEventListener('click', applySettings);
+      document.getElementById('downloadSingleBtn').addEventListener('click', downloadSingle);
+      document.getElementById('downloadZipBtn').addEventListener('click', downloadZip);
+      document.getElementById('resetBtn').addEventListener('click', resetAll);
+
+      // ======================================================================
+      // LocalStorage
+      // ======================================================================
+      function saveState() {
+        try {
+          localStorage.setItem('iconMakerState', JSON.stringify({
+            offsetX: state.offsetX,
+            offsetY: state.offsetY,
+            fgWidth: state.fgWidth,
+            fgHeight: state.fgHeight,
+            isApplied: state.isApplied,
+            selectedFgIndex: state.selectedFgIndex,
+          }));
+        } catch (e) { }
+      }
+
+      function restoreState() {
+        try {
+          const data = JSON.parse(localStorage.getItem('iconMakerState'));
+          if (!data) return;
+          state.offsetX = data.offsetX || 0;
+          state.offsetY = data.offsetY || 0;
+          state.fgWidth = data.fgWidth || CONFIG.DEFAULT_SIZE;
+          state.fgHeight = data.fgHeight || CONFIG.DEFAULT_SIZE;
+          state.isApplied = data.isApplied || false;
+          state.selectedFgIndex = data.selectedFgIndex || -1;
+          updateInfo();
+        } catch (e) { }
+      }
+
+      const origRenderPreview = renderPreview;
+      renderPreview = function () { origRenderPreview(); saveState(); };
+      const origRenderGrid = renderGrid;
+      renderGrid = function () { origRenderGrid(); saveState(); };
+
+      // ======================================================================
+      // Drag & Drop
+      // ======================================================================
+      document.addEventListener('dragover', (e) => e.preventDefault());
+      document.addEventListener('drop', (e) => e.preventDefault());
+
+      // ======================================================================
+      // Initialize
+      // ======================================================================
+      function init() {
+        restoreState();
+        updateBgUI();
+        updateFgUI();
+        updateStatus();
+        updateInfo();
+        renderPreview();
+        renderGrid();
+        showToast('🚀 Icon Maker ready', 'info', 1500);
+      }
+
+      init();
+
+    })();
+  </script>
+</body>
+
+</html>
